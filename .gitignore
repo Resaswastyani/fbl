@@ -1,0 +1,80 @@
+# ===============================
+# Dependencies
+# ===============================
+node_modules/
+.pnp/
+.pnp.js
+
+# ===============================
+# Next.js build output
+# ===============================
+.next/
+out/
+dist/
+build/
+
+# ===============================
+# Environment variables
+# ===============================
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+
+# ===============================
+# Logs
+# ===============================
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+logs
+*.log
+
+# ===============================
+# Runtime data
+# ===============================
+.tmp/
+temp/
+
+# ===============================
+# Coverage
+# ===============================
+coverage/
+
+# ===============================
+# OS files
+# ===============================
+.DS_Store
+Thumbs.db
+
+# ===============================
+# Editor / IDE
+# ===============================
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+.idea/
+*.swp
+*.swo
+
+# ===============================
+# Cache
+# ===============================
+.cache/
+.eslintcache
+.next/cache/
+
+# ===============================
+# Optional: Turbopack
+# ===============================
+.turbo/
+
+# ===============================
+# Misc
+# ===============================
+*.local
+.vercel
+.prisma

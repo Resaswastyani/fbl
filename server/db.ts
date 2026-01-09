@@ -1,4 +1,4 @@
-// server/db.ts — FIXED for MySQL (Prisma 7 + Next.js)
+// server/db.ts — FINAL FIX (Prisma 7 + MySQL + Vercel)
 
 import { PrismaClient } from "@prisma/client";
 
@@ -9,7 +9,7 @@ const globalForPrisma = globalThis as unknown as {
 export const prisma =
   globalForPrisma.prisma ??
   new PrismaClient({
-    log: ["query", "info", "warn", "error"],
+    log: ["warn", "error"],
   });
 
 if (process.env.NODE_ENV !== "production") {

@@ -1,5 +1,3 @@
-// server/db.ts — FINAL FIX (Prisma 7 + MySQL + Vercel)
-
 import { PrismaClient } from "@prisma/client";
 
 const globalForPrisma = globalThis as unknown as {
@@ -9,7 +7,8 @@ const globalForPrisma = globalThis as unknown as {
 export const prisma =
   globalForPrisma.prisma ??
   new PrismaClient({
-    log: ["warn", "error"],
+    accelerateUrl: process.env.DATABASE_URL!, // 🔑 WAJIB
+    log: ["error", "warn"],
   });
 
 if (process.env.NODE_ENV !== "production") {

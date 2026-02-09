@@ -22,6 +22,7 @@ model User {
   orders      Order[]
   enrollments Enrollment[]
   articles    Article[]
+  tradingVideos  TradingVideo[]
 
   @@map("users")
 }
@@ -184,4 +185,25 @@ model Article {
   @@index([authorId])
   @@index([published, createdAt])
   @@map("articles")
+}
+
+model TradingVideo {
+  id          String   @id @default(cuid())
+  title       String   @db.VarChar(255)
+  description String?  @db.Text
+  videoUrl    String   @db.VarChar(500)  // URL YouTube atau URL file upload
+  videoType   String   @default("YOUTUBE") // YOUTUBE atau UPLOAD
+  thumbnail   String?  @db.VarChar(500)  // URL thumbnail (auto-generate untuk YouTube)
+  published   Boolean  @default(false)
+  viewCount   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  authorId    String
+  author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([authorId])
+  @@index([published, createdAt])
+  @@map("trading_videos")
 }

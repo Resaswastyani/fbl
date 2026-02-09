@@ -66,10 +66,14 @@ export default function ArticlesPage() {
 
   return (
     <>
-      <Header />
-      <div className="min-h-screen bg-white">
+      {/* <Header /> */}
+      <div className="min-h-screen bg-white pt-24 md:pt-28">
+        {" "}
+        {/* ✅ PADDING TOP DITAMBAH */}
         {/* ARTICLES GRID */}
-        <section className="w-full pb-20 bg-white">
+        <section className="w-full py-8 md:py-12 bg-white">
+          {" "}
+          {/* ✅ TAMBAH PADDING Y */}
           <div className="max-w-7xl mx-auto px-8 md:px-12">
             {articles.length === 0 ? (
               <div className="text-center py-20">
@@ -159,7 +163,7 @@ export default function ArticlesPage() {
           </div>
         </section>
       </div>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }

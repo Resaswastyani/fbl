@@ -228,6 +228,7 @@ import {
   Layers,
   ChevronDown,
   Newspaper,
+  Video,
 } from "lucide-react";
 
 interface SidebarProps {
@@ -279,24 +280,30 @@ export default function Sidebar({
       href: "/dashboard/kelas",
       icon: BookOpen,
     },
-    {
-      name: "Analisa Pasar",
-      key: "analysis",
-      href: "/dashboard/analisa",
-      icon: BarChart3,
-    },
-    {
-      name: "Materi Premium",
-      key: "premium",
-      href: "/dashboard/premium",
-      icon: Layers,
-    },
+    // {
+    //   name: "Analisa Pasar",
+    //   key: "analysis",
+    //   href: "/dashboard/analisa",
+    //   icon: BarChart3,
+    // },
+    // {
+    //   name: "Materi Premium",
+    //   key: "premium",
+    //   href: "/dashboard/premium",
+    //   icon: Layers,
+    // },
     {
       name: "Artikel",
       key: "articles",
       href: "/dashboard/articles",
       icon: Newspaper,
     }, // ✅ samakan dengan ForexDashboardLMS
+    {
+      name: "Video Trading", // ✅ MENU BARU
+      key: "video-trading",
+      href: "/dashboard/videos",
+      icon: Video,
+    },
     { name: "Profil", key: "profile", href: "/dashboard/profil", icon: User },
   ];
 

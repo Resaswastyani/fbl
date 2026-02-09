@@ -89,7 +89,7 @@ export default function PositionSizeCalculatorPage() {
 
   return (
     <>
-      <Header />
+      {/* <Header /> */}
 
       <main className="pt-[140px] bg-white text-[#111A4A]">
         {/* ================= SECTION 1 : PROMOSI ================= */}
@@ -328,8 +328,8 @@ export default function PositionSizeCalculatorPage() {
           </div>
         </section>
       </main>
-
-      <Footer />
+      {/* 
+      <Footer /> */}
     </>
   );
 }

@@ -129,7 +129,7 @@ export default function ArticleDetailPage() {
 
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <div className="min-h-screen bg-white">
         {/* HERO SECTION WITH THUMBNAIL */}
         <section className="w-full pt-24 md:pt-32 pb-12 bg-white">
@@ -361,7 +361,7 @@ export default function ArticleDetailPage() {
           </div>
         </section>
       </div>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }

@@ -12,7 +12,7 @@ import Footer from "@/components/Footer";
 export default function Page() {
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <ProductTeaserCard />
       <BankingScaleHero />
       <ForexCarousel />
@@ -21,7 +21,7 @@ export default function Page() {
       <IntegrationCarousel />
       <PricingSection />
       <FAQSection />
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }

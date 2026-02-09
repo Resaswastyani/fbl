@@ -151,7 +151,11 @@ export const Header = () => {
                 { name: "Trading Beginner", href: "#free-1", icon: BookOpen },
                 { name: "Artikel Trading", href: "/articles", icon: FileText },
                 { name: "Strategy Trading", href: "#free-1", icon: TrendingUp },
-                { name: "Video Trading", href: "#free-2", icon: PlayCircle },
+                {
+                  name: "Video Trading",
+                  href: "/video-trading",
+                  icon: PlayCircle,
+                },
               ]}
             />
 

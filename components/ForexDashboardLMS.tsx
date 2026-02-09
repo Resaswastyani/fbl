@@ -105,6 +105,23 @@ type Article = {
   };
 };
 
+type TradingVideo = {
+  id: string;
+  title: string;
+  description?: string;
+  videoUrl: string;
+  videoType: "YOUTUBE" | "UPLOAD";
+  thumbnail?: string;
+  published: boolean;
+  viewCount: number;
+  createdAt: string;
+  updatedAt: string;
+  author: {
+    name: string | null;
+    email: string;
+  };
+};
+
 /* -------------- Mock Data -------------- */
 const MOCK_COURSES: Course[] = [
   {
@@ -201,6 +218,15 @@ export default function ForexDashboardLMS() {
     setValue: setArticleValue,
   } = useForm<any>();
 
+  // ✅ FORM BARU untuk TradingVideo
+  const {
+    register: registerVideo,
+    handleSubmit: handleSubmitVideo,
+    reset: resetVideo,
+    setValue: setVideoValue,
+    watch: watchVideo,
+  } = useForm<any>();
+
   const { theme, setTheme } = useTheme();
   const safeTheme: "light" | "dark" = theme === "dark" ? "dark" : "light";
   const toggleTheme = () => setTheme(safeTheme === "light" ? "dark" : "light");
@@ -275,6 +301,16 @@ export default function ForexDashboardLMS() {
   const [articleConfirmOpen, setArticleConfirmOpen] = useState(false);
   const [uploadingThumbnail, setUploadingThumbnail] = useState(false);
 
+  // ✅ STATE BARU untuk Trading Videos
+  const [videos, setVideos] = useState<TradingVideo[]>([]);
+  const [loadingVideos, setLoadingVideos] = useState(false);
+  const [selectedVideo, setSelectedVideo] = useState<TradingVideo | null>(null);
+  const [videoModalOpen, setVideoModalOpen] = useState(false);
+  const [editingVideo, setEditingVideo] = useState<TradingVideo | null>(null);
+  const [videoDeleteTarget, setVideoDeleteTarget] =
+    useState<TradingVideo | null>(null);
+  const [videoConfirmOpen, setVideoConfirmOpen] = useState(false);
+  const [uploadingVideo, setUploadingVideo] = useState(false);
   const [activeMenu, setActiveMenu] = useState<
     | "dashboard"
     | "courses"
@@ -287,7 +323,8 @@ export default function ForexDashboardLMS() {
     | "forum"
     | "certificates"
     | "profile"
-    | "article-management" // ✅ MENU BARU
+    | "article-management"
+    | "video-trading" // ✅ MENU BARU
   >("dashboard");
 
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
@@ -497,6 +534,194 @@ export default function ForexDashboardLMS() {
     }
   };
 
+  // fetch video trading
+  useEffect(() => {
+    const fetchVideos = async () => {
+      setLoadingVideos(true);
+      try {
+        const response = await fetch("/api/trading-videos");
+        if (response.ok) {
+          const data = await response.json();
+          setVideos(data.videos || []);
+        }
+      } catch (error) {
+        console.error("Error fetching videos:", error);
+      } finally {
+        setLoadingVideos(false);
+      }
+    };
+
+    if (activeMenu === "video-trading") {
+      fetchVideos();
+    }
+  }, [activeMenu]);
+
+  // ================= TRADING VIDEO CRUD HANDLERS =================
+
+  const openAddVideo = () => {
+    setEditingVideo(null);
+    resetVideo({
+      title: "",
+      description: "",
+      videoUrl: "",
+      videoType: "YOUTUBE",
+      thumbnail: "",
+      published: false,
+    });
+    setVideoModalOpen(true);
+  };
+
+  const openEditVideo = (video: TradingVideo) => {
+    setEditingVideo(video);
+    resetVideo({
+      title: video.title,
+      description: video.description,
+      videoUrl: video.videoUrl,
+      videoType: video.videoType,
+      thumbnail: video.thumbnail || "",
+      published: video.published,
+    });
+    setVideoModalOpen(true);
+  };
+
+  const handleVideoUpload = async (file: File) => {
+    setUploadingVideo(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!res.ok) throw new Error("Upload failed");
+
+      const data = await res.json();
+      setVideoValue("videoUrl", data.url);
+      setVideoValue("videoType", "UPLOAD");
+    } catch (error) {
+      console.error("Video upload error:", error);
+      alert("Gagal mengupload video");
+    } finally {
+      setUploadingVideo(false);
+    }
+  };
+
+  const handleSaveVideo = async (data: any) => {
+    try {
+      if (editingVideo) {
+        // Update video
+        const response = await fetch("/api/trading-videos", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            id: editingVideo.id,
+            title: data.title,
+            description: data.description,
+            videoUrl: data.videoUrl,
+            videoType: data.videoType,
+            thumbnail: data.thumbnail,
+            published: data.published,
+          }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || "Failed to update video");
+        }
+
+        const result = await response.json();
+        setVideos((prev) =>
+          prev.map((v) => (v.id === editingVideo.id ? result.video : v)),
+        );
+      } else {
+        // Create new video
+        const response = await fetch("/api/trading-videos", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            title: data.title,
+            description: data.description,
+            videoUrl: data.videoUrl,
+            videoType: data.videoType,
+            thumbnail: data.thumbnail,
+            published: data.published,
+          }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || "Failed to create video");
+        }
+
+        const result = await response.json();
+        setVideos((prev) => [result.video, ...prev]);
+      }
+
+      setVideoModalOpen(false);
+      resetVideo();
+    } catch (error) {
+      console.error("Error saving video:", error);
+      const errorMessage =
+        error instanceof Error ? error.message : "Terjadi kesalahan";
+      alert(`Gagal menyimpan video: ${errorMessage}`);
+    }
+  };
+
+  const confirmDeleteVideo = (video: TradingVideo) => {
+    setVideoDeleteTarget(video);
+    setVideoConfirmOpen(true);
+  };
+
+  const doDeleteVideo = async () => {
+    if (!videoDeleteTarget) return;
+
+    try {
+      const response = await fetch(
+        `/api/trading-videos?id=${videoDeleteTarget.id}`,
+        {
+          method: "DELETE",
+        },
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to delete video");
+      }
+
+      setVideos((prev) => prev.filter((v) => v.id !== videoDeleteTarget.id));
+      setVideoDeleteTarget(null);
+      setVideoConfirmOpen(false);
+    } catch (error) {
+      console.error("Error deleting video:", error);
+      const errorMessage =
+        error instanceof Error ? error.message : "Terjadi kesalahan";
+      alert(`Gagal menghapus video: ${errorMessage}`);
+    }
+  };
+
+  // Helper: Extract YouTube ID
+  const extractYouTubeId = (url: string): string | null => {
+    const patterns = [
+      /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\s?]+)/,
+      /youtube\.com\/shorts\/([^&\s?]+)/,
+    ];
+
+    for (const pattern of patterns) {
+      const match = url.match(pattern);
+      if (match) return match[1];
+    }
+
+    return null;
+  };
+
+  // Helper: Get YouTube embed URL
+  const getYouTubeEmbedUrl = (url: string): string => {
+    const videoId = extractYouTubeId(url);
+    return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
+  };
+
   /* ================= EXISTING CRUD HANDLERS ================= */
 
   const openAddCourse = () => {
@@ -628,11 +853,119 @@ export default function ForexDashboardLMS() {
     setLessonModalOpen(true);
   };
 
+  // const handleSaveLesson = async (data: any) => {
+  //   if (!selectedCourse) return;
+
+  //   try {
+  //     const contentValue = contentEditorRef.current?.value || data.content;
+
+  //     if (editingLesson) {
+  //       const response = await fetch("/api/lessons", {
+  //         method: "PUT",
+  //         headers: { "Content-Type": "application/json" },
+  //         body: JSON.stringify({
+  //           id: editingLesson.id,
+  //           title: data.title,
+  //           type: data.type,
+  //           content:
+  //             data.type === "html" || data.type === "text"
+  //               ? contentValue
+  //               : null,
+  //           contentUrl:
+  //             data.type === "video" || data.type === "pdf"
+  //               ? data.contentUrl
+  //               : null,
+  //           duration: data.duration,
+  //         }),
+  //       });
+
+  //       if (!response.ok) {
+  //         const errorData = await response.json();
+  //         throw new Error(errorData.error || "Failed to update lesson");
+  //       }
+
+  //       const result = await response.json();
+  //       const updatedLesson = result.lesson;
+
+  //       setCourses((prev) =>
+  //         prev.map((c) =>
+  //           c.id === selectedCourse.id
+  //             ? {
+  //                 ...c,
+  //                 lessons: c.lessons
+  //                   ? c.lessons.map((l) =>
+  //                       l.id === updatedLesson.id ? updatedLesson : l,
+  //                     )
+  //                   : [updatedLesson],
+  //               }
+  //             : c,
+  //         ),
+  //       );
+  //     } else {
+  //       const response = await fetch("/api/lessons", {
+  //         method: "POST",
+  //         headers: { "Content-Type": "application/json" },
+  //         body: JSON.stringify({
+  //           title: data.title,
+  //           type: data.type,
+  //           content:
+  //             data.type === "html" || data.type === "text"
+  //               ? contentValue
+  //               : null,
+  //           contentUrl:
+  //             data.type === "video" || data.type === "pdf"
+  //               ? data.contentUrl
+  //               : null,
+  //           duration: data.duration,
+  //           courseId: selectedCourse.id,
+  //         }),
+  //       });
+
+  //       if (!response.ok) {
+  //         const errorData = await response.json();
+  //         throw new Error(errorData.error || "Failed to create lesson");
+  //       }
+
+  //       const result = await response.json();
+  //       const newLesson = result.lesson;
+
+  //       setCourses((prev) =>
+  //         prev.map((c) =>
+  //           c.id === selectedCourse.id
+  //             ? {
+  //                 ...c,
+  //                 lessons: c.lessons ? [...c.lessons, newLesson] : [newLesson],
+  //               }
+  //             : c,
+  //         ),
+  //       );
+  //     }
+
+  //     setLessonModalOpen(false);
+  //     resetLesson();
+  //   } catch (error) {
+  //     console.error("Error saving lesson:", error);
+  //     const errorMessage =
+  //       error instanceof Error ? error.message : "Terjadi kesalahan";
+  //     alert(
+  //       `Gagal ${editingLesson ? "memperbarui" : "membuat"} lesson: ${errorMessage}`,
+  //     );
+  //   }
+  // };
   const handleSaveLesson = async (data: any) => {
     if (!selectedCourse) return;
 
     try {
-      const contentValue = contentEditorRef.current?.value || data.content;
+      // Get content from RichTextEditor ref or form data
+      let contentValue = "";
+
+      if (data.type === "html" || data.type === "text") {
+        // Get content from editor ref
+        contentValue = contentEditorRef.current?.value || data.content || "";
+      }
+
+      // For video/pdf, contentUrl is the main content
+      let contentUrlValue = data.contentUrl || null;
 
       if (editingLesson) {
         const response = await fetch("/api/lessons", {
@@ -642,14 +975,8 @@ export default function ForexDashboardLMS() {
             id: editingLesson.id,
             title: data.title,
             type: data.type,
-            content:
-              data.type === "html" || data.type === "text"
-                ? contentValue
-                : null,
-            contentUrl:
-              data.type === "video" || data.type === "pdf"
-                ? data.contentUrl
-                : null,
+            content: contentValue || null,
+            contentUrl: contentUrlValue,
             duration: data.duration,
           }),
         });
@@ -683,14 +1010,8 @@ export default function ForexDashboardLMS() {
           body: JSON.stringify({
             title: data.title,
             type: data.type,
-            content:
-              data.type === "html" || data.type === "text"
-                ? contentValue
-                : null,
-            contentUrl:
-              data.type === "video" || data.type === "pdf"
-                ? data.contentUrl
-                : null,
+            content: contentValue || null,
+            contentUrl: contentUrlValue,
             duration: data.duration,
             courseId: selectedCourse.id,
           }),
@@ -718,6 +1039,10 @@ export default function ForexDashboardLMS() {
 
       setLessonModalOpen(false);
       resetLesson();
+      // Reset editor content
+      if (contentEditorRef.current) {
+        contentEditorRef.current.value = "";
+      }
     } catch (error) {
       console.error("Error saving lesson:", error);
       const errorMessage =
@@ -1121,6 +1446,160 @@ export default function ForexDashboardLMS() {
                         title="Hapus Artikel"
                       >
                         <Trash2 size={18} />
+                      </button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  // ================= VIDEO TRADING PANEL =================
+  const VideoTradingPanel = () => {
+    if (loadingVideos) {
+      return (
+        <div className="flex items-center justify-center py-12">
+          <Loader className="animate-spin h-8 w-8 text-primary mr-3" />
+          <span>Loading videos...</span>
+        </div>
+      );
+    }
+
+    return (
+      <div>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-semibold flex items-center gap-2">
+            <Play className="h-5 w-5" />
+            Video Trading
+          </h2>
+          <div className="flex items-center gap-3">
+            <Button
+              variant="outline"
+              onClick={async () => {
+                setLoadingVideos(true);
+                const response = await fetch("/api/trading-videos");
+                if (response.ok) {
+                  const data = await response.json();
+                  setVideos(data.videos || []);
+                }
+                setLoadingVideos(false);
+              }}
+            >
+              <Loader className="mr-2 h-4 w-4" /> Refresh
+            </Button>
+            <Button onClick={openAddVideo}>
+              <Plus className="mr-2 h-4 w-4" /> Tambah Video
+            </Button>
+          </div>
+        </div>
+
+        {videos.length === 0 ? (
+          <div className="text-center py-12 text-muted-foreground">
+            <p className="mb-4">Belum ada video trading. Buat video pertama!</p>
+            <Button onClick={openAddVideo}>
+              <Plus className="mr-2 h-4 w-4" /> Tambah Video Pertama
+            </Button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {videos.map((video) => (
+              <Card
+                key={video.id}
+                className={!video.published ? "opacity-75" : ""}
+              >
+                <CardContent className="p-0">
+                  {/* Thumbnail / Video Preview */}
+                  <div className="relative aspect-video bg-gray-900 rounded-t-lg overflow-hidden group">
+                    {video.thumbnail ? (
+                      <img
+                        src={video.thumbnail}
+                        alt={video.title}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-gray-800">
+                        <Play className="h-12 w-12 text-gray-600" />
+                      </div>
+                    )}
+                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <Button
+                        size="sm"
+                        onClick={() => {
+                          setSelectedVideo(video);
+                          setActiveMenu("videos");
+                        }}
+                      >
+                        <Play className="mr-1 h-4 w-4" /> Tonton
+                      </Button>
+                    </div>
+                    {!video.published && (
+                      <Badge
+                        className="absolute top-2 left-2"
+                        variant="secondary"
+                      >
+                        Draft
+                      </Badge>
+                    )}
+                    <Badge
+                      className="absolute top-2 right-2"
+                      variant={
+                        video.videoType === "YOUTUBE" ? "default" : "secondary"
+                      }
+                    >
+                      {video.videoType === "YOUTUBE" ? "YouTube" : "Upload"}
+                    </Badge>
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-4">
+                    <h3 className="font-semibold text-lg mb-1 line-clamp-1">
+                      {video.title}
+                    </h3>
+                    <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
+                      {video.description || "Tidak ada deskripsi"}
+                    </p>
+
+                    <div className="flex items-center justify-between text-xs text-muted-foreground mb-3">
+                      <span className="flex items-center gap-1">
+                        <User className="h-3 w-3" />
+                        {video.author.name || video.author.email}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Eye className="h-3 w-3" />
+                        {video.viewCount} views
+                      </span>
+                    </div>
+
+                    <div className="flex gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="flex-1"
+                        onClick={() => openEditVideo(video)}
+                      >
+                        <Edit className="mr-1 h-3 w-3" /> Edit
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="flex-1"
+                        onClick={() => {
+                          setSelectedVideo(video);
+                          setActiveMenu("videos");
+                        }}
+                      >
+                        <Eye className="mr-1 h-3 w-3" /> Preview
+                      </Button>
+                      <button
+                        onClick={() => confirmDeleteVideo(video)}
+                        className="p-2 text-red-600 hover:text-red-800 transition hover:bg-red-50 rounded-md"
+                        title="Hapus Video"
+                      >
+                        <Trash2 size={16} />
                       </button>
                     </div>
                   </div>
@@ -1630,6 +2109,7 @@ export default function ForexDashboardLMS() {
             {activeMenu === "pdfs" && <PdfPanel />}
             {activeMenu === "articles" && <ArticlePanel />}
             {activeMenu === "article-management" && <ArticleManagementPanel />}
+            {activeMenu === "video-trading" && <VideoTradingPanel />}
             {activeMenu === "quizzes" && <QuizPanel />}
             {activeMenu === "progress" && <ProgressPanel />}
             {activeMenu === "forum" && <ForumPanel />}
@@ -2008,6 +2488,235 @@ export default function ForexDashboardLMS() {
           </motion.div>
         )}
       </AnimatePresence>
+      {/* ✅ TRADING VIDEO MODAL - BARU */}
+      <AnimatePresence>
+        {videoModalOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.98, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.98, opacity: 0 }}
+              className="bg-white dark:bg-slate-900 rounded-2xl p-6 w-full max-w-2xl shadow-2xl max-h-[95vh] overflow-y-auto"
+            >
+              <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
+                <Play className="h-5 w-5" />
+                {editingVideo ? "Edit Video Trading" : "Tambah Video Trading"}
+              </h3>
+              <form
+                onSubmit={handleSubmitVideo(handleSaveVideo)}
+                className="flex flex-col gap-4"
+              >
+                {/* Judul */}
+                <div>
+                  <Label htmlFor="video-title">Judul Video</Label>
+                  <Input
+                    id="video-title"
+                    {...registerVideo("title", { required: true })}
+                    placeholder="Masukkan judul video yang menarik"
+                  />
+                </div>
+
+                {/* Deskripsi */}
+                <div>
+                  <Label htmlFor="video-description">Deskripsi</Label>
+                  <Textarea
+                    id="video-description"
+                    {...registerVideo("description")}
+                    placeholder="Deskripsi singkat tentang video ini..."
+                    rows={3}
+                  />
+                </div>
+
+                {/* Tipe Video */}
+                <div>
+                  <Label htmlFor="video-type">Sumber Video</Label>
+                  <Select
+                    defaultValue="YOUTUBE"
+                    onValueChange={(value) => {
+                      setVideoValue("videoType", value);
+                      if (value === "YOUTUBE") {
+                        setVideoValue("videoUrl", "");
+                      }
+                    }}
+                    {...registerVideo("videoType")}
+                  >
+                    <SelectTrigger id="video-type">
+                      <SelectValue placeholder="Pilih sumber video" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="YOUTUBE">YouTube URL</SelectItem>
+                      <SelectItem value="UPLOAD">Upload File</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* URL Video atau Upload */}
+                {watchVideo("videoType") === "YOUTUBE" ? (
+                  <div>
+                    <Label htmlFor="video-url">URL YouTube</Label>
+                    <Input
+                      id="video-url"
+                      {...registerVideo("videoUrl", { required: true })}
+                      placeholder="https://youtube.com/watch?v=... atau https://youtu.be/..."
+                    />
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Support: youtube.com/watch?v=..., youtu.be/...,
+                      youtube.com/shorts/...
+                    </p>
+                  </div>
+                ) : (
+                  <div>
+                    <Label>Upload Video</Label>
+                    <div className="flex items-center gap-4">
+                      {registerVideo("videoUrl").value && (
+                        <video
+                          src={registerVideo("videoUrl").value}
+                          className="w-32 h-24 object-cover rounded-lg"
+                          controls
+                        />
+                      )}
+                      <div className="flex-1">
+                        <Input
+                          {...registerVideo("videoUrl")}
+                          placeholder="URL video hasil upload"
+                          readOnly
+                        />
+                        <div className="mt-2">
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            disabled={uploadingVideo}
+                            onClick={() => {
+                              const input = document.createElement("input");
+                              input.type = "file";
+                              input.accept = "video/*";
+                              input.onchange = async (e) => {
+                                const file = (e.target as HTMLInputElement)
+                                  .files?.[0];
+                                if (file) {
+                                  await handleVideoUpload(file);
+                                }
+                              };
+                              input.click();
+                            }}
+                          >
+                            {uploadingVideo ? (
+                              <>
+                                <Loader className="mr-2 h-4 w-4 animate-spin" />
+                                Mengupload...
+                              </>
+                            ) : (
+                              <>
+                                <Play className="mr-2 h-4 w-4" />
+                                Upload Video
+                              </>
+                            )}
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Thumbnail (Optional) */}
+                <div>
+                  <Label>Thumbnail (Opsional)</Label>
+                  <div className="flex items-center gap-4">
+                    {registerVideo("thumbnail").value && (
+                      <img
+                        src={registerVideo("thumbnail").value}
+                        alt="Thumbnail"
+                        className="w-32 h-24 object-cover rounded-lg border"
+                      />
+                    )}
+                    <div className="flex-1">
+                      <Input
+                        {...registerVideo("thumbnail")}
+                        placeholder="URL thumbnail custom (auto-generate untuk YouTube)"
+                      />
+                    </div>
+                  </div>
+                  {watchVideo("videoType") === "YOUTUBE" && (
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Kosongkan untuk menggunakan thumbnail YouTube otomatis
+                    </p>
+                  )}
+                </div>
+
+                {/* Status Published */}
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="video-published"
+                    {...registerVideo("published")}
+                    className="w-4 h-4 rounded border-gray-300"
+                  />
+                  <Label
+                    htmlFor="video-published"
+                    className="mb-0 cursor-pointer"
+                  >
+                    Publish video (tampilkan ke publik)
+                  </Label>
+                </div>
+
+                <div className="flex justify-end gap-3 pt-4 border-t mt-4">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => {
+                      setVideoModalOpen(false);
+                      resetVideo();
+                      setEditingVideo(null);
+                    }}
+                  >
+                    Batal
+                  </Button>
+                  <Button type="submit" disabled={uploadingVideo}>
+                    {editingVideo ? "Perbarui Video" : "Tambah Video"}
+                  </Button>
+                </div>
+              </form>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ✅ Confirm Delete Video Dialog - BARU */}
+      <AlertDialog open={videoConfirmOpen} onOpenChange={setVideoConfirmOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-red-600">
+              Hapus Video Trading?
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {videoDeleteTarget && (
+                <>
+                  Anda akan menghapus video "
+                  <span className="font-medium">{videoDeleteTarget.title}</span>
+                  ". Tindakan ini tidak dapat dibatalkan.
+                </>
+              )}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <div className="flex justify-end gap-2 mt-4">
+            <AlertDialogCancel onClick={() => setVideoConfirmOpen(false)}>
+              Batal
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={doDeleteVideo}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              Hapus Video
+            </AlertDialogAction>
+          </div>
+        </AlertDialogContent>
+      </AlertDialog>
 
       {/* Confirm Delete Course Dialog */}
       <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>

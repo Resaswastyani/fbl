@@ -1,84 +1,187 @@
+
 generator client {
   provider = "prisma-client-js"
 }
-datasource db {
-  provider = "mysql"
-}
 
-enum Role {
-  PELANGGAN
-  ADMIN
-  MENTOR
+datasource db {
+  provider = "mysql" // atau "mysql" sesuai database Anda
+  url      = env("DATABASE_URL")
 }
 
 model User {
-  id        String     @id @default(cuid())
-  name      String
-  email     String     @unique
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
   password  String
-  role      Role       @default(PELANGGAN)
-  createdAt DateTime   @default(now())
+  role      String   @default("PELANGGAN") // PELANGGAN, MENTOR, ADMIN
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // Relations
-  cart      Cart?
-  orders    Order[]
+  cart        Cart?
+  orders      Order[]
+  enrollments Enrollment[]
+  articles    Article[]
+
+  @@map("users")
+}
+
+model Course {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  price       String?  // "Free" atau harga dalam string
+  published   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  lessons     Lesson[]
+  enrollments Enrollment[]
+
+  @@map("courses")
+}
+
+model Lesson {
+  id          String   @id @default(cuid())
+  title       String
+  type        String   // "video", "pdf", "text", "html"
+  content     String @db.LongText  // Untuk text/html
+  contentUrl  String?  // Untuk video/pdf
+  duration    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  courseId    String
+  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  // Relations
+  lessonCompletions LessonCompletion[]
+
+  @@map("lessons")
+}
+
+model Enrollment {
+  id               String   @id @default(cuid())
+  userId           String
+  courseId         String
+  status           String   @default("ACTIVE") // ACTIVE, COMPLETED, CANCELLED
+  progress         Int      @default(0)
+  createdAt        DateTime @default(now())
+  lastAccessedAt   DateTime @updatedAt
+
+  // Relations
+  user              User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course            Course             @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lessonCompletions LessonCompletion[]
+
+  @@unique([userId, courseId])
+  @@map("enrollments")
+}
+
+// Model baru untuk tracking lesson completion (menggantikan array)
+model LessonCompletion {
+  id           String   @id @default(cuid())
+  enrollmentId String
+  lessonId     String
+  completedAt  DateTime @default(now())
+
+  // Relations
+  enrollment Enrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+  lesson     Lesson     @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([enrollmentId, lessonId])
+  @@map("lesson_completions")
 }
 
 model Product {
-  id          String    @id @default(cuid())
-  title       String
-  price       Int
-  thumbnail   String?
-  createdAt   DateTime  @default(now())
+  id        String   @id @default(cuid())
+  title     String
+  price     Float    @default(0)
+  thumbnail String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // Relations
-  cartItems   CartItem[]
-  orderItems  OrderItem[]
+  cartItems  CartItem[]
+  orderItems OrderItem[]
+
+  @@map("products")
 }
 
 model Cart {
-  id        String      @id @default(cuid())
-  userId    String      @unique
-  user      User        @relation(fields: [userId], references: [id])
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  updatedAt DateTime @updatedAt
 
-  items     CartItem[]
-  updatedAt DateTime    @updatedAt
+  // Relations
+  user  User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items CartItem[]
+
+  @@map("carts")
 }
 
 model CartItem {
-  id        String    @id @default(cuid())
+  id        String @id @default(cuid())
   cartId    String
   productId String
-  quantity  Int       @default(1)
+  quantity  Int    @default(1)
 
-  cart      Cart      @relation(fields: [cartId], references: [id])
-  product   Product   @relation(fields: [productId], references: [id])
+  // Relations
+  cart    Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([cartId, productId])
+  @@map("cart_items")
 }
 
 model Order {
-  id          String       @id @default(cuid())
-  userId      String
-  totalAmount Int
-  status      OrderStatus  @default(PENDING)
-  createdAt   DateTime     @default(now())
+  id            String   @id @default(cuid())
+  userId        String
+  totalAmount   Float
+  status        String   @default("PENDING") // PENDING, PAID, CANCELLED
+  transactionId String?
+  paymentMethod String   @default("midtrans")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
-  user        User         @relation(fields: [userId], references: [id])
-  items       OrderItem[]
+  // Relations
+  user   User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items  OrderItem[]
+
+  @@map("orders")
 }
 
 model OrderItem {
-  id          String   @id @default(cuid())
-  orderId     String
-  productId   String
-  price       Int
-  quantity    Int       @default(1)
+  id        String @id @default(cuid())
+  orderId   String
+  productId String
+  price     Float
+  quantity  Int
 
-  order       Order     @relation(fields: [orderId], references: [id])
-  product     Product   @relation(fields: [productId], references: [id])
+  // Relations
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("order_items")
 }
 
-enum OrderStatus {
-  PENDING
-  PAID
-  CANCELLED
+model Article {
+  id          String   @id @default(cuid())
+  title       String   @db.VarChar(255)     // ✅ Batasi judul
+  content     String   @db.LongText         // ✅ WAJIB LongText untuk konten panjang
+  thumbnail   String?  @db.VarChar(500)     // ✅ URL thumbnail
+  published   Boolean  @default(false)
+  viewCount   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  authorId    String
+  author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([authorId])
+  @@index([published, createdAt])
+  @@map("articles")
 }

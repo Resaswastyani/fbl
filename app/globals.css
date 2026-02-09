@@ -76,10 +76,14 @@
 
 @theme inline {
   /* Updated font variables - body text now uses Figtree */
-  --font-sans: var(--font-figtree), "Figtree", "Figtree Fallback", system-ui, sans-serif;
-  --font-figtree: var(--font-figtree), "Figtree", "Figtree Fallback", system-ui, sans-serif;
+  --font-sans:
+    var(--font-figtree), "Figtree", "Figtree Fallback", system-ui, sans-serif;
+  --font-figtree:
+    var(--font-figtree), "Figtree", "Figtree Fallback", system-ui, sans-serif;
   /* Update font-mono to use Geist Mono variable */
-  --font-mono: var(--font-geist-mono), "Geist Mono", "Geist Mono Fallback", ui-monospace, monospace;
+  --font-mono:
+    var(--font-geist-mono), "Geist Mono", "Geist Mono Fallback", ui-monospace,
+    monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -125,6 +129,132 @@
   body {
     /* Set body text to Figtree 18px */
     @apply bg-background text-foreground text-lg;
-    font-family: var(--font-figtree), "Figtree", "Figtree Fallback", system-ui, sans-serif;
+    font-family:
+      var(--font-figtree), "Figtree", "Figtree Fallback", system-ui, sans-serif;
   }
+}
+
+/* Article content styling */
+.article-content h1,
+.article-content h2,
+.article-content h3,
+.article-content h4,
+.article-content h5,
+.article-content h6 {
+  color: #111a4a;
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  line-height: 1.3;
+}
+
+.article-content h1 {
+  font-size: 1.875rem;
+}
+
+.article-content h2 {
+  font-size: 1.5rem;
+}
+
+.article-content h3 {
+  font-size: 1.25rem;
+}
+
+.article-content p {
+  margin-bottom: 1.25rem;
+  color: #374151;
+  line-height: 1.8;
+}
+
+.article-content ul,
+.article-content ol {
+  margin-bottom: 1.25rem;
+  padding-left: 1.5rem;
+}
+
+.article-content li {
+  margin-bottom: 0.5rem;
+  color: #374151;
+}
+
+.article-content a {
+  color: #156d95;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.article-content a:hover {
+  color: #0d5a7c;
+}
+
+.article-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  margin: 1.5rem 0;
+}
+
+.article-content blockquote {
+  border-left: 4px solid #156d95;
+  padding-left: 1rem;
+  margin: 1.5rem 0;
+  font-style: italic;
+  color: #6e6e6e;
+}
+
+.article-content code {
+  background-color: #f3f4f6;
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+  color: #111a4a;
+}
+
+.article-content pre {
+  background-color: #1f2937;
+  color: #f9fafb;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.article-content pre code {
+  background-color: transparent;
+  color: inherit;
+  padding: 0;
+}
+
+.article-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+}
+
+.article-content th,
+.article-content td {
+  border: 1px solid #e5e7eb;
+  padding: 0.75rem;
+  text-align: left;
+}
+
+.article-content th {
+  background-color: #f9fafb;
+  font-weight: 600;
+  color: #111a4a;
+}
+
+/* Line clamp utility */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }

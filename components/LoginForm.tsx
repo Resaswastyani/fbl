@@ -9,7 +9,10 @@ import { Label } from "@/components/ui/label";
 import { Eye, EyeOff, ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-export function LoginForm({ className, ...props }: React.ComponentProps<"div">) {
+export function LoginForm({
+  className,
+  ...props
+}: React.ComponentProps<"div">) {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -20,7 +23,8 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
 
     const form = e.currentTarget;
     const email = (form.elements.namedItem("email") as HTMLInputElement).value;
-    const password = (form.elements.namedItem("password") as HTMLInputElement).value;
+    const password = (form.elements.namedItem("password") as HTMLInputElement)
+      .value;
 
     try {
       const res = await fetch("/api/login", {
@@ -37,8 +41,12 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
         return;
       }
 
-      // sukses login
-      router.push("/dashboard"); // redirect ke dashboard (ubah jika beda)
+      // ✅ REDIRECT BERDASARKAN ROLE
+      if (data.user.role === "PELANGGAN") {
+        router.push("/student/dashboard"); // Dashboard khusus student
+      } else {
+        router.push("/dashboard"); // Dashboard admin/mentor
+      }
     } catch (error) {
       console.error("Error:", error);
       alert("Terjadi kesalahan");
@@ -49,7 +57,6 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-
       {/* Back button */}
       <button
         className="
@@ -75,11 +82,9 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
 
       <Card className="overflow-hidden">
         <CardContent className="grid p-0 md:grid-cols-2">
-
           {/* FORM */}
           <form className="p-6 md:p-8" onSubmit={handleSubmit}>
             <div className="flex flex-col gap-6">
-
               {/* Title */}
               <div className="flex flex-col items-center text-center">
                 <h1 className="text-2xl font-bold">Selamat datang kembali</h1>
@@ -91,7 +96,13 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
               {/* Email */}
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" name="email" type="email" placeholder="Masukkan email Anda..." required />
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  placeholder="Masukkan email Anda..."
+                  required
+                />
               </div>
 
               {/* Password */}
@@ -141,7 +152,10 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
               </div>
 
               {/* Google Login */}
-              <Button variant="outline" className="w-full flex items-center justify-center gap-2">
+              <Button
+                variant="outline"
+                className="w-full flex items-center justify-center gap-2"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -178,9 +192,8 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
 
       {/* Terms */}
       <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-primary">
-        By clicking continue, you agree to our{" "}
-        <a href="#">Terms of Service</a> and{" "}
-        <a href="#">Privacy Policy</a>.
+        By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
+        and <a href="#">Privacy Policy</a>.
       </div>
     </div>
   );

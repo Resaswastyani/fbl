@@ -18,7 +18,6 @@ export const ProductTeaserCard = ({
   return (
     <section className="w-full pt-24 md:pt-32 pb-20 bg-white">
       <div className="max-w-7xl mx-auto grid grid-cols-12 gap-5 lg:gap-16 px-8 md:px-12">
-
         {/* LEFT TEXT */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -41,28 +40,32 @@ export const ProductTeaserCard = ({
           </a>
 
           {/* Headline */}
-          <h1 className="text-[40px] font-normal leading-tight tracking-tight text-[#111A4A] mb-6"
-              style={{
-                fontFamily: "var(--font-figtree), Figtree",
-                fontSize: "50px",
-                fontWeight: "500",
-              }}
-            >
+          <h1
+            className="text-[40px] font-normal leading-tight tracking-tight text-[#111A4A] mb-6"
+            style={{
+              fontFamily: "var(--font-figtree), Figtree",
+              fontSize: "50px",
+              fontWeight: "500",
+            }}
+          >
             {headline}
           </h1>
 
           {/* Subheadline */}
-          <p className="text-lg leading-6 text-[#111A4A] opacity-60 mt-0 mb-6"
+          <p
+            className="text-lg leading-6 text-[#111A4A] opacity-60 mt-0 mb-6"
             style={{ fontFamily: "var(--font-figtree), Figtree" }}
           >
-            Layanan edukasi dan konsultasi bisnis di bidang Forex Trading
-            yang hadir untuk menjawab kebutuhan masyarakat Indonesia 
-            dalam memahami dan menguasai dunia trading secara praktis, efektif, dan berorientasi hasil.
+            Layanan edukasi dan konsultasi bisnis di bidang Forex Trading yang
+            hadir untuk menjawab kebutuhan masyarakat Indonesia dalam memahami
+            dan menguasai dunia trading secara praktis, efektif, dan
+            berorientasi hasil.
           </p>
+          <p className="mb-5">PT AKADEMI KEUANGAN NUSANTARA </p>
 
           {/* Small CTA Button */}
           <button
-             onClick={() => router.push(primaryButtonHref)}
+            onClick={() => router.push(primaryButtonHref)}
             className="
               inline-flex items-center justify-center
               bg-[#156d95]

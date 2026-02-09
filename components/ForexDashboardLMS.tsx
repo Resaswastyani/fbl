@@ -1,22 +1,54 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { useTheme } from "next-themes";
-import { Trash2, Plus, Play, FileText, Award, User, MessageCircle } from "lucide-react";
+import {
+  Trash2,
+  Plus,
+  Play,
+  FileText,
+  Award,
+  User,
+  MessageCircle,
+  Edit,
+  Loader,
+  File,
+  Image,
+  Newspaper,
+  Eye,
+  Calendar,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 
-// UI primitives (sesuaikan jika berbeda)
+// UI primitives
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogAction, AlertDialogCancel } from "@/components/ui/alert-dialog";
-import Sidebar from "@/components/dashboard/SideBar"; // gunakan sidebar yang ada — atau ganti implementasi
-import Header from "@/components/dashboard/Header"; // gunakan header yg ada
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogAction,
+  AlertDialogCancel,
+} from "@/components/ui/alert-dialog";
+import { Textarea } from "@/components/ui/textarea";
+import { RichTextEditor } from "@/components/rich-text-editor";
+import Sidebar from "@/components/dashboard/SideBar";
+import Header from "@/components/dashboard/Header";
 
 /* ---------------- Types ---------------- */
 type Course = {
@@ -31,7 +63,8 @@ type Course = {
 type Lesson = {
   id: string;
   title: string;
-  type: "video" | "pdf" | "article";
+  type: "video" | "pdf" | "text" | "html";
+  content?: string;
   contentUrl?: string;
   duration?: string;
   quiz?: Quiz;
@@ -39,14 +72,37 @@ type Lesson = {
 
 type Quiz = {
   id: string;
-  questions: { id: string; q: string; choices: string[]; answerIndex: number }[];
+  questions: {
+    id: string;
+    q: string;
+    choices: string[];
+    answerIndex: number;
+  }[];
 };
 
 type UserProgress = {
   userId: string;
   courseId: string;
-  completedLessons: string[]; // lesson ids
+  completedLessons: string[];
   score?: number;
+};
+
+type UserRole = "PELANGGAN" | "ADMIN" | "MENTOR";
+
+// ✅ TYPE BARU: Article
+type Article = {
+  id: string;
+  title: string;
+  content: string;
+  thumbnail?: string;
+  published: boolean;
+  viewCount: number;
+  createdAt: string;
+  updatedAt: string;
+  author: {
+    name: string | null;
+    email: string;
+  };
 };
 
 /* -------------- Mock Data -------------- */
@@ -54,13 +110,43 @@ const MOCK_COURSES: Course[] = [
   {
     id: "c-forex-basics",
     title: "Forex Foundations",
-    description: "Dasar-dasar forex: pasangan mata uang, pip, leverage, margin, dan psikologi trading.",
+    description:
+      "Dasar-dasar forex: pasangan mata uang, pip, leverage, margin, dan psikologi trading.",
     price: "Free",
     published: true,
     lessons: [
-      { id: "l1", title: "Pengenalan Forex", type: "article", contentUrl: "/content/intro.html", duration: "8m" },
-      { id: "l2", title: "Pair & Pip", type: "video", contentUrl: "/videos/pair-pip.mp4", duration: "12m" },
-      { id: "l3", title: "Manajemen Risiko", type: "pdf", contentUrl: "/pdfs/risk-management.pdf", duration: "10m" },
+      {
+        id: "l1",
+        title: "Pengenalan Forex",
+        type: "html",
+        content: `
+          <h2>Pengenalan Forex</h2>
+          <p>Forex adalah pasar keuangan terbesar di dunia dengan volume perdagangan harian mencapai triliunan dolar.</p>
+          <h3>Apa itu Forex?</h3>
+          <p>Forex adalah singkatan dari <strong>Foreign Exchange</strong>, yaitu pertukaran mata uang asing.</p>
+          <h3>Keuntungan Trading Forex</h3>
+          <ul>
+            <li>Market buka 24 jam</li>
+            <li>Liquidity tinggi</li>
+            <li>Leverage yang fleksibel</li>
+          </ul>
+        `,
+        duration: "8m",
+      },
+      {
+        id: "l2",
+        title: "Pair & Pip",
+        type: "video",
+        contentUrl: "/videos/pair-pip.mp4",
+        duration: "12m",
+      },
+      {
+        id: "l3",
+        title: "Manajemen Risiko",
+        type: "pdf",
+        contentUrl: "/pdfs/risk-management.pdf",
+        duration: "10m",
+      },
     ],
   },
   {
@@ -70,15 +156,51 @@ const MOCK_COURSES: Course[] = [
     price: "$49",
     published: true,
     lessons: [
-      { id: "l4", title: "Breakout Setup", type: "video", contentUrl: "/videos/breakout.mp4", duration: "18m" },
-      { id: "l5", title: "Pullback Rules", type: "article", contentUrl: "/content/pullback.html", duration: "9m" },
+      {
+        id: "l4",
+        title: "Breakout Setup",
+        type: "video",
+        contentUrl: "/videos/breakout.mp4",
+        duration: "18m",
+      },
+      {
+        id: "l5",
+        title: "Pullback Rules",
+        type: "html",
+        content: `
+          <h2>Pullback Rules</h2>
+          <p>Pullback adalah retracement sementara dalam trend yang sedang berlangsung.</p>
+          <h3>Cara Mengidentifikasi Pullback</h3>
+          <ol>
+            <li>Tunggu harga kembali ke support/resistance</li>
+            <li>Perhatikan volume trading</li>
+            <li>Gunakan indikator konfirmasi</li>
+          </ol>
+        `,
+        duration: "9m",
+      },
     ],
   },
 ];
 
 /* -------------- Main Component -------------- */
 export default function ForexDashboardLMS() {
-  const { register, handleSubmit, reset } = useForm<any>();
+  const { register, handleSubmit, reset, setValue } = useForm<any>();
+  const {
+    register: registerLesson,
+    handleSubmit: handleSubmitLesson,
+    reset: resetLesson,
+    setValue: setLessonValue,
+  } = useForm<any>();
+
+  // ✅ FORM BARU untuk Article
+  const {
+    register: registerArticle,
+    handleSubmit: handleSubmitArticle,
+    reset: resetArticle,
+    setValue: setArticleValue,
+  } = useForm<any>();
+
   const { theme, setTheme } = useTheme();
   const safeTheme: "light" | "dark" = theme === "dark" ? "dark" : "light";
   const toggleTheme = () => setTheme(safeTheme === "light" ? "dark" : "light");
@@ -86,61 +208,297 @@ export default function ForexDashboardLMS() {
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
   const [loadingUser, setLoadingUser] = useState(true);
+  const [userRole, setUserRole] = useState<UserRole | null>(null);
+  const [loadingCourses, setLoadingCourses] = useState(true);
 
+  // RichTextEditor refs
+  const contentEditorRef = useRef<HTMLInputElement>(null);
+  const articleContentRef = useRef<HTMLInputElement>(null);
+
+  // Role validation on mount
   useEffect(() => {
-    fetch("/api/auth/me")
-      .then((res) => {
+    const validateUser = async () => {
+      try {
+        const res = await fetch("/api/auth/me");
+
         if (res.status === 401) {
           router.push("/login");
-          return null;
+          return;
         }
-        return res.json();
-      })
-      .then((data) => {
-        if (data?.user) setUser(data.user);
-      })
-      .finally(() => setLoadingUser(false));
-  }, []);
 
+        const data = await res.json();
+
+        if (!data?.user) {
+          router.push("/login");
+          return;
+        }
+
+        setUser(data.user);
+        setUserRole(data.user.role);
+
+        if (data.user.role === "PELANGGAN") {
+          router.push("/student/dashboard");
+          return;
+        }
+
+        if (data.user.role !== "ADMIN" && data.user.role !== "MENTOR") {
+          router.push("/student/dashboard");
+          return;
+        }
+      } catch (error) {
+        console.error("Authentication error:", error);
+        router.push("/login");
+      } finally {
+        setLoadingUser(false);
+      }
+    };
+
+    validateUser();
+  }, [router]);
 
   /* UI state */
   const [mounted, setMounted] = useState(false);
-    useEffect(() => {
-      setMounted(true);
-    }, []);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const [courses, setCourses] = useState<Course[]>([]);
+
+  // ✅ STATE BARU untuk Articles
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [loadingArticles, setLoadingArticles] = useState(false);
+  const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
+  const [articleModalOpen, setArticleModalOpen] = useState(false);
+  const [editingArticle, setEditingArticle] = useState<Article | null>(null);
+  const [articleDeleteTarget, setArticleDeleteTarget] =
+    useState<Article | null>(null);
+  const [articleConfirmOpen, setArticleConfirmOpen] = useState(false);
+  const [uploadingThumbnail, setUploadingThumbnail] = useState(false);
+
   const [activeMenu, setActiveMenu] = useState<
     | "dashboard"
     | "courses"
     | "modules"
     | "videos"
     | "pdfs"
+    | "articles"
     | "quizzes"
     | "progress"
     | "forum"
     | "certificates"
     | "profile"
+    | "article-management" // ✅ MENU BARU
   >("dashboard");
 
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
+  const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<Course | null>(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [progressList, setProgressList] = useState<UserProgress[]>([]);
 
+  // Lesson management states
+  const [lessonModalOpen, setLessonModalOpen] = useState(false);
+  const [editingLesson, setEditingLesson] = useState<Lesson | null>(null);
+  const [lessonDeleteTarget, setLessonDeleteTarget] = useState<Lesson | null>(
+    null,
+  );
+  const [lessonConfirmOpen, setLessonConfirmOpen] = useState(false);
+
+  // Fetch courses from API on mount
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const response = await fetch("/api/courses");
+        if (response.ok) {
+          const data = await response.json();
+          setCourses(data.courses || data);
+        } else {
+          setCourses(MOCK_COURSES);
+        }
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+        setCourses(MOCK_COURSES);
+      } finally {
+        setLoadingCourses(false);
+      }
+    };
+
+    fetchCourses();
+  }, []);
+
+  // ✅ FETCH ARTICLES
+  useEffect(() => {
+    const fetchArticles = async () => {
+      setLoadingArticles(true);
+      try {
+        const response = await fetch("/api/articles");
+        if (response.ok) {
+          const data = await response.json();
+          setArticles(data.articles || []);
+        }
+      } catch (error) {
+        console.error("Error fetching articles:", error);
+      } finally {
+        setLoadingArticles(false);
+      }
+    };
+
+    if (activeMenu === "article-management") {
+      fetchArticles();
+    }
+  }, [activeMenu]);
+
   useEffect(() => {
     setMounted(true);
-    // init with mock
-    setCourses(MOCK_COURSES);
     setProgressList([
-      { userId: "u1", courseId: "c-forex-basics", completedLessons: ["l1"], score: 80 },
+      {
+        userId: "u1",
+        courseId: "c-forex-basics",
+        completedLessons: ["l1"],
+        score: 80,
+      },
       { userId: "u1", courseId: "c-strategy", completedLessons: [], score: 0 },
     ]);
   }, []);
 
-  /* ---------- CRUD Handlers (mock) ---------- */
+  /* ================= ARTICLE CRUD HANDLERS ================= */
+
+  const openAddArticle = () => {
+    setEditingArticle(null);
+    resetArticle({ title: "", thumbnail: "", published: false });
+    setArticleModalOpen(true);
+  };
+
+  const openEditArticle = (article: Article) => {
+    setEditingArticle(article);
+    resetArticle({
+      title: article.title,
+      thumbnail: article.thumbnail || "",
+      published: article.published,
+    });
+    setArticleModalOpen(true);
+  };
+
+  const handleThumbnailUpload = async (file: File) => {
+    setUploadingThumbnail(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!res.ok) throw new Error("Upload failed");
+
+      const data = await res.json();
+      setArticleValue("thumbnail", data.url);
+    } catch (error) {
+      console.error("Thumbnail upload error:", error);
+      alert("Gagal mengupload thumbnail");
+    } finally {
+      setUploadingThumbnail(false);
+    }
+  };
+
+  const handleSaveArticle = async (data: any) => {
+    try {
+      const contentValue = articleContentRef.current?.value || "";
+
+      if (editingArticle) {
+        // Update article
+        const response = await fetch("/api/articles", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            id: editingArticle.id,
+            title: data.title,
+            content: contentValue,
+            thumbnail: data.thumbnail,
+            published: data.published,
+          }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || "Failed to update article");
+        }
+
+        const result = await response.json();
+        setArticles((prev) =>
+          prev.map((a) => (a.id === editingArticle.id ? result.article : a)),
+        );
+      } else {
+        // Create new article
+        const response = await fetch("/api/articles", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            title: data.title,
+            content: contentValue,
+            thumbnail: data.thumbnail,
+            published: data.published,
+          }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || "Failed to create article");
+        }
+
+        const result = await response.json();
+        setArticles((prev) => [result.article, ...prev]);
+      }
+
+      setArticleModalOpen(false);
+      resetArticle();
+    } catch (error) {
+      console.error("Error saving article:", error);
+      const errorMessage =
+        error instanceof Error ? error.message : "Terjadi kesalahan";
+      alert(`Gagal menyimpan artikel: ${errorMessage}`);
+    }
+  };
+
+  const confirmDeleteArticle = (article: Article) => {
+    setArticleDeleteTarget(article);
+    setArticleConfirmOpen(true);
+  };
+
+  const doDeleteArticle = async () => {
+    if (!articleDeleteTarget) return;
+
+    try {
+      const response = await fetch(
+        `/api/articles?id=${articleDeleteTarget.id}`,
+        {
+          method: "DELETE",
+        },
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to delete article");
+      }
+
+      setArticles((prev) =>
+        prev.filter((a) => a.id !== articleDeleteTarget.id),
+      );
+      setArticleDeleteTarget(null);
+      setArticleConfirmOpen(false);
+    } catch (error) {
+      console.error("Error deleting article:", error);
+      const errorMessage =
+        error instanceof Error ? error.message : "Terjadi kesalahan";
+      alert(`Gagal menghapus artikel: ${errorMessage}`);
+    }
+  };
+
+  /* ================= EXISTING CRUD HANDLERS ================= */
+
   const openAddCourse = () => {
     setEditMode(false);
     setSelectedCourse(null);
@@ -155,15 +513,70 @@ export default function ForexDashboardLMS() {
     setModalOpen(true);
   };
 
-  const handleSaveCourse = (data: any) => {
-    if (editMode && selectedCourse) {
-      setCourses((prev) => prev.map((p) => (p.id === selectedCourse.id ? { ...p, title: data.title, description: data.description, price: data.price } : p)));
-    } else {
-      const id = `c-${Date.now()}`;
-      const newCourse: Course = { id, title: data.title, description: data.description, price: data.price || "Free", lessons: [], published: false };
-      setCourses((prev) => [newCourse, ...prev]);
+  const handleSaveCourse = async (data: any) => {
+    try {
+      if (editMode && selectedCourse) {
+        const response = await fetch("/api/courses", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            id: selectedCourse.id,
+            title: data.title,
+            description: data.description,
+            price: data.price,
+          }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || "Failed to update course");
+        }
+
+        const result = await response.json();
+        const updatedCourse = result.course;
+
+        setCourses((prev) =>
+          prev.map((p) => (p.id === selectedCourse.id ? updatedCourse : p)),
+        );
+      } else {
+        const response = await fetch("/api/courses", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            title: data.title,
+            description: data.description,
+            price: data.price || "Free",
+            published: false,
+          }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || "Failed to create course");
+        }
+
+        const result = await response.json();
+        const newCourse = result.course;
+
+        if (!newCourse.lessons) {
+          newCourse.lessons = [];
+        }
+
+        setCourses((prev) => [newCourse, ...prev]);
+      }
+
+      setModalOpen(false);
+      reset();
+    } catch (error) {
+      console.error("Error saving course:", error);
+      const errorMessage =
+        error instanceof Error ? error.message : "Terjadi kesalahan";
+      alert(
+        editMode
+          ? `Gagal memperbarui course: ${errorMessage}`
+          : `Gagal membuat course: ${errorMessage}`,
+      );
     }
-    setModalOpen(false);
   };
 
   const confirmDeleteCourse = (c: Course) => {
@@ -171,57 +584,270 @@ export default function ForexDashboardLMS() {
     setConfirmOpen(true);
   };
 
-  const doDeleteCourse = () => {
+  const doDeleteCourse = async () => {
     if (!deleteTarget) return;
-    setCourses((prev) => prev.filter((p) => p.id !== deleteTarget.id));
-    setDeleteTarget(null);
-    setConfirmOpen(false);
+
+    try {
+      const response = await fetch(`/api/courses?id=${deleteTarget.id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to delete course");
+      }
+
+      setCourses((prev) => prev.filter((p) => p.id !== deleteTarget.id));
+      setDeleteTarget(null);
+      setConfirmOpen(false);
+    } catch (error) {
+      console.error("Error deleting course:", error);
+      const errorMessage =
+        error instanceof Error ? error.message : "Terjadi kesalahan";
+      alert(`Gagal menghapus course: ${errorMessage}`);
+    }
+  };
+
+  /* ---------- Lesson CRUD Handlers ---------- */
+  const openAddLesson = (courseId: string) => {
+    setEditingLesson(null);
+    setSelectedCourse(courses.find((c) => c.id === courseId) || null);
+    resetLesson({ title: "", type: "html", contentUrl: "", duration: "" });
+    setLessonModalOpen(true);
+  };
+
+  const openEditLesson = (lesson: Lesson) => {
+    setEditingLesson(lesson);
+    resetLesson({
+      title: lesson.title,
+      type: lesson.type,
+      contentUrl: lesson.contentUrl || "",
+      duration: lesson.duration || "",
+      content: lesson.content || "",
+    });
+    setLessonModalOpen(true);
+  };
+
+  const handleSaveLesson = async (data: any) => {
+    if (!selectedCourse) return;
+
+    try {
+      const contentValue = contentEditorRef.current?.value || data.content;
+
+      if (editingLesson) {
+        const response = await fetch("/api/lessons", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            id: editingLesson.id,
+            title: data.title,
+            type: data.type,
+            content:
+              data.type === "html" || data.type === "text"
+                ? contentValue
+                : null,
+            contentUrl:
+              data.type === "video" || data.type === "pdf"
+                ? data.contentUrl
+                : null,
+            duration: data.duration,
+          }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || "Failed to update lesson");
+        }
+
+        const result = await response.json();
+        const updatedLesson = result.lesson;
+
+        setCourses((prev) =>
+          prev.map((c) =>
+            c.id === selectedCourse.id
+              ? {
+                  ...c,
+                  lessons: c.lessons
+                    ? c.lessons.map((l) =>
+                        l.id === updatedLesson.id ? updatedLesson : l,
+                      )
+                    : [updatedLesson],
+                }
+              : c,
+          ),
+        );
+      } else {
+        const response = await fetch("/api/lessons", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            title: data.title,
+            type: data.type,
+            content:
+              data.type === "html" || data.type === "text"
+                ? contentValue
+                : null,
+            contentUrl:
+              data.type === "video" || data.type === "pdf"
+                ? data.contentUrl
+                : null,
+            duration: data.duration,
+            courseId: selectedCourse.id,
+          }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || "Failed to create lesson");
+        }
+
+        const result = await response.json();
+        const newLesson = result.lesson;
+
+        setCourses((prev) =>
+          prev.map((c) =>
+            c.id === selectedCourse.id
+              ? {
+                  ...c,
+                  lessons: c.lessons ? [...c.lessons, newLesson] : [newLesson],
+                }
+              : c,
+          ),
+        );
+      }
+
+      setLessonModalOpen(false);
+      resetLesson();
+    } catch (error) {
+      console.error("Error saving lesson:", error);
+      const errorMessage =
+        error instanceof Error ? error.message : "Terjadi kesalahan";
+      alert(
+        `Gagal ${editingLesson ? "memperbarui" : "membuat"} lesson: ${errorMessage}`,
+      );
+    }
+  };
+
+  const confirmDeleteLesson = (lesson: Lesson) => {
+    setLessonDeleteTarget(lesson);
+    setLessonConfirmOpen(true);
+  };
+
+  const doDeleteLesson = async () => {
+    if (!lessonDeleteTarget || !selectedCourse) return;
+
+    try {
+      const response = await fetch(`/api/lessons?id=${lessonDeleteTarget.id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to delete lesson");
+      }
+
+      setCourses((prev) =>
+        prev.map((c) =>
+          c.id === selectedCourse.id
+            ? {
+                ...c,
+                lessons: c.lessons
+                  ? c.lessons.filter((l) => l.id !== lessonDeleteTarget.id)
+                  : [],
+              }
+            : c,
+        ),
+      );
+
+      setLessonDeleteTarget(null);
+      setLessonConfirmOpen(false);
+    } catch (error) {
+      console.error("Error deleting lesson:", error);
+      const errorMessage =
+        error instanceof Error ? error.message : "Terjadi kesalahan";
+      alert(`Gagal menghapus lesson: ${errorMessage}`);
+    }
   };
 
   /* ---------- Course/Module helpers ---------- */
-  const addLessonToCourse = (courseId: string, lesson: Lesson) => {
-    setCourses((prev) => prev.map((c) => (c.id === courseId ? { ...c, lessons: [...c.lessons, lesson] } : c)));
-  };
-
-  const markLessonComplete = (userId: string, courseId: string, lessonId: string) => {
+  const markLessonComplete = (
+    userId: string,
+    courseId: string,
+    lessonId: string,
+  ) => {
     setProgressList((prev) => {
-      const p = prev.find((x) => x.userId === userId && x.courseId === courseId);
+      const p = prev.find(
+        (x) => x.userId === userId && x.courseId === courseId,
+      );
       if (!p) {
-        return [...prev, { userId, courseId, completedLessons: [lessonId], score: 0 }];
+        return [
+          ...prev,
+          { userId, courseId, completedLessons: [lessonId], score: 0 },
+        ];
       } else if (!p.completedLessons.includes(lessonId)) {
-        return prev.map((x) => (x === p ? { ...p, completedLessons: [...p.completedLessons, lessonId] } : x));
+        return prev.map((x) =>
+          x === p
+            ? { ...p, completedLessons: [...p.completedLessons, lessonId] }
+            : x,
+        );
       }
       return prev;
     });
   };
 
-  /* ---------- Render helpers for each menu ---------- */
+  /* ================= RENDER PANELS ================= */
+
   const DashboardPanel = () => {
     const totalCourses = courses.length;
-    const totalLessons = courses.reduce((acc, c) => acc + c.lessons.length, 0);
-    const completedLessons = progressList.reduce((acc, p) => acc + p.completedLessons.length, 0);
+    const totalLessons = courses.reduce(
+      (acc, c) => acc + (c.lessons?.length || 0),
+      0,
+    );
+    const completedLessons = progressList.reduce(
+      (acc, p) => acc + p.completedLessons.length,
+      0,
+    );
+    const totalArticles = articles.length;
+
     return (
       <div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <Card>
             <CardContent>
               <h3 className="text-sm text-muted-foreground">Kursus</h3>
               <div className="text-2xl font-semibold">{totalCourses}</div>
-              <div className="text-xs mt-1 text-muted-foreground">Total kursus tersedia</div>
+              <div className="text-xs mt-1 text-muted-foreground">
+                Total kursus tersedia
+              </div>
             </CardContent>
           </Card>
           <Card>
             <CardContent>
               <h3 className="text-sm text-muted-foreground">Lessons</h3>
               <div className="text-2xl font-semibold">{totalLessons}</div>
-              <div className="text-xs mt-1 text-muted-foreground">Total lesson</div>
+              <div className="text-xs mt-1 text-muted-foreground">
+                Total lesson
+              </div>
             </CardContent>
           </Card>
           <Card>
             <CardContent>
-              <h3 className="text-sm text-muted-foreground">Progress (murid)</h3>
+              <h3 className="text-sm text-muted-foreground">Artikel</h3>
+              <div className="text-2xl font-semibold">{totalArticles}</div>
+              <div className="text-xs mt-1 text-muted-foreground">
+                Total artikel
+              </div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent>
+              <h3 className="text-sm text-muted-foreground">
+                Progress (murid)
+              </h3>
               <div className="text-2xl font-semibold">{completedLessons}</div>
-              <div className="text-xs mt-1 text-muted-foreground">Lesson terselesaikan</div>
+              <div className="text-xs mt-1 text-muted-foreground">
+                Lesson terselesaikan
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -234,16 +860,41 @@ export default function ForexDashboardLMS() {
                 <CardContent className="flex justify-between items-start gap-4">
                   <div>
                     <div className="text-lg font-semibold">{c.title}</div>
-                    <p className="text-sm text-muted-foreground">{c.description}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {c.description}
+                    </p>
                     <div className="flex items-center gap-2 mt-3">
-                      <Button size="sm" onClick={() => { setSelectedCourse(c); setActiveMenu("modules"); }}>Lihat Materi</Button>
-                      <Button variant="outline" size="sm" onClick={() => openEditCourse(c)}>Edit</Button>
-                      <button onClick={() => confirmDeleteCourse(c)} className="text-red-600"><Trash2 /></button>
+                      <Button
+                        size="sm"
+                        onClick={() => {
+                          setSelectedCourse(c);
+                          setActiveMenu("modules");
+                        }}
+                      >
+                        Lihat Materi
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => openEditCourse(c)}
+                      >
+                        Edit
+                      </Button>
+                      <button
+                        onClick={() => confirmDeleteCourse(c)}
+                        className="text-red-600 hover:text-red-800 transition"
+                      >
+                        <Trash2 size={18} />
+                      </button>
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="text-sm text-muted-foreground">{c.price}</div>
-                    <div className="mt-6 text-xs">{c.lessons.length} lessons</div>
+                    <div className="text-sm text-muted-foreground">
+                      {c.price}
+                    </div>
+                    <div className="mt-6 text-xs">
+                      {c.lessons?.length || 0} lessons
+                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -255,117 +906,371 @@ export default function ForexDashboardLMS() {
   };
 
   const CoursesPanel = () => {
+    if (loadingCourses) {
+      return (
+        <div className="flex items-center justify-center py-12">
+          <Loader className="animate-spin h-8 w-8 text-primary mr-3" />
+          <span>Loading courses...</span>
+        </div>
+      );
+    }
+
     return (
       <div>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-semibold">Courses</h2>
           <div className="flex items-center gap-3">
-            <Button variant="outline" onClick={() => { setCourses(MOCK_COURSES); }}>Reset Mock</Button>
-            <Button onClick={openAddCourse}><Plus /> Tambah Kursus</Button>
+            <Button
+              variant="outline"
+              onClick={async () => {
+                const response = await fetch("/api/courses");
+                if (response.ok) {
+                  const data = await response.json();
+                  setCourses(data.courses || data);
+                }
+              }}
+            >
+              <Loader className="mr-2 h-4 w-4" /> Refresh
+            </Button>
+            <Button onClick={openAddCourse}>
+              <Plus className="mr-2 h-4 w-4" /> Tambah Kursus
+            </Button>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {courses.map((c) => (
-            <Card key={c.id}>
-              <CardContent className="flex justify-between items-start gap-4">
-                <div>
-                  <div className="text-lg font-semibold">{c.title}</div>
-                  <div className="text-sm text-muted-foreground">{c.description}</div>
-                  <div className="mt-2 text-xs text-muted-foreground">{c.lessons.length} lesson(s)</div>
-                </div>
-
-                <div className="flex flex-col items-end gap-2">
-                  <div className="text-sm font-medium">{c.price}</div>
-                  <div className="flex gap-2">
-                    <Button size="sm" onClick={() => { setSelectedCourse(c); setActiveMenu("modules"); }}>Open</Button>
-                    <Button variant="outline" size="sm" onClick={() => openEditCourse(c)}>Edit</Button>
-                    <button onClick={() => confirmDeleteCourse(c)} className="p-2 text-red-600"><Trash2 /></button>
+        {courses.length === 0 ? (
+          <div className="text-center py-12 text-muted-foreground">
+            <p className="mb-4">Belum ada kursus. Tambahkan kursus baru!</p>
+            <Button onClick={openAddCourse}>
+              <Plus className="mr-2 h-4 w-4" /> Buat Kursus Pertama
+            </Button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {courses.map((c) => (
+              <Card key={c.id}>
+                <CardContent className="flex justify-between items-start gap-4">
+                  <div>
+                    <div className="text-lg font-semibold">{c.title}</div>
+                    <div className="text-sm text-muted-foreground">
+                      {c.description}
+                    </div>
+                    <div className="mt-2 text-xs text-muted-foreground">
+                      {c.lessons?.length || 0} lesson(s)
+                    </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+
+                  <div className="flex flex-col items-end gap-2">
+                    <div className="text-sm font-medium">{c.price}</div>
+                    <div className="flex gap-2">
+                      <Button
+                        size="sm"
+                        onClick={() => {
+                          setSelectedCourse(c);
+                          setActiveMenu("modules");
+                        }}
+                      >
+                        Open
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => openEditCourse(c)}
+                      >
+                        Edit
+                      </Button>
+                      <button
+                        onClick={() => confirmDeleteCourse(c)}
+                        className="p-2 text-red-600 hover:text-red-800 transition"
+                      >
+                        <Trash2 size={18} />
+                      </button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  // ✅ PANEL BARU: Article Management
+  const ArticleManagementPanel = () => {
+    if (loadingArticles) {
+      return (
+        <div className="flex items-center justify-center py-12">
+          <Loader className="animate-spin h-8 w-8 text-primary mr-3" />
+          <span>Loading articles...</span>
         </div>
+      );
+    }
+
+    return (
+      <div>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-semibold flex items-center gap-2">
+            <Newspaper className="h-5 w-5" />
+            Manajemen Artikel
+          </h2>
+          <div className="flex items-center gap-3">
+            <Button
+              variant="outline"
+              onClick={async () => {
+                setLoadingArticles(true);
+                const response = await fetch("/api/articles");
+                if (response.ok) {
+                  const data = await response.json();
+                  setArticles(data.articles || []);
+                }
+                setLoadingArticles(false);
+              }}
+            >
+              <Loader className="mr-2 h-4 w-4" /> Refresh
+            </Button>
+            <Button onClick={openAddArticle}>
+              <Plus className="mr-2 h-4 w-4" /> Tambah Artikel
+            </Button>
+          </div>
+        </div>
+
+        {articles.length === 0 ? (
+          <div className="text-center py-12 text-muted-foreground">
+            <p className="mb-4">Belum ada artikel. Buat artikel pertama!</p>
+            <Button onClick={openAddArticle}>
+              <Plus className="mr-2 h-4 w-4" /> Buat Artikel Pertama
+            </Button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 gap-4">
+            {articles.map((article) => (
+              <Card
+                key={article.id}
+                className={!article.published ? "opacity-75" : ""}
+              >
+                <CardContent className="flex justify-between items-start gap-4 p-4">
+                  <div className="flex gap-4 flex-1">
+                    {article.thumbnail ? (
+                      <img
+                        src={article.thumbnail}
+                        alt={article.title}
+                        className="w-32 h-24 object-cover rounded-lg"
+                      />
+                    ) : (
+                      <div className="w-32 h-24 bg-muted rounded-lg flex items-center justify-center">
+                        <Image className="h-8 w-8 text-muted-foreground" />
+                      </div>
+                    )}
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h3 className="text-lg font-semibold">
+                          {article.title}
+                        </h3>
+                        {!article.published && (
+                          <Badge variant="secondary">Draft</Badge>
+                        )}
+                      </div>
+                      <p className="text-sm text-muted-foreground line-clamp-2">
+                        {article.content
+                          .replace(/<[^>]*>/g, "")
+                          .substring(0, 150)}
+                        ...
+                      </p>
+                      <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground">
+                        <span className="flex items-center gap-1">
+                          <User className="h-3 w-3" />
+                          {article.author.name || article.author.email}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <Calendar className="h-3 w-3" />
+                          {new Date(article.createdAt).toLocaleDateString(
+                            "id-ID",
+                          )}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <Eye className="h-3 w-3" />
+                          {article.viewCount} views
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col items-end gap-2">
+                    <div className="flex gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => openEditArticle(article)}
+                      >
+                        <Edit className="mr-1 h-3 w-3" /> Edit
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          setSelectedArticle(article);
+                          setActiveMenu("articles");
+                        }}
+                      >
+                        <Eye className="mr-1 h-3 w-3" /> Preview
+                      </Button>
+                      <button
+                        onClick={() => confirmDeleteArticle(article)}
+                        className="p-2 text-red-600 hover:text-red-800 transition"
+                        title="Hapus Artikel"
+                      >
+                        <Trash2 size={18} />
+                      </button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
       </div>
     );
   };
 
   const ModulesPanel = () => {
     if (!selectedCourse) {
-      return <div>Pilih kursus terlebih dahulu (dari menu Courses atau Dashboard)</div>;
+      return (
+        <div className="py-12 text-center text-muted-foreground">
+          <p className="mb-4">
+            Pilih kursus terlebih dahulu (dari menu Courses atau Dashboard)
+          </p>
+          <Button onClick={() => setActiveMenu("courses")}>Pilih Kursus</Button>
+        </div>
+      );
     }
 
-    const addLesson = () => {
-      const id = `l-${Date.now()}`;
-      const lesson: Lesson = { id, title: `Lesson baru ${selectedCourse.lessons.length + 1}`, type: "video", contentUrl: "", duration: "5m" };
-      addLessonToCourse(selectedCourse.id, lesson);
-    };
+    const lessons = selectedCourse.lessons || [];
 
     return (
       <div>
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-xl font-semibold">Materi: {selectedCourse.title}</h2>
-            <p className="text-sm text-muted-foreground">{selectedCourse.description}</p>
+            <h2 className="text-xl font-semibold">
+              Materi: {selectedCourse.title}
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              {selectedCourse.description}
+            </p>
           </div>
           <div className="flex items-center gap-3">
-            <Button onClick={addLesson}><Plus /> Tambah Lesson</Button>
-            <Button onClick={() => setActiveMenu("videos")}><Play /> Play Sample</Button>
+            <Button onClick={() => openAddLesson(selectedCourse.id)}>
+              <Plus className="mr-2 h-4 w-4" /> Tambah Lesson
+            </Button>
+            <Button variant="outline" onClick={() => setActiveMenu("courses")}>
+              Kembali ke Courses
+            </Button>
           </div>
         </div>
 
         <div className="space-y-3">
-          {selectedCourse.lessons.map((ls) => (
-            <Card key={ls.id}>
-              <CardContent className="flex justify-between items-center">
-                <div>
-                  <div className="font-medium">{ls.title}</div>
-                  <div className="text-xs text-muted-foreground">{ls.type} • {ls.duration}</div>
-                </div>
-                <div className="flex gap-2">
-                  <Button size="sm" variant="outline" onClick={() => { /* edit lesson */ }}>Edit</Button>
-                  <Button size="sm" onClick={() => { /* open lesson */ setActiveMenu(ls.type === "video" ? "videos" : ls.type === "pdf" ? "pdfs" : "modules"); }}>
-                    Open
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+          {lessons.length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground">
+              <p>Belum ada lesson. Tambahkan lesson pertama!</p>
+            </div>
+          ) : (
+            lessons.map((ls) => (
+              <Card key={ls.id}>
+                <CardContent className="flex justify-between items-center">
+                  <div>
+                    <div className="font-medium">{ls.title}</div>
+                    <div className="text-xs text-muted-foreground capitalize">
+                      {ls.type === "html" ? "Article" : ls.type} • {ls.duration}
+                    </div>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => openEditLesson(ls)}
+                    >
+                      <Edit className="mr-1 h-3 w-3" /> Edit
+                    </Button>
+                    <Button
+                      size="sm"
+                      onClick={() => {
+                        setSelectedLesson(ls);
+                        if (ls.type === "video") setActiveMenu("videos");
+                        else if (ls.type === "pdf") setActiveMenu("pdfs");
+                        else setActiveMenu("articles");
+                      }}
+                    >
+                      Open
+                    </Button>
+                    <button
+                      onClick={() => confirmDeleteLesson(ls)}
+                      className="p-2 text-red-600 hover:text-red-800 transition"
+                      title="Hapus Lesson"
+                    >
+                      <Trash2 size={18} />
+                    </button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))
+          )}
         </div>
       </div>
     );
   };
 
   const VideoPanel = () => {
-    // will show first video of selectedCourse or a fallback
-    const firstVideo = selectedCourse?.lessons.find((l) => l.type === "video");
+    const videoLesson =
+      selectedLesson ||
+      selectedCourse?.lessons?.find((l) => l.type === "video");
+
+    if (!videoLesson) {
+      return (
+        <div className="py-12 text-center text-muted-foreground">
+          <p>Tidak ada video untuk kursus ini.</p>
+          <Button onClick={() => setActiveMenu("modules")} className="mt-4">
+            Kembali ke Materi
+          </Button>
+        </div>
+      );
+    }
+
     return (
       <div>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-semibold">Video Player</h2>
-          <div className="text-sm text-muted-foreground">{selectedCourse?.title ?? "No course selected"}</div>
+          <div className="text-sm text-muted-foreground">
+            {selectedCourse?.title ?? "No course selected"}
+          </div>
         </div>
 
         <Card>
           <CardContent>
-            {firstVideo ? (
-              <div>
-                <div className="mb-3 font-medium">{firstVideo.title}</div>
-                <div className="w-full bg-black/80 aspect-video rounded-md overflow-hidden">
-                  {/* NOTE: use <video> when you have a url; here placeholder */}
-                  <video controls className="w-full h-full object-cover">
-                    <source src={firstVideo.contentUrl || "/placeholder.mp4"} type="video/mp4" />
-                    Your browser does not support the video tag.
-                  </video>
-                </div>
-                <div className="mt-3 flex items-center gap-3">
-                  <Button onClick={() => markLessonComplete("u1", selectedCourse!.id, firstVideo.id)}>Mark Complete</Button>
-                </div>
-              </div>
-            ) : (
-              <div className="py-10 text-center text-muted-foreground">Tidak ada video untuk kursus ini.</div>
-            )}
+            <div className="mb-3 font-medium">{videoLesson.title}</div>
+            <div className="w-full bg-black/80 aspect-video rounded-md overflow-hidden">
+              <video controls className="w-full h-full object-cover">
+                <source
+                  src={videoLesson.contentUrl || "/placeholder.mp4"}
+                  type="video/mp4"
+                />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+            <div className="mt-3 flex items-center gap-3">
+              <Button
+                onClick={() =>
+                  markLessonComplete("u1", selectedCourse!.id, videoLesson.id)
+                }
+              >
+                Mark Complete
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => setActiveMenu("modules")}
+              >
+                Kembali ke Materi
+              </Button>
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -373,17 +1278,110 @@ export default function ForexDashboardLMS() {
   };
 
   const PdfPanel = () => {
-    const firstPdf = selectedCourse?.lessons.find((l) => l.type === "pdf");
+    const pdfLesson =
+      selectedLesson || selectedCourse?.lessons?.find((l) => l.type === "pdf");
+
+    if (!pdfLesson) {
+      return (
+        <div className="py-12 text-center text-muted-foreground">
+          <p>Tidak ada PDF untuk kursus ini.</p>
+          <Button onClick={() => setActiveMenu("modules")} className="mt-4">
+            Kembali ke Materi
+          </Button>
+        </div>
+      );
+    }
+
     return (
       <div>
-        <h2 className="text-xl font-semibold mb-4">PDF Viewer</h2>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-semibold">PDF Viewer</h2>
+          <Button variant="outline" onClick={() => setActiveMenu("modules")}>
+            Kembali ke Materi
+          </Button>
+        </div>
         <Card>
           <CardContent>
-            {firstPdf ? (
-              <iframe src={firstPdf.contentUrl || "/pdfs/sample.pdf"} className="w-full h-[600px]" />
-            ) : (
-              <div className="py-10 text-center text-muted-foreground">Tidak ada PDF untuk kursus ini.</div>
+            <div className="mb-3 font-medium">{pdfLesson.title}</div>
+            <iframe
+              src={pdfLesson.contentUrl || "/pdfs/sample.pdf"}
+              className="w-full h-[600px] border rounded-md"
+              title="PDF Viewer"
+            />
+            <div className="mt-3 flex items-center gap-3">
+              <Button
+                onClick={() =>
+                  markLessonComplete("u1", selectedCourse!.id, pdfLesson.id)
+                }
+              >
+                Mark Complete
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  };
+
+  // ✅ PANEL BARU: Article View (untuk preview artikel)
+  const ArticlePanel = () => {
+    const article = selectedArticle;
+
+    if (!article) {
+      return (
+        <div className="py-12 text-center text-muted-foreground">
+          <p>Tidak ada artikel yang dipilih.</p>
+          <Button
+            onClick={() => setActiveMenu("article-management")}
+            className="mt-4"
+          >
+            Kembali ke Manajemen Artikel
+          </Button>
+        </div>
+      );
+    }
+
+    return (
+      <div>
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-xl font-semibold">{article.title}</h2>
+            <div className="flex items-center gap-4 mt-1 text-sm text-muted-foreground">
+              <span className="flex items-center gap-1">
+                <User className="h-4 w-4" />
+                {article.author.name || article.author.email}
+              </span>
+              <span className="flex items-center gap-1">
+                <Calendar className="h-4 w-4" />
+                {new Date(article.createdAt).toLocaleDateString("id-ID")}
+              </span>
+              <span className="flex items-center gap-1">
+                <Eye className="h-4 w-4" />
+                {article.viewCount} views
+              </span>
+            </div>
+          </div>
+          <Button
+            variant="outline"
+            onClick={() => setActiveMenu("article-management")}
+          >
+            Kembali
+          </Button>
+        </div>
+
+        <Card>
+          <CardContent className="prose prose-slate dark:prose-invert max-w-none">
+            {article.thumbnail && (
+              <img
+                src={article.thumbnail}
+                alt={article.title}
+                className="w-full h-64 object-cover rounded-lg mb-6"
+              />
             )}
+            <div
+              className="lesson-content space-y-4"
+              dangerouslySetInnerHTML={{ __html: article.content }}
+            />
           </CardContent>
         </Card>
       </div>
@@ -396,7 +1394,10 @@ export default function ForexDashboardLMS() {
         <h2 className="text-xl font-semibold mb-4">Quiz Manager</h2>
         <Card>
           <CardContent>
-            <p className="text-sm text-muted-foreground">Buat dan kelola quiz untuk setiap lesson. (Fungsionalitas mock — hubungkan API anda untuk menyimpan)</p>
+            <p className="text-sm text-muted-foreground">
+              Buat dan kelola quiz untuk setiap lesson. (Fungsionalitas akan
+              dikembangkan)
+            </p>
           </CardContent>
         </Card>
       </div>
@@ -410,17 +1411,31 @@ export default function ForexDashboardLMS() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {progressList.map((p) => {
             const course = courses.find((c) => c.id === p.courseId);
+            const totalLessons = course?.lessons?.length || 0;
+            const completedLessons = p.completedLessons.length;
+            const completionRate =
+              totalLessons > 0
+                ? Math.round((completedLessons / totalLessons) * 100)
+                : 0;
             return (
               <Card key={p.courseId}>
                 <CardContent>
                   <div className="flex justify-between">
                     <div>
-                      <div className="font-medium">{course?.title ?? p.courseId}</div>
-                      <div className="text-xs text-muted-foreground">{p.completedLessons.length}/{course?.lessons.length ?? 0} lessons selesai</div>
+                      <div className="font-medium">
+                        {course?.title ?? p.courseId}
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        {completedLessons}/{totalLessons} lessons selesai
+                      </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-lg font-semibold">{Math.round(((p.completedLessons.length)/(course?.lessons.length || 1))*100)}%</div>
-                      <div className="text-xs text-muted-foreground">Score: {p.score ?? 0}</div>
+                      <div className="text-lg font-semibold">
+                        {completionRate}%
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        Score: {p.score ?? 0}
+                      </div>
                     </div>
                   </div>
                 </CardContent>
@@ -440,8 +1455,12 @@ export default function ForexDashboardLMS() {
           <CardContent>
             <div className="flex items-start gap-4">
               <div className="flex-1">
-                <div className="font-medium">Thread: Mengenal Support & Resistance</div>
-                <p className="text-sm text-muted-foreground mt-1">Diskusi terbuka — mentor akan menanggapi 24 jam.</p>
+                <div className="font-medium">
+                  Thread: Mengenal Support & Resistance
+                </div>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Diskusi terbuka — mentor akan menanggapi 24 jam.
+                </p>
               </div>
               <div>
                 <Badge>5 replies</Badge>
@@ -460,8 +1479,12 @@ export default function ForexDashboardLMS() {
         <CardContent>
           <div className="flex items-center justify-between">
             <div>
-              <div className="font-medium">Sertifikat Penyelesaian - Forex Foundations</div>
-              <div className="text-xs text-muted-foreground">Diberikan setelah menyelesaikan 80% materi dan lulus quiz</div>
+              <div className="font-medium">
+                Sertifikat Penyelesaian - Forex Foundations
+              </div>
+              <div className="text-xs text-muted-foreground">
+                Diberikan setelah menyelesaikan 80% materi dan lulus quiz
+              </div>
             </div>
             <div>
               <Button>Generate</Button>
@@ -480,11 +1503,19 @@ export default function ForexDashboardLMS() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <div className="text-sm text-muted-foreground">Nama</div>
-              <div className="font-medium">Siswa Demo</div>
+              <div className="font-medium">{user?.name || "Siswa Demo"}</div>
             </div>
             <div>
               <div className="text-sm text-muted-foreground">Email</div>
-              <div className="font-medium">demo@forex.com</div>
+              <div className="font-medium">
+                {user?.email || "demo@forex.com"}
+              </div>
+            </div>
+            <div>
+              <div className="text-sm text-muted-foreground">Role</div>
+              <div className="font-medium capitalize">
+                {userRole?.toLowerCase() || "pelanggan"}
+              </div>
             </div>
           </div>
         </CardContent>
@@ -493,16 +1524,30 @@ export default function ForexDashboardLMS() {
   );
 
   /* ---------- main render ---------- */
-  if (!mounted) return null;
+  if (loadingUser) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-slate-900">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+          <p className="mt-4 text-muted-foreground">Memeriksa autentikasi...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!mounted || !user) return null;
 
   const handleLogout = () => {
-    // clear local data (contoh)
     try {
       localStorage.removeItem("cart");
+      document.cookie.split(";").forEach((c) => {
+        document.cookie = c
+          .replace(/^ +/, "")
+          .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+      });
     } catch (e) {
-      // ignore
+      console.error("Logout cleanup error:", e);
     }
-    // redirect to login
     router.push("/login");
   };
 
@@ -510,7 +1555,7 @@ export default function ForexDashboardLMS() {
     <div className="min-h-screen bg-gray-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100">
       <Sidebar
         activeMenu={activeMenu}
-        setActiveMenu={(m) => setActiveMenu(m as any)}
+        setActiveMenu={setActiveMenu}
         sidebarOpen={true}
         onCollapseChange={() => {}}
         ordersCount={0}
@@ -520,7 +1565,20 @@ export default function ForexDashboardLMS() {
         inventoryCount={0}
         lowStockCount={0}
         onLogout={handleLogout}
-
+        onNavigate={(menu) => {
+          // ✅ RESET SELECTED COURSE/ARTICLE SAAT PINDAH MENU
+          if (
+            menu !== "modules" &&
+            menu !== "videos" &&
+            menu !== "pdfs" &&
+            menu !== "articles"
+          ) {
+            setSelectedCourse(null);
+            setSelectedLesson(null);
+            setSelectedArticle(null);
+          }
+          setActiveMenu(menu as any);
+        }}
         user={user}
       />
 
@@ -529,10 +1587,37 @@ export default function ForexDashboardLMS() {
 
         <main className="p-6">
           <div className="flex items-center justify-between mb-6">
-            <h1 className="text-2xl font-bold capitalize">{activeMenu}</h1>
+            <h1 className="text-2xl font-bold capitalize">
+              {activeMenu === "article-management"
+                ? "Manajemen Artikel"
+                : activeMenu === "articles"
+                  ? "Artikel"
+                  : activeMenu}
+            </h1>
             <div className="flex items-center gap-3">
-              <Button variant="outline" onClick={() => setActiveMenu("dashboard")}>Dashboard</Button>
+              <Button
+                variant="outline"
+                onClick={() => setActiveMenu("dashboard")}
+              >
+                Dashboard
+              </Button>
               <Button onClick={() => setActiveMenu("courses")}>Courses</Button>
+              <Button
+                variant={
+                  activeMenu === "article-management" ? "default" : "secondary"
+                }
+                onClick={() => setActiveMenu("article-management")}
+              >
+                <Newspaper className="mr-2 h-4 w-4" /> Artikel
+              </Button>
+              {selectedCourse && activeMenu !== "modules" && (
+                <Button
+                  variant="secondary"
+                  onClick={() => setActiveMenu("modules")}
+                >
+                  Kembali ke {selectedCourse.title}
+                </Button>
+              )}
             </div>
           </div>
 
@@ -543,6 +1628,8 @@ export default function ForexDashboardLMS() {
             {activeMenu === "modules" && <ModulesPanel />}
             {activeMenu === "videos" && <VideoPanel />}
             {activeMenu === "pdfs" && <PdfPanel />}
+            {activeMenu === "articles" && <ArticlePanel />}
+            {activeMenu === "article-management" && <ArticleManagementPanel />}
             {activeMenu === "quizzes" && <QuizPanel />}
             {activeMenu === "progress" && <ProgressPanel />}
             {activeMenu === "forum" && <ForumPanel />}
@@ -555,19 +1642,64 @@ export default function ForexDashboardLMS() {
       {/* Course Modal */}
       <AnimatePresence>
         {modalOpen && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-            <motion.div initial={{ scale: 0.98 }} animate={{ scale: 1 }} exit={{ scale: 0.98 }} className="bg-white dark:bg-slate-900 rounded-2xl p-6 w-full max-w-2xl">
-              <h3 className="text-lg font-bold mb-4">{editMode ? "Edit Course" : "Tambah Course"}</h3>
-              <form onSubmit={handleSubmit(handleSaveCourse)} className="flex flex-col gap-3">
-                <Label>Judul</Label>
-                <Input {...register("title")} required />
-                <Label>Deskripsi</Label>
-                <Input {...register("description")} />
-                <Label>Harga</Label>
-                <Input {...register("price")} />
-                <div className="flex justify-end gap-2 mt-4">
-                  <Button variant="outline" onClick={() => setModalOpen(false)}>Batal</Button>
-                  <Button type="submit">Simpan</Button>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+          >
+            <motion.div
+              initial={{ scale: 0.98, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.98, opacity: 0 }}
+              className="bg-white dark:bg-slate-900 rounded-2xl p-6 w-full max-w-2xl shadow-2xl max-h-[90vh] overflow-y-auto"
+            >
+              <h3 className="text-xl font-bold mb-6 flex items-center">
+                {editMode ? "Edit Course" : "Tambah Course Baru"}
+              </h3>
+              <form
+                onSubmit={handleSubmit(handleSaveCourse)}
+                className="flex flex-col gap-4"
+              >
+                <div>
+                  <Label htmlFor="title">Judul Course</Label>
+                  <Input
+                    id="title"
+                    {...register("title", { required: true })}
+                    placeholder="Masukkan judul course"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="description">Deskripsi</Label>
+                  <Textarea
+                    id="description"
+                    {...register("description")}
+                    placeholder="Deskripsi singkat course"
+                    rows={3}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="price">Harga</Label>
+                  <Input
+                    id="price"
+                    {...register("price")}
+                    placeholder="Free atau $49"
+                  />
+                </div>
+                <div className="flex justify-end gap-3 pt-4 border-t mt-4">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => {
+                      setModalOpen(false);
+                      reset();
+                    }}
+                  >
+                    Batal
+                  </Button>
+                  <Button type="submit">
+                    {editMode ? "Perbarui Course" : "Buat Course"}
+                  </Button>
                 </div>
               </form>
             </motion.div>
@@ -575,16 +1707,410 @@ export default function ForexDashboardLMS() {
         )}
       </AnimatePresence>
 
-      {/* Confirm Delete Dialog */}
+      {/* Lesson Modal */}
+      <AnimatePresence>
+        {lessonModalOpen && selectedCourse && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+          >
+            <motion.div
+              initial={{ scale: 0.98, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.98, opacity: 0 }}
+              className="bg-white dark:bg-slate-900 rounded-2xl p-6 w-full max-w-3xl shadow-2xl max-h-[90vh] overflow-y-auto"
+            >
+              <h3 className="text-xl font-bold mb-6 flex items-center">
+                {editingLesson ? "Edit Lesson" : "Tambah Lesson Baru"} untuk{" "}
+                {selectedCourse.title}
+              </h3>
+              <form
+                onSubmit={handleSubmitLesson(handleSaveLesson)}
+                className="flex flex-col gap-4"
+              >
+                <div>
+                  <Label htmlFor="lesson-title">Judul Lesson</Label>
+                  <Input
+                    id="lesson-title"
+                    {...registerLesson("title", { required: true })}
+                    placeholder="Masukkan judul lesson"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="lesson-type">Tipe Konten</Label>
+                  <Select
+                    defaultValue="html"
+                    onValueChange={(value) => {
+                      setLessonValue("type", value);
+                      if (value === "video" || value === "pdf") {
+                        setLessonValue("content", "");
+                      } else {
+                        setLessonValue("contentUrl", "");
+                      }
+                    }}
+                    {...registerLesson("type")}
+                  >
+                    <SelectTrigger id="lesson-type">
+                      <SelectValue placeholder="Pilih tipe konten" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="video">Video</SelectItem>
+                      <SelectItem value="pdf">PDF Document</SelectItem>
+                      <SelectItem value="text">Teks Sederhana</SelectItem>
+                      <SelectItem value="html">
+                        Artikel dengan Format Kaya
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* Conditional fields based on type */}
+                {registerLesson("type").value === "video" ||
+                registerLesson("type").value === "pdf" ? (
+                  <div>
+                    <Label htmlFor="content-url">URL Konten</Label>
+                    <Input
+                      id="content-url"
+                      {...registerLesson("contentUrl")}
+                      placeholder="URL video atau PDF"
+                    />
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Contoh: /videos/breakout.mp4, /pdfs/guide.pdf
+                    </p>
+                    <div className="mt-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        type="button"
+                        onClick={() => {
+                          const input = document.createElement("input");
+                          input.type = "file";
+                          input.accept =
+                            registerLesson("type").value === "video"
+                              ? "video/*"
+                              : "application/pdf";
+                          input.onchange = async (e) => {
+                            const file = (e.target as HTMLInputElement)
+                              .files?.[0];
+                            if (file) {
+                              try {
+                                const formData = new FormData();
+                                formData.append("file", file);
+                                const res = await fetch("/api/upload", {
+                                  method: "POST",
+                                  body: formData,
+                                });
+                                const data = await res.json();
+                                setLessonValue("contentUrl", data.url);
+                              } catch (error) {
+                                console.error("Upload error:", error);
+                                alert("Gagal mengupload file. Coba lagi.");
+                              }
+                            }
+                          };
+                          input.click();
+                        }}
+                      >
+                        <File className="mr-2 h-4 w-4" /> Upload File
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <div>
+                    <Label htmlFor="content">Konten</Label>
+                    {/* ✅ RICH TEXT EDITOR DENGAN SCROLL */}
+                    <div className="max-h-[400px] overflow-hidden rounded-md border">
+                      <RichTextEditor
+                        ref={contentEditorRef}
+                        value={registerLesson("content").value || ""}
+                        onChange={(value) => setLessonValue("content", value)}
+                        placeholder="Tulis konten pembelajaran di sini dengan format kaya (heading, list, gambar, dll)..."
+                      />
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Gunakan toolbar untuk format kaya (gambar, tabel, heading,
+                      dll)
+                    </p>
+                  </div>
+                )}
+
+                <div>
+                  <Label htmlFor="duration">Durasi Perkiraan</Label>
+                  <Input
+                    id="duration"
+                    {...registerLesson("duration")}
+                    placeholder="Contoh: 15m, 45m, 2h"
+                  />
+                </div>
+                <div className="flex justify-end gap-3 pt-4 border-t mt-4">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => {
+                      setLessonModalOpen(false);
+                      resetLesson();
+                    }}
+                  >
+                    Batal
+                  </Button>
+                  <Button type="submit">
+                    {editingLesson ? "Perbarui Lesson" : "Tambah Lesson"}
+                  </Button>
+                </div>
+              </form>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ✅ ARTICLE MODAL - BARU */}
+      <AnimatePresence>
+        {articleModalOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.98, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.98, opacity: 0 }}
+              className="bg-white dark:bg-slate-900 rounded-2xl p-6 w-full max-w-4xl shadow-2xl max-h-[95vh] overflow-y-auto"
+            >
+              <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
+                <Newspaper className="h-5 w-5" />
+                {editingArticle ? "Edit Artikel" : "Tambah Artikel Baru"}
+              </h3>
+              <form
+                onSubmit={handleSubmitArticle(handleSaveArticle)}
+                className="flex flex-col gap-4"
+              >
+                {/* Judul */}
+                <div>
+                  <Label htmlFor="article-title">Judul Artikel</Label>
+                  <Input
+                    id="article-title"
+                    {...registerArticle("title", { required: true })}
+                    placeholder="Masukkan judul artikel yang menarik"
+                  />
+                </div>
+
+                {/* Thumbnail Upload */}
+                <div>
+                  <Label>Thumbnail Artikel</Label>
+                  <div className="flex items-center gap-4">
+                    {registerArticle("thumbnail").value && (
+                      <img
+                        src={registerArticle("thumbnail").value}
+                        alt="Thumbnail"
+                        className="w-32 h-24 object-cover rounded-lg border"
+                      />
+                    )}
+                    <div className="flex-1">
+                      <Input
+                        {...registerArticle("thumbnail")}
+                        placeholder="URL thumbnail atau upload gambar"
+                        readOnly
+                      />
+                      <div className="mt-2">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          disabled={uploadingThumbnail}
+                          onClick={() => {
+                            const input = document.createElement("input");
+                            input.type = "file";
+                            input.accept = "image/*";
+                            input.onchange = async (e) => {
+                              const file = (e.target as HTMLInputElement)
+                                .files?.[0];
+                              if (file) {
+                                await handleThumbnailUpload(file);
+                              }
+                            };
+                            input.click();
+                          }}
+                        >
+                          {uploadingThumbnail ? (
+                            <>
+                              <Loader className="mr-2 h-4 w-4 animate-spin" />
+                              Mengupload...
+                            </>
+                          ) : (
+                            <>
+                              <Image className="mr-2 h-4 w-4" />
+                              Upload Thumbnail
+                            </>
+                          )}
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Status Published */}
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="published"
+                    {...registerArticle("published")}
+                    className="w-4 h-4 rounded border-gray-300"
+                  />
+                  <Label htmlFor="published" className="mb-0 cursor-pointer">
+                    Publish artikel (tampilkan ke publik)
+                  </Label>
+                </div>
+
+                {/* Konten Artikel dengan Rich Text Editor */}
+                <div>
+                  <Label>Konten Artikel</Label>
+                  <div className="border rounded-md max-h-[500px] overflow-hidden">
+                    <RichTextEditor
+                      ref={articleContentRef}
+                      value={editingArticle?.content || ""}
+                      onChange={(value) => {
+                        // Update ref value manually since we can't directly set it
+                        if (articleContentRef.current) {
+                          articleContentRef.current.value = value;
+                        }
+                      }}
+                      placeholder="Tulis konten artikel lengkap di sini. Gunakan toolbar untuk formatting..."
+                    />
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Tips: Gunakan heading, list, dan gambar untuk membuat
+                    artikel lebih menarik
+                  </p>
+                </div>
+
+                <div className="flex justify-end gap-3 pt-4 border-t mt-4">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => {
+                      setArticleModalOpen(false);
+                      resetArticle();
+                      setEditingArticle(null);
+                    }}
+                  >
+                    Batal
+                  </Button>
+                  <Button type="submit" disabled={uploadingThumbnail}>
+                    {editingArticle ? "Perbarui Artikel" : "Buat Artikel"}
+                  </Button>
+                </div>
+              </form>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Confirm Delete Course Dialog */}
       <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Hapus Kursus?</AlertDialogTitle>
-            <AlertDialogDescription>Jika dihapus, semua lesson terkait akan hilang.</AlertDialogDescription>
+            <AlertDialogTitle className="text-red-600">
+              Hapus Kursus?
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {deleteTarget && (
+                <>
+                  Anda akan menghapus kursus "
+                  <span className="font-medium">{deleteTarget.title}</span>
+                  ". Semua lesson di dalamnya akan ikut terhapus secara
+                  permanen.
+                </>
+              )}
+              <br />
+              <br />
+              <span className="text-destructive font-medium">
+                Tindakan ini tidak dapat dibatalkan.
+              </span>
+            </AlertDialogDescription>
           </AlertDialogHeader>
           <div className="flex justify-end gap-2 mt-4">
-            <AlertDialogCancel onClick={() => setConfirmOpen(false)}>Batal</AlertDialogCancel>
-            <AlertDialogAction onClick={() => doDeleteCourse()}>Hapus</AlertDialogAction>
+            <AlertDialogCancel onClick={() => setConfirmOpen(false)}>
+              Batal
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={doDeleteCourse}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              Hapus Permanen
+            </AlertDialogAction>
+          </div>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Confirm Delete Lesson Dialog */}
+      <AlertDialog open={lessonConfirmOpen} onOpenChange={setLessonConfirmOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-red-600">
+              Hapus Lesson?
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {lessonDeleteTarget && (
+                <>
+                  Anda akan menghapus lesson "
+                  <span className="font-medium">
+                    {lessonDeleteTarget.title}
+                  </span>
+                  " dari kursus ini. Tindakan ini tidak dapat dibatalkan.
+                </>
+              )}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <div className="flex justify-end gap-2 mt-4">
+            <AlertDialogCancel onClick={() => setLessonConfirmOpen(false)}>
+              Batal
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={doDeleteLesson}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              Hapus Lesson
+            </AlertDialogAction>
+          </div>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* ✅ Confirm Delete Article Dialog - BARU */}
+      <AlertDialog
+        open={articleConfirmOpen}
+        onOpenChange={setArticleConfirmOpen}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-red-600">
+              Hapus Artikel?
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {articleDeleteTarget && (
+                <>
+                  Anda akan menghapus artikel "
+                  <span className="font-medium">
+                    {articleDeleteTarget.title}
+                  </span>
+                  ". Tindakan ini tidak dapat dibatalkan.
+                </>
+              )}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <div className="flex justify-end gap-2 mt-4">
+            <AlertDialogCancel onClick={() => setArticleConfirmOpen(false)}>
+              Batal
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={doDeleteArticle}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              Hapus Artikel
+            </AlertDialogAction>
           </div>
         </AlertDialogContent>
       </AlertDialog>

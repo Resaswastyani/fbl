@@ -14,6 +14,7 @@ import {
   TrendingUp,
   PlayCircle,
   Newspaper,
+  Calculator,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -36,8 +37,18 @@ export const Header = () => {
 
   const handleLinkClick = (href: string) => {
     setIsMobileMenuOpen(false);
-    const el = document.querySelector(href);
-    if (el) el.scrollIntoView({ behavior: "smooth" });
+
+    // kalau anchor (#)
+    if (href.startsWith("#")) {
+      const el = document.querySelector(href);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+    // kalau route (/page)
+    else {
+      router.push(href);
+    }
   };
 
   const Dropdown = ({
@@ -105,7 +116,10 @@ export const Header = () => {
           `}
         >
           {/* BRAND */}
-          <button onClick={() => handleLinkClick("#home")} className="flex items-center">
+          <button
+            onClick={() => handleLinkClick("/")}
+            className="flex items-center"
+          >
             <motion.img
               src="/logo-fbl.png"
               alt="Forex Logo"
@@ -123,31 +137,31 @@ export const Header = () => {
               ${isScrolled ? "gap-5" : "gap-8"}
             `}
           >
-            <Dropdown
+            {/* <Dropdown
               title="Analisa"
               items={[
                 { name: "Analisa Forex", href: "#analisa-forex", icon: BarChart2 },
                 { name: "Berita Forex", href: "#berita-forex", icon: Newspaper },
               ]}
-            />
+            /> */}
 
             <Dropdown
-              title="Free Courses"
+              title="Trading lesson"
               items={[
                 { name: "Trading Beginner", href: "#free-1", icon: BookOpen },
-                { name: "Artikel Trading", href: "#free-2", icon: FileText },
+                { name: "Artikel Trading", href: "/articles", icon: FileText },
                 { name: "Strategy Trading", href: "#free-1", icon: TrendingUp },
                 { name: "Video Trading", href: "#free-2", icon: PlayCircle },
               ]}
             />
 
             <button
-              onClick={() => handleLinkClick("#pro-courses")}
+              onClick={() => handleLinkClick("/professional-course")}
               className={`font-medium text-gray-700 hover:text-primary transition 
                 ${isScrolled ? "text-sm" : "text-base"}
               `}
             >
-              Professional Courses
+              Professional Course
             </button>
 
             <button
@@ -156,13 +170,25 @@ export const Header = () => {
                 ${isScrolled ? "text-sm" : "text-base"}
               `}
             >
-              Testimoni
+              Mentor
             </button>
+            <Dropdown
+              title="Tools"
+              items={[
+                {
+                  name: "Position Size Calculator",
+                  href: "/position-size-calculator",
+                  icon: Calculator,
+                },
+                // { name: "Artikel Trading", href: "#free-2", icon: FileText },
+                // { name: "Strategy Trading", href: "#free-1", icon: TrendingUp },
+                // { name: "Video Trading", href: "#free-2", icon: PlayCircle },
+              ]}
+            />
           </div>
 
           {/* CTA BUTTONS (CART REMOVED) */}
           <div className="hidden md:flex items-center gap-5">
-
             <button
               onClick={() => router.push("/login")}
               className={`text-gray-700 hover:text-primary transition hover:underline 
@@ -204,8 +230,7 @@ export const Header = () => {
               className="md:hidden bg-white/95 backdrop-blur-lg border-t border-gray-200"
             >
               <div className="px-6 py-6 space-y-5">
-
-                <div>
+                {/* <div>
                   <p className="text-gray-900 font-semibold mb-2">Analisa</p>
                   <div className="space-y-2 pl-3">
                     <button className="flex gap-2 items-center text-gray-700">
@@ -215,14 +240,16 @@ export const Header = () => {
                       <Newspaper size={16} /> Berita Forex
                     </button>
                   </div>
-                </div>
+                </div> */}
 
                 <div>
-                  <p className="text-gray-900 font-semibold mb-2">Free Courses</p>
+                  <p className="text-gray-900 font-semibold mb-2">
+                    Trading lesson
+                  </p>
                   <div className="space-y-2 pl-3">
-                    <button className="flex gap-2 items-center text-gray-700">
+                    {/* <button className="flex gap-2 items-center text-gray-700">
                       <BookOpen size={16} /> Trading Beginner
-                    </button>
+                    </button> */}
                     <button className="flex gap-2 items-center text-gray-700">
                       <FileText size={16} /> Artikel Trading
                     </button>
@@ -236,18 +263,26 @@ export const Header = () => {
                 </div>
 
                 <button
-                  onClick={() => handleLinkClick("#pro-courses")}
+                  onClick={() => handleLinkClick("/professional-course")}
                   className="block w-full text-left text-lg text-gray-800"
                 >
-                  Professional Courses
+                  Professional Course
                 </button>
-
-                <button
+                {/* <button
                   onClick={() => handleLinkClick("#testimoni")}
                   className="block w-full text-left text-lg text-gray-800"
                 >
-                  Testimoni
-                </button>
+                  Tools
+                </button> */}
+
+                <div>
+                  <p className="text-gray-900 font-semibold mb-2">Tools</p>
+                  <div className="space-y-2 pl-3">
+                    <button className="flex gap-2 items-center text-gray-700">
+                      <BookOpen size={16} /> Position Size Calculator
+                    </button>
+                  </div>
+                </div>
 
                 {/* CART BUTTON REMOVED */}
 

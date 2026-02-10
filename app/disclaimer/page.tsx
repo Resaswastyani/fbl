@@ -72,7 +72,7 @@ export default function DisclaimerPage() {
       <div className="min-h-screen bg-white pt-24 md:pt-28">
         {/* Header Section */}
         <section className="w-full py-8 md:py-12 bg-gray-50 border-b border-gray-200">
-          <div className="max-w-4xl mx-auto px-6 md:px-12">
+          <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -108,7 +108,7 @@ export default function DisclaimerPage() {
 
         {/* Content Sections */}
         <section className="w-full py-8 md:py-12">
-          <div className="max-w-4xl mx-auto px-6 md:px-12 space-y-8">
+          <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 space-y-8">
             {disclaimerSections.map((section, index) => (
               <motion.div
                 key={section.id}
@@ -142,7 +142,7 @@ export default function DisclaimerPage() {
 
         {/* Bottom CTA */}
         <section className="w-full py-12 bg-gray-50">
-          <div className="max-w-4xl mx-auto px-6 md:px-12 text-center">
+          <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 text-center">
             <p
               className="text-[#6e6e6e] mb-6"
               style={{ fontFamily: "var(--font-figtree), Figtree" }}

@@ -258,3 +258,38 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* styles/whatsapp.css atau tambahkan ke globals.css */
+
+/* Custom scrollbar untuk chat window */
+.whatsapp-chat-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.whatsapp-chat-scroll::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.whatsapp-chat-scroll::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.whatsapp-chat-scroll::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
+}
+
+/* Animasi pulse untuk online indicator */
+@keyframes pulse-green {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse-green {
+  animation: pulse-green 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}

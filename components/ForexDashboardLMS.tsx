@@ -325,6 +325,7 @@ export default function ForexDashboardLMS() {
     | "profile"
     | "article-management"
     | "video-trading" // ✅ MENU BARU
+    | "lesson-content"
   >("dashboard");
 
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
@@ -975,7 +976,7 @@ export default function ForexDashboardLMS() {
             id: editingLesson.id,
             title: data.title,
             type: data.type,
-            content: contentValue || null,
+            content: contentValue || null, // HTML content dengan gambar
             contentUrl: contentUrlValue,
             duration: data.duration,
           }),
@@ -1010,7 +1011,7 @@ export default function ForexDashboardLMS() {
           body: JSON.stringify({
             title: data.title,
             type: data.type,
-            content: contentValue || null,
+            content: contentValue || null, // HTML content dengan gambar
             contentUrl: contentUrlValue,
             duration: data.duration,
             courseId: selectedCourse.id,
@@ -1317,6 +1318,67 @@ export default function ForexDashboardLMS() {
             ))}
           </div>
         )}
+      </div>
+    );
+  };
+  // ✅ PANEL BARU: Lesson Content Viewer (untuk HTML/Text lessons)
+  const LessonContentPanel = () => {
+    const lesson =
+      selectedLesson ||
+      selectedCourse?.lessons?.find(
+        (l) => l.type === "html" || l.type === "text",
+      );
+
+    if (!lesson) {
+      return (
+        <div className="py-12 text-center text-muted-foreground">
+          <p>Tidak ada konten lesson yang dipilih.</p>
+          <Button onClick={() => setActiveMenu("modules")} className="mt-4">
+            Kembali ke Materi
+          </Button>
+        </div>
+      );
+    }
+
+    return (
+      <div>
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-xl font-semibold">{lesson.title}</h2>
+            <div className="flex items-center gap-2 mt-1 text-sm text-muted-foreground">
+              <Badge variant="outline">{lesson.type.toUpperCase()}</Badge>
+              {lesson.duration && <span>• {lesson.duration}</span>}
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <Button
+              onClick={() =>
+                markLessonComplete("u1", selectedCourse!.id, lesson.id)
+              }
+            >
+              Mark Complete
+            </Button>
+            <Button variant="outline" onClick={() => setActiveMenu("modules")}>
+              Kembali ke Materi
+            </Button>
+          </div>
+        </div>
+
+        <Card>
+          <CardContent className="prose prose-slate dark:prose-invert max-w-none p-6">
+            {/* Render HTML content dengan gambar */}
+            {lesson.content ? (
+              <div
+                className="lesson-content space-y-4"
+                dangerouslySetInnerHTML={{ __html: lesson.content }}
+              />
+            ) : (
+              <p className="text-muted-foreground italic">
+                Tidak ada konten untuk lesson ini.
+              </p>
+            )}
+          </CardContent>
+        </Card>
       </div>
     );
   };
@@ -1674,9 +1736,14 @@ export default function ForexDashboardLMS() {
                       size="sm"
                       onClick={() => {
                         setSelectedLesson(ls);
-                        if (ls.type === "video") setActiveMenu("videos");
-                        else if (ls.type === "pdf") setActiveMenu("pdfs");
-                        else setActiveMenu("articles");
+                        // ✅ PERBAIKAN: Routing berdasarkan tipe lesson
+                        if (ls.type === "video") {
+                          setActiveMenu("videos");
+                        } else if (ls.type === "pdf") {
+                          setActiveMenu("pdfs");
+                        } else if (ls.type === "html" || ls.type === "text") {
+                          setActiveMenu("lesson-content"); // Panel baru untuk HTML/Text
+                        }
                       }}
                     >
                       Open
@@ -2050,7 +2117,8 @@ export default function ForexDashboardLMS() {
             menu !== "modules" &&
             menu !== "videos" &&
             menu !== "pdfs" &&
-            menu !== "articles"
+            menu !== "articles" &&
+            menu !== "lesson-content"
           ) {
             setSelectedCourse(null);
             setSelectedLesson(null);
@@ -2110,6 +2178,7 @@ export default function ForexDashboardLMS() {
             {activeMenu === "articles" && <ArticlePanel />}
             {activeMenu === "article-management" && <ArticleManagementPanel />}
             {activeMenu === "video-trading" && <VideoTradingPanel />}
+            {activeMenu === "lesson-content" && <LessonContentPanel />}
             {activeMenu === "quizzes" && <QuizPanel />}
             {activeMenu === "progress" && <ProgressPanel />}
             {activeMenu === "forum" && <ForumPanel />}

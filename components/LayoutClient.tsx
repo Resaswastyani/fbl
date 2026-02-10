@@ -5,6 +5,7 @@ import AnnouncementBar from "@/components/AnnouncementBar";
 import DisclaimerPreview from "./DisclaimerPreview";
 import { Header } from "./Header";
 import Footer from "./Footer";
+import WhatsAppFloat from "@/components/whatsappFloat";
 
 export default function LayoutClient({
   children,
@@ -20,6 +21,7 @@ export default function LayoutClient({
     pathname === "/forgot-password" ||
     pathname === "/reset-password" ||
     pathname.startsWith("/auth") ||
+    pathname.startsWith("/student/") ||
     pathname.startsWith("/course/");
 
   // Jangan tampilkan disclaimer di halaman disclaimer dan halaman auth
@@ -30,6 +32,7 @@ export default function LayoutClient({
     pathname !== "/forgot-password" &&
     pathname !== "/reset-password" &&
     !pathname.startsWith("/auth") &&
+    !pathname.startsWith("/student/") &&
     !pathname.startsWith("/dashboard");
 
   // Jangan tampilkan header di halaman auth tertentu (opsional)
@@ -39,7 +42,14 @@ export default function LayoutClient({
     pathname === "/forgot-password" ||
     pathname === "/reset-password" ||
     pathname.startsWith("/course/") ||
+    pathname.startsWith("/student/") ||
     pathname.startsWith("/dashboard");
+
+  const hideWhatsApp =
+    pathname === "/login" ||
+    pathname === "/signup" ||
+    pathname === "/forgot-password" ||
+    pathname === "/reset-password";
 
   const hideFooter = pathname.startsWith("/dashboard");
 
@@ -59,6 +69,8 @@ export default function LayoutClient({
 
       {/* Footer */}
       {!hideFooter && <Footer />}
+
+      {!hideWhatsApp && <WhatsAppFloat />}
     </div>
   );
 }

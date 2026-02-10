@@ -8,7 +8,7 @@ import Link from "next/link";
 export default function DisclaimerPreview() {
   return (
     <section className="w-full bg-gradient-to-br from-slate-50 via-white to-slate-100 border-t border-slate-200">
-      <div className="max-w-5xl mx-auto px-6 md:px-12 py-8 md:py-12">
+      <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 py-8 md:py-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -17,14 +17,14 @@ export default function DisclaimerPreview() {
           className="relative"
         >
           {/* Icon Badge */}
-          <div className="absolute -top-4 left-1/2 -translate-x-1/2 md:left-0 md:translate-x-0">
+          <div className="absolute -top-4 left-4 md:left-8">
             <div className="bg-[#156d95] text-white p-3 rounded-xl shadow-lg shadow-[#156d95]/20">
               <Shield size={24} />
             </div>
           </div>
 
           {/* Main Content Card */}
-          <div className="bg-white rounded-2xl p-6 md:p-8 pt-10 md:pt-8 shadow-sm border border-slate-100 md:pl-20">
+          <div className="bg-white rounded-2xl p-6 md:p-8 pt-10 md:pt-8 shadow-sm border border-slate-100 md:pl-24">
             {/* Header */}
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
               <div>

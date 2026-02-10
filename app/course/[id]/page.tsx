@@ -17,6 +17,10 @@
 //   Image as ImageIcon,
 //   Code,
 //   AlignLeft,
+//   Menu,
+//   X,
+//   ChevronLeft,
+//   ChevronRight,
 // } from "lucide-react";
 
 // type Lesson = {
@@ -51,6 +55,7 @@
 //   const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
 //   const [completedLessonIds, setCompletedLessonIds] = useState<string[]>([]);
 //   const [user, setUser] = useState<any>(null);
+//   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
 //   useEffect(() => {
 //     fetchCourseDetail();
@@ -327,6 +332,25 @@
 //               </div>
 //             </div>
 //             <div className="flex items-center gap-2">
+//               {/* Toggle Sidebar Button - Desktop Only */}
+//               <Button
+//                 variant="outline"
+//                 size="sm"
+//                 onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+//                 className="hidden lg:flex items-center gap-2"
+//               >
+//                 {isSidebarOpen ? (
+//                   <>
+//                     <ChevronRight className="h-4 w-4" />
+//                     <span className="hidden xl:inline">Sembunyikan Lesson</span>
+//                   </>
+//                 ) : (
+//                   <>
+//                     <ChevronLeft className="h-4 w-4" />
+//                     <span className="hidden xl:inline">Tampilkan Lesson</span>
+//                   </>
+//                 )}
+//               </Button>
 //               {isFree && (
 //                 <Badge className="bg-blue-100 text-blue-700">Gratis</Badge>
 //               )}
@@ -339,9 +363,13 @@
 //       </header>
 
 //       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-//         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+//         <div className={`grid gap-8 transition-all duration-300 ${
+//           isSidebarOpen
+//             ? "grid-cols-1 lg:grid-cols-3"
+//             : "grid-cols-1"
+//         }`}>
 //           {/* Main Content */}
-//           <div className="lg:col-span-2">
+//           <div className={isSidebarOpen ? "lg:col-span-2" : "col-span-1"}>
 //             {canAccess ? (
 //               <Card className="mb-6">
 //                 <CardContent className="p-6">
@@ -435,66 +463,93 @@
 //           </div>
 
 //           {/* Sidebar - Lesson List */}
-//           <div className="lg:col-span-1">
-//             <Card className="sticky top-24">
-//               <CardContent className="p-4">
-//                 <h3 className="font-bold mb-4">Daftar Lesson</h3>
-//                 <div className="space-y-2">
-//                   {course.lessons.map((lesson, index) => {
-//                     const isCompleted = completedLessonIds.includes(lesson.id);
-//                     const isLocked = !canAccess;
+//           {isSidebarOpen && (
+//             <div className="lg:col-span-1">
+//               <Card className="sticky top-24">
+//                 <CardContent className="p-4">
+//                   <div className="flex items-center justify-between mb-4">
+//                     <h3 className="font-bold">Daftar Lesson</h3>
+//                     {/* Mobile Close Button */}
+//                     <Button
+//                       variant="ghost"
+//                       size="icon"
+//                       onClick={() => setIsSidebarOpen(false)}
+//                       className="lg:hidden h-8 w-8"
+//                     >
+//                       <X className="h-4 w-4" />
+//                     </Button>
+//                   </div>
+//                   <div className="space-y-2">
+//                     {course.lessons.map((lesson, index) => {
+//                       const isCompleted = completedLessonIds.includes(lesson.id);
+//                       const isLocked = !canAccess;
 
-//                     return (
-//                       <button
-//                         key={lesson.id}
-//                         onClick={() => !isLocked && setSelectedLesson(lesson)}
-//                         disabled={isLocked}
-//                         className={`w-full text-left p-3 rounded-lg transition-colors flex items-center ${
-//                           selectedLesson?.id === lesson.id
-//                             ? "bg-[#156d95] text-white"
-//                             : isLocked
-//                               ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-//                               : "bg-gray-50 hover:bg-gray-100"
-//                         }`}
-//                       >
-//                         <div className="flex-shrink-0 mr-3">
-//                           {isLocked ? (
-//                             <Lock className="h-4 w-4" />
-//                           ) : isCompleted ? (
-//                             <CheckCircle className="h-4 w-4 text-green-500" />
-//                           ) : (
-//                             getLessonIcon(lesson.type)
-//                           )}
-//                         </div>
-//                         <div className="flex-1 min-w-0">
-//                           <p className="font-medium text-sm truncate">
-//                             {index + 1}. {lesson.title}
-//                           </p>
-//                           {lesson.duration && (
-//                             <p
-//                               className={`text-xs ${
-//                                 selectedLesson?.id === lesson.id
-//                                   ? "text-white/70"
-//                                   : "text-gray-500"
-//                               }`}
-//                             >
-//                               {lesson.duration} • {lesson.type.toLowerCase()}
+//                       return (
+//                         <button
+//                           key={lesson.id}
+//                           onClick={() => !isLocked && setSelectedLesson(lesson)}
+//                           disabled={isLocked}
+//                           className={`w-full text-left p-3 rounded-lg transition-colors flex items-center ${
+//                             selectedLesson?.id === lesson.id
+//                               ? "bg-[#156d95] text-white"
+//                               : isLocked
+//                                 ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+//                                 : "bg-gray-50 hover:bg-gray-100"
+//                           }`}
+//                         >
+//                           <div className="flex-shrink-0 mr-3">
+//                             {isLocked ? (
+//                               <Lock className="h-4 w-4" />
+//                             ) : isCompleted ? (
+//                               <CheckCircle className="h-4 w-4 text-green-500" />
+//                             ) : (
+//                               getLessonIcon(lesson.type)
+//                             )}
+//                           </div>
+//                           <div className="flex-1 min-w-0">
+//                             <p className="font-medium text-sm truncate">
+//                               {index + 1}. {lesson.title}
 //                             </p>
-//                           )}
-//                         </div>
-//                       </button>
-//                     );
-//                   })}
-//                 </div>
-//               </CardContent>
-//             </Card>
-//           </div>
+//                             {lesson.duration && (
+//                               <p
+//                                 className={`text-xs ${
+//                                   selectedLesson?.id === lesson.id
+//                                     ? "text-white/70"
+//                                     : "text-gray-500"
+//                                 }`}
+//                               >
+//                                 {lesson.duration} • {lesson.type.toLowerCase()}
+//                               </p>
+//                             )}
+//                           </div>
+//                         </button>
+//                       );
+//                     })}
+//                   </div>
+//                 </CardContent>
+//               </Card>
+//             </div>
+//           )}
 //         </div>
+
+//         {/* Floating Toggle Button - Show when sidebar is hidden on desktop */}
+//         {!isSidebarOpen && (
+//           <Button
+//             variant="default"
+//             size="sm"
+//             onClick={() => setIsSidebarOpen(true)}
+//             className="fixed bottom-6 right-6 lg:flex hidden items-center gap-2 shadow-lg z-50 bg-[#156d95] hover:bg-[#0d476e]"
+//           >
+//             <Menu className="h-4 w-4" />
+//             <span>Daftar Lesson</span>
+//           </Button>
+//         )}
 //       </div>
 //     </div>
 //   );
 // }
 
+// app/courses/[id]/page.tsx
 "use client";
 
 import { useEffect, useState } from "react";
@@ -523,7 +578,17 @@ import {
 type Lesson = {
   id: string;
   title: string;
-  type: "VIDEO" | "PDF" | "IMAGE" | "TEXT" | "HTML";
+  type:
+    | "VIDEO"
+    | "PDF"
+    | "IMAGE"
+    | "TEXT"
+    | "HTML"
+    | "video"
+    | "pdf"
+    | "image"
+    | "text"
+    | "html";
   content?: string;
   contentUrl?: string;
   duration?: string;
@@ -655,7 +720,10 @@ export default function CourseDetailPage() {
   };
 
   const getLessonIcon = (type: string) => {
-    switch (type) {
+    // Normalize type to uppercase for comparison
+    const normalizedType = type?.toUpperCase();
+
+    switch (normalizedType) {
       case "VIDEO":
         return <Play className="h-4 w-4" />;
       case "PDF":
@@ -674,7 +742,10 @@ export default function CourseDetailPage() {
   const renderLessonContent = () => {
     if (!selectedLesson) return null;
 
-    switch (selectedLesson.type) {
+    // Normalize type to uppercase for comparison
+    const lessonType = selectedLesson.type?.toUpperCase();
+
+    switch (lessonType) {
       case "VIDEO":
         if (selectedLesson.contentUrl) {
           return (
@@ -728,6 +799,7 @@ export default function CourseDetailPage() {
         );
 
       case "IMAGE":
+        // ✅ PERBAIKAN: Tampilkan gambar dari contentUrl
         if (selectedLesson.contentUrl) {
           return (
             <div className="mb-4">
@@ -744,6 +816,22 @@ export default function CourseDetailPage() {
             </div>
           );
         }
+        // Jika tidak ada contentUrl tapi ada content (base64 atau URL di content)
+        if (
+          selectedLesson.content &&
+          (selectedLesson.content.startsWith("http") ||
+            selectedLesson.content.startsWith("data:image"))
+        ) {
+          return (
+            <div className="mb-4">
+              <img
+                src={selectedLesson.content}
+                alt={selectedLesson.title}
+                className="w-full rounded-lg shadow-md"
+              />
+            </div>
+          );
+        }
         return (
           <div className="p-8 text-center text-gray-500">
             Gambar tidak tersedia
@@ -751,15 +839,39 @@ export default function CourseDetailPage() {
         );
 
       case "TEXT":
+        // ✅ PERBAIKAN: Render HTML content sebagai HTML, bukan teks biasa
+        // Karena content dari RichTextEditor selalu berupa HTML
+        if (selectedLesson.content) {
+          // Cek apakah content mengandung HTML tag
+          const hasHtmlTags = /<[^>]+>/.test(selectedLesson.content);
+
+          if (hasHtmlTags) {
+            // Render sebagai HTML
+            return (
+              <div
+                className="prose max-w-none mb-4 p-6 bg-white border rounded-lg"
+                dangerouslySetInnerHTML={{
+                  __html: selectedLesson.content,
+                }}
+              />
+            );
+          } else {
+            // Render sebagai teks biasa (plain text)
+            return (
+              <div className="prose max-w-none mb-4 p-6 bg-gray-50 rounded-lg">
+                <p className="whitespace-pre-wrap text-gray-800 leading-relaxed text-base">
+                  {selectedLesson.content}
+                </p>
+              </div>
+            );
+          }
+        }
         return (
-          <div className="prose max-w-none mb-4 p-6 bg-gray-50 rounded-lg">
-            <p className="whitespace-pre-wrap text-gray-800 leading-relaxed text-base">
-              {selectedLesson.content || "Tidak ada konten"}
-            </p>
-          </div>
+          <div className="p-8 text-center text-gray-500">Tidak ada konten</div>
         );
 
       case "HTML":
+        // ✅ PERBAIKAN: Render HTML content
         return (
           <div
             className="prose max-w-none mb-4 p-6 bg-white border rounded-lg"
@@ -860,11 +972,11 @@ export default function CourseDetailPage() {
       </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className={`grid gap-8 transition-all duration-300 ${
-          isSidebarOpen 
-            ? "grid-cols-1 lg:grid-cols-3" 
-            : "grid-cols-1"
-        }`}>
+        <div
+          className={`grid gap-8 transition-all duration-300 ${
+            isSidebarOpen ? "grid-cols-1 lg:grid-cols-3" : "grid-cols-1"
+          }`}
+        >
           {/* Main Content */}
           <div className={isSidebarOpen ? "lg:col-span-2" : "col-span-1"}>
             {canAccess ? (
@@ -877,7 +989,7 @@ export default function CourseDetailPage() {
                           {selectedLesson.title}
                         </h2>
                         <Badge variant="outline" className="capitalize">
-                          {selectedLesson.type.toLowerCase()}
+                          {selectedLesson.type?.toLowerCase()}
                         </Badge>
                       </div>
 
@@ -978,7 +1090,9 @@ export default function CourseDetailPage() {
                   </div>
                   <div className="space-y-2">
                     {course.lessons.map((lesson, index) => {
-                      const isCompleted = completedLessonIds.includes(lesson.id);
+                      const isCompleted = completedLessonIds.includes(
+                        lesson.id,
+                      );
                       const isLocked = !canAccess;
 
                       return (
@@ -1015,7 +1129,7 @@ export default function CourseDetailPage() {
                                     : "text-gray-500"
                                 }`}
                               >
-                                {lesson.duration} • {lesson.type.toLowerCase()}
+                                {lesson.duration} • {lesson.type?.toLowerCase()}
                               </p>
                             )}
                           </div>

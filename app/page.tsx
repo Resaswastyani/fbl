@@ -19,7 +19,7 @@ export default function Page() {
       {/* <CourseSection /> */}
       <ForexTestimonials />
       <IntegrationCarousel />
-      <PricingSection />
+      {/* <PricingSection /> */}
       <FAQSection />
       {/* <Footer /> */}
     </>

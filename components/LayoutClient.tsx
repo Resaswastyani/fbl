@@ -51,7 +51,8 @@ export default function LayoutClient({
     pathname === "/forgot-password" ||
     pathname === "/reset-password";
 
-  const hideFooter = pathname.startsWith("/dashboard");
+  const hideFooter =
+    pathname.startsWith("/dashboard") || pathname.startsWith("/student/");
 
   return (
     <div className="flex flex-col min-h-screen">

@@ -1,18 +1,18 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { Plus } from "lucide-react"
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Plus } from "lucide-react";
 
 type FAQItem = {
-  question: string
-  answer: string
-}
+  question: string;
+  answer: string;
+};
 
 type FAQSectionProps = {
-  title?: string
-  faqs?: FAQItem[]
-}
+  title?: string;
+  faqs?: FAQItem[];
+};
 
 const defaultFAQs: FAQItem[] = [
   {
@@ -45,30 +45,32 @@ const defaultFAQs: FAQItem[] = [
     answer:
       "Ya! Anda akan masuk komunitas private, bisa tanya kapan saja, konsultasi personal, serta ikut live mentoring mingguan. Kami memastikan Anda tidak belajar sendirian.",
   },
-  {
-    question: "Apakah ada sertifikat setelah menyelesaikan kelas?",
-    answer:
-      "Ada. Anda akan mendapatkan sertifikat digital resmi sebagai bukti telah menyelesaikan program pelatihan Forex for Better Living.",
-  },
+  // {
+  //   question: "Apakah ada sertifikat setelah menyelesaikan kelas?",
+  //   answer:
+  //     "Ada. Anda akan mendapatkan sertifikat digital resmi sebagai bukti telah menyelesaikan program pelatihan Forex for Better Living.",
+  // },
   {
     question: "Bagaimana cara daftar kelasnya?",
     answer:
       "Anda cukup membuat akun, melakukan pendaftaran kelas, lalu Anda akan langsung mendapatkan akses dashboard pembelajaran dan group mentoring private.",
   },
-]
+];
 
-export const FAQSection = ({ title = "Frequently asked questions", faqs = defaultFAQs }: FAQSectionProps) => {
-  const [openIndex, setOpenIndex] = useState<number | null>(null)
+export const FAQSection = ({
+  title = "Frequently asked questions",
+  faqs = defaultFAQs,
+}: FAQSectionProps) => {
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const toggleFAQ = (index: number) => {
-    setOpenIndex(openIndex === index ? null : index)
-  }
+    setOpenIndex(openIndex === index ? null : index);
+  };
 
   return (
     <section className="w-full py-24 px-8 bg-white">
       <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-12 gap-16">
-          
           {/* Left Column - Title */}
           <div className="lg:col-span-4">
             <h2
@@ -87,8 +89,10 @@ export const FAQSection = ({ title = "Frequently asked questions", faqs = defaul
           <div className="lg:col-span-8">
             <div className="space-y-0">
               {faqs.map((faq, index) => (
-                <div key={index} className="border-b border-[#e5e5e5] last:border-b-0">
-                  
+                <div
+                  key={index}
+                  className="border-b border-[#e5e5e5] last:border-b-0"
+                >
                   {/* Question */}
                   <button
                     onClick={() => toggleFAQ(index)}
@@ -115,7 +119,10 @@ export const FAQSection = ({ title = "Frequently asked questions", faqs = defaul
                       }}
                       className="shrink-0"
                     >
-                      <Plus className="w-6 h-6 text-[#202020]" strokeWidth={1.5} />
+                      <Plus
+                        className="w-6 h-6 text-[#202020]"
+                        strokeWidth={1.5}
+                      />
                     </motion.div>
                   </button>
 
@@ -145,7 +152,6 @@ export const FAQSection = ({ title = "Frequently asked questions", faqs = defaul
                       </motion.div>
                     )}
                   </AnimatePresence>
-
                 </div>
               ))}
             </div>
@@ -153,5 +159,5 @@ export const FAQSection = ({ title = "Frequently asked questions", faqs = defaul
         </div>
       </div>
     </section>
-  )
-}
+  );
+};

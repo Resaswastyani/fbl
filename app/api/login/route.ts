@@ -203,8 +203,9 @@
 // }
 
 // app/api/auth/login/route.ts
+// app/api/auth/login/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/server/db";
+import { prisma } from "@/lib/prisma"; // atau "@/server/db"
 import bcrypt from "bcrypt";
 import { sign } from "jsonwebtoken";
 
@@ -215,6 +216,8 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { email, password } = body;
+
+    console.log("Login attempt:", email); // Debug log
 
     if (!email || !password) {
       return NextResponse.json(
@@ -232,15 +235,25 @@ export async function POST(request: NextRequest) {
         name: true,
         role: true,
         password: true,
+        image: true,
       },
     });
 
-    // Cek apakah user ada dan punya password
-    if (!user || !user.password) {
+    console.log("User found:", user ? "YES" : "NO"); // Debug log
+
+    if (!user) {
+      return NextResponse.json(
+        { error: "Email atau password salah" },
+        { status: 401 },
+      );
+    }
+
+    // Cek apakah user punya password (bukan Google-only)
+    if (!user.password) {
       return NextResponse.json(
         {
           error:
-            "Email atau password salah. Jika Anda mendaftar dengan Google, silakan login menggunakan Google.",
+            "Akun ini terdaftar dengan Google. Silakan login dengan Google.",
         },
         { status: 401 },
       );
@@ -248,6 +261,8 @@ export async function POST(request: NextRequest) {
 
     // Cek password
     const isValid = await bcrypt.compare(password, user.password);
+    console.log("Password valid:", isValid); // Debug log
+
     if (!isValid) {
       return NextResponse.json(
         { error: "Email atau password salah" },
@@ -266,7 +281,7 @@ export async function POST(request: NextRequest) {
       { expiresIn: "7d" },
     );
 
-    // Response sukses + set cookie
+    // Response sukses
     const response = NextResponse.json(
       {
         success: true,
@@ -276,11 +291,13 @@ export async function POST(request: NextRequest) {
           email: user.email,
           name: user.name,
           role: user.role,
+          image: user.image,
         },
       },
       { status: 200 },
     );
 
+    // Set cookie
     response.cookies.set({
       name: "session",
       value: token,
@@ -292,10 +309,16 @@ export async function POST(request: NextRequest) {
     });
 
     return response;
-  } catch (error) {
+  } catch (error: any) {
     console.error("Login error:", error);
+
+    // Return error detail untuk debugging
     return NextResponse.json(
-      { error: "Terjadi kesalahan server" },
+      {
+        error: "Terjadi kesalahan server",
+        detail:
+          process.env.NODE_ENV === "development" ? error.message : undefined,
+      },
       { status: 500 },
     );
   }

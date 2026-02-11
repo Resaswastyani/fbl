@@ -205,7 +205,7 @@
 // app/api/auth/login/route.ts
 // app/api/auth/login/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma"; // atau "@/server/db"
+import { prisma } from "@/server/db"; // atau "@/server/db"
 import bcrypt from "bcrypt";
 import { sign } from "jsonwebtoken";
 

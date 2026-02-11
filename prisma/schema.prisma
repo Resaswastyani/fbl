@@ -9,24 +9,29 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
-  password  String
-  role      String   @default("PELANGGAN") // PELANGGAN, MENTOR, ADMIN
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  password      String?   // ✅ Diubah ke nullable (?) untuk OAuth
+  image         String?   @db.VarChar(500) // ✅ Tambahan untuk avatar Google
+  emailVerified DateTime? // ✅ Tambahan untuk NextAuth
+  role          String    @default("PELANGGAN")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 
-  // Relations
-  cart        Cart?
-  orders      Order[]
-  enrollments Enrollment[]
-  articles    Article[]
-  tradingVideos  TradingVideo[]
+  // NextAuth relations (baru)
+  accounts      Account[]
+  sessions      Session[]
+
+  // Existing relations (tetap sama)
+  cart          Cart?
+  orders        Order[]
+  enrollments   Enrollment[]
+  articles      Article[]
+  tradingVideos TradingVideo[]
 
   @@map("users")
 }
-
 model Course {
   id          String   @id @default(cuid())
   title       String
@@ -206,4 +211,44 @@ model TradingVideo {
   @@index([authorId])
   @@index([published, createdAt])
   @@map("trading_videos")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
 }

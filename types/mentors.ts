@@ -25,10 +25,10 @@ export interface Mentor {
 export const mentors: Mentor[] = [
   {
     id: "budi-santoso",
-    name: "Budi Santoso",
+    name: "Eka Pramudhitya",
     role: "Lead Mentor & Founder",
     image: "/mentors/Eka.jpeg",
-    experience: "15+ Tahun",
+    experience: "5+ Tahun",
     specialization: [
       "Technical Analysis",
       "Price Action",
@@ -50,16 +50,16 @@ export const mentors: Mentor[] = [
     stats: {
       students: "5,000+",
       courses: 12,
-      yearsExperience: 15,
+      yearsExperience: 5,
     },
     certifications: ["CFTe", "MSTA", "CFA Level II"],
   },
   {
     id: "dewi-kusuma",
-    name: "Dewi Kusuma",
+    name: "Desi Oktasari",
     role: "Senior Mentor - Fundamental Analysis",
     image: "/mentors/Desi.jpeg",
-    experience: "10+ Tahun",
+    experience: "2+ Tahun",
     specialization: [
       "Fundamental Analysis",
       "Macro Economics",
@@ -81,7 +81,7 @@ export const mentors: Mentor[] = [
     stats: {
       students: "3,200+",
       courses: 8,
-      yearsExperience: 10,
+      yearsExperience: 2,
     },
     certifications: ["PhD Economics", "FRM", "CMT Level II"],
   },

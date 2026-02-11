@@ -165,7 +165,7 @@ export default function PositionSizeCalculatorPage() {
 
                 {/* CTA */}
                 <a
-                  href="https://wa.me/6281234567890?text=Halo%20saya%20ingin%20order%20Position%20Size%20Calculator%20harga%20promo"
+                  href="https://wa.me/6285187555440?text=Halo%20saya%20ingin%20order%20Position%20Size%20Calculator%20harga%20promo"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center gap-2 w-full

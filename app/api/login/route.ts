@@ -223,7 +223,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Cari user (email case-insensitive)
+    // Cari user
     const user = await prisma.user.findUnique({
       where: { email: email.toLowerCase() },
       select: {
@@ -235,7 +235,7 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // Cek apakah user ada dan punya password (bukan Google-only user)
+    // Cek apakah user ada dan punya password
     if (!user || !user.password) {
       return NextResponse.json(
         {
@@ -266,7 +266,7 @@ export async function POST(request: NextRequest) {
       { expiresIn: "7d" },
     );
 
-    // Response sukses + set cookie httpOnly
+    // Response sukses + set cookie
     const response = NextResponse.json(
       {
         success: true,
@@ -281,14 +281,13 @@ export async function POST(request: NextRequest) {
       { status: 200 },
     );
 
-    // Set cookie session (httpOnly, secure di production)
     response.cookies.set({
       name: "session",
       value: token,
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       path: "/",
-      maxAge: 60 * 60 * 24 * 7, // 7 hari
+      maxAge: 60 * 60 * 24 * 7,
       sameSite: "lax",
     });
 
@@ -300,9 +299,4 @@ export async function POST(request: NextRequest) {
       { status: 500 },
     );
   }
-}
-
-// Optional: tambah GET kalau mau cek status login
-export async function GET() {
-  return NextResponse.json({ message: "Login API aktif" });
 }

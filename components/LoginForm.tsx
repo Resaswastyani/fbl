@@ -216,11 +216,13 @@ export function LoginForm({
 }: React.ComponentProps<"div">) {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
+    setError(null);
 
     const form = e.currentTarget;
     const email = (form.elements.namedItem("email") as HTMLInputElement).value;
@@ -237,7 +239,7 @@ export function LoginForm({
       const data = await res.json();
 
       if (!res.ok) {
-        alert(data.error || "Login failed");
+        setError(data.error || "Login gagal");
         setLoading(false);
         return;
       }
@@ -248,15 +250,15 @@ export function LoginForm({
       } else {
         router.push("/dashboard");
       }
+      router.refresh();
     } catch (error) {
       console.error("Error:", error);
-      alert("Terjadi kesalahan");
+      setError("Terjadi kesalahan server. Silakan coba lagi.");
+      setLoading(false);
     }
-
-    setLoading(false);
   }
 
-  // 🔥 TAMBAHAN: Handler untuk Google Login
+  // 🔥 Handler untuk Google Login
   const handleGoogleLogin = () => {
     window.location.href = "/api/auth/google";
   };
@@ -265,10 +267,7 @@ export function LoginForm({
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       {/* Back button */}
       <button
-        className="
-          w-10 h-10 rounded-full border flex items-center justify-center
-          hover:bg-muted transition mb-2
-        "
+        className="w-10 h-10 rounded-full border flex items-center justify-center hover:bg-muted transition mb-2"
         onClick={() => {
           fetch("/api/auth/me")
             .then((r) => r.json())
@@ -297,6 +296,13 @@ export function LoginForm({
                 </p>
               </div>
 
+              {/* Error Message */}
+              {error && (
+                <div className="p-3 text-sm text-red-500 bg-red-50 rounded-lg">
+                  {error}
+                </div>
+              )}
+
               {/* Email */}
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
@@ -306,6 +312,7 @@ export function LoginForm({
                   type="email"
                   placeholder="Masukkan email Anda..."
                   required
+                  disabled={loading}
                 />
               </div>
 
@@ -327,14 +334,12 @@ export function LoginForm({
                     name="password"
                     type={showPassword ? "text" : "password"}
                     required
+                    disabled={loading}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="
-                      absolute right-3 top-1/2 -translate-y-1/2
-                      text-muted-foreground hover:text-foreground
-                    "
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                   >
                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                   </button>
@@ -353,12 +358,13 @@ export function LoginForm({
                 </span>
               </div>
 
-              {/* 🔥 TAMBAHAN: Google Login dengan onClick */}
+              {/* Google Login */}
               <Button
                 type="button"
                 variant="outline"
                 className="w-full flex items-center justify-center gap-2"
                 onClick={handleGoogleLogin}
+                disabled={loading}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

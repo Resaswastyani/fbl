@@ -37,6 +37,11 @@ export default function SignupForm({
       return;
     }
 
+    if (password.length < 6) {
+      setError("Password minimal 6 karakter.");
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -66,19 +71,26 @@ export default function SignupForm({
       });
 
       if (loginRes.ok) {
-        router.push("/student/dashboard");
+        const loginData = await loginRes.json();
+
+        // Redirect berdasarkan role
+        if (loginData.user.role === "PELANGGAN") {
+          router.push("/student/dashboard");
+        } else {
+          router.push("/dashboard");
+        }
         router.refresh();
       } else {
         router.push("/login?success=account_created");
       }
     } catch (err) {
-      setError("Terjadi kesalahan server.");
+      console.error("Signup error:", err);
+      setError("Terjadi kesalahan server. Silakan coba lagi.");
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
-  // 🔥 TAMBAHAN: Handler untuk Google Signup
+  // 🔥 Handler untuk Google Signup
   const handleGoogleSignup = () => {
     window.location.href = "/api/auth/google";
   };
@@ -108,7 +120,9 @@ export default function SignupForm({
 
               {/* Error Message */}
               {error && (
-                <p className="text-red-500 text-center text-sm">{error}</p>
+                <div className="p-3 text-sm text-red-500 bg-red-50 rounded-lg">
+                  {error}
+                </div>
               )}
 
               {/* Name */}
@@ -120,6 +134,7 @@ export default function SignupForm({
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
+                  disabled={loading}
                 />
               </div>
 
@@ -133,6 +148,7 @@ export default function SignupForm({
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  disabled={loading}
                 />
               </div>
 
@@ -146,6 +162,8 @@ export default function SignupForm({
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    disabled={loading}
+                    minLength={6}
                   />
                   <button
                     type="button"
@@ -167,6 +185,7 @@ export default function SignupForm({
                     required
                     value={password2}
                     onChange={(e) => setPassword2(e.target.value)}
+                    disabled={loading}
                   />
                   <button
                     type="button"
@@ -190,12 +209,13 @@ export default function SignupForm({
                 </span>
               </div>
 
-              {/* 🔥 TAMBAHAN: Google Signup dengan onClick */}
+              {/* Google Signup */}
               <Button
                 type="button"
                 variant="outline"
                 className="w-full flex items-center justify-center gap-2"
                 onClick={handleGoogleSignup}
+                disabled={loading}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -234,6 +254,7 @@ export default function SignupForm({
           </div>
         </CardContent>
       </Card>
+
       {/* Terms */}
       <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-primary">
         By continuing, you agree to our <a href="#">Terms of Service</a> and{" "}

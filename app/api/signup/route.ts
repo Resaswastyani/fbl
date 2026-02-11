@@ -85,12 +85,11 @@ export async function POST(req: Request) {
     });
 
     if (existingUser) {
-      // Jika user sudah ada tapi dari Google (tanpa password)
       if (!existingUser.password && existingUser.accounts.length > 0) {
         return NextResponse.json(
           {
             error:
-              "Email sudah terdaftar dengan Google. Silakan login menggunakan Google atau set password di pengaturan.",
+              "Email sudah terdaftar dengan Google. Silakan login menggunakan Google.",
           },
           { status: 400 },
         );

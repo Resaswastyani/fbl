@@ -26,7 +26,7 @@ export const mentors: Mentor[] = [
   {
     id: "budi-santoso",
     name: "Eka Pramudhitya",
-    role: "Lead Mentor & Founder",
+    role: "Lead Mentor",
     image: "/mentors/Eka.jpeg",
     experience: "5+ Tahun",
     specialization: [
@@ -35,7 +35,7 @@ export const mentors: Mentor[] = [
       "Risk Management",
       "Trading Psychology",
     ],
-    bio: "Budi Santoso adalah founder sekaligus lead mentor di Forex Bisa Lab. Dengan pengalaman lebih dari 15 tahun di industri forex, beliau telah membantu ribuan trader Indonesia mencapai konsistensi profit. Sebelumnya bekerja sebagai institutional trader di salah satu bank investasi terkemuka di Jakarta.",
+    bio: "Eka Pramudhitya adalah founder sekaligus lead mentor di Forex Bisa Lab. Dengan pengalaman lebih dari 15 tahun di industri forex, beliau telah membantu ribuan trader Indonesia mencapai konsistensi profit. Sebelumnya bekerja sebagai institutional trader di salah satu bank investasi terkemuka di Jakarta.",
     achievements: [
       "Mengelola portfolio $50M+",
       "Certified Financial Technician (CFTe)",
@@ -66,7 +66,7 @@ export const mentors: Mentor[] = [
       "News Trading",
       "Portfolio Diversification",
     ],
-    bio: "Dewi Kusuma adalah ahli analisis fundamental dengan latar belakang ekonomi internasional dari Universitas Indonesia. Spesialisasi beliau dalam membaca pergerakan market berdasarkan data ekonomi global dan kebijakan bank sentral. Pendekatan mengajarnya yang sistematis sangat cocok untuk trader yang ingin memahami 'mengapa' di balik pergerakan harga.",
+    bio: "Desi Oktasari adalah ahli analisis fundamental dengan latar belakang ekonomi internasional dari Universitas Indonesia. Spesialisasi beliau dalam membaca pergerakan market berdasarkan data ekonomi global dan kebijakan bank sentral. Pendekatan mengajarnya yang sistematis sangat cocok untuk trader yang ingin memahami 'mengapa' di balik pergerakan harga.",
     achievements: [
       "Ex-Economist di Bank Indonesia",
       "PhD in International Economics",

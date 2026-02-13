@@ -459,7 +459,13 @@
 // }
 
 "use client";
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
 
 export interface CartItem {
   id: string;
@@ -482,6 +488,7 @@ interface CartContextType {
   syncToServer: () => Promise<void>;
   isLoggedIn: boolean;
   loading: boolean;
+  refreshAuth: () => Promise<void>;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -492,6 +499,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [snapReady, setSnapReady] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [userId, setUserId] = useState<string | null>(null);
 
   // Load Midtrans Snap
   useEffect(() => {
@@ -514,91 +522,32 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     };
   }, []);
 
-  // Check auth dan load cart
-  useEffect(() => {
-    const initCart = async () => {
-      try {
-        const authRes = await fetch("/api/auth/me", {
-          credentials: "include",
-        });
-        const authenticated = authRes.ok;
-        setIsLoggedIn(authenticated);
+  // Check auth dan load cart - DIPISAHKAN AGAR BISA DI-REFRESH
+  const checkAuth = useCallback(async () => {
+    try {
+      const authRes = await fetch("/api/auth/me", {
+        credentials: "include",
+        cache: "no-store", // Hindari cache
+      });
 
-        if (authenticated) {
-          // Load cart dari server terlebih dahulu
-          await loadCartFromServer();
+      const authenticated = authRes.ok;
+      const authData = authenticated ? await authRes.json() : null;
+      const currentUserId = authData?.user?.id || null;
 
-          // Cek apakah ada guest cart di localStorage
-          const guestCart = localStorage.getItem("guest-cart");
-          if (guestCart) {
-            try {
-              const guestItems = JSON.parse(guestCart);
-              if (guestItems.length > 0) {
-                console.log("Syncing guest cart to server:", guestItems);
+      setIsLoggedIn(authenticated);
+      setUserId(currentUserId);
 
-                // Sync guest cart ke server
-                const res = await fetch("/api/cart", {
-                  method: "PUT",
-                  headers: { "Content-Type": "application/json" },
-                  credentials: "include",
-                  body: JSON.stringify({ items: guestItems }),
-                });
+      if (authenticated && currentUserId) {
+        // Load cart dari server
+        await loadCartFromServer();
 
-                if (res.ok) {
-                  console.log("Guest cart synced successfully");
-                  localStorage.removeItem("guest-cart");
-                  // Reload cart dari server setelah sync
-                  await loadCartFromServer();
-                }
-              } else {
-                localStorage.removeItem("guest-cart");
-              }
-            } catch (error) {
-              console.error("Error syncing guest cart:", error);
-              localStorage.removeItem("guest-cart");
-            }
-          }
-        } else {
-          // User tidak login, load dari guest-cart
-          const stored = localStorage.getItem("guest-cart");
-          if (stored) {
-            try {
-              const parsed = JSON.parse(stored);
-              setItems(parsed);
-            } catch (e) {
-              localStorage.removeItem("guest-cart");
-            }
-          }
-        }
-      } catch (error) {
-        console.error("Cart init error:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    initCart();
-  }, []);
-
-  // Effect untuk handle redirect dari Google OAuth dengan sync_cart parameter
-  useEffect(() => {
-    const handleOAuthRedirect = async () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const syncCart = urlParams.get("sync_cart");
-      const newUser = urlParams.get("new_user");
-
-      if (syncCart === "true") {
-        // Hapus parameter dari URL tanpa reload
-        const newUrl = window.location.pathname;
-        window.history.replaceState({}, document.title, newUrl);
-
-        // Re-init cart untuk sync
+        // Cek apakah ada guest cart yang perlu di-sync
         const guestCart = localStorage.getItem("guest-cart");
         if (guestCart) {
           try {
             const guestItems = JSON.parse(guestCart);
             if (guestItems.length > 0) {
-              console.log("OAuth redirect: Syncing guest cart:", guestItems);
+              console.log("Syncing guest cart to server:", guestItems);
 
               const res = await fetch("/api/cart", {
                 method: "PUT",
@@ -608,35 +557,115 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
               });
 
               if (res.ok) {
+                console.log("Guest cart synced successfully");
                 localStorage.removeItem("guest-cart");
                 await loadCartFromServer();
-
-                // Show notification untuk new user
-                if (newUser === "true") {
-                  console.log("New user registered via Google");
-                }
               }
+            } else {
+              localStorage.removeItem("guest-cart");
             }
           } catch (error) {
-            console.error("Error syncing cart after OAuth:", error);
+            console.error("Error syncing guest cart:", error);
+            localStorage.removeItem("guest-cart");
           }
         }
+      } else {
+        // User tidak login, load dari guest-cart
+        const stored = localStorage.getItem("guest-cart");
+        if (stored) {
+          try {
+            const parsed = JSON.parse(stored);
+            setItems(parsed);
+          } catch (e) {
+            localStorage.removeItem("guest-cart");
+            setItems([]);
+          }
+        } else {
+          setItems([]);
+        }
+      }
+    } catch (error) {
+      console.error("Cart init error:", error);
+      setIsLoggedIn(false);
+      setItems([]);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
-        // Update login state
-        setIsLoggedIn(true);
+  // Initial load
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
+
+  // Listen untuk event logout dari komponen lain
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === "logout-event") {
+        console.log("Logout event detected from another tab/component");
+        setIsLoggedIn(false);
+        setUserId(null);
+        setItems([]);
+        localStorage.removeItem("cart");
+      }
+      if (e.key === "auth-change") {
+        console.log("Auth change detected, refreshing cart...");
+        checkAuth();
       }
     };
 
-    // Delay sedikit untuk memastikan cookie sudah ter-set
-    const timer = setTimeout(handleOAuthRedirect, 500);
+    window.addEventListener("storage", handleStorageChange);
+
+    // Custom event untuk same-tab communication
+    const handleCustomLogout = () => {
+      console.log("Custom logout event received");
+      setIsLoggedIn(false);
+      setUserId(null);
+      setItems([]);
+      localStorage.removeItem("cart");
+    };
+
+    const handleCustomAuthChange = () => {
+      console.log("Custom auth change event received");
+      checkAuth();
+    };
+
+    window.addEventListener("app-logout", handleCustomLogout);
+    window.addEventListener("app-auth-change", handleCustomAuthChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("app-logout", handleCustomLogout);
+      window.removeEventListener("app-auth-change", handleCustomAuthChange);
+    };
+  }, [checkAuth]);
+
+  // Effect untuk handle redirect dari Google OAuth
+  useEffect(() => {
+    const handleOAuthRedirect = async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const syncCart = urlParams.get("sync_cart");
+
+      if (syncCart === "true") {
+        // Hapus parameter dari URL tanpa reload
+        const newUrl = window.location.pathname;
+        window.history.replaceState({}, document.title, newUrl);
+
+        // Trigger auth check ulang
+        await checkAuth();
+      }
+    };
+
+    const timer = setTimeout(handleOAuthRedirect, 300);
     return () => clearTimeout(timer);
-  }, []);
+  }, [checkAuth]);
 
   // Load cart dari server
   const loadCartFromServer = async () => {
     try {
       const res = await fetch("/api/cart", {
         credentials: "include",
+        cache: "no-store",
       });
 
       if (res.ok) {
@@ -645,7 +674,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         setItems(cartItems);
         localStorage.setItem("cart", JSON.stringify(cartItems));
       } else if (res.status === 401) {
-        // Unauthorized, clear state
         setIsLoggedIn(false);
         setItems([]);
       }
@@ -657,15 +685,21 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   // Save to localStorage (backup)
   useEffect(() => {
     if (!loading) {
-      localStorage.setItem("cart", JSON.stringify(items));
+      if (isLoggedIn) {
+        localStorage.setItem("cart", JSON.stringify(items));
+      } else {
+        localStorage.setItem("guest-cart", JSON.stringify(items));
+      }
     }
-  }, [items, loading]);
+  }, [items, loading, isLoggedIn]);
 
   // Add to cart
   const addToCart = async (item: CartItem) => {
     try {
+      // Cek auth status terkini
       const authRes = await fetch("/api/auth/me", {
         credentials: "include",
+        cache: "no-store",
       });
       const authenticated = authRes.ok;
       setIsLoggedIn(authenticated);
@@ -767,6 +801,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     const authCheck = await fetch("/api/auth/me", {
       method: "GET",
       credentials: "include",
+      cache: "no-store",
     });
 
     if (!authCheck.ok) {
@@ -940,6 +975,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  // Fungsi untuk refresh auth state dari komponen lain
+  const refreshAuth = async () => {
+    await checkAuth();
+  };
+
   return (
     <CartContext.Provider
       value={{
@@ -953,6 +993,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         syncToServer,
         isLoggedIn,
         loading,
+        refreshAuth,
       }}
     >
       {children}

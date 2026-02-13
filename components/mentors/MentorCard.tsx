@@ -5,14 +5,11 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import {
   Award,
-  Users,
-  BookOpen,
   Clock,
   Instagram,
   Linkedin,
   Twitter,
   Youtube,
-  ArrowRight,
 } from "lucide-react";
 import type { Mentor } from "@/types/mentors";
 
@@ -81,31 +78,6 @@ export default function MentorCard({ mentor, index }: MentorCardProps) {
 
       {/* Content Section */}
       <div className={`${!isEven ? "lg:order-1" : ""}`}>
-        {/* Stats */}
-        <div className="grid grid-cols-3 gap-4 mb-6">
-          <div className="bg-[#f8fafc] rounded-xl p-4 text-center">
-            <Users size={20} className="text-[#156d95] mx-auto mb-2" />
-            <p className="text-lg font-bold text-[#111A4A]">
-              {mentor.stats.students}
-            </p>
-            <p className="text-xs text-gray-500">Students</p>
-          </div>
-          <div className="bg-[#f8fafc] rounded-xl p-4 text-center">
-            <BookOpen size={20} className="text-[#156d95] mx-auto mb-2" />
-            <p className="text-lg font-bold text-[#111A4A]">
-              {mentor.stats.courses}
-            </p>
-            <p className="text-xs text-gray-500">Courses</p>
-          </div>
-          <div className="bg-[#f8fafc] rounded-xl p-4 text-center">
-            <Award size={20} className="text-[#156d95] mx-auto mb-2" />
-            <p className="text-lg font-bold text-[#111A4A]">
-              {mentor.stats.yearsExperience}
-            </p>
-            <p className="text-xs text-gray-500">Years Exp.</p>
-          </div>
-        </div>
-
         {/* Bio */}
         <p
           className="text-gray-600 leading-relaxed mb-6"
@@ -163,58 +135,48 @@ export default function MentorCard({ mentor, index }: MentorCardProps) {
           </div>
         </div>
 
-        {/* Social Media & CTA */}
-        <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-          <div className="flex items-center gap-3">
-            {mentor.socialMedia.instagram && (
-              <a
-                href={mentor.socialMedia.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 bg-pink-50 text-pink-600 rounded-full flex items-center justify-center hover:bg-pink-100 transition"
-              >
-                <Instagram size={18} />
-              </a>
-            )}
-            {mentor.socialMedia.linkedin && (
-              <a
-                href={mentor.socialMedia.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center hover:bg-blue-100 transition"
-              >
-                <Linkedin size={18} />
-              </a>
-            )}
-            {mentor.socialMedia.twitter && (
-              <a
-                href={mentor.socialMedia.twitter}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 bg-sky-50 text-sky-500 rounded-full flex items-center justify-center hover:bg-sky-100 transition"
-              >
-                <Twitter size={18} />
-              </a>
-            )}
-            {mentor.socialMedia.youtube && (
-              <a
-                href={mentor.socialMedia.youtube}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 bg-red-50 text-red-600 rounded-full flex items-center justify-center hover:bg-red-100 transition"
-              >
-                <Youtube size={18} />
-              </a>
-            )}
-          </div>
-
-          <button className="group inline-flex items-center gap-2 bg-gradient-to-r from-[#156d95] to-[#111A4A] text-white px-5 py-2.5 rounded-lg font-medium hover:shadow-lg hover:shadow-[#156d95]/25 transition-all">
-            Lihat Profil
-            <ArrowRight
-              size={16}
-              className="transition-transform group-hover:translate-x-1"
-            />
-          </button>
+        {/* Social Media */}
+        <div className="flex items-center gap-3 pt-4 border-t border-gray-100">
+          {mentor.socialMedia.instagram && (
+            <a
+              href={mentor.socialMedia.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-10 h-10 bg-pink-50 text-pink-600 rounded-full flex items-center justify-center hover:bg-pink-100 transition"
+            >
+              <Instagram size={18} />
+            </a>
+          )}
+          {mentor.socialMedia.linkedin && (
+            <a
+              href={mentor.socialMedia.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-10 h-10 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center hover:bg-blue-100 transition"
+            >
+              <Linkedin size={18} />
+            </a>
+          )}
+          {mentor.socialMedia.twitter && (
+            <a
+              href={mentor.socialMedia.twitter}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-10 h-10 bg-sky-50 text-sky-500 rounded-full flex items-center justify-center hover:bg-sky-100 transition"
+            >
+              <Twitter size={18} />
+            </a>
+          )}
+          {mentor.socialMedia.youtube && (
+            <a
+              href={mentor.socialMedia.youtube}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-10 h-10 bg-red-50 text-red-600 rounded-full flex items-center justify-center hover:bg-red-100 transition"
+            >
+              <Youtube size={18} />
+            </a>
+          )}
         </div>
       </div>
     </motion.div>

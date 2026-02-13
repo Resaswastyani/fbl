@@ -89,8 +89,6 @@ export default function PositionSizeCalculatorPage() {
 
   return (
     <>
-      <Header />
-
       <main className="pt-[100px] md:pt-[140px] bg-white text-[#111A4A]">
         {/* ================= SECTION 1 : PROMOSI ================= */}
         <section className="w-full pt-12 md:pt-24 pb-16 md:pb-28">
@@ -266,7 +264,7 @@ export default function PositionSizeCalculatorPage() {
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-10">
               {/* INPUT */}
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
@@ -342,8 +340,6 @@ export default function PositionSizeCalculatorPage() {
           </div>
         </section>
       </main>
-
-      <Footer />
     </>
   );
 }
@@ -398,7 +394,7 @@ function ResultPanel({
   pair,
 }: any) {
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, delay: 0.1 }}

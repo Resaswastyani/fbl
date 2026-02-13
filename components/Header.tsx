@@ -351,7 +351,7 @@ export const Header = () => {
             <Dropdown
               title="Trading lesson"
               items={[
-                { name: "Trading Beginner", href: "#free-1", icon: BookOpen },
+                // { name: "Trading Beginner", href: "#free-1", icon: BookOpen },
                 { name: "Artikel Trading", href: "/articles", icon: FileText },
                 { name: "Strategy Trading", href: "#free-1", icon: TrendingUp },
                 {

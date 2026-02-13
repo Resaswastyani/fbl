@@ -11,6 +11,7 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
     const code = searchParams.get("code");
     const error = searchParams.get("error");
+    const state = searchParams.get("state"); // Untuk menyimpan cart data
 
     if (error) {
       console.error("Google OAuth error:", error);
@@ -68,10 +69,26 @@ export async function GET(request: NextRequest) {
       { expiresIn: "7d" },
     );
 
+    // Cek apakah user baru atau sudah ada
+    const isNewUser =
+      user.createdAt &&
+      new Date().getTime() - new Date(user.createdAt).getTime() < 60000; // 1 menit
+
+    // Redirect berdasarkan role
+    let redirectUrl = "/student/dashboard";
+    if (user.role !== "PELANGGAN") {
+      redirectUrl = "/dashboard";
+    }
+
+    // Tambahkan parameter untuk trigger sync cart
+    if (isNewUser) {
+      redirectUrl += "?new_user=true&sync_cart=true";
+    } else {
+      redirectUrl += "?sync_cart=true";
+    }
+
     // Set cookie and redirect
-    const response = NextResponse.redirect(
-      new URL("/student/dashboard", request.url),
-    );
+    const response = NextResponse.redirect(new URL(redirectUrl, request.url));
 
     response.cookies.set({
       name: "session",

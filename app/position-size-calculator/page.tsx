@@ -89,12 +89,12 @@ export default function PositionSizeCalculatorPage() {
 
   return (
     <>
-      {/* <Header /> */}
+      <Header />
 
-      <main className="pt-[140px] bg-white text-[#111A4A]">
+      <main className="pt-[100px] md:pt-[140px] bg-white text-[#111A4A]">
         {/* ================= SECTION 1 : PROMOSI ================= */}
-        <section className="w-full pt-24 pb-28">
-          <div className="max-w-7xl mx-auto grid grid-cols-12 gap-12 px-8">
+        <section className="w-full pt-12 md:pt-24 pb-16 md:pb-28">
+          <div className="max-w-7xl mx-auto grid grid-cols-12 gap-6 md:gap-12 px-4 sm:px-6 lg:px-8">
             {/* LEFT PROMO */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -102,32 +102,41 @@ export default function PositionSizeCalculatorPage() {
               transition={{ duration: 0.8 }}
               className="col-span-12 lg:col-span-7 flex flex-col justify-center"
             >
-              <span className="text-xs tracking-wide uppercase text-[#156d95] font-semibold mb-4">
+              <span className="text-xs tracking-wide uppercase text-[#156d95] font-semibold mb-3 md:mb-4">
                 Risk Management Tool
               </span>
 
               <h1
-                className="text-[50px] font-medium leading-tight mb-6"
+                className="text-3xl sm:text-4xl md:text-[50px] font-medium leading-tight mb-4 md:mb-6"
                 style={{ fontFamily: "var(--font-figtree), Figtree" }}
               >
-                Trading Lebih Aman dengan <br />
+                Trading Lebih Aman dengan{" "}
                 <span className="text-[#156d95]">Position Size Calculator</span>
               </h1>
 
-              <p className="text-lg opacity-70 mb-6 leading-relaxed">
+              <p className="text-base md:text-lg opacity-70 mb-4 md:mb-6 leading-relaxed">
                 Bukan entry yang bikin akun kamu habis, tapi{" "}
                 <b>salah ukuran lot</b>. Tool ini membantu trader mengontrol
                 risiko secara profesional, konsisten, dan realistis di setiap
                 posisi.
               </p>
 
-              <ul className="text-sm opacity-70 space-y-2">
-                <li>✔ Anti overlot & margin call</li>
-                <li>✔ Cocok forex, gold, crypto</li>
-                <li>✔ Dipakai trader serius & konsisten</li>
+              <ul className="text-sm opacity-70 space-y-2 mb-4 md:mb-6">
+                <li className="flex items-start gap-2">
+                  <span className="text-green-600">✔</span>
+                  <span>Anti overlot & margin call</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-green-600">✔</span>
+                  <span>Cocok forex, gold, crypto</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-green-600">✔</span>
+                  <span>Dipakai trader serius & konsisten</span>
+                </li>
               </ul>
 
-              <p className="mt-6 text-xs opacity-50">
+              <p className="text-xs opacity-50">
                 © PT Akademi Keuangan Nusantara
               </p>
             </motion.div>
@@ -137,12 +146,12 @@ export default function PositionSizeCalculatorPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.15 }}
-              className="col-span-12 lg:col-span-5 flex items-center"
+              className="col-span-12 lg:col-span-5 flex items-center mt-6 lg:mt-0"
             >
-              <div className="w-full p-8 rounded-3xl border border-[#156d95]/20 bg-[#156d95]/5 shadow-sm">
+              <div className="w-full p-6 md:p-8 rounded-2xl md:rounded-3xl border border-[#156d95]/20 bg-[#156d95]/5 shadow-sm">
                 {/* DISKON BADGE */}
                 <span
-                  className="inline-block mb-4 px-3 py-1 rounded-full
+                  className="inline-block mb-3 md:mb-4 px-3 py-1 rounded-full
                          bg-red-100 text-red-600 text-xs font-semibold"
                 >
                   Promo Terbatas 🔥
@@ -150,16 +159,16 @@ export default function PositionSizeCalculatorPage() {
 
                 {/* PRICE */}
                 <p className="text-sm opacity-60 mb-1">Harga Normal</p>
-                <p className="text-lg line-through opacity-50 mb-2">
+                <p className="text-base md:text-lg line-through opacity-50 mb-2">
                   Rp 299.000
                 </p>
 
                 <p className="text-sm opacity-60 mb-1">Harga Promo</p>
-                <p className="text-4xl font-semibold text-[#156d95] mb-2">
+                <p className="text-2xl md:text-4xl font-semibold text-[#156d95] mb-2">
                   Rp 149.000
                 </p>
 
-                <p className="text-xs opacity-60 mb-6">
+                <p className="text-xs opacity-60 mb-4 md:mb-6">
                   Hemat 50% • Akses tool + panduan penggunaan
                 </p>
 
@@ -182,8 +191,8 @@ export default function PositionSizeCalculatorPage() {
         </section>
 
         {/* ================= SECTION 2 : EDUKASI ================= */}
-        <section className="w-full pb-32">
-          <div className="max-w-7xl mx-auto grid grid-cols-12 gap-12 px-8">
+        <section className="w-full pb-16 md:pb-32">
+          <div className="max-w-7xl mx-auto grid grid-cols-12 gap-8 md:gap-12 px-4 sm:px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -191,11 +200,11 @@ export default function PositionSizeCalculatorPage() {
               className="col-span-12 lg:col-span-6"
             >
               {/* FUNGSI */}
-              <div className="mb-10">
-                <h2 className="text-2xl font-semibold mb-3">
+              <div className="mb-8 md:mb-10">
+                <h2 className="text-xl md:text-2xl font-semibold mb-3">
                   Fungsi Position Size Calculator
                 </h2>
-                <p className="opacity-70 leading-relaxed">
+                <p className="opacity-70 leading-relaxed text-sm md:text-base">
                   Menghitung ukuran lot ideal berdasarkan risiko per transaksi,
                   sehingga setiap posisi memiliki risiko yang konsisten meskipun
                   jarak stop loss berbeda.
@@ -203,12 +212,12 @@ export default function PositionSizeCalculatorPage() {
               </div>
 
               {/* PROS & CONS */}
-              <div className="grid sm:grid-cols-2 gap-6 mb-10">
-                <div className="p-6 rounded-2xl bg-green-50 border border-green-200">
-                  <h3 className="flex items-center gap-2 font-semibold text-green-700 mb-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 mb-8 md:mb-10">
+                <div className="p-4 md:p-6 rounded-2xl bg-green-50 border border-green-200">
+                  <h3 className="flex items-center gap-2 font-semibold text-green-700 mb-3 text-sm md:text-base">
                     <ShieldCheck size={18} /> Kelebihan
                   </h3>
-                  <ul className="text-sm opacity-80 space-y-2">
+                  <ul className="text-xs md:text-sm opacity-80 space-y-2">
                     <li>• Anti overlot & margin call</li>
                     <li>• Risiko konsisten</li>
                     <li>• Disiplin trading</li>
@@ -216,11 +225,11 @@ export default function PositionSizeCalculatorPage() {
                   </ul>
                 </div>
 
-                <div className="p-6 rounded-2xl bg-red-50 border border-red-200">
-                  <h3 className="flex items-center gap-2 font-semibold text-red-700 mb-3">
+                <div className="p-4 md:p-6 rounded-2xl bg-red-50 border border-red-200">
+                  <h3 className="flex items-center gap-2 font-semibold text-red-700 mb-3 text-sm md:text-base">
                     <AlertTriangle size={18} /> Kekurangan
                   </h3>
-                  <ul className="text-sm opacity-80 space-y-2">
+                  <ul className="text-xs md:text-sm opacity-80 space-y-2">
                     <li>• Tidak menentukan arah market</li>
                     <li>• Tetap butuh analisa</li>
                     <li>• Pip value tergantung broker</li>
@@ -236,7 +245,7 @@ export default function PositionSizeCalculatorPage() {
               transition={{ duration: 0.8, delay: 0.15 }}
               className="col-span-12 lg:col-span-6"
             >
-              <h2 className="text-2xl font-semibold mb-4">
+              <h2 className="text-xl md:text-2xl font-semibold mb-4">
                 Langkah Penggunaan Position Size Calculator
               </h2>
 
@@ -253,21 +262,26 @@ export default function PositionSizeCalculatorPage() {
         </section>
 
         {/* ================= SECTION 3 : CALCULATOR ================= */}
-        <section className="pb-32 bg-[#f4f7fb]">
-          <div className="max-w-6xl mx-auto px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+        <section className="pb-16 md:pb-32 bg-[#f4f7fb]">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-10">
               {/* INPUT */}
-              <motion.div className="bg-white rounded-3xl p-10 shadow-xl">
-                <div className="flex items-center gap-3 mb-8">
-                  <div className="w-12 h-12 rounded-xl bg-[#156d95] text-white flex items-center justify-center">
-                    <Calculator />
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+                className="bg-white rounded-2xl md:rounded-3xl p-6 md:p-10 shadow-xl"
+              >
+                <div className="flex items-center gap-3 mb-6 md:mb-8">
+                  <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-[#156d95] text-white flex items-center justify-center">
+                    <Calculator size={20} />
                   </div>
-                  <h2 className="text-2xl font-semibold">
+                  <h2 className="text-xl md:text-2xl font-semibold">
                     Position Size Calculator
                   </h2>
                 </div>
 
-                <div className="space-y-5">
+                <div className="space-y-4 md:space-y-5">
                   <Select
                     label="Trading Pair"
                     value={pair}
@@ -307,7 +321,7 @@ export default function PositionSizeCalculatorPage() {
 
                 <button
                   onClick={handleCalculate}
-                  className="w-full mt-8 py-3 rounded-xl bg-[#156d95] text-white"
+                  className="w-full mt-6 md:mt-8 py-3 rounded-xl bg-[#156d95] text-white font-medium text-sm md:text-base transition-all hover:opacity-90 active:scale-[0.98]"
                 >
                   Hitung Position Size
                 </button>
@@ -328,8 +342,8 @@ export default function PositionSizeCalculatorPage() {
           </div>
         </section>
       </main>
-      {/* 
-      <Footer /> */}
+
+      <Footer />
     </>
   );
 }
@@ -338,14 +352,14 @@ export default function PositionSizeCalculatorPage() {
 function Input({ label, value, onChange }: any) {
   return (
     <div>
-      <label className="block text-sm font-medium mb-1 opacity-80">
+      <label className="block text-sm font-medium mb-1.5 md:mb-2 opacity-80">
         {label}
       </label>
       <input
         type="number"
         value={value}
         onChange={(e) => onChange(Number(e.target.value) || 0)}
-        className="w-full border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#156d95]"
+        className="w-full border rounded-lg px-3 md:px-4 py-2.5 md:py-3 text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-[#156d95] transition-all"
       />
     </div>
   );
@@ -354,13 +368,13 @@ function Input({ label, value, onChange }: any) {
 function Select({ label, value, options, onChange }: any) {
   return (
     <div>
-      <label className="block text-sm font-medium mb-1 opacity-80">
+      <label className="block text-sm font-medium mb-1.5 md:mb-2 opacity-80">
         {label}
       </label>
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#156d95]"
+        className="w-full border rounded-lg px-3 md:px-4 py-2.5 md:py-3 text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-[#156d95] bg-white transition-all"
       >
         {options.map((o: string) => (
           <option key={o} value={o}>
@@ -384,27 +398,32 @@ function ResultPanel({
   pair,
 }: any) {
   return (
-    <div className="space-y-5">
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, delay: 0.1 }}
+      className="space-y-4 md:space-y-5"
+    >
       {/* LOT */}
-      <div className="rounded-2xl p-6 text-center text-white bg-gradient-to-r from-blue-500 to-purple-600">
-        <p className="text-sm opacity-80">Ukuran Lot</p>
-        <p className="text-3xl font-bold">
+      <div className="rounded-xl md:rounded-2xl p-4 md:p-6 text-center text-white bg-gradient-to-r from-blue-500 to-purple-600 shadow-lg">
+        <p className="text-xs md:text-sm opacity-80 mb-1">Ukuran Lot</p>
+        <p className="text-2xl md:text-3xl font-bold">
           {isCalculated ? positionSize.toFixed(3) : "0.000"}
         </p>
       </div>
 
       {/* POSITION SIZE */}
-      <div className="rounded-2xl p-6 text-center text-white bg-gradient-to-r from-blue-500 to-purple-600">
-        <p className="text-sm opacity-80">Ukuran Posisi</p>
-        <p className="text-3xl font-bold">
+      <div className="rounded-xl md:rounded-2xl p-4 md:p-6 text-center text-white bg-gradient-to-r from-blue-500 to-purple-600 shadow-lg">
+        <p className="text-xs md:text-sm opacity-80 mb-1">Ukuran Posisi</p>
+        <p className="text-2xl md:text-3xl font-bold">
           {isCalculated ? positionUnits.toFixed(0) : "0"}
         </p>
       </div>
 
       {/* RISK */}
-      <div className="rounded-2xl p-6 text-center text-white bg-gradient-to-r from-blue-500 to-purple-600">
-        <p className="text-sm opacity-80">Jumlah Risiko</p>
-        <p className="text-3xl font-bold">
+      <div className="rounded-xl md:rounded-2xl p-4 md:p-6 text-center text-white bg-gradient-to-r from-blue-500 to-purple-600 shadow-lg">
+        <p className="text-xs md:text-sm opacity-80 mb-1">Jumlah Risiko</p>
+        <p className="text-2xl md:text-3xl font-bold">
           {isCalculated
             ? `${((balance * riskPercent) / 100).toFixed(2)} ${currency}`
             : `0.00 ${currency}`}
@@ -412,34 +431,34 @@ function ResultPanel({
       </div>
 
       {/* INFO PANEL */}
-      <div className="bg-white rounded-2xl p-6 border text-sm space-y-3">
-        <div>
+      <div className="bg-white rounded-xl md:rounded-2xl p-4 md:p-6 border text-xs md:text-sm space-y-3 shadow-sm">
+        <div className="flex justify-between items-center">
           <p className="font-semibold">Terdeteksi</p>
           <p className="opacity-70">{pair}</p>
         </div>
 
-        <div>
+        <div className="flex justify-between items-center">
           <p className="font-semibold">Perlu Harga?</p>
           <p className="opacity-70">
             {needPriceConversion(pair) ? "Ya" : "Tidak"}
           </p>
-          <p className="text-xs opacity-50">
-            Kolom harga muncul hanya saat diperlukan
-          </p>
         </div>
+        <p className="text-xs opacity-50 -mt-2">
+          Kolom harga muncul hanya saat diperlukan
+        </p>
 
-        <div>
+        <div className="flex justify-between items-center">
           <p className="font-semibold">Nilai Pip (1 lot)</p>
           <p className="opacity-70">
             {isCalculated ? `${pipValue.toFixed(2)} ${currency}` : "-"}
           </p>
         </div>
 
-        <div>
+        <div className="flex justify-between items-center">
           <p className="font-semibold">Dalam mata uang akun</p>
           <p className="opacity-70">{currency}</p>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

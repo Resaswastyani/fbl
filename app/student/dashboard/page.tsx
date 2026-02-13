@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -30,7 +30,7 @@ interface EnrolledCourse {
 
 export default function StudentDashboardPage() {
   const router = useRouter();
-  const { items: cartItems, clearCart } = useCart();
+  const { items: cartItems, clearCart, refreshAuth } = useCart();
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [enrolledCourses, setEnrolledCourses] = useState<EnrolledCourse[]>([]);
@@ -38,66 +38,104 @@ export default function StudentDashboardPage() {
   const [certificateCount, setCertificateCount] = useState(0);
 
   // Check authentication dan fetch data
-  useEffect(() => {
-    const initDashboard = async () => {
-      try {
-        // Check auth
-        const authRes = await fetch("/api/auth/me", {
-          credentials: "include",
-        });
+  const initDashboard = useCallback(async () => {
+    try {
+      const authRes = await fetch("/api/auth/me", {
+        credentials: "include",
+        cache: "no-store",
+      });
 
-        if (authRes.status === 401) {
-          router.push("/login");
-          return;
-        }
-
-        const authData = await authRes.json();
-        if (!authData?.user) {
-          router.push("/login");
-          return;
-        }
-
-        setUser(authData.user);
-
-        if (authData.user.role !== "PELANGGAN") {
-          router.push("/dashboard");
-          return;
-        }
-
-        // Fetch enrolled courses dari API
-        const coursesRes = await fetch("/api/enrollments", {
-          credentials: "include",
-        });
-
-        if (coursesRes.ok) {
-          const coursesData = await coursesRes.json();
-          setEnrolledCourses(coursesData.courses || []);
-          setCertificateCount(coursesData.certificateCount || 0);
-        }
-      } catch (error) {
-        console.error("Initialization error:", error);
-      } finally {
-        setLoading(false);
+      if (authRes.status === 401) {
+        router.push("/login");
+        return;
       }
-    };
 
-    initDashboard();
+      const authData = await authRes.json();
+      if (!authData?.user) {
+        router.push("/login");
+        return;
+      }
+
+      setUser(authData.user);
+
+      if (authData.user.role !== "PELANGGAN") {
+        router.push("/dashboard");
+        return;
+      }
+
+      // Fetch enrolled courses
+      const coursesRes = await fetch("/api/enrollments", {
+        credentials: "include",
+      });
+
+      if (coursesRes.ok) {
+        const coursesData = await coursesRes.json();
+        setEnrolledCourses(coursesData.courses || []);
+        setCertificateCount(coursesData.certificateCount || 0);
+      }
+    } catch (error) {
+      console.error("Initialization error:", error);
+    } finally {
+      setLoading(false);
+    }
   }, [router]);
 
-  // Handle logout
-  const handleLogout = () => {
-    clearCart();
-    document.cookie =
-      "session=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
-    router.push("/login");
+  useEffect(() => {
+    initDashboard();
+  }, [initDashboard]);
+
+  // Listen untuk auth changes dari komponen lain
+  useEffect(() => {
+    const handleAuthChange = () => {
+      console.log("Auth change detected in Dashboard");
+      initDashboard();
+    };
+
+    const handleLogout = () => {
+      console.log("Logout detected in Dashboard");
+      setUser(null);
+      router.push("/login");
+    };
+
+    window.addEventListener("app-auth-change", handleAuthChange);
+    window.addEventListener("app-logout", handleLogout);
+
+    return () => {
+      window.removeEventListener("app-auth-change", handleAuthChange);
+      window.removeEventListener("app-logout", handleLogout);
+    };
+  }, [initDashboard, router]);
+
+  // Handle logout dengan broadcast ke komponen lain
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/auth/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+    } catch (error) {
+      console.error("Logout error:", error);
+    } finally {
+      clearCart();
+
+      // Broadcast logout event
+      localStorage.setItem("logout-event", Date.now().toString());
+      localStorage.removeItem("logout-event");
+
+      // Custom event untuk same-tab
+      window.dispatchEvent(new Event("app-logout"));
+
+      // Refresh cart context
+      await refreshAuth();
+
+      router.push("/login");
+    }
   };
 
-  // Toggle sidebar for mobile
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  // Format price helper
   const formatPrice = (price: string | number) => {
     const priceStr = typeof price === "number" ? price.toString() : price;
     if (priceStr === "Free") return "Free";
@@ -107,7 +145,6 @@ export default function StudentDashboardPage() {
       : priceStr;
   };
 
-  // Handle view cart
   const handleViewCart = () => {
     if (cartItems.length === 0) {
       alert("Keranjang Anda kosong!");
@@ -116,12 +153,10 @@ export default function StudentDashboardPage() {
     router.push("/student/cart");
   };
 
-  // Handle continue learning
   const handleContinueLearning = (courseId: string) => {
     router.push(`/course/${courseId}`);
   };
 
-  // Format last accessed
   const formatLastAccessed = (date: string) => {
     if (!date) return "Belum diakses";
     const d = new Date(date);
@@ -152,7 +187,6 @@ export default function StudentDashboardPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
-      {/* Mobile Sidebar Toggle */}
       <button
         onClick={toggleSidebar}
         className="fixed top-4 left-4 z-50 md:hidden bg-white p-2 rounded-lg shadow-md"
@@ -165,7 +199,6 @@ export default function StudentDashboardPage() {
         )}
       </button>
 
-      {/* Sidebar */}
       <aside
         className={`
           fixed md:sticky top-0 left-0 z-40 w-64 h-screen bg-white border-r shadow-lg
@@ -174,7 +207,6 @@ export default function StudentDashboardPage() {
           md:translate-x-0 flex flex-col
         `}
       >
-        {/* Logo */}
         <div className="p-6 border-b shrink-0 flex justify-center">
           <Image
             src="/logo-fbl.png"
@@ -186,7 +218,6 @@ export default function StudentDashboardPage() {
           />
         </div>
 
-        {/* Navigation */}
         <nav className="flex-1 p-4 overflow-y-auto">
           <ul className="space-y-1">
             <li>
@@ -263,7 +294,6 @@ export default function StudentDashboardPage() {
           </ul>
         </nav>
 
-        {/* User Profile */}
         <div className="p-4 border-t shrink-0">
           <div className="flex items-center justify-between p-3 bg-[#156d95]/5 rounded-lg">
             <div className="flex items-center min-w-0">
@@ -290,10 +320,8 @@ export default function StudentDashboardPage() {
         </div>
       </aside>
 
-      {/* Main Content */}
       <main className="flex-1 min-w-0">
         <div className="p-4 md:p-8 max-w-7xl mx-auto">
-          {/* Header */}
           <div className="mb-8 mt-12 md:mt-0">
             <h1 className="text-3xl font-bold text-gray-900">
               Halo, {user.name}! 👋
@@ -303,7 +331,6 @@ export default function StudentDashboardPage() {
             </p>
           </div>
 
-          {/* Stats Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-8 md:mb-12">
             <Card>
               <CardContent className="p-6">
@@ -348,7 +375,6 @@ export default function StudentDashboardPage() {
             </Card>
           </div>
 
-          {/* Enrolled Courses Section */}
           <section className="mb-12">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
               <h2 className="text-2xl font-bold text-gray-900">Kursus Saya</h2>
@@ -445,7 +471,6 @@ export default function StudentDashboardPage() {
               </div>
             )}
 
-            {/* Mobile CTA */}
             <div className="md:hidden mt-6 text-center">
               <Button
                 onClick={() => router.push("/student/courses")}
@@ -456,7 +481,6 @@ export default function StudentDashboardPage() {
             </div>
           </section>
 
-          {/* Shopping Cart Section */}
           <section className="mb-12">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
               <h2 className="text-2xl font-bold text-gray-900">
@@ -550,7 +574,6 @@ export default function StudentDashboardPage() {
             )}
           </section>
 
-          {/* Course Catalog Section */}
           <section>
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
               <h2 className="text-2xl font-bold text-gray-900">
@@ -568,7 +591,6 @@ export default function StudentDashboardPage() {
         </div>
       </main>
 
-      {/* Overlay for mobile sidebar */}
       {isSidebarOpen && (
         <div
           className="fixed inset-0 bg-black/50 z-30 md:hidden"

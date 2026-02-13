@@ -47,6 +47,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { RichTextEditor } from "@/components/rich-text-editor";
+import type { RichTextEditorRef } from "@/components/rich-text-editor";
 import Sidebar from "@/components/dashboard/SideBar";
 import Header from "@/components/dashboard/Header";
 
@@ -238,8 +239,8 @@ export default function ForexDashboardLMS() {
   const [loadingCourses, setLoadingCourses] = useState(true);
 
   // RichTextEditor refs
-  const contentEditorRef = useRef<HTMLInputElement>(null);
-  const articleContentRef = useRef<HTMLInputElement>(null);
+  const contentEditorRef = useRef<RichTextEditorRef>(null);
+  const articleContentRef = useRef<RichTextEditorRef>(null);
 
   // Role validation on mount
   useEffect(() => {
@@ -404,21 +405,36 @@ export default function ForexDashboardLMS() {
   /* ================= ARTICLE CRUD HANDLERS ================= */
 
   const openAddArticle = () => {
-    setEditingArticle(null);
-    resetArticle({ title: "", thumbnail: "", published: false });
-    setArticleModalOpen(true);
-  };
+  setEditingArticle(null);
+  resetArticle({ title: "", thumbnail: "", published: false });
+  
+  // Reset editor
+  setTimeout(() => {
+    if (articleContentRef.current) {
+      articleContentRef.current.setValue("");
+    }
+  }, 100);
+  
+  setArticleModalOpen(true);
+};
 
-  const openEditArticle = (article: Article) => {
-    setEditingArticle(article);
-    resetArticle({
-      title: article.title,
-      thumbnail: article.thumbnail || "",
-      published: article.published,
-    });
-    setArticleModalOpen(true);
-  };
-
+const openEditArticle = (article: Article) => {
+  setEditingArticle(article);
+  resetArticle({
+    title: article.title,
+    thumbnail: article.thumbnail || "",
+    published: article.published,
+  });
+  
+  setArticleModalOpen(true);
+  
+  // Set content ke editor
+  setTimeout(() => {
+    if (articleContentRef.current && article.content) {
+      articleContentRef.current.setValue(article.content);
+    }
+  }, 150);
+};
   const handleThumbnailUpload = async (file: File) => {
     setUploadingThumbnail(true);
     try {
@@ -442,99 +458,67 @@ export default function ForexDashboardLMS() {
     }
   };
 
-  const handleSaveArticle = async (data: any) => {
-    try {
-      const contentValue = articleContentRef.current?.value || "";
+  cconst handleSaveArticle = async (data: any) => {
+  try {
+    // Get content dari editor ref
+    const contentValue = articleContentRef.current?.getValue() || "";
 
-      if (editingArticle) {
-        // Update article
-        const response = await fetch("/api/articles", {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            id: editingArticle.id,
-            title: data.title,
-            content: contentValue,
-            thumbnail: data.thumbnail,
-            published: data.published,
-          }),
-        });
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.error || "Failed to update article");
-        }
-
-        const result = await response.json();
-        setArticles((prev) =>
-          prev.map((a) => (a.id === editingArticle.id ? result.article : a)),
-        );
-      } else {
-        // Create new article
-        const response = await fetch("/api/articles", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            title: data.title,
-            content: contentValue,
-            thumbnail: data.thumbnail,
-            published: data.published,
-          }),
-        });
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.error || "Failed to create article");
-        }
-
-        const result = await response.json();
-        setArticles((prev) => [result.article, ...prev]);
-      }
-
-      setArticleModalOpen(false);
-      resetArticle();
-    } catch (error) {
-      console.error("Error saving article:", error);
-      const errorMessage =
-        error instanceof Error ? error.message : "Terjadi kesalahan";
-      alert(`Gagal menyimpan artikel: ${errorMessage}`);
-    }
-  };
-
-  const confirmDeleteArticle = (article: Article) => {
-    setArticleDeleteTarget(article);
-    setArticleConfirmOpen(true);
-  };
-
-  const doDeleteArticle = async () => {
-    if (!articleDeleteTarget) return;
-
-    try {
-      const response = await fetch(
-        `/api/articles?id=${articleDeleteTarget.id}`,
-        {
-          method: "DELETE",
-        },
-      );
+    if (editingArticle) {
+      const response = await fetch("/api/articles", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: editingArticle.id,
+          title: data.title,
+          content: contentValue,
+          thumbnail: data.thumbnail,
+          published: data.published,
+        }),
+      });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to delete article");
+        throw new Error(errorData.error || "Failed to update article");
       }
 
+      const result = await response.json();
       setArticles((prev) =>
-        prev.filter((a) => a.id !== articleDeleteTarget.id),
+        prev.map((a) => (a.id === editingArticle.id ? result.article : a)),
       );
-      setArticleDeleteTarget(null);
-      setArticleConfirmOpen(false);
-    } catch (error) {
-      console.error("Error deleting article:", error);
-      const errorMessage =
-        error instanceof Error ? error.message : "Terjadi kesalahan";
-      alert(`Gagal menghapus artikel: ${errorMessage}`);
-    }
-  };
+    } else {
+      const response = await fetch("/api/articles", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: data.title,
+          content: contentValue,
+          thumbnail: data.thumbnail,
+          published: data.published,
+        }),
+      });
 
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to create article");
+      }
+
+      const result = await response.json();
+      setArticles((prev) => [result.article, ...prev]);
+    }
+
+    setArticleModalOpen(false);
+    resetArticle();
+    // Reset editor
+    if (articleContentRef.current) {
+      articleContentRef.current.setValue("");
+    }
+  } catch (error) {
+    console.error("Error saving article:", error);
+    const errorMessage =
+      error instanceof Error ? error.message : "Terjadi kesalahan";
+    alert(`Gagal menyimpan artikel: ${errorMessage}`);
+  }
+};
   // fetch video trading
   useEffect(() => {
     const fetchVideos = async () => {
@@ -839,11 +823,23 @@ export default function ForexDashboardLMS() {
     setEditingLesson(null);
     setSelectedCourse(courses.find((c) => c.id === courseId) || null);
     resetLesson({ title: "", type: "html", contentUrl: "", duration: "" });
+
+    // Reset editor content
+    setTimeout(() => {
+      if (contentEditorRef.current) {
+        contentEditorRef.current.setValue("");
+      }
+    }, 100);
+
     setLessonModalOpen(true);
   };
-
   const openEditLesson = (lesson: Lesson) => {
     setEditingLesson(lesson);
+    setSelectedCourse(
+      courses.find((c) => c.lessons?.some((l) => l.id === lesson.id)) || null,
+    );
+
+    // Reset form dengan value yang benar
     resetLesson({
       title: lesson.title,
       type: lesson.type,
@@ -851,9 +847,16 @@ export default function ForexDashboardLMS() {
       duration: lesson.duration || "",
       content: lesson.content || "",
     });
-    setLessonModalOpen(true);
-  };
 
+    setLessonModalOpen(true);
+
+    // Set timeout untuk set content ke editor setelah modal terbuka
+    setTimeout(() => {
+      if (contentEditorRef.current && lesson.content) {
+        contentEditorRef.current.setValue(lesson.content);
+      }
+    }, 150);
+  };
   // const handleSaveLesson = async (data: any) => {
   //   if (!selectedCourse) return;
 
@@ -957,15 +960,13 @@ export default function ForexDashboardLMS() {
     if (!selectedCourse) return;
 
     try {
-      // Get content from RichTextEditor ref or form data
+      // Get content dari RichTextEditor ref
       let contentValue = "";
-
       if (data.type === "html" || data.type === "text") {
-        // Get content from editor ref
-        contentValue = contentEditorRef.current?.value || data.content || "";
+        contentValue =
+          contentEditorRef.current?.getValue() || data.content || "";
       }
 
-      // For video/pdf, contentUrl is the main content
       let contentUrlValue = data.contentUrl || null;
 
       if (editingLesson) {
@@ -976,7 +977,7 @@ export default function ForexDashboardLMS() {
             id: editingLesson.id,
             title: data.title,
             type: data.type,
-            content: contentValue || null, // HTML content dengan gambar
+            content: contentValue || null,
             contentUrl: contentUrlValue,
             duration: data.duration,
           }),
@@ -1011,7 +1012,7 @@ export default function ForexDashboardLMS() {
           body: JSON.stringify({
             title: data.title,
             type: data.type,
-            content: contentValue || null, // HTML content dengan gambar
+            content: contentValue || null,
             contentUrl: contentUrlValue,
             duration: data.duration,
             courseId: selectedCourse.id,
@@ -1042,7 +1043,7 @@ export default function ForexDashboardLMS() {
       resetLesson();
       // Reset editor content
       if (contentEditorRef.current) {
-        contentEditorRef.current.value = "";
+        contentEditorRef.current.setValue("");
       }
     } catch (error) {
       console.error("Error saving lesson:", error);
@@ -1051,47 +1052,6 @@ export default function ForexDashboardLMS() {
       alert(
         `Gagal ${editingLesson ? "memperbarui" : "membuat"} lesson: ${errorMessage}`,
       );
-    }
-  };
-
-  const confirmDeleteLesson = (lesson: Lesson) => {
-    setLessonDeleteTarget(lesson);
-    setLessonConfirmOpen(true);
-  };
-
-  const doDeleteLesson = async () => {
-    if (!lessonDeleteTarget || !selectedCourse) return;
-
-    try {
-      const response = await fetch(`/api/lessons?id=${lessonDeleteTarget.id}`, {
-        method: "DELETE",
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to delete lesson");
-      }
-
-      setCourses((prev) =>
-        prev.map((c) =>
-          c.id === selectedCourse.id
-            ? {
-                ...c,
-                lessons: c.lessons
-                  ? c.lessons.filter((l) => l.id !== lessonDeleteTarget.id)
-                  : [],
-              }
-            : c,
-        ),
-      );
-
-      setLessonDeleteTarget(null);
-      setLessonConfirmOpen(false);
-    } catch (error) {
-      console.error("Error deleting lesson:", error);
-      const errorMessage =
-        error instanceof Error ? error.message : "Terjadi kesalahan";
-      alert(`Gagal menghapus lesson: ${errorMessage}`);
     }
   };
 
@@ -1870,19 +1830,18 @@ export default function ForexDashboardLMS() {
   };
 
   // ✅ PANEL BARU: Article View (untuk preview artikel)
+  // GANTI ArticlePanel yang lama dengan ini:
   const ArticlePanel = () => {
-    const article = selectedArticle;
+    // FIX: Jika tidak ada selectedArticle, redirect ke article-management
+    if (!selectedArticle) {
+      // Auto-redirect ke article management jika tidak ada artikel yang dipilih
+      useEffect(() => {
+        setActiveMenu("article-management");
+      }, []);
 
-    if (!article) {
       return (
         <div className="py-12 text-center text-muted-foreground">
-          <p>Tidak ada artikel yang dipilih.</p>
-          <Button
-            onClick={() => setActiveMenu("article-management")}
-            className="mt-4"
-          >
-            Kembali ke Manajemen Artikel
-          </Button>
+          <p>Memuat artikel...</p>
         </div>
       );
     }
@@ -1891,25 +1850,30 @@ export default function ForexDashboardLMS() {
       <div>
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-xl font-semibold">{article.title}</h2>
+            <h2 className="text-xl font-semibold">{selectedArticle.title}</h2>
             <div className="flex items-center gap-4 mt-1 text-sm text-muted-foreground">
               <span className="flex items-center gap-1">
                 <User className="h-4 w-4" />
-                {article.author.name || article.author.email}
+                {selectedArticle.author.name || selectedArticle.author.email}
               </span>
               <span className="flex items-center gap-1">
                 <Calendar className="h-4 w-4" />
-                {new Date(article.createdAt).toLocaleDateString("id-ID")}
+                {new Date(selectedArticle.createdAt).toLocaleDateString(
+                  "id-ID",
+                )}
               </span>
               <span className="flex items-center gap-1">
                 <Eye className="h-4 w-4" />
-                {article.viewCount} views
+                {selectedArticle.viewCount} views
               </span>
             </div>
           </div>
           <Button
             variant="outline"
-            onClick={() => setActiveMenu("article-management")}
+            onClick={() => {
+              setSelectedArticle(null); // FIX: Clear selected article
+              setActiveMenu("article-management");
+            }}
           >
             Kembali
           </Button>
@@ -1917,23 +1881,22 @@ export default function ForexDashboardLMS() {
 
         <Card>
           <CardContent className="prose prose-slate dark:prose-invert max-w-none">
-            {article.thumbnail && (
+            {selectedArticle.thumbnail && (
               <img
-                src={article.thumbnail}
-                alt={article.title}
+                src={selectedArticle.thumbnail}
+                alt={selectedArticle.title}
                 className="w-full h-64 object-cover rounded-lg mb-6"
               />
             )}
             <div
               className="lesson-content space-y-4"
-              dangerouslySetInnerHTML={{ __html: article.content }}
+              dangerouslySetInnerHTML={{ __html: selectedArticle.content }}
             />
           </CardContent>
         </Card>
       </div>
     );
   };
-
   const QuizPanel = () => {
     return (
       <div>
@@ -2372,11 +2335,11 @@ export default function ForexDashboardLMS() {
                     {/* ✅ RICH TEXT EDITOR DENGAN SCROLL */}
                     <div className="max-h-[400px] overflow-hidden rounded-md border">
                       <RichTextEditor
-                        ref={contentEditorRef}
-                        value={registerLesson("content").value || ""}
-                        onChange={(value) => setLessonValue("content", value)}
-                        placeholder="Tulis konten pembelajaran di sini dengan format kaya (heading, list, gambar, dll)..."
-                      />
+  ref={contentEditorRef}
+  value={editingLesson?.content || ""}
+  onChange={(value) => setLessonValue("content", value)}
+  placeholder="Tulis konten pembelajaran di sini..."
+/>
                     </div>
                     <p className="text-xs text-muted-foreground mt-1">
                       Gunakan toolbar untuk format kaya (gambar, tabel, heading,
@@ -2518,17 +2481,14 @@ export default function ForexDashboardLMS() {
                 <div>
                   <Label>Konten Artikel</Label>
                   <div className="border rounded-md max-h-[500px] overflow-hidden">
-                    <RichTextEditor
-                      ref={articleContentRef}
-                      value={editingArticle?.content || ""}
-                      onChange={(value) => {
-                        // Update ref value manually since we can't directly set it
-                        if (articleContentRef.current) {
-                          articleContentRef.current.value = value;
-                        }
-                      }}
-                      placeholder="Tulis konten artikel lengkap di sini. Gunakan toolbar untuk formatting..."
-                    />
+                  <RichTextEditor
+  ref={articleContentRef}
+  value={editingArticle?.content || ""}
+  onChange={(value) => {
+    // Value sudah di-handle oleh editor internal
+  }}
+  placeholder="Tulis konten artikel lengkap di sini..."
+/>
                   </div>
                   <p className="text-xs text-muted-foreground mt-1">
                     Tips: Gunakan heading, list, dan gambar untuk membuat

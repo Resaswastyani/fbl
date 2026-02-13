@@ -85,13 +85,33 @@ export async function POST(req: Request) {
     });
 
     if (existingUser) {
+      // Jika user sudah ada tapi tidak punya password (Google-only user)
       if (!existingUser.password && existingUser.accounts.length > 0) {
+        // Update user dengan password baru (link account)
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const updatedUser = await prisma.user.update({
+          where: { id: existingUser.id },
+          data: {
+            password: hashedPassword,
+            name: name, // Update nama jika berbeda
+          },
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            role: true,
+          },
+        });
+
         return NextResponse.json(
           {
-            error:
-              "Email sudah terdaftar dengan Google. Silakan login menggunakan Google.",
+            success: true,
+            message:
+              "Akun Google berhasil ditautkan dengan password. Silakan login.",
+            user: updatedUser,
           },
-          { status: 400 },
+          { status: 200 },
         );
       }
 

@@ -15,11 +15,13 @@
 // }: React.ComponentProps<"div">) {
 //   const [showPassword, setShowPassword] = useState(false);
 //   const [loading, setLoading] = useState(false);
+//   const [error, setError] = useState<string | null>(null);
 //   const router = useRouter();
 
 //   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
 //     e.preventDefault();
 //     setLoading(true);
+//     setError(null);
 
 //     const form = e.currentTarget;
 //     const email = (form.elements.namedItem("email") as HTMLInputElement).value;
@@ -36,42 +38,42 @@
 //       const data = await res.json();
 
 //       if (!res.ok) {
-//         alert(data.error || "Login failed");
+//         setError(data.error || "Login gagal");
 //         setLoading(false);
 //         return;
 //       }
 
 //       // ✅ REDIRECT BERDASARKAN ROLE
 //       if (data.user.role === "PELANGGAN") {
-//         router.push("/student/dashboard"); // Dashboard khusus student
+//         router.push("/student/dashboard");
 //       } else {
-//         router.push("/dashboard"); // Dashboard admin/mentor
+//         router.push("/dashboard");
 //       }
+//       router.refresh();
 //     } catch (error) {
 //       console.error("Error:", error);
-//       alert("Terjadi kesalahan");
+//       setError("Terjadi kesalahan server. Silakan coba lagi.");
+//       setLoading(false);
 //     }
-
-//     setLoading(false);
 //   }
+
+//   // 🔥 Handler untuk Google Login
+//   const handleGoogleLogin = () => {
+//     window.location.href = "/api/auth/google";
+//   };
 
 //   return (
 //     <div className={cn("flex flex-col gap-6", className)} {...props}>
 //       {/* Back button */}
 //       <button
-//         className="
-//           w-10 h-10 rounded-full border flex items-center justify-center
-//           hover:bg-muted transition mb-2
-//         "
+//         className="w-10 h-10 rounded-full border flex items-center justify-center hover:bg-muted transition mb-2"
 //         onClick={() => {
 //           fetch("/api/auth/me")
 //             .then((r) => r.json())
 //             .then((data) => {
 //               if (!data?.user) {
-//                 // Tidak login → redirect aman
 //                 window.location.href = "/";
 //               } else {
-//                 // Login → back diperbolehkan
 //                 window.history.back();
 //               }
 //             });
@@ -93,6 +95,13 @@
 //                 </p>
 //               </div>
 
+//               {/* Error Message */}
+//               {error && (
+//                 <div className="p-3 text-sm text-red-500 bg-red-50 rounded-lg">
+//                   {error}
+//                 </div>
+//               )}
+
 //               {/* Email */}
 //               <div className="grid gap-2">
 //                 <Label htmlFor="email">Email</Label>
@@ -102,6 +111,7 @@
 //                   type="email"
 //                   placeholder="Masukkan email Anda..."
 //                   required
+//                   disabled={loading}
 //                 />
 //               </div>
 
@@ -109,8 +119,6 @@
 //               <div className="grid gap-2">
 //                 <div className="flex items-center">
 //                   <Label htmlFor="password">Password</Label>
-
-//                   {/* 👉 Forgot password */}
 //                   <a
 //                     href="/forgot-password"
 //                     className="ml-auto text-sm underline-offset-2 hover:underline"
@@ -125,14 +133,12 @@
 //                     name="password"
 //                     type={showPassword ? "text" : "password"}
 //                     required
+//                     disabled={loading}
 //                   />
 //                   <button
 //                     type="button"
 //                     onClick={() => setShowPassword(!showPassword)}
-//                     className="
-//                       absolute right-3 top-1/2 -translate-y-1/2
-//                       text-muted-foreground hover:text-foreground
-//                     "
+//                     className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
 //                   >
 //                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
 //                   </button>
@@ -153,8 +159,11 @@
 
 //               {/* Google Login */}
 //               <Button
+//                 type="button"
 //                 variant="outline"
 //                 className="w-full flex items-center justify-center gap-2"
+//                 onClick={handleGoogleLogin}
+//                 disabled={loading}
 //               >
 //                 <svg
 //                   xmlns="http://www.w3.org/2000/svg"
@@ -217,12 +226,14 @@ export function LoginForm({
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isGoogleUser, setIsGoogleUser] = useState(false);
   const router = useRouter();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
     setError(null);
+    setIsGoogleUser(false);
 
     const form = e.currentTarget;
     const email = (form.elements.namedItem("email") as HTMLInputElement).value;
@@ -240,6 +251,9 @@ export function LoginForm({
 
       if (!res.ok) {
         setError(data.error || "Login gagal");
+        if (data.isGoogleUser) {
+          setIsGoogleUser(true);
+        }
         setLoading(false);
         return;
       }
@@ -260,6 +274,13 @@ export function LoginForm({
 
   // 🔥 Handler untuk Google Login
   const handleGoogleLogin = () => {
+    // Simpan guest cart sebelum redirect ke Google
+    const guestCart = localStorage.getItem("guest-cart");
+    if (guestCart) {
+      // Simpan ke temporary storage untuk di-sync setelah login
+      sessionStorage.setItem("pending-cart-sync", "true");
+    }
+
     window.location.href = "/api/auth/google";
   };
 
@@ -300,6 +321,16 @@ export function LoginForm({
               {error && (
                 <div className="p-3 text-sm text-red-500 bg-red-50 rounded-lg">
                   {error}
+                </div>
+              )}
+
+              {/* Google User Hint */}
+              {isGoogleUser && (
+                <div className="p-3 text-sm text-blue-600 bg-blue-50 rounded-lg">
+                  💡 <strong>Tips:</strong> Akun ini terdaftar dengan Google.
+                  Anda bisa login menggunakan tombol "Masuk dengan Google" di
+                  bawah, atau daftar ulang dengan password yang sama untuk
+                  mengaktifkan login manual.
                 </div>
               )}
 
@@ -392,7 +423,7 @@ export function LoginForm({
           {/* Right Side Image */}
           <div className="relative hidden bg-muted md:block">
             <img
-              src="/placeholder.svg"
+              src="/login-fbl.png"
               alt="Image"
               className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
             />

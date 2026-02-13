@@ -28,6 +28,7 @@
 //   });
 // }
 
+// app/api/upload/route.ts
 import { writeFile, mkdir } from "fs/promises";
 import { join } from "path";
 import { NextRequest, NextResponse } from "next/server";
@@ -35,32 +36,33 @@ import { v4 as uuidv4 } from "uuid";
 import { getUserFromCookie } from "@/lib/get-user";
 
 // Konfigurasi tipe file yang diizinkan
-const ALLOWED_FILE_TYPES = {
+const ALLOWED_FILE_TYPES: Record<string, { dir: string; maxSize: number }> = {
   // Images
-  "image/jpeg": { dir: "images", maxSize: 10 * 1024 * 1024 }, // 10MB
+  "image/jpeg": { dir: "images", maxSize: 10 * 1024 * 1024 },
   "image/png": { dir: "images", maxSize: 10 * 1024 * 1024 },
   "image/gif": { dir: "images", maxSize: 10 * 1024 * 1024 },
   "image/webp": { dir: "images", maxSize: 10 * 1024 * 1024 },
   "image/svg+xml": { dir: "images", maxSize: 5 * 1024 * 1024 },
+  "image/jpg": { dir: "images", maxSize: 10 * 1024 * 1024 },
 
   // Videos
-  "video/mp4": { dir: "videos", maxSize: 100 * 1024 * 1024 }, // 100MB
+  "video/mp4": { dir: "videos", maxSize: 100 * 1024 * 1024 },
   "video/webm": { dir: "videos", maxSize: 100 * 1024 * 1024 },
   "video/ogg": { dir: "videos", maxSize: 100 * 1024 * 1024 },
-  "video/quicktime": { dir: "videos", maxSize: 100 * 1024 * 1024 }, // MOV
+  "video/quicktime": { dir: "videos", maxSize: 100 * 1024 * 1024 },
 
   // Documents
-  "application/pdf": { dir: "documents", maxSize: 50 * 1024 * 1024 }, // 50MB
+  "application/pdf": { dir: "documents", maxSize: 50 * 1024 * 1024 },
   "application/msword": { dir: "documents", maxSize: 20 * 1024 * 1024 },
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document": {
     dir: "documents",
     maxSize: 20 * 1024 * 1024,
-  }, // DOCX
+  },
   "application/vnd.ms-excel": { dir: "documents", maxSize: 20 * 1024 * 1024 },
   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
     dir: "documents",
     maxSize: 20 * 1024 * 1024,
-  }, // XLSX
+  },
   "application/vnd.ms-powerpoint": {
     dir: "documents",
     maxSize: 50 * 1024 * 1024,
@@ -68,7 +70,7 @@ const ALLOWED_FILE_TYPES = {
   "application/vnd.openxmlformats-officedocument.presentationml.presentation": {
     dir: "documents",
     maxSize: 50 * 1024 * 1024,
-  }, // PPTX
+  },
 
   // Archives
   "application/zip": { dir: "files", maxSize: 100 * 1024 * 1024 },
@@ -106,15 +108,30 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
     }
 
-    // Cek tipe file
-    const fileConfig = ALLOWED_FILE_TYPES[file.type];
+    // Debug log
+    console.log("Upload attempt:", {
+      name: file.name,
+      type: file.type,
+      size: file.size,
+    });
+
+    // Cek tipe file - gunakan fallback untuk image/jpg
+    let fileType = file.type;
+    if (!fileType && file.name.endsWith(".jpg")) {
+      fileType = "image/jpeg";
+    }
+    if (!fileType && file.name.endsWith(".png")) {
+      fileType = "image/png";
+    }
+
+    const fileConfig = ALLOWED_FILE_TYPES[fileType];
 
     if (!fileConfig) {
       return NextResponse.json(
         {
           error: "File type not allowed",
-          allowedTypes: Object.keys(ALLOWED_FILE_TYPES),
-          receivedType: file.type,
+          receivedType: fileType,
+          filename: file.name,
         },
         { status: 400 },
       );
@@ -124,7 +141,7 @@ export async function POST(req: NextRequest) {
     if (file.size > fileConfig.maxSize) {
       return NextResponse.json(
         {
-          error: `File too large. Max size for ${file.type} is ${formatBytes(fileConfig.maxSize)}`,
+          error: `File too large. Max size is ${formatBytes(fileConfig.maxSize)}`,
           maxSize: formatBytes(fileConfig.maxSize),
           receivedSize: formatBytes(file.size),
         },
@@ -138,14 +155,21 @@ export async function POST(req: NextRequest) {
 
     // Buat direktori berdasarkan tipe file
     const uploadDir = join(process.cwd(), "public", "uploads", fileConfig.dir);
-    await mkdir(uploadDir, { recursive: true });
+
+    // Pastikan direktori ada
+    try {
+      await mkdir(uploadDir, { recursive: true });
+    } catch (mkdirError) {
+      console.error("Error creating directory:", mkdirError);
+      // Continue anyway, mungkin direktori sudah ada
+    }
 
     // Generate nama file yang aman
     const sanitizedName = file.name
-      .replace(/[^a-zA-Z0-9.-]/g, "_") // Ganti karakter spesial dengan underscore
-      .replace(/_{2,}/g, "_"); // Hindari multiple underscore
+      .replace(/[^a-zA-Z0-9.-]/g, "_")
+      .replace(/_{2,}/g, "_");
 
-    const uniqueId = uuidv4().split("-")[0]; // Ambil 8 karakter pertama saja
+    const uniqueId = uuidv4().split("-")[0];
     const filename = `${uniqueId}_${sanitizedName}`;
     const filepath = join(uploadDir, filename);
 
@@ -157,11 +181,9 @@ export async function POST(req: NextRequest) {
 
     // Generate thumbnail untuk video (placeholder)
     let thumbnailUrl = null;
-    if (file.type.startsWith("video/")) {
-      // Untuk video, bisa generate thumbnail atau gunakan placeholder
+    if (fileType.startsWith("video/")) {
       thumbnailUrl = "/images/video-placeholder.jpg";
-    } else if (file.type.startsWith("image/")) {
-      // Untuk gambar, thumbnail = gambar itu sendiri
+    } else if (fileType.startsWith("image/")) {
       thumbnailUrl = fileUrl;
     }
 
@@ -174,7 +196,7 @@ export async function POST(req: NextRequest) {
       originalName: file.name,
       size: file.size,
       sizeFormatted: formatBytes(file.size),
-      type: file.type,
+      type: fileType,
       category: fileConfig.dir,
       uploadedBy: user.id,
       uploadedAt: new Date().toISOString(),
@@ -199,8 +221,6 @@ export async function GET(req: NextRequest) {
     if (!user || (user.role !== "ADMIN" && user.role !== "MENTOR")) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
-
-    // Bisa ditambahkan logic untuk list files jika diperlukan
 
     return NextResponse.json({ message: "List files endpoint" });
   } catch (error) {

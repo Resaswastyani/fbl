@@ -203,9 +203,8 @@
 // }
 
 // app/api/auth/login/route.ts
-// app/api/auth/login/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/server/db"; // atau "@/server/db"
+import { prisma } from "@/server/db";
 import bcrypt from "bcrypt";
 import { sign } from "jsonwebtoken";
 
@@ -217,7 +216,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { email, password } = body;
 
-    console.log("Login attempt:", email); // Debug log
+    console.log("Login attempt:", email);
 
     if (!email || !password) {
       return NextResponse.json(
@@ -226,20 +225,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Cari user
+    // Cari user dengan accounts untuk cek Google login
     const user = await prisma.user.findUnique({
       where: { email: email.toLowerCase() },
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        role: true,
-        password: true,
-        image: true,
+      include: {
+        accounts: true,
       },
     });
 
-    console.log("User found:", user ? "YES" : "NO"); // Debug log
+    console.log("User found:", user ? "YES" : "NO");
 
     if (!user) {
       return NextResponse.json(
@@ -248,24 +242,33 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Cek apakah user punya password (bukan Google-only)
-    if (!user.password) {
+    // Jika user tidak punya password tapi punya Google account
+    if (!user.password && user.accounts.length > 0) {
       return NextResponse.json(
         {
           error:
-            "Akun ini terdaftar dengan Google. Silakan login dengan Google.",
+            "Akun ini terdaftar dengan Google. Silakan login menggunakan Google atau set password terlebih dahulu di pengaturan profil.",
+          isGoogleUser: true,
         },
         { status: 401 },
       );
     }
 
-    // Cek password
-    const isValid = await bcrypt.compare(password, user.password);
-    console.log("Password valid:", isValid); // Debug log
+    // Jika user punya password, cek validitas
+    if (user.password) {
+      const isValid = await bcrypt.compare(password, user.password);
+      console.log("Password valid:", isValid);
 
-    if (!isValid) {
+      if (!isValid) {
+        return NextResponse.json(
+          { error: "Email atau password salah" },
+          { status: 401 },
+        );
+      }
+    } else {
+      // User tidak punya password dan tidak punya Google account (edge case)
       return NextResponse.json(
-        { error: "Email atau password salah" },
+        { error: "Akun tidak valid. Silakan hubungi support." },
         { status: 401 },
       );
     }
@@ -292,6 +295,7 @@ export async function POST(request: NextRequest) {
           name: user.name,
           role: user.role,
           image: user.image,
+          isGoogleUser: user.accounts.length > 0,
         },
       },
       { status: 200 },
@@ -311,8 +315,6 @@ export async function POST(request: NextRequest) {
     return response;
   } catch (error: any) {
     console.error("Login error:", error);
-
-    // Return error detail untuk debugging
     return NextResponse.json(
       {
         error: "Terjadi kesalahan server",

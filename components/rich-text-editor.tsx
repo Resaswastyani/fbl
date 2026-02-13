@@ -298,7 +298,13 @@
 // components/rich-text-editor.tsx
 "use client";
 
-import { forwardRef, useEffect, useState, useCallback } from "react";
+import {
+  forwardRef,
+  useEffect,
+  useState,
+  useCallback,
+  useImperativeHandle,
+} from "react";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
@@ -329,8 +335,14 @@ import {
   FileText,
 } from "lucide-react";
 
+// Expose methods via ref
+export interface RichTextEditorRef {
+  getValue: () => string;
+  setValue: (value: string) => void;
+}
+
 export const RichTextEditor = forwardRef<
-  HTMLDivElement,
+  RichTextEditorRef,
   {
     value?: string;
     onChange?: (value: string) => void;
@@ -379,12 +391,22 @@ export const RichTextEditor = forwardRef<
     },
   });
 
+  // Expose methods to parent via ref
+  useImperativeHandle(ref, () => ({
+    getValue: () => editor?.getHTML() || "",
+    setValue: (newValue: string) => {
+      if (editor && newValue !== editor.getHTML()) {
+        editor.commands.setContent(newValue);
+      }
+    },
+  }));
+
   useEffect(() => {
     setMounted(true);
     return () => editor?.destroy();
   }, [editor]);
 
-  // Sync external value
+  // Sync external value - hanya jika berbeda untuk avoid loop
   useEffect(() => {
     if (editor && value !== undefined && value !== editor.getHTML()) {
       editor.commands.setContent(value);
@@ -401,12 +423,15 @@ export const RichTextEditor = forwardRef<
         const formData = new FormData();
         formData.append("file", file);
 
+        console.log("Uploading file:", file.name, file.type, file.size);
+
         const res = await fetch("/api/upload", {
           method: "POST",
           body: formData,
         });
 
         const data = await res.json();
+        console.log("Upload response:", data);
 
         if (!res.ok) {
           throw new Error(data.error || "Upload failed");
@@ -415,7 +440,6 @@ export const RichTextEditor = forwardRef<
         if (!editor) return;
 
         if (type === "image") {
-          // Insert image
           editor
             .chain()
             .focus()
@@ -425,7 +449,6 @@ export const RichTextEditor = forwardRef<
             })
             .run();
         } else if (type === "video") {
-          // Insert video player
           const videoHtml = `
             <div class="my-4 rounded-lg overflow-hidden bg-black">
               <video controls class="w-full max-h-[500px]">
@@ -437,7 +460,6 @@ export const RichTextEditor = forwardRef<
           `;
           editor.chain().focus().insertContent(videoHtml).run();
         } else {
-          // Insert document link
           const icon = getFileIcon(file.name);
           const docHtml = `
             <div class="my-4 p-4 bg-gray-50 border rounded-lg flex items-center gap-4">
@@ -660,7 +682,7 @@ export const RichTextEditor = forwardRef<
 
       {/* Editor Content */}
       <div className="overflow-y-auto max-h-[500px]">
-        <EditorContent ref={ref} editor={editor} />
+        <EditorContent editor={editor} />
       </div>
     </div>
   );

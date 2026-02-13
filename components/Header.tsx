@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Menu,
@@ -40,19 +40,16 @@ export const Header = () => {
   const [user, setUser] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const { items } = useCart();
+  const { items, refreshAuth } = useCart();
   const router = useRouter();
   const itemCount = items.reduce((t, i) => t + i.quantity, 0);
 
-  // Check auth status on mount
-  useEffect(() => {
-    checkAuth();
-  }, []);
-
-  const checkAuth = async () => {
+  // Check auth status on mount dan listen untuk perubahan
+  const checkAuth = useCallback(async () => {
     try {
       const res = await fetch("/api/auth/me", {
         credentials: "include",
+        cache: "no-store", // Hindari cache
       });
 
       if (res.ok) {
@@ -67,7 +64,48 @@ export const Header = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
+
+  // Listen untuk storage events (logout dari tab lain)
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === "logout-event") {
+        console.log("Logout detected from another tab");
+        setUser(null);
+        refreshAuth(); // Refresh cart context juga
+      }
+      if (e.key === "auth-change") {
+        console.log("Auth change detected");
+        checkAuth();
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    // Custom event untuk same-tab
+    const handleCustomLogout = () => {
+      console.log("Custom logout event received in Header");
+      setUser(null);
+    };
+
+    const handleCustomAuthChange = () => {
+      console.log("Custom auth change received in Header");
+      checkAuth();
+    };
+
+    window.addEventListener("app-logout", handleCustomLogout);
+    window.addEventListener("app-auth-change", handleCustomAuthChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("app-logout", handleCustomLogout);
+      window.removeEventListener("app-auth-change", handleCustomAuthChange);
+    };
+  }, [checkAuth, refreshAuth]);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -79,15 +117,12 @@ export const Header = () => {
     setIsMobileMenuOpen(false);
     setOpenDropdown(null);
 
-    // kalau anchor (#)
     if (href.startsWith("#")) {
       const el = document.querySelector(href);
       if (el) {
         el.scrollIntoView({ behavior: "smooth" });
       }
-    }
-    // kalau route (/page)
-    else {
+    } else {
       router.push(href);
     }
   };
@@ -105,6 +140,17 @@ export const Header = () => {
       // Clear local state
       setUser(null);
       setOpenDropdown(null);
+
+      // Trigger event untuk komponen lain
+      localStorage.setItem("logout-event", Date.now().toString());
+      localStorage.removeItem("logout-event");
+
+      // Custom event untuk same-tab
+      window.dispatchEvent(new Event("app-logout"));
+
+      // Refresh cart context
+      await refreshAuth();
+
       router.push("/");
       router.refresh();
     }
@@ -184,7 +230,6 @@ export const Header = () => {
             ${isScrolled ? "text-sm" : "text-base"}
           `}
         >
-          {/* Desktop Avatar - HANYA SATU INI */}
           <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center overflow-hidden">
             {user.image ? (
               <img
@@ -211,7 +256,6 @@ export const Header = () => {
               transition={{ duration: 0.18 }}
               className="absolute right-0 mt-3 w-[280px] bg-white shadow-xl rounded-xl border border-gray-100 py-2 z-40"
             >
-              {/* User Info */}
               <div className="px-4 py-3 border-b border-gray-100">
                 <p className="font-semibold text-gray-900 truncate">
                   {user.name || "User"}
@@ -222,7 +266,6 @@ export const Header = () => {
                 </span>
               </div>
 
-              {/* Menu Items */}
               <div className="py-2">
                 <button
                   onClick={() => handleLinkClick(dashboardUrl)}
@@ -285,7 +328,6 @@ export const Header = () => {
             }
           `}
         >
-          {/* BRAND */}
           <button
             onClick={() => handleLinkClick("/")}
             className="flex items-center"
@@ -300,7 +342,6 @@ export const Header = () => {
             />
           </button>
 
-          {/* DESKTOP NAV */}
           <div
             className={`
               hidden md:flex items-center transition-all duration-200
@@ -360,9 +401,7 @@ export const Header = () => {
             />
           </div>
 
-          {/* CTA BUTTONS */}
           <div className="hidden md:flex items-center gap-5">
-            {/* Cart Icon - Always visible */}
             <button
               onClick={() => router.push("/cart")}
               className="relative p-2 text-gray-700 hover:text-primary transition"
@@ -378,10 +417,8 @@ export const Header = () => {
             {!loading && (
               <>
                 {user ? (
-                  // Logged in - Show User Dropdown
                   <UserDropdown />
                 ) : (
-                  // Not logged in - Show Login/Sign Up
                   <>
                     <button
                       onClick={() => router.push("/login")}
@@ -408,7 +445,6 @@ export const Header = () => {
             )}
           </div>
 
-          {/* MOBILE MENU TOGGLE */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="md:hidden p-2 text-gray-800 hover:text-primary transition"
@@ -417,7 +453,6 @@ export const Header = () => {
           </button>
         </div>
 
-        {/* MOBILE MENU */}
         <AnimatePresence>
           {isMobileMenuOpen && (
             <motion.div
@@ -428,11 +463,9 @@ export const Header = () => {
               className="md:hidden bg-white/95 backdrop-blur-lg border-t border-gray-200"
             >
               <div className="px-6 py-6 space-y-5">
-                {/* User Section (if logged in) - MOBILE AVATAR DISINI */}
                 {user && (
                   <div className="border-b border-gray-200 pb-4">
                     <div className="flex items-center gap-3 mb-3">
-                      {/* Mobile Avatar - YANG BENAR */}
                       <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center overflow-hidden">
                         {user.image ? (
                           <img
@@ -517,7 +550,6 @@ export const Header = () => {
                   </div>
                 </div>
 
-                {/* Mobile Cart */}
                 <button
                   onClick={() => handleLinkClick("/cart")}
                   className="flex items-center gap-2 w-full text-lg text-gray-800"
@@ -531,11 +563,9 @@ export const Header = () => {
                   )}
                 </button>
 
-                {/* Auth Buttons */}
                 {!loading && (
                   <>
                     {user ? (
-                      // Logged in mobile menu
                       <div className="space-y-3 pt-4 border-t border-gray-200">
                         <button
                           onClick={() =>
@@ -562,7 +592,6 @@ export const Header = () => {
                         </button>
                       </div>
                     ) : (
-                      // Not logged in mobile menu
                       <div className="space-y-3 pt-4 border-t border-gray-200">
                         <button
                           onClick={() => handleLinkClick("/login")}

@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -9,72 +9,96 @@ import { useCart } from "@/app/context/cart-context";
 
 export default function CartPage() {
   const router = useRouter();
-  const { items, removeFromCart, clearCart, checkout, isLoggedIn } = useCart();
+  const {
+    items,
+    removeFromCart,
+    clearCart,
+    checkout,
+    isLoggedIn,
+    refreshAuth,
+  } = useCart();
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [processing, setProcessing] = useState(false);
 
   // Check authentication on mount
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const res = await fetch("/api/auth/me");
-        if (res.status === 401 || !res.ok) {
-          // Redirect ke login jika belum login
-          alert(
-            "Silakan login terlebih dahulu untuk melihat keranjang belanja.",
-          );
-          router.push("/login");
-          return;
-        }
-        const data = await res.json();
-        if (!data?.user) {
-          router.push("/login");
-          return;
-        }
-        setUser(data.user);
+  const checkAuth = useCallback(async () => {
+    try {
+      const res = await fetch("/api/auth/me", {
+        credentials: "include",
+        cache: "no-store",
+      });
 
-        // Only PELANGGAN can access this page
-        if (data.user.role !== "PELANGGAN") {
-          router.push("/student/dashboard");
-          return;
-        }
-      } catch (error) {
-        console.error("Authentication error:", error);
+      if (res.status === 401 || !res.ok) {
+        alert("Silakan login terlebih dahulu untuk melihat keranjang belanja.");
         router.push("/login");
-      } finally {
-        setLoading(false);
+        return;
       }
-    };
 
-    checkAuth();
+      const data = await res.json();
+      if (!data?.user) {
+        router.push("/login");
+        return;
+      }
+
+      setUser(data.user);
+
+      if (data.user.role !== "PELANGGAN") {
+        router.push("/student/dashboard");
+        return;
+      }
+    } catch (error) {
+      console.error("Authentication error:", error);
+      router.push("/login");
+    } finally {
+      setLoading(false);
+    }
   }, [router]);
 
-  // Calculate total price
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
+
+  // Listen untuk auth changes
+  useEffect(() => {
+    const handleAuthChange = () => {
+      checkAuth();
+    };
+
+    const handleLogout = () => {
+      setUser(null);
+      router.push("/login");
+    };
+
+    window.addEventListener("app-auth-change", handleAuthChange);
+    window.addEventListener("app-logout", handleLogout);
+
+    return () => {
+      window.removeEventListener("app-auth-change", handleAuthChange);
+      window.removeEventListener("app-logout", handleLogout);
+    };
+  }, [checkAuth, router]);
+
   const calculateTotal = () => {
     return items.reduce((sum, item) => sum + item.price * item.quantity, 0);
   };
 
-  // Format price helper
   const formatPrice = (price: number) => {
     return `Rp ${price.toLocaleString("id-ID")}`;
   };
 
-  // Handle remove item
   const handleRemoveItem = (id: string) => {
     if (confirm("Hapus item ini dari keranjang?")) {
       removeFromCart(id);
     }
   };
 
-  // Handle clear cart
   const handleClearCart = () => {
     if (confirm("Apakah Anda yakin ingin mengosongkan keranjang?")) {
       clearCart();
     }
   };
 
-  // Handle checkout
   const handleCheckout = async () => {
     if (items.length === 0) {
       alert("Keranjang Anda kosong!");
@@ -97,7 +121,6 @@ export default function CartPage() {
     }
   };
 
-  // Handle continue shopping
   const handleContinueShopping = () => {
     router.push("/student/courses");
   };
@@ -123,7 +146,6 @@ export default function CartPage() {
   return (
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
         <div className="mb-8">
           <Button
             variant="ghost"
@@ -142,7 +164,6 @@ export default function CartPage() {
         </div>
 
         {isEmpty ? (
-          // Empty Cart State
           <div className="bg-white rounded-2xl shadow-lg p-12 text-center">
             <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-[#156d95]/10 flex items-center justify-center">
               <ShoppingCart className="w-10 h-10 text-[#156d95]" />
@@ -163,9 +184,7 @@ export default function CartPage() {
             </Button>
           </div>
         ) : (
-          // Cart Items
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Left Column - Cart Items */}
             <div className="lg:col-span-2 space-y-6">
               {items.map((item) => (
                 <Card
@@ -249,7 +268,6 @@ export default function CartPage() {
               ))}
             </div>
 
-            {/* Right Column - Summary */}
             <div className="lg:col-span-1">
               <Card className="sticky top-24 border-0 shadow-xl overflow-hidden bg-gradient-to-br from-[#156d95] to-[#0d476e]">
                 <CardContent className="p-6">

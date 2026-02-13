@@ -405,36 +405,36 @@ export default function ForexDashboardLMS() {
   /* ================= ARTICLE CRUD HANDLERS ================= */
 
   const openAddArticle = () => {
-  setEditingArticle(null);
-  resetArticle({ title: "", thumbnail: "", published: false });
-  
-  // Reset editor
-  setTimeout(() => {
-    if (articleContentRef.current) {
-      articleContentRef.current.setValue("");
-    }
-  }, 100);
-  
-  setArticleModalOpen(true);
-};
+    setEditingArticle(null);
+    resetArticle({ title: "", thumbnail: "", published: false });
 
-const openEditArticle = (article: Article) => {
-  setEditingArticle(article);
-  resetArticle({
-    title: article.title,
-    thumbnail: article.thumbnail || "",
-    published: article.published,
-  });
-  
-  setArticleModalOpen(true);
-  
-  // Set content ke editor
-  setTimeout(() => {
-    if (articleContentRef.current && article.content) {
-      articleContentRef.current.setValue(article.content);
-    }
-  }, 150);
-};
+    // Reset editor
+    setTimeout(() => {
+      if (articleContentRef.current) {
+        articleContentRef.current.setValue("");
+      }
+    }, 100);
+
+    setArticleModalOpen(true);
+  };
+
+  const openEditArticle = (article: Article) => {
+    setEditingArticle(article);
+    resetArticle({
+      title: article.title,
+      thumbnail: article.thumbnail || "",
+      published: article.published,
+    });
+
+    setArticleModalOpen(true);
+
+    // Set content ke editor
+    setTimeout(() => {
+      if (articleContentRef.current && article.content) {
+        articleContentRef.current.setValue(article.content);
+      }
+    }, 150);
+  };
   const handleThumbnailUpload = async (file: File) => {
     setUploadingThumbnail(true);
     try {
@@ -458,67 +458,67 @@ const openEditArticle = (article: Article) => {
     }
   };
 
-  cconst handleSaveArticle = async (data: any) => {
-  try {
-    // Get content dari editor ref
-    const contentValue = articleContentRef.current?.getValue() || "";
+  const handleSaveArticle = async (data: any) => {
+    try {
+      // Get content dari editor ref
+      const contentValue = articleContentRef.current?.getValue() || "";
 
-    if (editingArticle) {
-      const response = await fetch("/api/articles", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          id: editingArticle.id,
-          title: data.title,
-          content: contentValue,
-          thumbnail: data.thumbnail,
-          published: data.published,
-        }),
-      });
+      if (editingArticle) {
+        const response = await fetch("/api/articles", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            id: editingArticle.id,
+            title: data.title,
+            content: contentValue,
+            thumbnail: data.thumbnail,
+            published: data.published,
+          }),
+        });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to update article");
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || "Failed to update article");
+        }
+
+        const result = await response.json();
+        setArticles((prev) =>
+          prev.map((a) => (a.id === editingArticle.id ? result.article : a)),
+        );
+      } else {
+        const response = await fetch("/api/articles", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            title: data.title,
+            content: contentValue,
+            thumbnail: data.thumbnail,
+            published: data.published,
+          }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || "Failed to create article");
+        }
+
+        const result = await response.json();
+        setArticles((prev) => [result.article, ...prev]);
       }
 
-      const result = await response.json();
-      setArticles((prev) =>
-        prev.map((a) => (a.id === editingArticle.id ? result.article : a)),
-      );
-    } else {
-      const response = await fetch("/api/articles", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title: data.title,
-          content: contentValue,
-          thumbnail: data.thumbnail,
-          published: data.published,
-        }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to create article");
+      setArticleModalOpen(false);
+      resetArticle();
+      // Reset editor
+      if (articleContentRef.current) {
+        articleContentRef.current.setValue("");
       }
-
-      const result = await response.json();
-      setArticles((prev) => [result.article, ...prev]);
+    } catch (error) {
+      console.error("Error saving article:", error);
+      const errorMessage =
+        error instanceof Error ? error.message : "Terjadi kesalahan";
+      alert(`Gagal menyimpan artikel: ${errorMessage}`);
     }
-
-    setArticleModalOpen(false);
-    resetArticle();
-    // Reset editor
-    if (articleContentRef.current) {
-      articleContentRef.current.setValue("");
-    }
-  } catch (error) {
-    console.error("Error saving article:", error);
-    const errorMessage =
-      error instanceof Error ? error.message : "Terjadi kesalahan";
-    alert(`Gagal menyimpan artikel: ${errorMessage}`);
-  }
-};
+  };
   // fetch video trading
   useEffect(() => {
     const fetchVideos = async () => {
@@ -2335,11 +2335,11 @@ const openEditArticle = (article: Article) => {
                     {/* ✅ RICH TEXT EDITOR DENGAN SCROLL */}
                     <div className="max-h-[400px] overflow-hidden rounded-md border">
                       <RichTextEditor
-  ref={contentEditorRef}
-  value={editingLesson?.content || ""}
-  onChange={(value) => setLessonValue("content", value)}
-  placeholder="Tulis konten pembelajaran di sini..."
-/>
+                        ref={contentEditorRef}
+                        value={editingLesson?.content || ""}
+                        onChange={(value) => setLessonValue("content", value)}
+                        placeholder="Tulis konten pembelajaran di sini..."
+                      />
                     </div>
                     <p className="text-xs text-muted-foreground mt-1">
                       Gunakan toolbar untuk format kaya (gambar, tabel, heading,
@@ -2481,14 +2481,14 @@ const openEditArticle = (article: Article) => {
                 <div>
                   <Label>Konten Artikel</Label>
                   <div className="border rounded-md max-h-[500px] overflow-hidden">
-                  <RichTextEditor
-  ref={articleContentRef}
-  value={editingArticle?.content || ""}
-  onChange={(value) => {
-    // Value sudah di-handle oleh editor internal
-  }}
-  placeholder="Tulis konten artikel lengkap di sini..."
-/>
+                    <RichTextEditor
+                      ref={articleContentRef}
+                      value={editingArticle?.content || ""}
+                      onChange={(value) => {
+                        // Value sudah di-handle oleh editor internal
+                      }}
+                      placeholder="Tulis konten artikel lengkap di sini..."
+                    />
                   </div>
                   <p className="text-xs text-muted-foreground mt-1">
                     Tips: Gunakan heading, list, dan gambar untuk membuat

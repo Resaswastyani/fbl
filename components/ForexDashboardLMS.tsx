@@ -440,79 +440,36 @@ export default function ForexDashboardLMS() {
   // Tambahkan fungsi ini di ForexDashboardLMS.tsx
 
   // Compress image sebelum upload
-  const compressImage = (
-    file: File,
-    maxWidth: number = 800,
-    maxHeight: number = 600,
-    quality: number = 0.8,
-  ): Promise<Blob> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = (event) => {
-        const img = new Image();
-        img.src = event.target?.result as string;
-        img.onload = () => {
-          const canvas = document.createElement("canvas");
-          let width = img.width;
-          let height = img.height;
+  // HAPUS fungsi compressImage yang lama
 
-          // Calculate new dimensions
-          if (width > height) {
-            if (width > maxWidth) {
-              height *= maxWidth / width;
-              width = maxWidth;
-            }
-          } else {
-            if (height > maxHeight) {
-              width *= maxHeight / height;
-              height = maxHeight;
-            }
-          }
-
-          canvas.width = width;
-          canvas.height = height;
-          const ctx = canvas.getContext("2d");
-          ctx?.drawImage(img, 0, 0, width, height);
-
-          canvas.toBlob(
-            (blob) => {
-              if (blob) resolve(blob);
-              else reject(new Error("Canvas to Blob failed"));
-            },
-            "image/jpeg",
-            quality,
-          );
-        };
-        img.onerror = reject;
-      };
-      reader.onerror = reject;
-    });
-  };
-
-  // Update handleThumbnailUpload
+  // GANTI dengan ini - Simple upload tanpa compression
   const handleThumbnailUpload = async (file: File) => {
     setUploadingThumbnail(true);
     try {
-      // Validasi
+      // Validasi basic
       if (!file.type.startsWith("image/")) {
-        alert("Hanya file gambar yang diizinkan");
+        alert("Hanya file gambar yang diizinkan (JPG, PNG, GIF, WebP)");
         return;
       }
 
-      // Compress image dulu
-      console.log("Original size:", file.size);
-      const compressedBlob = await compressImage(file, 800, 600, 0.8);
-      console.log("Compressed size:", compressedBlob.size);
-
-      // Convert blob ke file
-      const compressedFile = new File([compressedBlob], file.name, {
-        type: "image/jpeg",
-      });
+      // Validasi ukuran - max 500KB untuk thumbnail
+      if (file.size > 500 * 1024) {
+        alert(
+          "Ukuran thumbnail terlalu besar!\n\nMaksimal 500KB.\nSilakan compress dulu di: https://tinypng.com atau https://squoosh.app",
+        );
+        return;
+      }
 
       const formData = new FormData();
-      formData.append("file", compressedFile);
-      formData.append("type", "thumbnail"); // Beritahu API ini untuk thumbnail
+      formData.append("file", file);
+      formData.append("type", "thumbnail");
+
+      console.log(
+        "Uploading thumbnail:",
+        file.name,
+        file.type,
+        formatBytes(file.size),
+      );
 
       const res = await fetch("/api/upload", {
         method: "POST",
@@ -520,20 +477,33 @@ export default function ForexDashboardLMS() {
       });
 
       const data = await res.json();
+      console.log("Upload response:", data);
 
       if (!res.ok) {
-        throw new Error(data.error || "Upload failed");
+        throw new Error(data.error || data.details || "Upload failed");
       }
 
       setArticleValue("thumbnail", data.url);
-      alert("Thumbnail berhasil diupload! Ukuran: " + data.size);
+      alert("Thumbnail berhasil diupload!");
     } catch (error: any) {
       console.error("Thumbnail upload error:", error);
-      alert("Gagal mengupload thumbnail: " + error.message);
+      alert(
+        "Gagal mengupload thumbnail: " + (error.message || "Unknown error"),
+      );
     } finally {
       setUploadingThumbnail(false);
     }
   };
+
+  // Helper function untuk format bytes
+  function formatBytes(bytes: number, decimals = 2): string {
+    if (bytes === 0) return "0 Bytes";
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ["Bytes", "KB", "MB", "GB"];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
+  }
   // Untuk lesson video/pdf upload, tambahkan fungsi ini:
   const handleLessonFileUpload = async (file: File, type: "video" | "pdf") => {
     try {

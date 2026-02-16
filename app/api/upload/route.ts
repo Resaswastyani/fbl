@@ -236,13 +236,20 @@ import { NextRequest, NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 import { getUserFromCookie } from "@/lib/get-user";
 
-// Konfigurasi tipe file
-const ALLOWED_FILE_TYPES: Record<string, { maxSize: number; type: string }> = {
-  "image/jpeg": { maxSize: 5 * 1024 * 1024, type: "image" },
-  "image/png": { maxSize: 5 * 1024 * 1024, type: "image" },
-  "image/gif": { maxSize: 5 * 1024 * 1024, type: "image" },
-  "image/webp": { maxSize: 5 * 1024 * 1024, type: "image" },
-};
+// Dynamic import sharp (hanya di server)
+let sharp: any;
+try {
+  sharp = require("sharp");
+} catch (e) {
+  console.log("Sharp not available, using basic upload");
+}
+
+const ALLOWED_FILE_TYPES = [
+  "image/jpeg",
+  "image/png",
+  "image/gif",
+  "image/webp",
+];
 
 function formatBytes(bytes: number): string {
   if (bytes === 0) return "0 Bytes";
@@ -261,7 +268,7 @@ export async function POST(req: NextRequest) {
 
     const formData = await req.formData();
     const file = formData.get("file") as File;
-    const uploadType = (formData.get("type") as string) || "thumbnail"; // 'thumbnail' atau 'content'
+    const uploadType = (formData.get("type") as string) || "content";
 
     if (!file) {
       return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
@@ -284,49 +291,71 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    const fileConfig = ALLOWED_FILE_TYPES[fileType];
-    if (!fileConfig) {
+    if (!ALLOWED_FILE_TYPES.includes(fileType)) {
       return NextResponse.json(
-        { error: "File type not allowed", receivedType: fileType },
-        { status: 400 },
-      );
-    }
-
-    if (file.size > fileConfig.maxSize) {
-      return NextResponse.json(
-        { error: `File too large. Max: ${formatBytes(fileConfig.maxSize)}` },
+        {
+          error: `File type not allowed: ${fileType}`,
+          allowed: ALLOWED_FILE_TYPES,
+        },
         { status: 400 },
       );
     }
 
     const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
+    let buffer = Buffer.from(bytes);
 
-    // THUMBNAIL: Simpan sebagai base64 tapi compressed/optimized
+    // THUMBNAIL: Compress dengan sharp (server-side)
     if (uploadType === "thumbnail") {
-      // Untuk thumbnail, kita compress dan buat base64
-      // Di production, gunakan sharp untuk compress
-
-      const base64Data = buffer.toString("base64");
-      const dataUrl = `data:${fileType};base64,${base64Data}`;
-
-      // Validasi ukuran thumbnail max 500KB setelah base64
-      if (base64Data.length > 500000) {
+      // Max 500KB untuk thumbnail
+      if (buffer.length > 500 * 1024) {
         return NextResponse.json(
-          { error: "Thumbnail terlalu besar. Max 500KB setelah encoding." },
+          {
+            error: "Thumbnail terlalu besar",
+            maxSize: "500KB",
+            receivedSize: formatBytes(buffer.length),
+            suggestion: "Silakan compress manual di tinypng.com",
+          },
           { status: 400 },
         );
       }
+
+      // Compress dengan sharp jika tersedia
+      if (sharp) {
+        try {
+          buffer = await sharp(buffer)
+            .resize(800, 600, { fit: "inside", withoutEnlargement: true })
+            .jpeg({ quality: 80, progressive: true })
+            .toBuffer();
+
+          console.log("Compressed with sharp:", formatBytes(buffer.length));
+        } catch (sharpError) {
+          console.log("Sharp compression failed, using original:", sharpError);
+        }
+      }
+
+      // Convert ke base64
+      const base64Data = buffer.toString("base64");
+      const mimeType = fileType === "image/png" ? "image/png" : "image/jpeg";
+      const dataUrl = `data:${mimeType};base64,${base64Data}`;
 
       return NextResponse.json({
         success: true,
         url: dataUrl,
         type: "thumbnail",
-        size: formatBytes(file.size),
+        originalSize: formatBytes(bytes.byteLength),
+        finalSize: formatBytes(buffer.length),
       });
     }
 
-    // CONTENT IMAGE: Simpan sebagai base64 (untuk artikel inline)
+    // CONTENT IMAGE: Base64 dengan limit
+    if (buffer.length > 2 * 1024 * 1024) {
+      // 2MB limit
+      return NextResponse.json(
+        { error: "Gambar konten terlalu besar. Max 2MB." },
+        { status: 400 },
+      );
+    }
+
     const base64Data = buffer.toString("base64");
     const dataUrl = `data:${fileType};base64,${base64Data}`;
 
@@ -334,7 +363,7 @@ export async function POST(req: NextRequest) {
       success: true,
       url: dataUrl,
       type: "content",
-      size: formatBytes(file.size),
+      size: formatBytes(buffer.length),
     });
   } catch (error) {
     console.error("Upload error:", error);

@@ -202,10 +202,13 @@
 // }
 
 // app/api/upload/route.ts
-// app/api/upload/route.ts - Versi Base64 Kompres
+// app/api/upload/route.ts - Versi Lengkap (Fixed Thumbnail + Content)
 import { NextRequest, NextResponse } from "next/server";
 import { getUserFromCookie } from "@/lib/get-user";
-import sharp from "sharp"; // npm install sharp
+import sharp from "sharp";
+import { writeFile, mkdir } from "fs/promises";
+import { join } from "path";
+import { v4 as uuidv4 } from "uuid";
 
 const ALLOWED_IMAGE_TYPES = [
   "image/jpeg",
@@ -214,10 +217,15 @@ const ALLOWED_IMAGE_TYPES = [
   "image/webp",
 ];
 
-// Max size untuk content (2MB)
-const MAX_CONTENT_SIZE = 2 * 1024 * 1024;
-// Max size untuk thumbnail sebelum kompres (5MB)
-const MAX_THUMBNAIL_SIZE = 5 * 1024 * 1024;
+// BATASAN UKURAN
+const MAX_THUMBNAIL_SIZE = 5 * 1024 * 1024; // 5MB untuk thumbnail sebelum kompres
+const MAX_CONTENT_SIZE = 2 * 1024 * 1024; // 2MB untuk content Base64
+const MAX_FILE_UPLOAD = 10 * 1024 * 1024; // 10MB untuk file upload biasa
+
+// KONFIGURASI MODE UPLOAD
+// Ganti ke "storage" jika ingin simpan ke folder public/uploads (recommended)
+// Biarkan "base64" untuk backward compatibility
+const UPLOAD_MODE: "base64" | "storage" = "storage";
 
 function formatBytes(bytes: number): string {
   if (bytes === 0) return "0 Bytes";
@@ -225,6 +233,106 @@ function formatBytes(bytes: number): string {
   const sizes = ["Bytes", "KB", "MB"];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
   return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + " " + sizes[i];
+}
+
+// ==================== HELPER: Simpan ke Storage ====================
+async function saveToStorage(
+  buffer: Buffer,
+  filename: string,
+  folder: string,
+): Promise<string> {
+  const uploadDir = join(process.cwd(), "public", "uploads", folder);
+
+  try {
+    await mkdir(uploadDir, { recursive: true });
+  } catch (e) {
+    // Directory mungkin sudah ada
+  }
+
+  const uniqueId = uuidv4().split("-")[0];
+  const sanitizedName = filename
+    .replace(/[^a-zA-Z0-9.-]/g, "_")
+    .replace(/_{2,}/g, "_");
+
+  const finalFilename = `${uniqueId}_${sanitizedName}`;
+  const filepath = join(uploadDir, finalFilename);
+
+  await writeFile(filepath, buffer);
+
+  return `/uploads/${folder}/${finalFilename}`;
+}
+
+// ==================== HELPER: Kompres Thumbnail ====================
+async function compressThumbnail(buffer: Buffer): Promise<{
+  dataUrl: string;
+  size: number;
+  quality: string;
+}> {
+  // Level 1: 150px, quality 40%
+  let compressed = await sharp(buffer)
+    .resize(150, null, { withoutEnlargement: true })
+    .jpeg({ quality: 40, progressive: true, mozjpeg: true })
+    .toBuffer();
+
+  let quality = "normal";
+
+  // Level 2: Jika masih besar, 120px quality 30%
+  if (compressed.length > 350) {
+    compressed = await sharp(buffer)
+      .resize(120, null, { withoutEnlargement: true })
+      .jpeg({ quality: 30, progressive: true, mozjpeg: true })
+      .toBuffer();
+    quality = "high-compression";
+  }
+
+  const base64 = compressed.toString("base64");
+  const dataUrl = `data:image/jpeg;base64,${base64}`;
+
+  // Level 3 (Ekstrim): 80px quality 20%
+  if (dataUrl.length > 500) {
+    const extreme = await sharp(buffer)
+      .resize(80, null, { withoutEnlargement: true })
+      .jpeg({ quality: 20, progressive: true })
+      .toBuffer();
+
+    const extremeBase64 = extreme.toString("base64");
+    return {
+      dataUrl: `data:image/jpeg;base64,${extremeBase64}`,
+      size: extreme.length,
+      quality: "extreme",
+    };
+  }
+
+  return { dataUrl, size: compressed.length, quality };
+}
+
+// ==================== HELPER: Kompres Content Image ====================
+async function compressContentImage(
+  buffer: Buffer,
+  fileType: string,
+): Promise<{ dataUrl: string; size: number; compressed: boolean }> {
+  // Jika sudah kecil (<500KB), gunakan as-is
+  if (buffer.length < 500 * 1024) {
+    const base64 = buffer.toString("base64");
+    return {
+      dataUrl: `data:${fileType};base64,${base64}`,
+      size: buffer.length,
+      compressed: false,
+    };
+  }
+
+  // Kompres gambar besar
+  const compressed = await sharp(buffer)
+    .resize(1200, null, { withoutEnlargement: true }) // Max width 1200px
+    .jpeg({ quality: 70, progressive: true })
+    .toBuffer();
+
+  const base64 = compressed.toString("base64");
+  return {
+    dataUrl: `data:image/jpeg;base64,${base64}`,
+    size: compressed.length,
+    compressed: true,
+  };
 }
 
 export async function POST(req: NextRequest) {
@@ -242,6 +350,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
     }
 
+    // Detect file type
     let fileType = file.type;
     const fileExtension = file.name.split(".").pop()?.toLowerCase();
     const extensionMap: Record<string, string> = {
@@ -271,86 +380,108 @@ export async function POST(req: NextRequest) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // ==================== MODE: THUMBNAIL (Kompres jadi Base64) ====================
+    // ==================== MODE: THUMBNAIL ====================
     if (uploadType === "thumbnail") {
       if (buffer.length > MAX_THUMBNAIL_SIZE) {
         return NextResponse.json(
           {
             error: "File too large",
-            message: `Max ${formatBytes(MAX_THUMBNAIL_SIZE)}`,
+            message: `Max ${formatBytes(MAX_THUMBNAIL_SIZE)} untuk thumbnail`,
           },
           { status: 400 },
         );
       }
 
       try {
-        // Kompres gambar jadi thumbnail kecil (max 300px width, quality 60%)
-        const compressedBuffer = await sharp(buffer)
-          .resize(300, null, { withoutEnlargement: true })
-          .jpeg({ quality: 60, progressive: true })
-          .toBuffer();
+        // Opsi 1: Simpan ke storage (RECOMMENDED - tidak ada batasan karakter)
+        if (UPLOAD_MODE === "storage") {
+          const url = await saveToStorage(buffer, file.name, "thumbnails");
+          return NextResponse.json({
+            success: true,
+            url: url,
+            type: "thumbnail-storage",
+            size: formatBytes(buffer.length),
+          });
+        }
 
-        const base64Data = compressedBuffer.toString("base64");
-        const dataUrl = `data:image/jpeg;base64,${base64Data}`;
+        // Opsi 2: Base64 dengan kompresi agresif
+        const result = await compressThumbnail(buffer);
 
-        // Warning jika masih panjang
-        if (dataUrl.length > 500) {
-          console.warn(
-            "Thumbnail Base64 masih panjang:",
-            dataUrl.length,
-            "chars",
+        if (result.dataUrl.length > 500) {
+          return NextResponse.json(
+            {
+              error: "Thumbnail too complex",
+              message:
+                "Gambar terlalu kompleks. Coba gambar yang lebih sederhana atau ubah UPLOAD_MODE ke 'storage'",
+            },
+            { status: 400 },
           );
         }
 
         return NextResponse.json({
           success: true,
-          url: dataUrl,
-          type: "thumbnail-compressed",
-          size: formatBytes(compressedBuffer.length),
-          originalSize: formatBytes(buffer.length),
-          length: dataUrl.length,
+          url: result.dataUrl,
+          type: "thumbnail-base64",
+          size: formatBytes(result.size),
+          quality: result.quality,
+          length: result.dataUrl.length,
         });
-      } catch (compressError) {
-        // Fallback: pakai gambar asli tapi resize saja
-        console.error("Compression error:", compressError);
-
-        const resizedBuffer = await sharp(buffer)
-          .resize(200, null, { withoutEnlargement: true })
-          .toBuffer();
-
-        const base64Data = resizedBuffer.toString("base64");
-        const dataUrl = `data:image/jpeg;base64,${base64Data}`;
-
-        return NextResponse.json({
-          success: true,
-          url: dataUrl,
-          type: "thumbnail-resized",
-          size: formatBytes(resizedBuffer.length),
-          warning: "Using resized original format",
-        });
+      } catch (error) {
+        console.error("Thumbnail processing error:", error);
+        return NextResponse.json(
+          { error: "Failed to process thumbnail" },
+          { status: 500 },
+        );
       }
     }
 
-    // ==================== MODE: CONTENT (Base64) ====================
-    if (buffer.length > MAX_CONTENT_SIZE) {
-      return NextResponse.json(
-        {
-          error: "File too large",
-          message: `Max ${formatBytes(MAX_CONTENT_SIZE)}`,
-        },
-        { status: 400 },
-      );
+    // ==================== MODE: CONTENT ====================
+    if (uploadType === "content") {
+      // Opsi 1: Simpan ke storage (RECOMMENDED)
+      if (UPLOAD_MODE === "storage") {
+        if (buffer.length > MAX_FILE_UPLOAD) {
+          return NextResponse.json(
+            {
+              error: "File too large",
+              message: `Max ${formatBytes(MAX_FILE_UPLOAD)}`,
+            },
+            { status: 400 },
+          );
+        }
+
+        const url = await saveToStorage(buffer, file.name, "content");
+        return NextResponse.json({
+          success: true,
+          url: url,
+          type: "content-storage",
+          size: formatBytes(buffer.length),
+        });
+      }
+
+      // Opsi 2: Base64 (legacy - ada batasan 2MB)
+      if (buffer.length > MAX_CONTENT_SIZE) {
+        return NextResponse.json(
+          {
+            error: "File too large for Base64 mode",
+            message: `Max ${formatBytes(MAX_CONTENT_SIZE)}. Gunakan UPLOAD_MODE="storage" untuk file besar`,
+          },
+          { status: 400 },
+        );
+      }
+
+      const result = await compressContentImage(buffer, fileType);
+
+      return NextResponse.json({
+        success: true,
+        url: result.dataUrl,
+        type: "content-base64",
+        size: formatBytes(result.size),
+        compressed: result.compressed,
+      });
     }
 
-    const base64Data = buffer.toString("base64");
-    const dataUrl = `data:${fileType};base64,${base64Data}`;
-
-    return NextResponse.json({
-      success: true,
-      url: dataUrl,
-      type: "content",
-      size: formatBytes(buffer.length),
-    });
+    // ==================== MODE: DEFAULT/OTHER ====================
+    return NextResponse.json({ error: "Invalid upload type" }, { status: 400 });
   } catch (error) {
     console.error("Upload error:", error);
     return NextResponse.json(

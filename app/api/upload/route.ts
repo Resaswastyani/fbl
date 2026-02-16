@@ -233,18 +233,12 @@
 
 // app/api/upload/route.ts
 import { NextRequest, NextResponse } from "next/server";
+import { writeFile, mkdir } from "fs/promises";
+import { join } from "path";
 import { v4 as uuidv4 } from "uuid";
 import { getUserFromCookie } from "@/lib/get-user";
 
-// Dynamic import sharp (hanya di server)
-let sharp: any;
-try {
-  sharp = require("sharp");
-} catch (e) {
-  console.log("Sharp not available, using basic upload");
-}
-
-const ALLOWED_FILE_TYPES = [
+const ALLOWED_IMAGE_TYPES = [
   "image/jpeg",
   "image/png",
   "image/gif",
@@ -254,9 +248,9 @@ const ALLOWED_FILE_TYPES = [
 function formatBytes(bytes: number): string {
   if (bytes === 0) return "0 Bytes";
   const k = 1024;
-  const sizes = ["Bytes", "KB", "MB", "GB"];
+  const sizes = ["Bytes", "KB", "MB"];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + " " + sizes[i];
 }
 
 export async function POST(req: NextRequest) {
@@ -278,80 +272,77 @@ export async function POST(req: NextRequest) {
     let fileType = file.type;
     const fileExtension = file.name.split(".").pop()?.toLowerCase();
 
+    const extensionMap: Record<string, string> = {
+      jpg: "image/jpeg",
+      jpeg: "image/jpeg",
+      png: "image/png",
+      gif: "image/gif",
+      webp: "image/webp",
+    };
+
     if (!fileType || fileType === "application/octet-stream") {
-      const extensionMap: Record<string, string> = {
-        jpg: "image/jpeg",
-        jpeg: "image/jpeg",
-        png: "image/png",
-        gif: "image/gif",
-        webp: "image/webp",
-      };
       if (fileExtension && extensionMap[fileExtension]) {
         fileType = extensionMap[fileExtension];
       }
     }
 
-    if (!ALLOWED_FILE_TYPES.includes(fileType)) {
+    if (!ALLOWED_IMAGE_TYPES.includes(fileType)) {
       return NextResponse.json(
-        {
-          error: `File type not allowed: ${fileType}`,
-          allowed: ALLOWED_FILE_TYPES,
-        },
+        { error: `File type not allowed: ${fileType}` },
         { status: 400 },
       );
     }
 
     const bytes = await file.arrayBuffer();
-    let buffer = Buffer.from(bytes);
+    const buffer = Buffer.from(bytes);
 
-    // THUMBNAIL: Compress dengan sharp (server-side)
+    // THUMBNAIL: Simpan sebagai file di /public/uploads/
     if (uploadType === "thumbnail") {
-      // Max 500KB untuk thumbnail
-      if (buffer.length > 500 * 1024) {
+      // Max 2MB untuk thumbnail file
+      if (buffer.length > 2 * 1024 * 1024) {
         return NextResponse.json(
           {
-            error: "Thumbnail terlalu besar",
-            maxSize: "500KB",
-            receivedSize: formatBytes(buffer.length),
-            suggestion: "Silakan compress manual di tinypng.com",
+            error: "THUMBNAIL_TOO_LARGE",
+            message: `Thumbnail terlalu besar (${formatBytes(buffer.length)}). Max 2MB.`,
           },
           { status: 400 },
         );
       }
 
-      // Compress dengan sharp jika tersedia
-      if (sharp) {
-        try {
-          buffer = await sharp(buffer)
-            .resize(800, 600, { fit: "inside", withoutEnlargement: true })
-            .jpeg({ quality: 80, progressive: true })
-            .toBuffer();
+      // Generate unique filename
+      const uniqueId = uuidv4();
+      const sanitizedName = file.name
+        .replace(/[^a-zA-Z0-9.-]/g, "_")
+        .replace(/_{2,}/g, "_");
 
-          console.log("Compressed with sharp:", formatBytes(buffer.length));
-        } catch (sharpError) {
-          console.log("Sharp compression failed, using original:", sharpError);
-        }
-      }
+      const filename = `${uniqueId}-${sanitizedName}`;
 
-      // Convert ke base64
-      const base64Data = buffer.toString("base64");
-      const mimeType = fileType === "image/png" ? "image/png" : "image/jpeg";
-      const dataUrl = `data:${mimeType};base64,${base64Data}`;
+      // Simpan ke /public/uploads/thumbnails/
+      const uploadDir = join(process.cwd(), "public", "uploads", "thumbnails");
+      await mkdir(uploadDir, { recursive: true });
+
+      const filepath = join(uploadDir, filename);
+      await writeFile(filepath, buffer);
+
+      // Return URL yang bisa diakses publik
+      const fileUrl = `/uploads/thumbnails/${filename}`;
 
       return NextResponse.json({
         success: true,
-        url: dataUrl,
+        url: fileUrl,
         type: "thumbnail",
-        originalSize: formatBytes(bytes.byteLength),
-        finalSize: formatBytes(buffer.length),
+        size: formatBytes(buffer.length),
+        filename: filename,
       });
     }
 
-    // CONTENT IMAGE: Base64 dengan limit
+    // CONTENT IMAGE: Base64 (untuk inline di artikel)
     if (buffer.length > 2 * 1024 * 1024) {
-      // 2MB limit
       return NextResponse.json(
-        { error: "Gambar konten terlalu besar. Max 2MB." },
+        {
+          error: "CONTENT_TOO_LARGE",
+          message: `Gambar terlalu besar (${formatBytes(buffer.length)}). Max 2MB.`,
+        },
         { status: 400 },
       );
     }

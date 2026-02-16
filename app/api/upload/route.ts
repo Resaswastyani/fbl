@@ -1,33 +1,3 @@
-// // import { writeFile, mkdir } from "fs/promises";
-// // import { join } from "path";
-// // import { NextResponse } from "next/server";
-// // import { v4 as uuidv4 } from "uuid";
-
-// // export async function POST(req: Request) {
-// //   const formData = await req.formData();
-// //   const file = formData.get("file") as File;
-
-// //   if (!file) {
-// //     return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
-// //   }
-
-// //   const bytes = await file.arrayBuffer();
-// //   const buffer = Buffer.from(bytes);
-
-// //   const uploadDir = join(process.cwd(), "public/uploads");
-// //   await mkdir(uploadDir, { recursive: true });
-
-// //   const filename = `${uuidv4()}-${file.name}`;
-// //   const filepath = join(uploadDir, filename);
-
-// //   await writeFile(filepath, buffer);
-
-// //   return NextResponse.json({
-// //     success: true,
-// //     url: `/uploads/${filename}`,
-// //   });
-// // }
-
 // // app/api/upload/route.ts
 // import { writeFile, mkdir } from "fs/promises";
 // import { join } from "path";
@@ -233,9 +203,6 @@
 
 // app/api/upload/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import { writeFile, mkdir } from "fs/promises";
-import { join } from "path";
-import { v4 as uuidv4 } from "uuid";
 import { getUserFromCookie } from "@/lib/get-user";
 
 const ALLOWED_IMAGE_TYPES = [
@@ -244,6 +211,8 @@ const ALLOWED_IMAGE_TYPES = [
   "image/gif",
   "image/webp",
 ];
+
+const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB untuk semua gambar
 
 function formatBytes(bytes: number): string {
   if (bytes === 0) return "0 Bytes";
@@ -255,9 +224,13 @@ function formatBytes(bytes: number): string {
 
 export async function POST(req: NextRequest) {
   try {
+    // Check authentication
     const user = await getUserFromCookie();
     if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json(
+        { error: "Unauthorized - Silakan login terlebih dahulu" },
+        { status: 401 },
+      );
     }
 
     const formData = await req.formData();
@@ -268,7 +241,15 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
     }
 
-    // Deteksi tipe file
+    // Debug log untuk development
+    console.log("Upload attempt:", {
+      name: file.name,
+      type: file.type,
+      size: file.size,
+      uploadType,
+    });
+
+    // Deteksi tipe file dengan fallback
     let fileType = file.type;
     const fileExtension = file.name.split(".").pop()?.toLowerCase();
 
@@ -280,88 +261,71 @@ export async function POST(req: NextRequest) {
       webp: "image/webp",
     };
 
+    // Fallback jika file.type kosong atau generic
     if (!fileType || fileType === "application/octet-stream") {
       if (fileExtension && extensionMap[fileExtension]) {
         fileType = extensionMap[fileExtension];
       }
     }
 
+    // Validasi tipe file
     if (!ALLOWED_IMAGE_TYPES.includes(fileType)) {
       return NextResponse.json(
-        { error: `File type not allowed: ${fileType}` },
-        { status: 400 },
-      );
-    }
-
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-
-    // THUMBNAIL: Simpan sebagai file di /public/uploads/
-    if (uploadType === "thumbnail") {
-      // Max 2MB untuk thumbnail file
-      if (buffer.length > 2 * 1024 * 1024) {
-        return NextResponse.json(
-          {
-            error: "THUMBNAIL_TOO_LARGE",
-            message: `Thumbnail terlalu besar (${formatBytes(buffer.length)}). Max 2MB.`,
-          },
-          { status: 400 },
-        );
-      }
-
-      // Generate unique filename
-      const uniqueId = uuidv4();
-      const sanitizedName = file.name
-        .replace(/[^a-zA-Z0-9.-]/g, "_")
-        .replace(/_{2,}/g, "_");
-
-      const filename = `${uniqueId}-${sanitizedName}`;
-
-      // Simpan ke /public/uploads/thumbnails/
-      const uploadDir = join(process.cwd(), "public", "uploads", "thumbnails");
-      await mkdir(uploadDir, { recursive: true });
-
-      const filepath = join(uploadDir, filename);
-      await writeFile(filepath, buffer);
-
-      // Return URL yang bisa diakses publik
-      const fileUrl = `/uploads/thumbnails/${filename}`;
-
-      return NextResponse.json({
-        success: true,
-        url: fileUrl,
-        type: "thumbnail",
-        size: formatBytes(buffer.length),
-        filename: filename,
-      });
-    }
-
-    // CONTENT IMAGE: Base64 (untuk inline di artikel)
-    if (buffer.length > 2 * 1024 * 1024) {
-      return NextResponse.json(
         {
-          error: "CONTENT_TOO_LARGE",
-          message: `Gambar terlalu besar (${formatBytes(buffer.length)}). Max 2MB.`,
+          error: "Invalid file type",
+          message: `Tipe file tidak diizinkan: ${fileType || fileExtension}. Gunakan: JPG, PNG, GIF, WEBP`,
         },
         { status: 400 },
       );
     }
 
+    // Validasi ukuran file
+    if (file.size > MAX_FILE_SIZE) {
+      return NextResponse.json(
+        {
+          error: "File too large",
+          message: `File terlalu besar (${formatBytes(file.size)}). Maksimal ${formatBytes(MAX_FILE_SIZE)}.`,
+        },
+        { status: 400 },
+      );
+    }
+
+    // Convert file ke buffer
+    const bytes = await file.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+
+    // Validasi ukuran buffer (double check)
+    if (buffer.length > MAX_FILE_SIZE) {
+      return NextResponse.json(
+        {
+          error: "File too large",
+          message: `File terlalu besar (${formatBytes(buffer.length)}). Maksimal ${formatBytes(MAX_FILE_SIZE)}.`,
+        },
+        { status: 400 },
+      );
+    }
+
+    // Convert ke Base64 - Solusi untuk Vercel (serverless, read-only filesystem)
     const base64Data = buffer.toString("base64");
     const dataUrl = `data:${fileType};base64,${base64Data}`;
 
+    // Response sukses
     return NextResponse.json({
       success: true,
       url: dataUrl,
-      type: "content",
+      type: uploadType,
       size: formatBytes(buffer.length),
+      filename: file.name,
     });
   } catch (error) {
     console.error("Upload error:", error);
     return NextResponse.json(
       {
         error: "Upload failed",
-        details: error instanceof Error ? error.message : "Unknown",
+        message:
+          error instanceof Error
+            ? error.message
+            : "Terjadi kesalahan saat upload",
       },
       { status: 500 },
     );

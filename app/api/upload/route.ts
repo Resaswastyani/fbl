@@ -203,9 +203,7 @@
 
 // app/api/upload/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import { writeFile, mkdir } from "fs/promises";
-import { join } from "path";
-import { v4 as uuidv4 } from "uuid";
+import { put } from "@vercel/blob";
 import { getUserFromCookie } from "@/lib/get-user";
 
 const ALLOWED_IMAGE_TYPES = [
@@ -217,8 +215,8 @@ const ALLOWED_IMAGE_TYPES = [
 
 // Max size untuk base64 content (2MB)
 const MAX_CONTENT_SIZE = 2 * 1024 * 1024;
-// Max size untuk thumbnail file (5MB) - lebih besar karena disimpan sebagai file
-const MAX_THUMBNAIL_SIZE = 5 * 1024 * 1024;
+// Max size untuk thumbnail file (4.5MB - batas Vercel Blob)
+const MAX_THUMBNAIL_SIZE = 4.5 * 1024 * 1024;
 
 function formatBytes(bytes: number): string {
   if (bytes === 0) return "0 Bytes";
@@ -287,7 +285,7 @@ export async function POST(req: NextRequest) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // ==================== MODE: THUMBNAIL (Save as File) ====================
+    // ==================== MODE: THUMBNAIL (Save to Vercel Blob) ====================
     if (uploadType === "thumbnail") {
       // Validasi ukuran untuk thumbnail
       if (buffer.length > MAX_THUMBNAIL_SIZE) {
@@ -302,59 +300,38 @@ export async function POST(req: NextRequest) {
 
       try {
         // Generate unique filename
-        const uniqueId = uuidv4();
+        const timestamp = Date.now();
         const sanitizedName = file.name
           .replace(/[^a-zA-Z0-9.-]/g, "_")
           .replace(/_{2,}/g, "_");
 
-        const filename = `${uniqueId}-${sanitizedName}`;
+        const filename = `thumbnails/${timestamp}-${sanitizedName}`;
 
-        // Simpan ke /public/uploads/
-        const uploadDir = join(process.cwd(), "public", "uploads");
-        await mkdir(uploadDir, { recursive: true });
+        // Upload ke Vercel Blob
+        const blob = await put(filename, buffer, {
+          access: "public",
+          contentType: fileType,
+        });
 
-        const filepath = join(uploadDir, filename);
-        await writeFile(filepath, buffer);
-
-        // Return URL yang bisa diakses publik
-        const fileUrl = `/uploads/${filename}`;
-
-        console.log("Thumbnail saved to file:", fileUrl);
+        console.log("Thumbnail saved to Vercel Blob:", blob.url);
 
         return NextResponse.json({
           success: true,
-          url: fileUrl,
+          url: blob.url, // URL lengkap dari Vercel Blob (contoh: https://xxxxx.blob.vercel-storage.com/thumbnails/...)
           type: "thumbnail",
           size: formatBytes(buffer.length),
           filename: filename,
         });
-      } catch (fsError) {
-        console.error("Filesystem error (Vercel read-only?):", fsError);
-
-        // Fallback ke base64 jika filesystem gagal (Vercel production)
-        // Tapi ini seharusnya tidak terjadi di local development
-        if (buffer.length > 500000) {
-          // Base64 akan lebih panjang dari 500 char
-          return NextResponse.json(
-            {
-              error: "File too large for base64 fallback",
-              message:
-                "Thumbnail terlalu besar untuk disimpan sebagai base64. Gunakan local development atau external storage.",
-            },
-            { status: 400 },
-          );
-        }
-
-        const base64Data = buffer.toString("base64");
-        const dataUrl = `data:${fileType};base64,${base64Data}`;
-
-        return NextResponse.json({
-          success: true,
-          url: dataUrl,
-          type: "thumbnail-base64",
-          size: formatBytes(buffer.length),
-          warning: "Saved as base64 due to filesystem restriction",
-        });
+      } catch (blobError) {
+        console.error("Vercel Blob error:", blobError);
+        return NextResponse.json(
+          {
+            error: "Upload failed",
+            message:
+              "Gagal mengupload ke storage. Pastikan BLOB_READ_WRITE_TOKEN sudah di-set di environment variables.",
+          },
+          { status: 500 },
+        );
       }
     }
 

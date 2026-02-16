@@ -203,6 +203,9 @@
 
 // app/api/upload/route.ts
 import { NextRequest, NextResponse } from "next/server";
+import { writeFile, mkdir } from "fs/promises";
+import { join } from "path";
+import { v4 as uuidv4 } from "uuid";
 import { getUserFromCookie } from "@/lib/get-user";
 
 const ALLOWED_IMAGE_TYPES = [
@@ -212,7 +215,10 @@ const ALLOWED_IMAGE_TYPES = [
   "image/webp",
 ];
 
-const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB untuk semua gambar
+// Max size untuk base64 content (2MB)
+const MAX_CONTENT_SIZE = 2 * 1024 * 1024;
+// Max size untuk thumbnail file (5MB) - lebih besar karena disimpan sebagai file
+const MAX_THUMBNAIL_SIZE = 5 * 1024 * 1024;
 
 function formatBytes(bytes: number): string {
   if (bytes === 0) return "0 Bytes";
@@ -241,7 +247,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
     }
 
-    // Debug log untuk development
     console.log("Upload attempt:", {
       name: file.name,
       type: file.type,
@@ -261,7 +266,6 @@ export async function POST(req: NextRequest) {
       webp: "image/webp",
     };
 
-    // Fallback jika file.type kosong atau generic
     if (!fileType || fileType === "application/octet-stream") {
       if (fileExtension && extensionMap[fileExtension]) {
         fileType = extensionMap[fileExtension];
@@ -279,43 +283,101 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Validasi ukuran file
-    if (file.size > MAX_FILE_SIZE) {
-      return NextResponse.json(
-        {
-          error: "File too large",
-          message: `File terlalu besar (${formatBytes(file.size)}). Maksimal ${formatBytes(MAX_FILE_SIZE)}.`,
-        },
-        { status: 400 },
-      );
-    }
-
     // Convert file ke buffer
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // Validasi ukuran buffer (double check)
-    if (buffer.length > MAX_FILE_SIZE) {
+    // ==================== MODE: THUMBNAIL (Save as File) ====================
+    if (uploadType === "thumbnail") {
+      // Validasi ukuran untuk thumbnail
+      if (buffer.length > MAX_THUMBNAIL_SIZE) {
+        return NextResponse.json(
+          {
+            error: "File too large",
+            message: `Thumbnail terlalu besar (${formatBytes(buffer.length)}). Maksimal ${formatBytes(MAX_THUMBNAIL_SIZE)}.`,
+          },
+          { status: 400 },
+        );
+      }
+
+      try {
+        // Generate unique filename
+        const uniqueId = uuidv4();
+        const sanitizedName = file.name
+          .replace(/[^a-zA-Z0-9.-]/g, "_")
+          .replace(/_{2,}/g, "_");
+
+        const filename = `${uniqueId}-${sanitizedName}`;
+
+        // Simpan ke /public/uploads/
+        const uploadDir = join(process.cwd(), "public", "uploads");
+        await mkdir(uploadDir, { recursive: true });
+
+        const filepath = join(uploadDir, filename);
+        await writeFile(filepath, buffer);
+
+        // Return URL yang bisa diakses publik
+        const fileUrl = `/uploads/${filename}`;
+
+        console.log("Thumbnail saved to file:", fileUrl);
+
+        return NextResponse.json({
+          success: true,
+          url: fileUrl,
+          type: "thumbnail",
+          size: formatBytes(buffer.length),
+          filename: filename,
+        });
+      } catch (fsError) {
+        console.error("Filesystem error (Vercel read-only?):", fsError);
+
+        // Fallback ke base64 jika filesystem gagal (Vercel production)
+        // Tapi ini seharusnya tidak terjadi di local development
+        if (buffer.length > 500000) {
+          // Base64 akan lebih panjang dari 500 char
+          return NextResponse.json(
+            {
+              error: "File too large for base64 fallback",
+              message:
+                "Thumbnail terlalu besar untuk disimpan sebagai base64. Gunakan local development atau external storage.",
+            },
+            { status: 400 },
+          );
+        }
+
+        const base64Data = buffer.toString("base64");
+        const dataUrl = `data:${fileType};base64,${base64Data}`;
+
+        return NextResponse.json({
+          success: true,
+          url: dataUrl,
+          type: "thumbnail-base64",
+          size: formatBytes(buffer.length),
+          warning: "Saved as base64 due to filesystem restriction",
+        });
+      }
+    }
+
+    // ==================== MODE: CONTENT (Base64) ====================
+    // Validasi ukuran untuk content
+    if (buffer.length > MAX_CONTENT_SIZE) {
       return NextResponse.json(
         {
           error: "File too large",
-          message: `File terlalu besar (${formatBytes(buffer.length)}). Maksimal ${formatBytes(MAX_FILE_SIZE)}.`,
+          message: `Gambar terlalu besar (${formatBytes(buffer.length)}). Maksimal ${formatBytes(MAX_CONTENT_SIZE)} untuk konten artikel.`,
         },
         { status: 400 },
       );
     }
 
-    // Convert ke Base64 - Solusi untuk Vercel (serverless, read-only filesystem)
     const base64Data = buffer.toString("base64");
     const dataUrl = `data:${fileType};base64,${base64Data}`;
 
-    // Response sukses
     return NextResponse.json({
       success: true,
       url: dataUrl,
-      type: uploadType,
+      type: "content",
       size: formatBytes(buffer.length),
-      filename: file.name,
     });
   } catch (error) {
     console.error("Upload error:", error);

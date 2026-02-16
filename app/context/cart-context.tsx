@@ -907,7 +907,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const syncToServer = async () => {
     console.log("Sync to server skipped (frontend-only mode)");
     // Dalam mode frontend-only, tidak perlu sync ke server
-    // Cart sudah tersimpan di localStorage
   };
 
   // 🔧 REFRESH AUTH - FRONTEND ONLY

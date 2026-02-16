@@ -202,9 +202,10 @@
 // }
 
 // app/api/upload/route.ts
+// app/api/upload/route.ts - Versi Base64 Kompres
 import { NextRequest, NextResponse } from "next/server";
-import { put } from "@vercel/blob";
 import { getUserFromCookie } from "@/lib/get-user";
+import sharp from "sharp"; // npm install sharp
 
 const ALLOWED_IMAGE_TYPES = [
   "image/jpeg",
@@ -213,10 +214,10 @@ const ALLOWED_IMAGE_TYPES = [
   "image/webp",
 ];
 
-// Max size untuk base64 content (2MB)
+// Max size untuk content (2MB)
 const MAX_CONTENT_SIZE = 2 * 1024 * 1024;
-// Max size untuk thumbnail file (4.5MB - batas Vercel Blob)
-const MAX_THUMBNAIL_SIZE = 4.5 * 1024 * 1024;
+// Max size untuk thumbnail sebelum kompres (5MB)
+const MAX_THUMBNAIL_SIZE = 5 * 1024 * 1024;
 
 function formatBytes(bytes: number): string {
   if (bytes === 0) return "0 Bytes";
@@ -228,13 +229,9 @@ function formatBytes(bytes: number): string {
 
 export async function POST(req: NextRequest) {
   try {
-    // Check authentication
     const user = await getUserFromCookie();
     if (!user) {
-      return NextResponse.json(
-        { error: "Unauthorized - Silakan login terlebih dahulu" },
-        { status: 401 },
-      );
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const formData = await req.formData();
@@ -245,17 +242,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
     }
 
-    console.log("Upload attempt:", {
-      name: file.name,
-      type: file.type,
-      size: file.size,
-      uploadType,
-    });
-
-    // Deteksi tipe file dengan fallback
     let fileType = file.type;
     const fileExtension = file.name.split(".").pop()?.toLowerCase();
-
     const extensionMap: Record<string, string> = {
       jpg: "image/jpeg",
       jpeg: "image/jpeg",
@@ -270,78 +258,85 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Validasi tipe file
     if (!ALLOWED_IMAGE_TYPES.includes(fileType)) {
       return NextResponse.json(
         {
           error: "Invalid file type",
-          message: `Tipe file tidak diizinkan: ${fileType || fileExtension}. Gunakan: JPG, PNG, GIF, WEBP`,
+          message: `Tipe tidak diizinkan: ${fileType}`,
         },
         { status: 400 },
       );
     }
 
-    // Convert file ke buffer
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // ==================== MODE: THUMBNAIL (Save to Vercel Blob) ====================
+    // ==================== MODE: THUMBNAIL (Kompres jadi Base64) ====================
     if (uploadType === "thumbnail") {
-      // Validasi ukuran untuk thumbnail
       if (buffer.length > MAX_THUMBNAIL_SIZE) {
         return NextResponse.json(
           {
             error: "File too large",
-            message: `Thumbnail terlalu besar (${formatBytes(buffer.length)}). Maksimal ${formatBytes(MAX_THUMBNAIL_SIZE)}.`,
+            message: `Max ${formatBytes(MAX_THUMBNAIL_SIZE)}`,
           },
           { status: 400 },
         );
       }
 
       try {
-        // Generate unique filename
-        const timestamp = Date.now();
-        const sanitizedName = file.name
-          .replace(/[^a-zA-Z0-9.-]/g, "_")
-          .replace(/_{2,}/g, "_");
+        // Kompres gambar jadi thumbnail kecil (max 300px width, quality 60%)
+        const compressedBuffer = await sharp(buffer)
+          .resize(300, null, { withoutEnlargement: true })
+          .jpeg({ quality: 60, progressive: true })
+          .toBuffer();
 
-        const filename = `thumbnails/${timestamp}-${sanitizedName}`;
+        const base64Data = compressedBuffer.toString("base64");
+        const dataUrl = `data:image/jpeg;base64,${base64Data}`;
 
-        // Upload ke Vercel Blob
-        const blob = await put(filename, buffer, {
-          access: "public",
-          contentType: fileType,
-        });
-
-        console.log("Thumbnail saved to Vercel Blob:", blob.url);
+        // Warning jika masih panjang
+        if (dataUrl.length > 500) {
+          console.warn(
+            "Thumbnail Base64 masih panjang:",
+            dataUrl.length,
+            "chars",
+          );
+        }
 
         return NextResponse.json({
           success: true,
-          url: blob.url, // URL lengkap dari Vercel Blob (contoh: https://xxxxx.blob.vercel-storage.com/thumbnails/...)
-          type: "thumbnail",
-          size: formatBytes(buffer.length),
-          filename: filename,
+          url: dataUrl,
+          type: "thumbnail-compressed",
+          size: formatBytes(compressedBuffer.length),
+          originalSize: formatBytes(buffer.length),
+          length: dataUrl.length,
         });
-      } catch (blobError) {
-        console.error("Vercel Blob error:", blobError);
-        return NextResponse.json(
-          {
-            error: "Upload failed",
-            message:
-              "Gagal mengupload ke storage. Pastikan BLOB_READ_WRITE_TOKEN sudah di-set di environment variables.",
-          },
-          { status: 500 },
-        );
+      } catch (compressError) {
+        // Fallback: pakai gambar asli tapi resize saja
+        console.error("Compression error:", compressError);
+
+        const resizedBuffer = await sharp(buffer)
+          .resize(200, null, { withoutEnlargement: true })
+          .toBuffer();
+
+        const base64Data = resizedBuffer.toString("base64");
+        const dataUrl = `data:image/jpeg;base64,${base64Data}`;
+
+        return NextResponse.json({
+          success: true,
+          url: dataUrl,
+          type: "thumbnail-resized",
+          size: formatBytes(resizedBuffer.length),
+          warning: "Using resized original format",
+        });
       }
     }
 
     // ==================== MODE: CONTENT (Base64) ====================
-    // Validasi ukuran untuk content
     if (buffer.length > MAX_CONTENT_SIZE) {
       return NextResponse.json(
         {
           error: "File too large",
-          message: `Gambar terlalu besar (${formatBytes(buffer.length)}). Maksimal ${formatBytes(MAX_CONTENT_SIZE)} untuk konten artikel.`,
+          message: `Max ${formatBytes(MAX_CONTENT_SIZE)}`,
         },
         { status: 400 },
       );
@@ -361,10 +356,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(
       {
         error: "Upload failed",
-        message:
-          error instanceof Error
-            ? error.message
-            : "Terjadi kesalahan saat upload",
+        message: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 },
     );

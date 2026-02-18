@@ -219,19 +219,19 @@ export default function ArticleDetailPage() {
           </section>
         )}
 
-        {/* ARTICLE CONTENT - WIDER READABLE WIDTH */}
+        {/* ARTICLE CONTENT - FULLWIDTH */}
         <section className="w-full pb-20 bg-white">
-          <div className="max-w-4xl mx-auto px-6 md:px-12 lg:px-16">
+          <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-16">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="prose prose-lg max-w-none"
+              className="prose prose-lg max-w-none w-full"
               style={{ fontFamily: "var(--font-figtree), Figtree" }}
             >
-              {/* Custom prose styling to match theme */}
+              {/* Custom prose styling to match theme - Full width */}
               <div
-                className="article-content text-[#111A4A] leading-relaxed"
+                className="article-content text-[#111A4A] leading-relaxed w-full"
                 dangerouslySetInnerHTML={{ __html: article.content }}
               />
             </motion.div>

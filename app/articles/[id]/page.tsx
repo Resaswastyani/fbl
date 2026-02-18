@@ -131,9 +131,9 @@ export default function ArticleDetailPage() {
     <>
       {/* <Header /> */}
       <div className="min-h-screen bg-white">
-        {/* HERO SECTION WITH THUMBNAIL */}
+        {/* HERO SECTION WITH THUMBNAIL - FULLWIDTH */}
         <section className="w-full pt-24 md:pt-32 pb-12 bg-white">
-          <div className="max-w-4xl mx-auto px-8 md:px-12">
+          <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-16">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -150,9 +150,9 @@ export default function ArticleDetailPage() {
                 </span>
               </Link>
 
-              {/* Title */}
+              {/* Title - Full width */}
               <h1
-                className="text-[32px] md:text-[42px] font-medium leading-tight tracking-tight text-[#111A4A] mb-6"
+                className="text-[32px] md:text-[48px] lg:text-[56px] font-medium leading-tight tracking-tight text-[#111A4A] mb-6 max-w-5xl"
                 style={{
                   fontFamily: "var(--font-figtree), Figtree",
                 }}
@@ -160,7 +160,7 @@ export default function ArticleDetailPage() {
                 {article.title}
               </h1>
 
-              {/* Meta Info */}
+              {/* Meta Info - Full width layout */}
               <div className="flex flex-wrap items-center gap-6 text-sm text-[#6e6e6e] mb-8 pb-8 border-b border-gray-200">
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-8 rounded-full bg-[#156d95] text-white flex items-center justify-center text-sm font-bold">
@@ -199,15 +199,15 @@ export default function ArticleDetailPage() {
           </div>
         </section>
 
-        {/* THUMBNAIL */}
+        {/* THUMBNAIL - FULLWIDTH EDGE TO EDGE */}
         {article.thumbnail && (
           <section className="w-full pb-12 bg-white">
-            <div className="max-w-5xl mx-auto px-8 md:px-12">
+            <div className="w-full px-4 md:px-8 lg:px-12">
               <motion.div
                 initial={{ opacity: 0, scale: 0.98 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
-                className="relative aspect-[21/9] rounded-xl overflow-hidden"
+                className="relative w-full aspect-[21/9] rounded-xl overflow-hidden max-h-[70vh]"
               >
                 <img
                   src={article.thumbnail}
@@ -219,9 +219,9 @@ export default function ArticleDetailPage() {
           </section>
         )}
 
-        {/* ARTICLE CONTENT */}
+        {/* ARTICLE CONTENT - WIDER READABLE WIDTH */}
         <section className="w-full pb-20 bg-white">
-          <div className="max-w-3xl mx-auto px-8 md:px-12">
+          <div className="max-w-4xl mx-auto px-6 md:px-12 lg:px-16">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -253,10 +253,10 @@ export default function ArticleDetailPage() {
           </div>
         </section>
 
-        {/* RELATED ARTICLES */}
+        {/* RELATED ARTICLES - FULLWIDTH */}
         {relatedArticles.length > 0 && (
           <section className="w-full py-20 bg-gray-50">
-            <div className="max-w-7xl mx-auto px-8 md:px-12">
+            <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-16">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -320,9 +320,9 @@ export default function ArticleDetailPage() {
           </section>
         )}
 
-        {/* CTA SECTION */}
+        {/* CTA SECTION - FULLWIDTH */}
         <section className="w-full py-20 bg-white">
-          <div className="max-w-4xl mx-auto px-8 md:px-12 text-center">
+          <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-16 text-center">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}

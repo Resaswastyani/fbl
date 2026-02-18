@@ -202,10 +202,12 @@
 // }
 
 // app/api/upload/route.ts
-// app/api/upload/route.ts - Versi Base64 Kompres
 import { NextRequest, NextResponse } from "next/server";
 import { getUserFromCookie } from "@/lib/get-user";
-import sharp from "sharp"; // npm install sharp
+import { writeFile, mkdir } from "fs/promises";
+import { join } from "path";
+import { v4 as uuidv4 } from "uuid";
+import sharp from "sharp";
 
 const ALLOWED_IMAGE_TYPES = [
   "image/jpeg",
@@ -214,9 +216,9 @@ const ALLOWED_IMAGE_TYPES = [
   "image/webp",
 ];
 
-// Max size untuk content (2MB)
+// Max size untuk content images (2MB)
 const MAX_CONTENT_SIZE = 2 * 1024 * 1024;
-// Max size untuk thumbnail sebelum kompres (5MB)
+// Max size untuk thumbnail upload (5MB)
 const MAX_THUMBNAIL_SIZE = 5 * 1024 * 1024;
 
 function formatBytes(bytes: number): string {
@@ -271,7 +273,7 @@ export async function POST(req: NextRequest) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // ==================== MODE: THUMBNAIL (Kompres jadi Base64) ====================
+    // ==================== MODE: THUMBNAIL (Simpan ke Disk) ====================
     if (uploadType === "thumbnail") {
       if (buffer.length > MAX_THUMBNAIL_SIZE) {
         return NextResponse.json(
@@ -284,72 +286,107 @@ export async function POST(req: NextRequest) {
       }
 
       try {
-        // Kompres gambar jadi thumbnail kecil (max 300px width, quality 60%)
-        const compressedBuffer = await sharp(buffer)
-          .resize(300, null, { withoutEnlargement: true })
-          .jpeg({ quality: 60, progressive: true })
+        // Buat direktori uploads/thumbnails
+        const uploadDir = join(
+          process.cwd(),
+          "public",
+          "uploads",
+          "thumbnails",
+        );
+        await mkdir(uploadDir, { recursive: true });
+
+        // Kompres dan resize thumbnail (max 800px width, quality 80%)
+        const processedBuffer = await sharp(buffer)
+          .resize(800, null, { withoutEnlargement: true, fit: "inside" })
+          .jpeg({ quality: 80, progressive: true })
           .toBuffer();
 
-        const base64Data = compressedBuffer.toString("base64");
-        const dataUrl = `data:image/jpeg;base64,${base64Data}`;
+        // Generate nama file unik
+        const uniqueId = uuidv4().split("-")[0];
+        const filename = `${uniqueId}_${Date.now()}.jpg`;
+        const filepath = join(uploadDir, filename);
 
-        // Warning jika masih panjang
-        if (dataUrl.length > 500) {
-          console.warn(
-            "Thumbnail Base64 masih panjang:",
-            dataUrl.length,
-            "chars",
-          );
-        }
+        // Simpan file
+        await writeFile(filepath, processedBuffer);
+
+        // Generate URL relatif (pendek, tidak perlu base64)
+        const fileUrl = `/uploads/thumbnails/${filename}`;
 
         return NextResponse.json({
           success: true,
-          url: dataUrl,
-          type: "thumbnail-compressed",
-          size: formatBytes(compressedBuffer.length),
+          url: fileUrl,
+          type: "thumbnail-disk",
+          size: formatBytes(processedBuffer.length),
           originalSize: formatBytes(buffer.length),
-          length: dataUrl.length,
+          filename: filename,
         });
-      } catch (compressError) {
-        // Fallback: pakai gambar asli tapi resize saja
-        console.error("Compression error:", compressError);
-
-        const resizedBuffer = await sharp(buffer)
-          .resize(200, null, { withoutEnlargement: true })
-          .toBuffer();
-
-        const base64Data = resizedBuffer.toString("base64");
-        const dataUrl = `data:image/jpeg;base64,${base64Data}`;
-
-        return NextResponse.json({
-          success: true,
-          url: dataUrl,
-          type: "thumbnail-resized",
-          size: formatBytes(resizedBuffer.length),
-          warning: "Using resized original format",
-        });
+      } catch (error) {
+        console.error("Thumbnail processing error:", error);
+        return NextResponse.json(
+          {
+            error: "Processing failed",
+            message: "Gagal memproses thumbnail",
+          },
+          { status: 500 },
+        );
       }
     }
 
-    // ==================== MODE: CONTENT (Base64) ====================
-    if (buffer.length > MAX_CONTENT_SIZE) {
-      return NextResponse.json(
-        {
-          error: "File too large",
-          message: `Max ${formatBytes(MAX_CONTENT_SIZE)}`,
-        },
-        { status: 400 },
-      );
+    // ==================== MODE: CONTENT ARTICLE (Base64 untuk inline) ====================
+    if (uploadType === "content") {
+      if (buffer.length > MAX_CONTENT_SIZE) {
+        return NextResponse.json(
+          {
+            error: "File too large",
+            message: `Max ${formatBytes(MAX_CONTENT_SIZE)} untuk konten artikel`,
+          },
+          { status: 400 },
+        );
+      }
+
+      // Untuk konten artikel inline, gunakan base64 (tapi tetap kecil)
+      const compressedBuffer = await sharp(buffer)
+        .resize(1200, null, { withoutEnlargement: true, fit: "inside" })
+        .jpeg({ quality: 85, progressive: true })
+        .toBuffer();
+
+      const base64Data = compressedBuffer.toString("base64");
+      const dataUrl = `data:image/jpeg;base64,${base64Data}`;
+
+      return NextResponse.json({
+        success: true,
+        url: dataUrl,
+        type: "content-base64",
+        size: formatBytes(compressedBuffer.length),
+      });
     }
 
-    const base64Data = buffer.toString("base64");
-    const dataUrl = `data:${fileType};base64,${base64Data}`;
+    // ==================== MODE: GENERAL UPLOAD (Simpan ke Disk) ====================
+    // Default: simpan ke disk (untuk avatar, dll)
+    const uploadDir = join(process.cwd(), "public", "uploads", "images");
+    await mkdir(uploadDir, { recursive: true });
+
+    const uniqueId = uuidv4().split("-")[0];
+    const ext = fileType === "image/png" ? "png" : "jpg";
+    const filename = `${uniqueId}_${Date.now()}.${ext}`;
+    const filepath = join(uploadDir, filename);
+
+    // Kompres sedikit untuk general upload
+    const processedBuffer = await sharp(buffer)
+      .resize(1920, null, { withoutEnlargement: true, fit: "inside" })
+      .jpeg({ quality: 90, progressive: true })
+      .toBuffer();
+
+    await writeFile(filepath, processedBuffer);
+
+    const fileUrl = `/uploads/images/${filename}`;
 
     return NextResponse.json({
       success: true,
-      url: dataUrl,
-      type: "content",
-      size: formatBytes(buffer.length),
+      url: fileUrl,
+      type: "image-disk",
+      size: formatBytes(processedBuffer.length),
+      filename: filename,
     });
   } catch (error) {
     console.error("Upload error:", error);

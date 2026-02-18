@@ -3,7 +3,15 @@
 // import { Button } from "@/components/ui/button";
 // import { Card, CardContent } from "@/components/ui/card";
 // import { Badge } from "@/components/ui/badge";
-// import { Star, Play, X, CheckIcon, ShoppingCart } from "lucide-react";
+// import {
+//   Star,
+//   Play,
+//   X,
+//   CheckIcon,
+//   ShoppingCart,
+//   ChevronLeft,
+//   ChevronRight,
+// } from "lucide-react";
 // import { Dialog, DialogContent } from "@/components/ui/dialog";
 // import { useCart } from "@/app/context/cart-context";
 // import { useRouter } from "next/navigation";
@@ -39,6 +47,9 @@
 //   const [lastAddedItem, setLastAddedItem] = useState<any>(null);
 //   const [loading, setLoading] = useState(true);
 //   const [enrolledCourses, setEnrolledCourses] = useState<string[]>([]);
+//   // Pagination state
+//   const [currentPage, setCurrentPage] = useState(1);
+//   const itemsPerPage = 5;
 
 //   // Fetch enrolled courses untuk user yang login
 //   useEffect(() => {
@@ -274,6 +285,19 @@
 //     return items.some((item) => !item.isBundle && item.id === courseId);
 //   };
 
+//   // Pagination logic
+//   const totalPages = Math.ceil(courses.length / itemsPerPage);
+//   const startIndex = (currentPage - 1) * itemsPerPage;
+//   const endIndex = startIndex + itemsPerPage;
+//   const currentCourses = courses.slice(startIndex, endIndex);
+
+//   const handlePageChange = (page: number) => {
+//     if (page >= 1 && page <= totalPages) {
+//       setCurrentPage(page);
+//       window.scrollTo({ top: 0, behavior: "smooth" });
+//     }
+//   };
+
 //   // Mock courses
 //   const mockCourses: Course[] = [
 //     {
@@ -487,7 +511,7 @@
 //           {/* Courses List */}
 //           <div className="lg:col-span-2">
 //             <div className="space-y-6">
-//               {courses.map((course) => {
+//               {currentCourses.map((course) => {
 //                 const buttonConfig = getButtonConfig(course);
 //                 return (
 //                   <Card
@@ -563,6 +587,46 @@
 //                 );
 //               })}
 //             </div>
+
+//             {/* Pagination */}
+//             {totalPages > 1 && (
+//               <div className="flex items-center justify-center mt-8 gap-2">
+//                 <button
+//                   onClick={() => handlePageChange(currentPage - 1)}
+//                   disabled={currentPage === 1}
+//                   className="p-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-[#156d95] hover:text-white hover:border-[#156d95] transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-gray-600 disabled:hover:border-gray-200"
+//                 >
+//                   <ChevronLeft size={20} />
+//                 </button>
+
+//                 <div className="flex items-center gap-1">
+//                   {[...Array(totalPages)].map((_, i) => {
+//                     const page = i + 1;
+//                     return (
+//                       <button
+//                         key={page}
+//                         onClick={() => handlePageChange(page)}
+//                         className={`w-10 h-10 rounded-lg font-medium text-sm transition-all ${
+//                           currentPage === page
+//                             ? "bg-[#156d95] text-white"
+//                             : "border border-gray-200 text-gray-600 hover:bg-[#156d95] hover:text-white hover:border-[#156d95]"
+//                         }`}
+//                       >
+//                         {page}
+//                       </button>
+//                     );
+//                   })}
+//                 </div>
+
+//                 <button
+//                   onClick={() => handlePageChange(currentPage + 1)}
+//                   disabled={currentPage === totalPages}
+//                   className="p-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-[#156d95] hover:text-white hover:border-[#156d95] transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-gray-600 disabled:hover:border-gray-200"
+//                 >
+//                   <ChevronRight size={20} />
+//                 </button>
+//               </div>
+//             )}
 //           </div>
 //         </div>
 //       </div>
@@ -647,6 +711,7 @@
 //   );
 // }
 
+// app/components/CourseSection.tsx
 "use client";
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
@@ -947,6 +1012,20 @@ export default function CourseSection() {
     }
   };
 
+  // Helper: Strip HTML tags dan ambil beberapa kata untuk preview
+  const getPlainTextPreview = (htmlContent: string | undefined, wordCount: number = 20): string => {
+    if (!htmlContent) return "Deskripsi tidak tersedia.";
+    
+    // Remove HTML tags
+    const plainText = htmlContent.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+    
+    // Split into words and take first N words
+    const words = plainText.split(" ");
+    if (words.length <= wordCount) return plainText;
+    
+    return words.slice(0, wordCount).join(" ") + "...";
+  };
+
   // Mock courses
   const mockCourses: Course[] = [
     {
@@ -1088,9 +1167,9 @@ export default function CourseSection() {
       )}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Bundle Card */}
-          <div className="lg:col-span-1">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+          {/* Bundle Card - TANPA SCROLL, TAMPIL SEMUA */}
+          <div className="lg:col-span-1 lg:sticky lg:top-24">
             <Card className="h-full border-0 shadow-xl overflow-hidden bg-gradient-to-br from-[#156d95] to-[#0d476e]">
               <CardContent className="p-6">
                 <div className="flex items-start justify-between">
@@ -1109,7 +1188,8 @@ export default function CourseSection() {
                     Includes {bundleInfo.courseCount} Courses:
                   </span>
                 </p>
-                <ul className="text-white/80 text-sm space-y-1 mb-4 max-h-32 overflow-y-auto pr-2">
+                {/* ✅ HAPUS max-h-32 overflow-y-auto, TAMPIL SEMUA */}
+                <ul className="text-white/80 text-sm space-y-1 mb-4 pr-2">
                   {bundleInfo.courseNames.map((title, index) => (
                     <li key={index} className="flex items-start">
                       <span className="text-[#ff6b00] mr-2">•</span>
@@ -1280,7 +1360,7 @@ export default function CourseSection() {
         </div>
       </div>
 
-      {/* Preview Modal */}
+      {/* Preview Modal - FIX DESKRIPSI HTML */}
       <Dialog open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
         <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
           <button
@@ -1345,9 +1425,9 @@ export default function CourseSection() {
                     <div className="text-sm text-gray-500 mb-1">
                       Description
                     </div>
+                    {/* ✅ FIX: Gunakan helper untuk strip HTML dan ambil preview */}
                     <div className="text-gray-600">
-                      {selectedLesson.content ||
-                        "Description will be shown here."}
+                      {getPlainTextPreview(selectedLesson.content, 30)}
                     </div>
                   </div>
                 </div>

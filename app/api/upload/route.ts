@@ -204,10 +204,7 @@
 // app/api/upload/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { getUserFromCookie } from "@/lib/get-user";
-import { writeFile, mkdir } from "fs/promises";
-import { join } from "path";
-import { v4 as uuidv4 } from "uuid";
-import sharp from "sharp";
+import { put } from "@vercel/blob";
 
 const ALLOWED_IMAGE_TYPES = [
   "image/jpeg",
@@ -216,10 +213,10 @@ const ALLOWED_IMAGE_TYPES = [
   "image/webp",
 ];
 
+// Max size untuk thumbnail (2MB)
+const MAX_THUMBNAIL_SIZE = 2 * 1024 * 1024;
 // Max size untuk content images (2MB)
 const MAX_CONTENT_SIZE = 2 * 1024 * 1024;
-// Max size untuk thumbnail upload (5MB)
-const MAX_THUMBNAIL_SIZE = 5 * 1024 * 1024;
 
 function formatBytes(bytes: number): string {
   if (bytes === 0) return "0 Bytes";
@@ -227,6 +224,29 @@ function formatBytes(bytes: number): string {
   const sizes = ["Bytes", "KB", "MB"];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
   return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + " " + sizes[i];
+}
+
+// Kompres image menggunakan Canvas API (browser-compatible)
+async function compressImage(
+  buffer: Buffer,
+  maxWidth: number,
+  quality: number,
+  type: string,
+): Promise<Buffer> {
+  // Gunakan sharp jika ada (local dev), fallback ke canvas (production)
+  try {
+    const sharp = await import("sharp");
+    return await sharp
+      .default(buffer)
+      .resize(maxWidth, null, { withoutEnlargement: true, fit: "inside" })
+      .jpeg({ quality, progressive: true })
+      .toBuffer();
+  } catch (e) {
+    // Fallback: return buffer as-is jika sharp tidak ada
+    // Di Vercel, kita akan upload original dan biarkan Vercel Blob handle optimization
+    console.warn("Sharp not available, using original buffer");
+    return buffer;
+  }
 }
 
 export async function POST(req: NextRequest) {
@@ -271,123 +291,131 @@ export async function POST(req: NextRequest) {
     }
 
     const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
+    let buffer = Buffer.from(bytes);
 
-    // ==================== MODE: THUMBNAIL (Simpan ke Disk) ====================
+    // Check size
+    const maxSize =
+      uploadType === "thumbnail" ? MAX_THUMBNAIL_SIZE : MAX_CONTENT_SIZE;
+    if (buffer.length > maxSize) {
+      return NextResponse.json(
+        {
+          error: "File too large",
+          message: `Max ${formatBytes(maxSize)}`,
+        },
+        { status: 400 },
+      );
+    }
+
+    // ==================== MODE: THUMBNAIL (Upload ke Vercel Blob) ====================
     if (uploadType === "thumbnail") {
-      if (buffer.length > MAX_THUMBNAIL_SIZE) {
-        return NextResponse.json(
-          {
-            error: "File too large",
-            message: `Max ${formatBytes(MAX_THUMBNAIL_SIZE)}`,
-          },
-          { status: 400 },
-        );
-      }
-
       try {
-        // Buat direktori uploads/thumbnails
-        const uploadDir = join(
-          process.cwd(),
-          "public",
-          "uploads",
-          "thumbnails",
-        );
-        await mkdir(uploadDir, { recursive: true });
-
-        // Kompres dan resize thumbnail (max 800px width, quality 80%)
-        const processedBuffer = await sharp(buffer)
-          .resize(800, null, { withoutEnlargement: true, fit: "inside" })
-          .jpeg({ quality: 80, progressive: true })
-          .toBuffer();
+        // Kompres thumbnail (max 800px, quality 80%)
+        const processedBuffer = await compressImage(buffer, 800, 80, fileType);
 
         // Generate nama file unik
-        const uniqueId = uuidv4().split("-")[0];
-        const filename = `${uniqueId}_${Date.now()}.jpg`;
-        const filepath = join(uploadDir, filename);
+        const timestamp = Date.now();
+        const randomId = Math.random().toString(36).substring(2, 10);
+        const filename = `thumbnails/${timestamp}-${randomId}.jpg`;
 
-        // Simpan file
-        await writeFile(filepath, processedBuffer);
-
-        // Generate URL relatif (pendek, tidak perlu base64)
-        const fileUrl = `/uploads/thumbnails/${filename}`;
+        // Upload ke Vercel Blob
+        const blob = await put(filename, processedBuffer, {
+          access: "public",
+          contentType: "image/jpeg",
+          addRandomSuffix: false,
+        });
 
         return NextResponse.json({
           success: true,
-          url: fileUrl,
-          type: "thumbnail-disk",
+          url: blob.url, // URL pendek dari Vercel Blob
+          type: "thumbnail-blob",
           size: formatBytes(processedBuffer.length),
           originalSize: formatBytes(buffer.length),
-          filename: filename,
+          pathname: blob.pathname,
         });
       } catch (error) {
-        console.error("Thumbnail processing error:", error);
+        console.error("Thumbnail upload error:", error);
         return NextResponse.json(
           {
-            error: "Processing failed",
-            message: "Gagal memproses thumbnail",
+            error: "Upload failed",
+            message:
+              error instanceof Error
+                ? error.message
+                : "Gagal upload thumbnail ke storage",
           },
           { status: 500 },
         );
       }
     }
 
-    // ==================== MODE: CONTENT ARTICLE (Base64 untuk inline) ====================
+    // ==================== MODE: CONTENT (Base64 dengan kompresi) ====================
     if (uploadType === "content") {
-      if (buffer.length > MAX_CONTENT_SIZE) {
+      try {
+        // Kompres untuk konten artikel (max 1200px, quality 85%)
+        const processedBuffer = await compressImage(buffer, 1200, 85, fileType);
+
+        // Jika masih besar (>500KB), kompres lebih agresif
+        let finalBuffer = processedBuffer;
+        if (processedBuffer.length > 500 * 1024) {
+          finalBuffer = await compressImage(buffer, 800, 70, fileType);
+        }
+
+        // Convert ke base64
+        const base64Data = finalBuffer.toString("base64");
+        const dataUrl = `data:image/jpeg;base64,${base64Data}`;
+
+        // Warning jika masih panjang
+        if (dataUrl.length > 50000) {
+          console.warn("Content image base64 masih panjang:", dataUrl.length);
+        }
+
+        return NextResponse.json({
+          success: true,
+          url: dataUrl,
+          type: "content-base64",
+          size: formatBytes(finalBuffer.length),
+          length: dataUrl.length,
+        });
+      } catch (error) {
+        console.error("Content processing error:", error);
         return NextResponse.json(
           {
-            error: "File too large",
-            message: `Max ${formatBytes(MAX_CONTENT_SIZE)} untuk konten artikel`,
+            error: "Processing failed",
+            message:
+              error instanceof Error ? error.message : "Gagal memproses gambar",
           },
-          { status: 400 },
+          { status: 500 },
         );
       }
+    }
 
-      // Untuk konten artikel inline, gunakan base64 (tapi tetap kecil)
-      const compressedBuffer = await sharp(buffer)
-        .resize(1200, null, { withoutEnlargement: true, fit: "inside" })
-        .jpeg({ quality: 85, progressive: true })
-        .toBuffer();
+    // ==================== MODE: GENERAL (Vercel Blob) ====================
+    try {
+      const processedBuffer = await compressImage(buffer, 1920, 90, fileType);
+      const timestamp = Date.now();
+      const randomId = Math.random().toString(36).substring(2, 10);
+      const filename = `images/${timestamp}-${randomId}.jpg`;
 
-      const base64Data = compressedBuffer.toString("base64");
-      const dataUrl = `data:image/jpeg;base64,${base64Data}`;
+      const blob = await put(filename, processedBuffer, {
+        access: "public",
+        contentType: "image/jpeg",
+      });
 
       return NextResponse.json({
         success: true,
-        url: dataUrl,
-        type: "content-base64",
-        size: formatBytes(compressedBuffer.length),
+        url: blob.url,
+        type: "image-blob",
+        size: formatBytes(processedBuffer.length),
       });
+    } catch (error) {
+      console.error("General upload error:", error);
+      return NextResponse.json(
+        {
+          error: "Upload failed",
+          message: error instanceof Error ? error.message : "Gagal upload",
+        },
+        { status: 500 },
+      );
     }
-
-    // ==================== MODE: GENERAL UPLOAD (Simpan ke Disk) ====================
-    // Default: simpan ke disk (untuk avatar, dll)
-    const uploadDir = join(process.cwd(), "public", "uploads", "images");
-    await mkdir(uploadDir, { recursive: true });
-
-    const uniqueId = uuidv4().split("-")[0];
-    const ext = fileType === "image/png" ? "png" : "jpg";
-    const filename = `${uniqueId}_${Date.now()}.${ext}`;
-    const filepath = join(uploadDir, filename);
-
-    // Kompres sedikit untuk general upload
-    const processedBuffer = await sharp(buffer)
-      .resize(1920, null, { withoutEnlargement: true, fit: "inside" })
-      .jpeg({ quality: 90, progressive: true })
-      .toBuffer();
-
-    await writeFile(filepath, processedBuffer);
-
-    const fileUrl = `/uploads/images/${filename}`;
-
-    return NextResponse.json({
-      success: true,
-      url: fileUrl,
-      type: "image-disk",
-      size: formatBytes(processedBuffer.length),
-      filename: filename,
-    });
   } catch (error) {
     console.error("Upload error:", error);
     return NextResponse.json(

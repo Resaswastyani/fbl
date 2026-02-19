@@ -840,10 +840,15 @@ export default function CourseSection() {
         const data = await response.json();
         const coursesData = data.courses || data;
 
-        // ✅ HAPUS SORTING BERDASARKAN FREE/BERBAYAR
-        // Tampilkan sesuai urutan asli dari API (yang sudah berisi nomor urut di title)
-        setCourses(coursesData);
-        setBundleCourses(coursesData);
+        // ✅ SORT BY EXTRACTED NUMBER FROM TITLE to ensure correct order
+        const sortedCourses = [...coursesData].sort((a, b) => {
+          const numA = extractNumberFromTitle(a.title);
+          const numB = extractNumberFromTitle(b.title);
+          return numA - numB;
+        });
+
+        setCourses(sortedCourses);
+        setBundleCourses(sortedCourses);
       } catch (error) {
         console.error("Error fetching courses:", error);
         setCourses(mockCourses);
@@ -855,6 +860,12 @@ export default function CourseSection() {
 
     fetchCourses();
   }, []);
+
+  // Helper: Extract number from title (e.g., "1. Title" -> 1, "10. Title" -> 10)
+  const extractNumberFromTitle = (title: string): number => {
+    const match = title.match(/^(\d+)\./);
+    return match ? parseInt(match[1], 10) : 999;
+  };
 
   // Calculate bundle price
   const calculateBundlePrice = () => {

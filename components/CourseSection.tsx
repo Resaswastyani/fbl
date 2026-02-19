@@ -840,16 +840,10 @@ export default function CourseSection() {
         const data = await response.json();
         const coursesData = data.courses || data;
 
-        const sortedCourses = [...coursesData].sort((a, b) => {
-          const aIsFree = a.price === "Free";
-          const bIsFree = b.price === "Free";
-          if (aIsFree && !bIsFree) return -1;
-          if (!aIsFree && bIsFree) return 1;
-          return 0;
-        });
-
-        setCourses(sortedCourses);
-        setBundleCourses(sortedCourses);
+        // ✅ HAPUS SORTING BERDASARKAN FREE/BERBAYAR
+        // Tampilkan sesuai urutan asli dari API (yang sudah berisi nomor urut di title)
+        setCourses(coursesData);
+        setBundleCourses(coursesData);
       } catch (error) {
         console.error("Error fetching courses:", error);
         setCourses(mockCourses);
@@ -1046,12 +1040,6 @@ export default function CourseSection() {
     if (words.length <= wordCount) return plainText;
 
     return words.slice(0, wordCount).join(" ") + "...";
-  };
-
-  // Helper: Extract number from course title untuk sorting yang konsisten
-  const extractNumberFromTitle = (title: string): number => {
-    const match = title.match(/^(\d+)\./);
-    return match ? parseInt(match[1]) : 999;
   };
 
   // Mock courses
@@ -1268,10 +1256,8 @@ export default function CourseSection() {
           {/* Courses List */}
           <div className="lg:col-span-2">
             <div className="space-y-6">
-              {currentCourses.map((course, index) => {
+              {currentCourses.map((course) => {
                 const buttonConfig = getButtonConfig(course);
-                // ✅ HITUNG NOMOR URUT BERDASARKAN HALAMAN DAN INDEX
-                const courseNumber = startIndex + index + 1;
                 return (
                   <Card
                     key={course.id}
@@ -1281,9 +1267,9 @@ export default function CourseSection() {
                       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-2">
-                            {/* ✅ TAMPILKAN NOMOR URUT YANG BENAR */}
+                            {/* ✅ TAMPILKAN TITLE ASLI (SUDAH ADA NOMOR DI API) */}
                             <h3 className="text-xl font-bold text-gray-900">
-                              {courseNumber}. {course.title}
+                              {course.title}
                             </h3>
                             {isEnrolled(course.id) && (
                               <Badge className="bg-green-100 text-green-700">

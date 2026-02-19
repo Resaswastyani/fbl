@@ -1,3 +1,4 @@
+// // app/components/CourseSection.tsx
 // "use client";
 // import React, { useState, useEffect } from "react";
 // import { Button } from "@/components/ui/button";
@@ -298,6 +299,20 @@
 //     }
 //   };
 
+//   // Helper: Strip HTML tags dan ambil beberapa kata untuk preview
+//   const getPlainTextPreview = (htmlContent: string | undefined, wordCount: number = 20): string => {
+//     if (!htmlContent) return "Deskripsi tidak tersedia.";
+
+//     // Remove HTML tags
+//     const plainText = htmlContent.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+
+//     // Split into words and take first N words
+//     const words = plainText.split(" ");
+//     if (words.length <= wordCount) return plainText;
+
+//     return words.slice(0, wordCount).join(" ") + "...";
+//   };
+
 //   // Mock courses
 //   const mockCourses: Course[] = [
 //     {
@@ -439,9 +454,9 @@
 //       )}
 
 //       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-//         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-//           {/* Bundle Card */}
-//           <div className="lg:col-span-1">
+//         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+//           {/* Bundle Card - TANPA SCROLL, TAMPIL SEMUA */}
+//           <div className="lg:col-span-1 lg:sticky lg:top-24">
 //             <Card className="h-full border-0 shadow-xl overflow-hidden bg-gradient-to-br from-[#156d95] to-[#0d476e]">
 //               <CardContent className="p-6">
 //                 <div className="flex items-start justify-between">
@@ -460,7 +475,8 @@
 //                     Includes {bundleInfo.courseCount} Courses:
 //                   </span>
 //                 </p>
-//                 <ul className="text-white/80 text-sm space-y-1 mb-4 max-h-32 overflow-y-auto pr-2">
+//                 {/* ✅ HAPUS max-h-32 overflow-y-auto, TAMPIL SEMUA */}
+//                 <ul className="text-white/80 text-sm space-y-1 mb-4 pr-2">
 //                   {bundleInfo.courseNames.map((title, index) => (
 //                     <li key={index} className="flex items-start">
 //                       <span className="text-[#ff6b00] mr-2">•</span>
@@ -631,7 +647,7 @@
 //         </div>
 //       </div>
 
-//       {/* Preview Modal */}
+//       {/* Preview Modal - FIX DESKRIPSI HTML */}
 //       <Dialog open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
 //         <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
 //           <button
@@ -696,9 +712,9 @@
 //                     <div className="text-sm text-gray-500 mb-1">
 //                       Description
 //                     </div>
+//                     {/* ✅ FIX: Gunakan helper untuk strip HTML dan ambil preview */}
 //                     <div className="text-gray-600">
-//                       {selectedLesson.content ||
-//                         "Description will be shown here."}
+//                       {getPlainTextPreview(selectedLesson.content, 30)}
 //                     </div>
 //                   </div>
 //                 </div>
@@ -1013,17 +1029,29 @@ export default function CourseSection() {
   };
 
   // Helper: Strip HTML tags dan ambil beberapa kata untuk preview
-  const getPlainTextPreview = (htmlContent: string | undefined, wordCount: number = 20): string => {
+  const getPlainTextPreview = (
+    htmlContent: string | undefined,
+    wordCount: number = 20,
+  ): string => {
     if (!htmlContent) return "Deskripsi tidak tersedia.";
-    
+
     // Remove HTML tags
-    const plainText = htmlContent.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
-    
+    const plainText = htmlContent
+      .replace(/<[^>]*>/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+
     // Split into words and take first N words
     const words = plainText.split(" ");
     if (words.length <= wordCount) return plainText;
-    
+
     return words.slice(0, wordCount).join(" ") + "...";
+  };
+
+  // Helper: Extract number from course title untuk sorting yang konsisten
+  const extractNumberFromTitle = (title: string): number => {
+    const match = title.match(/^(\d+)\./);
+    return match ? parseInt(match[1]) : 999;
   };
 
   // Mock courses
@@ -1240,8 +1268,10 @@ export default function CourseSection() {
           {/* Courses List */}
           <div className="lg:col-span-2">
             <div className="space-y-6">
-              {currentCourses.map((course) => {
+              {currentCourses.map((course, index) => {
                 const buttonConfig = getButtonConfig(course);
+                // ✅ HITUNG NOMOR URUT BERDASARKAN HALAMAN DAN INDEX
+                const courseNumber = startIndex + index + 1;
                 return (
                   <Card
                     key={course.id}
@@ -1251,8 +1281,9 @@ export default function CourseSection() {
                       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-2">
+                            {/* ✅ TAMPILKAN NOMOR URUT YANG BENAR */}
                             <h3 className="text-xl font-bold text-gray-900">
-                              {course.title}
+                              {courseNumber}. {course.title}
                             </h3>
                             {isEnrolled(course.id) && (
                               <Badge className="bg-green-100 text-green-700">

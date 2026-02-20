@@ -20,7 +20,7 @@ export const brokers: Broker[] = [
   {
     id: "xm",
     name: "XM",
-    logo: "/brokers/xm-logo.png",
+    logo: "/brokers/xm.png",
     description:
       "Broker forex global dengan regulasi terpercaya dan layanan pelanggan 24/7 dalam Bahasa Indonesia.",
     rating: 4.8,
@@ -46,7 +46,7 @@ export const brokers: Broker[] = [
   {
     id: "fbs",
     name: "FBS",
-    logo: "/brokers/fbs-logo.png",
+    logo: "/brokers/fbs.png",
     description:
       "Broker dengan spread terendah dan berbagai promo menarik untuk trader Indonesia.",
     rating: 4.7,
@@ -72,7 +72,7 @@ export const brokers: Broker[] = [
   {
     id: "exness",
     name: "Exness",
-    logo: "/brokers/exness-logo.png",
+    logo: "/brokers/exness.png",
     description:
       "Broker dengan eksekusi instan dan withdrawal super cepat dalam hitungan detik.",
     rating: 4.9,
@@ -98,7 +98,7 @@ export const brokers: Broker[] = [
   {
     id: "octa",
     name: "OctaFX",
-    logo: "/brokers/octa-logo.png",
+    logo: "/brokers/octafx.png",
     description:
       "Broker ramah pemula dengan platform trading modern dan kompetisi trading berhadiah.",
     rating: 4.6,
@@ -123,7 +123,7 @@ export const brokers: Broker[] = [
   {
     id: "icmarkets",
     name: "IC Markets",
-    logo: "/brokers/icm-logo.png",
+    logo: "/brokers/icm.jpeg",
     description:
       "Broker ECN terbaik untuk trader profesional dengan spread raw yang kompetitif.",
     rating: 4.8,
@@ -149,7 +149,7 @@ export const brokers: Broker[] = [
   {
     id: "hotforex",
     name: "HFM (HotForex)",
-    logo: "/brokers/hfm-logo.png",
+    logo: "/brokers/hfm.jpg",
     description:
       "Broker multi-award dengan berbagai jenis akun untuk semua level trader.",
     rating: 4.7,

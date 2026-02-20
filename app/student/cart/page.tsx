@@ -239,10 +239,10 @@ export default function CartPage() {
                             </p>
                           </div>
                           <div>
-                            <p className="text-sm text-gray-500">Jumlah</p>
+                            {/* <p className="text-sm text-gray-500">Jumlah</p>
                             <p className="text-lg font-bold text-gray-900">
                               {item.quantity}
-                            </p>
+                            </p> */}
                           </div>
                           <div>
                             <p className="text-sm text-gray-500">Subtotal</p>

@@ -1233,9 +1233,9 @@ export default function CourseSection() {
                       />
                     ))}
                   </div>
-                  <span className="text-white/80 ml-2 text-sm">
+                  {/* <span className="text-white/80 ml-2 text-sm">
                     4.9 (2.4k ratings)
-                  </span>
+                  </span> */}
                 </div>
                 <div className="flex items-center justify-between mb-4">
                   <div className="text-white/70 line-through text-lg">
@@ -1408,7 +1408,7 @@ export default function CourseSection() {
                     <Star key={i} className="h-5 w-5 fill-yellow-400" />
                   ))}
                 </div>
-                <span className="ml-2 text-gray-500">4.9 (2.4k ratings)</span>
+                {/* <span className="ml-2 text-gray-500">4.9 (2.4k ratings)</span> */}
               </div>
 
               <div className="mb-8">

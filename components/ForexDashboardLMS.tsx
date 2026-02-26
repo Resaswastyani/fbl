@@ -435,52 +435,53 @@ export default function ForexDashboardLMS() {
       }
     }, 150);
   };
-  // Tambahkan fungsi ini di dalam component ForexDashboardLMS, sebelum return statement:
+  // Tambahkan fungsi ini di dalam component ForexDashboardLMS, sebelum return statement: tambhakan fungsi
 
- const handleThumbnailUpload = async (file: File) => {
-  setUploadingThumbnail(true);
-  try {
-    if (!file.type.startsWith("image/")) {
-      alert("Hanya file gambar yang diizinkan");
-      return;
-    }
-
-    // Pre-check size (2MB)
-    if (file.size > 2 * 1024 * 1024) {
-      alert(`File terlalu besar (${(file.size/1024/1024).toFixed(1)}MB)!\n\nMax: 2MB`);
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("type", "thumbnail");
-
-    const res = await fetch("/api/upload", {
-      method: "POST",
-      body: formData,
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      if (data.error === "THUMBNAIL_TOO_LARGE") {
-        alert(data.message);
+  const handleThumbnailUpload = async (file: File) => {
+    setUploadingThumbnail(true);
+    try {
+      if (!file.type.startsWith("image/")) {
+        alert("Hanya file gambar yang diizinkan");
         return;
       }
-      throw new Error(data.message || data.error || "Upload failed");
-    }
 
-    // Simpan URL file (bukan base64)
-    setArticleValue("thumbnail", data.url);
-    alert(`Thumbnail uploaded! (${data.size})`);
-    
-  } catch (error: any) {
-    console.error("Upload error:", error);
-    alert("Error: " + (error.message || "Upload gagal"));
-  } finally {
-    setUploadingThumbnail(false);
-  }
-};
+      // Pre-check size (2MB)
+      if (file.size > 2 * 1024 * 1024) {
+        alert(
+          `File terlalu besar (${(file.size / 1024 / 1024).toFixed(1)}MB)!\n\nMax: 2MB`,
+        );
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("type", "thumbnail");
+
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        if (data.error === "THUMBNAIL_TOO_LARGE") {
+          alert(data.message);
+          return;
+        }
+        throw new Error(data.message || data.error || "Upload failed");
+      }
+
+      // Simpan URL file (bukan base64)
+      setArticleValue("thumbnail", data.url);
+      alert(`Thumbnail uploaded! (${data.size})`);
+    } catch (error: any) {
+      console.error("Upload error:", error);
+      alert("Error: " + (error.message || "Upload gagal"));
+    } finally {
+      setUploadingThumbnail(false);
+    }
+  };
 
   // Untuk lesson video/pdf upload, tambahkan fungsi ini:
   const handleLessonFileUpload = async (file: File, type: "video" | "pdf") => {

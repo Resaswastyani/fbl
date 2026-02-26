@@ -234,7 +234,7 @@ export default function WhatsAppFloat() {
                 </motion.button>
 
                 <p className="text-center text-gray-400 text-xs mt-3">
-                  Powered by WhatsApp Business API
+                  Powered by Forex for Better Living
                 </p>
               </div>
             </div>

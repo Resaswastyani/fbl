@@ -1,6 +1,6 @@
 // "use client";
 
-// import { useState, useEffect, useCallback } from "react";
+// import { useState, useEffect, useCallback, useRef } from "react";
 // import { motion, AnimatePresence } from "framer-motion";
 // import {
 //   Menu,
@@ -43,6 +43,9 @@
 //   const { items, refreshAuth } = useCart();
 //   const router = useRouter();
 //   const itemCount = items.reduce((t, i) => t + i.quantity, 0);
+
+//   // Refs untuk tracking hover state
+//   const dropdownTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
 //   // Check auth status on mount dan listen untuk perubahan
 //   const checkAuth = useCallback(async () => {
@@ -164,6 +167,22 @@
 //     return "/student/dashboard";
 //   };
 
+//   // Fungsi untuk handle mouse enter dengan clear timeout
+//   const handleMouseEnter = (title: string) => {
+//     if (dropdownTimeoutRef.current) {
+//       clearTimeout(dropdownTimeoutRef.current);
+//       dropdownTimeoutRef.current = null;
+//     }
+//     setOpenDropdown(title);
+//   };
+
+//   // Fungsi untuk handle mouse leave dengan delay
+//   const handleMouseLeave = () => {
+//     dropdownTimeoutRef.current = setTimeout(() => {
+//       setOpenDropdown(null);
+//     }, 150); // Delay 150ms untuk memberi waktu mouse pindah ke dropdown
+//   };
+
 //   const Dropdown = ({
 //     title,
 //     items,
@@ -173,8 +192,8 @@
 //   }) => (
 //     <div
 //       className="relative group"
-//       onMouseEnter={() => setOpenDropdown(title)}
-//       onMouseLeave={() => setOpenDropdown(null)}
+//       onMouseEnter={() => handleMouseEnter(title)}
+//       onMouseLeave={handleMouseLeave}
 //     >
 //       <button
 //         className={`flex items-center gap-1 font-medium text-gray-700 hover:text-primary transition
@@ -192,8 +211,18 @@
 //             animate={{ opacity: 1, y: 0 }}
 //             exit={{ opacity: 0, y: -4 }}
 //             transition={{ duration: 0.18 }}
-//             className="absolute left-0 mt-3 w-[250px] bg-white shadow-xl rounded-xl border border-gray-100 py-2 z-40"
+//             className="absolute left-0 mt-2 w-[250px] bg-white shadow-xl rounded-xl border border-gray-100 py-2 z-40"
+//             style={{
+//               // Tambahkan padding top untuk bridge gap antara button dan dropdown
+//               paddingTop: "8px",
+//               marginTop: "4px",
+//             }}
 //           >
+//             {/* Pseudo-element bridge untuk menghubungkan trigger dan dropdown */}
+//             <div
+//               className="absolute -top-2 left-0 right-0 h-2 bg-transparent"
+//               aria-hidden="true"
+//             />
 //             {items.map((item) => (
 //               <button
 //                 key={item.name}
@@ -222,8 +251,8 @@
 //     return (
 //       <div
 //         className="relative"
-//         onMouseEnter={() => setOpenDropdown("user")}
-//         onMouseLeave={() => setOpenDropdown(null)}
+//         onMouseEnter={() => handleMouseEnter("user")}
+//         onMouseLeave={handleMouseLeave}
 //       >
 //         <button
 //           className={`flex items-center gap-2 font-medium text-gray-700 hover:text-primary transition
@@ -254,8 +283,17 @@
 //               animate={{ opacity: 1, y: 0 }}
 //               exit={{ opacity: 0, y: -4 }}
 //               transition={{ duration: 0.18 }}
-//               className="absolute right-0 mt-3 w-[280px] bg-white shadow-xl rounded-xl border border-gray-100 py-2 z-40"
+//               className="absolute right-0 mt-2 w-[280px] bg-white shadow-xl rounded-xl border border-gray-100 py-2 z-40"
+//               style={{
+//                 paddingTop: "8px",
+//                 marginTop: "4px",
+//               }}
 //             >
+//               {/* Pseudo-element bridge */}
+//               <div
+//                 className="absolute -top-2 left-0 right-0 h-2 bg-transparent"
+//                 aria-hidden="true"
+//               />
 //               <div className="px-4 py-3 border-b border-gray-100">
 //                 <p className="font-semibold text-gray-900 truncate">
 //                   {user.name || "User"}
@@ -672,7 +710,7 @@ export const Header = () => {
     try {
       const res = await fetch("/api/auth/me", {
         credentials: "include",
-        cache: "no-store", // Hindari cache
+        cache: "no-store",
       });
 
       if (res.ok) {
@@ -699,7 +737,7 @@ export const Header = () => {
       if (e.key === "logout-event") {
         console.log("Logout detected from another tab");
         setUser(null);
-        refreshAuth(); // Refresh cart context juga
+        refreshAuth();
       }
       if (e.key === "auth-change") {
         console.log("Auth change detected");
@@ -750,6 +788,7 @@ export const Header = () => {
     }
   };
 
+  // ✅ PERBAIKAN: Logout dengan proper broadcast dan state cleanup
   const handleLogout = async () => {
     try {
       // Clear cookies via API
@@ -760,31 +799,62 @@ export const Header = () => {
     } catch (error) {
       console.error("Logout error:", error);
     } finally {
-      // Clear local state
+      // Clear local state TERLEBIH DAHULU
       setUser(null);
       setOpenDropdown(null);
 
-      // Trigger event untuk komponen lain
+      // Broadcast logout event ke SEMUA tab dan komponen
       localStorage.setItem("logout-event", Date.now().toString());
-      localStorage.removeItem("logout-event");
 
-      // Custom event untuk same-tab
+      // Custom event untuk same-tab (dispatch SEBELUM removeItem)
       window.dispatchEvent(new Event("app-logout"));
+
+      // Hapus dari localStorage SETELAH dispatch
+      setTimeout(() => {
+        localStorage.removeItem("logout-event");
+      }, 100);
+
+      // Clear cart
+      clearCart();
 
       // Refresh cart context
       await refreshAuth();
 
+      // Navigate dan refresh
       router.push("/");
       router.refresh();
     }
   };
 
+  // ✅ PERBAIKAN: Dashboard URL berdasarkan role dengan validasi yang lebih baik
   const getDashboardUrl = (role: string) => {
-    const upperRole = role.toUpperCase();
+    if (!role) return "/login";
+
+    const upperRole = role.toUpperCase().trim();
+
+    // Admin dan Mentor ke dashboard utama
     if (upperRole === "ADMIN" || upperRole === "MENTOR") {
       return "/dashboard";
     }
+
+    // Pelanggan/Student ke student dashboard
+    if (
+      upperRole === "PELANGGAN" ||
+      upperRole === "STUDENT" ||
+      upperRole === "USER"
+    ) {
+      return "/student/dashboard";
+    }
+
+    // Default fallback
     return "/student/dashboard";
+  };
+
+  // ✅ PERBAIKAN: Cek role dengan validasi lebih ketat
+  const isAdminOrMentor = (role: string | undefined | null) => {
+    if (!role) return false;
+    const upperRole = role.toUpperCase().trim();
+    return upperRole === "ADMIN" || upperRole === "MENTOR";
   };
 
   // Fungsi untuk handle mouse enter dengan clear timeout
@@ -800,7 +870,7 @@ export const Header = () => {
   const handleMouseLeave = () => {
     dropdownTimeoutRef.current = setTimeout(() => {
       setOpenDropdown(null);
-    }, 150); // Delay 150ms untuk memberi waktu mouse pindah ke dropdown
+    }, 150);
   };
 
   const Dropdown = ({
@@ -833,7 +903,6 @@ export const Header = () => {
             transition={{ duration: 0.18 }}
             className="absolute left-0 mt-2 w-[250px] bg-white shadow-xl rounded-xl border border-gray-100 py-2 z-40"
             style={{
-              // Tambahkan padding top untuk bridge gap antara button dan dropdown
               paddingTop: "8px",
               marginTop: "4px",
             }}
@@ -859,14 +928,12 @@ export const Header = () => {
     </div>
   );
 
-  // User Dropdown Component - DESKTOP
+  // ✅ PERBAIKAN: User Dropdown Component dengan role handling yang benar
   const UserDropdown = () => {
     if (!user) return null;
 
     const dashboardUrl = getDashboardUrl(user.role);
-    const isAdminOrMentor =
-      user.role.toUpperCase() === "ADMIN" ||
-      user.role.toUpperCase() === "MENTOR";
+    const userIsAdminOrMentor = isAdminOrMentor(user.role);
 
     return (
       <div
@@ -920,7 +987,7 @@ export const Header = () => {
                 </p>
                 <p className="text-sm text-gray-500 truncate">{user.email}</p>
                 <span className="inline-block mt-2 px-2 py-0.5 bg-primary/10 text-primary text-xs rounded-full capitalize">
-                  {user.role.toLowerCase()}
+                  {(user.role || "user").toLowerCase()}
                 </span>
               </div>
 
@@ -941,7 +1008,8 @@ export const Header = () => {
                   Pengaturan
                 </button>
 
-                {isAdminOrMentor && (
+                {/* ✅ Tampilkan Kelola Kursus hanya untuk Admin/Mentor */}
+                {userIsAdminOrMentor && (
                   <button
                     onClick={() => handleLinkClick("/dashboard/courses")}
                     className="flex items-center gap-3 w-full px-4 py-3 text-gray-600 hover:bg-gray-100 transition"
@@ -1009,7 +1077,6 @@ export const Header = () => {
             <Dropdown
               title="Trading lesson"
               items={[
-                // { name: "Trading Beginner", href: "#free-1", icon: BookOpen },
                 { name: "Artikel Trading", href: "/articles", icon: FileText },
                 { name: "Strategy Trading", href: "#free-1", icon: TrendingUp },
                 {
@@ -1143,7 +1210,7 @@ export const Header = () => {
                       </div>
                     </div>
                     <span className="inline-block px-2 py-0.5 bg-primary/10 text-primary text-xs rounded-full capitalize">
-                      {user.role.toLowerCase()}
+                      {(user.role || "user").toLowerCase()}
                     </span>
                   </div>
                 )}
@@ -1225,6 +1292,7 @@ export const Header = () => {
                   <>
                     {user ? (
                       <div className="space-y-3 pt-4 border-t border-gray-200">
+                        {/* ✅ PERBAIKAN: Mobile menu juga menggunakan getDashboardUrl */}
                         <button
                           onClick={() =>
                             handleLinkClick(getDashboardUrl(user.role))
@@ -1241,6 +1309,18 @@ export const Header = () => {
                           <Settings size={20} />
                           Pengaturan
                         </button>
+                        {/* ✅ Tampilkan Kelola Kursus di mobile untuk Admin/Mentor */}
+                        {isAdminOrMentor(user.role) && (
+                          <button
+                            onClick={() =>
+                              handleLinkClick("/dashboard/courses")
+                            }
+                            className="flex items-center gap-2 w-full text-lg text-gray-800"
+                          >
+                            <BookOpen size={20} />
+                            Kelola Kursus
+                          </button>
+                        )}
                         <button
                           onClick={handleLogout}
                           className="flex items-center gap-2 w-full text-lg text-red-600"

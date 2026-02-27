@@ -695,7 +695,7 @@ const StatsCard = ({ accentColor }: { accentColor: string }) => (
     <div className="flex items-center gap-3">
       <CircularProgress percentage={87} color={accentColor} size={60} />
       <div>
-        <p className="text-xs text-gray-500 mb-1">Win Rate</p>
+        <p className="text-xs text-gray-500 mb-1">Profit</p>
         <p className="text-lg font-bold text-gray-800">87%</p>
         <p className="text-xs text-green-500">+12% vs last month</p>
       </div>

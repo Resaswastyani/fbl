@@ -790,7 +790,7 @@ const FloatingParticles = () => {
 };
 
 // ============================================
-// MAIN COMPONENT
+// MAIN COMPO
 // ============================================
 
 export const ForexTestimonials = () => {
@@ -846,7 +846,7 @@ export const ForexTestimonials = () => {
             transition={{ delay: 0.1 }}
             className="text-lg leading-7 text-muted-foreground max-w-2xl mx-auto"
           >
-            Alasan kenapa FBL jadi pilihan trader Indonesia.
+            Alasan kenapa FBL jadi pilihan?
           </motion.p>
         </div>
 

@@ -358,7 +358,7 @@ export default function StudentDashboardPage() {
                 </div>
               </CardContent>
             </Card>
-            <Card>
+            {/* <Card>
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
@@ -372,7 +372,7 @@ export default function StudentDashboardPage() {
                   </div>
                 </div>
               </CardContent>
-            </Card>
+            </Card> */}
           </div>
 
           <section className="mb-12">

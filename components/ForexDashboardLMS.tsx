@@ -283,6 +283,35 @@ export default function ForexDashboardLMS() {
     validateUser();
   }, [router]);
 
+  // ✅ PERBAIKAN: Listen untuk navigasi dari header "Kelola Kursus"
+  useEffect(() => {
+    // Cek localStorage saat mount
+    const savedMenu = localStorage.getItem("dashboard-active-menu");
+    if (savedMenu) {
+      setActiveMenu(savedMenu as any);
+      localStorage.removeItem("dashboard-active-menu"); // Hapus setelah digunakan
+    }
+
+    // Listen untuk event dari header
+    const handleDashboardNavigate = (e: CustomEvent) => {
+      if (e.detail?.menu) {
+        setActiveMenu(e.detail.menu);
+      }
+    };
+
+    window.addEventListener(
+      "dashboard-navigate",
+      handleDashboardNavigate as EventListener,
+    );
+
+    return () => {
+      window.removeEventListener(
+        "dashboard-navigate",
+        handleDashboardNavigate as EventListener,
+      );
+    };
+  }, []);
+
   /* UI state */
   const [mounted, setMounted] = useState(false);
   useEffect(() => {

@@ -52,7 +52,7 @@
 //     try {
 //       const res = await fetch("/api/auth/me", {
 //         credentials: "include",
-//         cache: "no-store", // Hindari cache
+//         cache: "no-store",
 //       });
 
 //       if (res.ok) {
@@ -79,7 +79,7 @@
 //       if (e.key === "logout-event") {
 //         console.log("Logout detected from another tab");
 //         setUser(null);
-//         refreshAuth(); // Refresh cart context juga
+//         refreshAuth();
 //       }
 //       if (e.key === "auth-change") {
 //         console.log("Auth change detected");
@@ -130,6 +130,7 @@
 //     }
 //   };
 
+//   // ✅ PERBAIKAN: Logout dengan proper broadcast dan state cleanup
 //   const handleLogout = async () => {
 //     try {
 //       // Clear cookies via API
@@ -140,31 +141,62 @@
 //     } catch (error) {
 //       console.error("Logout error:", error);
 //     } finally {
-//       // Clear local state
+//       // Clear local state TERLEBIH DAHULU
 //       setUser(null);
 //       setOpenDropdown(null);
 
-//       // Trigger event untuk komponen lain
+//       // Broadcast logout event ke SEMUA tab dan komponen
 //       localStorage.setItem("logout-event", Date.now().toString());
-//       localStorage.removeItem("logout-event");
 
-//       // Custom event untuk same-tab
+//       // Custom event untuk same-tab (dispatch SEBELUM removeItem)
 //       window.dispatchEvent(new Event("app-logout"));
+
+//       // Hapus dari localStorage SETELAH dispatch
+//       setTimeout(() => {
+//         localStorage.removeItem("logout-event");
+//       }, 100);
+
+//       // Clear cart
+//       clearCart();
 
 //       // Refresh cart context
 //       await refreshAuth();
 
+//       // Navigate dan refresh
 //       router.push("/");
 //       router.refresh();
 //     }
 //   };
 
+//   // ✅ PERBAIKAN: Dashboard URL berdasarkan role dengan validasi yang lebih baik
 //   const getDashboardUrl = (role: string) => {
-//     const upperRole = role.toUpperCase();
+//     if (!role) return "/login";
+
+//     const upperRole = role.toUpperCase().trim();
+
+//     // Admin dan Mentor ke dashboard utama
 //     if (upperRole === "ADMIN" || upperRole === "MENTOR") {
 //       return "/dashboard";
 //     }
+
+//     // Pelanggan/Student ke student dashboard
+//     if (
+//       upperRole === "PELANGGAN" ||
+//       upperRole === "STUDENT" ||
+//       upperRole === "USER"
+//     ) {
+//       return "/student/dashboard";
+//     }
+
+//     // Default fallback
 //     return "/student/dashboard";
+//   };
+
+//   // ✅ PERBAIKAN: Cek role dengan validasi lebih ketat
+//   const isAdminOrMentor = (role: string | undefined | null) => {
+//     if (!role) return false;
+//     const upperRole = role.toUpperCase().trim();
+//     return upperRole === "ADMIN" || upperRole === "MENTOR";
 //   };
 
 //   // Fungsi untuk handle mouse enter dengan clear timeout
@@ -180,7 +212,7 @@
 //   const handleMouseLeave = () => {
 //     dropdownTimeoutRef.current = setTimeout(() => {
 //       setOpenDropdown(null);
-//     }, 150); // Delay 150ms untuk memberi waktu mouse pindah ke dropdown
+//     }, 150);
 //   };
 
 //   const Dropdown = ({
@@ -213,7 +245,6 @@
 //             transition={{ duration: 0.18 }}
 //             className="absolute left-0 mt-2 w-[250px] bg-white shadow-xl rounded-xl border border-gray-100 py-2 z-40"
 //             style={{
-//               // Tambahkan padding top untuk bridge gap antara button dan dropdown
 //               paddingTop: "8px",
 //               marginTop: "4px",
 //             }}
@@ -239,14 +270,12 @@
 //     </div>
 //   );
 
-//   // User Dropdown Component - DESKTOP
+//   // ✅ PERBAIKAN: User Dropdown Component dengan role handling yang benar
 //   const UserDropdown = () => {
 //     if (!user) return null;
 
 //     const dashboardUrl = getDashboardUrl(user.role);
-//     const isAdminOrMentor =
-//       user.role.toUpperCase() === "ADMIN" ||
-//       user.role.toUpperCase() === "MENTOR";
+//     const userIsAdminOrMentor = isAdminOrMentor(user.role);
 
 //     return (
 //       <div
@@ -300,7 +329,7 @@
 //                 </p>
 //                 <p className="text-sm text-gray-500 truncate">{user.email}</p>
 //                 <span className="inline-block mt-2 px-2 py-0.5 bg-primary/10 text-primary text-xs rounded-full capitalize">
-//                   {user.role.toLowerCase()}
+//                   {(user.role || "user").toLowerCase()}
 //                 </span>
 //               </div>
 
@@ -321,7 +350,8 @@
 //                   Pengaturan
 //                 </button>
 
-//                 {isAdminOrMentor && (
+//                 {/* ✅ Tampilkan Kelola Kursus hanya untuk Admin/Mentor */}
+//                 {userIsAdminOrMentor && (
 //                   <button
 //                     onClick={() => handleLinkClick("/dashboard/courses")}
 //                     className="flex items-center gap-3 w-full px-4 py-3 text-gray-600 hover:bg-gray-100 transition"
@@ -389,7 +419,6 @@
 //             <Dropdown
 //               title="Trading lesson"
 //               items={[
-//                 // { name: "Trading Beginner", href: "#free-1", icon: BookOpen },
 //                 { name: "Artikel Trading", href: "/articles", icon: FileText },
 //                 { name: "Strategy Trading", href: "#free-1", icon: TrendingUp },
 //                 {
@@ -523,7 +552,7 @@
 //                       </div>
 //                     </div>
 //                     <span className="inline-block px-2 py-0.5 bg-primary/10 text-primary text-xs rounded-full capitalize">
-//                       {user.role.toLowerCase()}
+//                       {(user.role || "user").toLowerCase()}
 //                     </span>
 //                   </div>
 //                 )}
@@ -605,6 +634,7 @@
 //                   <>
 //                     {user ? (
 //                       <div className="space-y-3 pt-4 border-t border-gray-200">
+//                         {/* ✅ PERBAIKAN: Mobile menu juga menggunakan getDashboardUrl */}
 //                         <button
 //                           onClick={() =>
 //                             handleLinkClick(getDashboardUrl(user.role))
@@ -621,6 +651,18 @@
 //                           <Settings size={20} />
 //                           Pengaturan
 //                         </button>
+//                         {/* ✅ Tampilkan Kelola Kursus di mobile untuk Admin/Mentor */}
+//                         {isAdminOrMentor(user.role) && (
+//                           <button
+//                             onClick={() =>
+//                               handleLinkClick("/dashboard/courses")
+//                             }
+//                             className="flex items-center gap-2 w-full text-lg text-gray-800"
+//                           >
+//                             <BookOpen size={20} />
+//                             Kelola Kursus
+//                           </button>
+//                         )}
 //                         <button
 //                           onClick={handleLogout}
 //                           className="flex items-center gap-2 w-full text-lg text-red-600"
@@ -788,6 +830,25 @@ export const Header = () => {
     }
   };
 
+  // ✅ PERBAIKAN: Handle Kelola Kursus - simpan menu preference ke localStorage
+  const handleManageCourses = () => {
+    setIsMobileMenuOpen(false);
+    setOpenDropdown(null);
+
+    // Simpan preference menu ke localStorage agar dashboard membuka tab Courses
+    localStorage.setItem("dashboard-active-menu", "courses");
+
+    // Trigger event untuk dashboard jika sedang di halaman dashboard
+    window.dispatchEvent(
+      new CustomEvent("dashboard-navigate", {
+        detail: { menu: "courses" },
+      }),
+    );
+
+    // Navigate ke dashboard
+    router.push("/dashboard");
+  };
+
   // ✅ PERBAIKAN: Logout dengan proper broadcast dan state cleanup
   const handleLogout = async () => {
     try {
@@ -815,7 +876,11 @@ export const Header = () => {
       }, 100);
 
       // Clear cart
-      clearCart();
+      try {
+        localStorage.removeItem("cart");
+      } catch (e) {
+        console.error("Error clearing cart:", e);
+      }
 
       // Refresh cart context
       await refreshAuth();
@@ -1008,10 +1073,10 @@ export const Header = () => {
                   Pengaturan
                 </button>
 
-                {/* ✅ Tampilkan Kelola Kursus hanya untuk Admin/Mentor */}
+                {/* ✅ PERBAIKAN: Kelola Kursus menggunakan handleManageCourses */}
                 {userIsAdminOrMentor && (
                   <button
-                    onClick={() => handleLinkClick("/dashboard/courses")}
+                    onClick={handleManageCourses}
                     className="flex items-center gap-3 w-full px-4 py-3 text-gray-600 hover:bg-gray-100 transition"
                   >
                     <BookOpen size={18} />
@@ -1292,7 +1357,6 @@ export const Header = () => {
                   <>
                     {user ? (
                       <div className="space-y-3 pt-4 border-t border-gray-200">
-                        {/* ✅ PERBAIKAN: Mobile menu juga menggunakan getDashboardUrl */}
                         <button
                           onClick={() =>
                             handleLinkClick(getDashboardUrl(user.role))
@@ -1309,12 +1373,10 @@ export const Header = () => {
                           <Settings size={20} />
                           Pengaturan
                         </button>
-                        {/* ✅ Tampilkan Kelola Kursus di mobile untuk Admin/Mentor */}
+                        {/* ✅ PERBAIKAN: Mobile menu juga menggunakan handleManageCourses */}
                         {isAdminOrMentor(user.role) && (
                           <button
-                            onClick={() =>
-                              handleLinkClick("/dashboard/courses")
-                            }
+                            onClick={handleManageCourses}
                             className="flex items-center gap-2 w-full text-lg text-gray-800"
                           >
                             <BookOpen size={20} />

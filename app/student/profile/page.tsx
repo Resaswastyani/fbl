@@ -1197,17 +1197,17 @@ export default function StudentProfilePage() {
                   <span className="font-bold text-lg">{stats.completed}</span>
                 </div>
 
-                <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                {/* <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                   <div className="flex items-center gap-3">
                     <div className="p-2 bg-purple-100 rounded-lg">
                       <Shield className="h-5 w-5 text-purple-600" />
                     </div>
-                    {/* <span className="text-gray-600">Sertifikat</span> */}
+                    <span className="text-gray-600">Sertifikat</span>
                   </div>
                   <span className="font-bold text-lg">
                     {stats.certificates}
                   </span>
-                </div>
+                </div> */}
               </CardContent>
             </Card>
           </div>

@@ -1470,10 +1470,10 @@ export default function CourseSection() {
                     transition={{ delay: 0.5 }}
                     className="flex items-center gap-2 mb-4"
                   >
-                    <Award className="w-5 h-5 text-yellow-400" />
+                    {/* <Award className="w-5 h-5 text-yellow-400" />
                     <span className="text-white/80 text-sm">
                       Sertifikat Resmi
-                    </span>
+                    </span> */}
                   </motion.div>
                   <div className="flex items-center justify-between mb-4">
                     <motion.div

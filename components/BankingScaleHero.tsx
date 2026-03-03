@@ -753,10 +753,10 @@ const AnimatedDataLine = ({
 };
 
 export const BankingScaleHero = () => {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState<boolean>(false);
   const [dataPoints, setDataPoints] = useState<DataPoint[] | null>(null);
   const [typingComplete, setTypingComplete] = useState<boolean>(false);
-  const [mounted, setMounted] = useState(false);
+  const [mounted, setMounted] = useState<boolean>(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -809,11 +809,11 @@ export const BankingScaleHero = () => {
   };
 
   return (
-    <div className="w-full overflow-hidden bg-white">
-      <div className="mx-auto max-w-7xl px-8 py-24 pt-16">
-        <div className="grid grid-cols-12 gap-5 gap-y-16">
+    <div className="w-full overflow-hidden bg-white relative">
+      <div className="mx-auto max-w-7xl px-8 py-24 pt-16 relative">
+        <div className="grid grid-cols-12 gap-5 gap-y-16 relative">
           {/* LEFT CONTENT */}
-          <div className="col-span-12 md:col-span-6 relative z-10">
+          <div className="col-span-12 md:col-span-6 relative z-20">
             {/* TOP TAGLINE */}
             <motion.div
               className="relative h-6 inline-flex items-center font-mono uppercase text-xs text-[#167E6C] mb-12 px-2"
@@ -873,8 +873,8 @@ export const BankingScaleHero = () => {
             </motion.p>
           </div>
 
-          {/* RIGHT GRAPH */}
-          <div className="col-span-12 md:col-span-6">
+          {/* RIGHT GRAPH - Z-INDEX LEBIH RENDAH */}
+          <div className="col-span-12 md:col-span-6 relative z-10">
             <motion.div
               className="relative w-full h-[416px] md:-ml-[200px]"
               initial={{ opacity: 0, x: 50 }}
@@ -886,7 +886,7 @@ export const BankingScaleHero = () => {
               }}
             >
               {/* BACKGROUND GLOW */}
-              <div className="absolute top-0 left-0 md:left-[302px] w-full md:w-[680px] h-[416px] pointer-events-none">
+              <div className="absolute top-0 left-0 md:left-[302px] w-full md:w-[680px] h-[416px] pointer-events-none overflow-hidden">
                 <motion.div
                   className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full"
                   style={{
@@ -921,15 +921,15 @@ export const BankingScaleHero = () => {
             </motion.div>
           </div>
 
-          {/* STATS SECTION */}
-          <div className="col-span-12">
+          {/* STATS SECTION - Z-INDEX PALING TINGGI */}
+          <div className="col-span-12 relative z-30">
             <motion.div
               className="overflow-visible pb-5"
               variants={statContainerVariants}
               initial="hidden"
               animate="visible"
             >
-              <div className="grid grid-cols-12 gap-5 relative z-10">
+              <div className="grid grid-cols-12 gap-5 relative">
                 {stats.map((stat, index) => (
                   <motion.div
                     key={index}
@@ -942,7 +942,7 @@ export const BankingScaleHero = () => {
                     }}
                   >
                     <motion.div
-                      className="flex flex-col gap-2 p-4 rounded-xl transition-all duration-300 hover:bg-[#167E6C]/5 cursor-default"
+                      className="flex flex-col gap-2 p-4 rounded-xl transition-all duration-300 hover:bg-[#167E6C]/5 cursor-default bg-white/80 backdrop-blur-sm"
                       whileHover={{
                         boxShadow: "0 20px 40px -15px rgba(22, 126, 108, 0.2)",
                       }}

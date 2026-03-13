@@ -709,7 +709,7 @@ export default function StudentProfilePage() {
     try {
       setLoading(true);
 
-      // Fetch user data
+      // Fetch User Data
       const authRes = await fetch("/api/auth/me", {
         credentials: "include",
       });
@@ -976,7 +976,7 @@ export default function StudentProfilePage() {
       default:
         return (
           <Badge className="bg-[#156d95]/10 text-[#156d95] hover:bg-[#156d95]/10">
-            Pelanggan
+           Pelanggan
           </Badge>
         );
     }
@@ -1038,7 +1038,7 @@ export default function StudentProfilePage() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Alert Message */}
+        {/* Alert Message*/}
         {message && (
           <div
             className={`mb-6 p-4 rounded-lg flex items-center gap-3 ${
@@ -1057,7 +1057,7 @@ export default function StudentProfilePage() {
         )}
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Column - Profile Info */}
+          {/* Left Column - Profile-info */}
           <div className="lg:col-span-1 space-y-6">
             {/* Profile Card */}
             <Card>
@@ -1086,7 +1086,7 @@ export default function StudentProfilePage() {
                   {getRoleBadge(user.role)}
                 </div>
 
-                {/* Google Badge */}
+                {/* Google Badge*/}
                 {user.isGoogleUser && (
                   <div className="inline-flex items-center gap-1 px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm mb-3">
                     <svg className="h-4 w-4" viewBox="0 0 24 24">
@@ -1133,7 +1133,7 @@ export default function StudentProfilePage() {
                     }`}
                   >
                     <User className="h-5 w-5" />
-                    Informasi Profil
+                   Informasi Profil
                   </button>
                   <button
                     onClick={() => setActiveTab("password")}
@@ -1155,7 +1155,7 @@ export default function StudentProfilePage() {
                     }`}
                   >
                     <Shield className="h-5 w-5" />
-                    Keamanan & Koneksi
+                   Keamanan & Koneksi
                   </button>
                 </nav>
               </CardContent>
@@ -1348,7 +1348,7 @@ export default function StudentProfilePage() {
                           </svg>
                           <div>
                             <p className="font-medium text-blue-900">
-                              Akun Google
+                              Akun Google.
                             </p>
                             <p className="text-sm text-blue-700">
                               Akun ini terhubung dengan Google. Anda dapat

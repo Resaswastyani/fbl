@@ -327,7 +327,7 @@ export default function StudentDashboardPage() {
               Halo, {user.name}! 👋
             </h1>
             <p className="text-gray-600 mt-2">
-              Selamat datang di dashboard pembelajaran Anda
+              Selamat datang di dashboard Pembelajaran Anda
             </p>
           </div>
 

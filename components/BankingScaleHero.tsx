@@ -524,7 +524,7 @@ const stats: StatItem[] = [
     delay: 0.2,
   },
   {
-    value: "Mudah Diimplementasi",
+    value: "Mudah Diimplementasikan",
     description: "Langkah-langkah teknis yang\nsiap langsung dipraktikkan",
     delay: 0.4,
   },
@@ -828,7 +828,7 @@ export const BankingScaleHero = () => {
                   transition={{ duration: 0.8, ease: "easeOut" }}
                   className="block whitespace-nowrap overflow-hidden text-[#167E6C]"
                 >
-                  {"Live Forex Intelligence".split("").map((char, i) => (
+                  {"Forex For Better Living".split("").map((char, i) => (
                     <motion.span
                       key={i}
                       initial={{ opacity: 0, y: 10 }}

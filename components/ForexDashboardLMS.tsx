@@ -3298,7 +3298,7 @@ export default function ForexDashboardLMS() {
 
   // ✅ PERBAIKAN: Listen untuk navigasi dari header "Kelola Kursus"
   useEffect(() => {
-       // Cek localStorage saat mount
+    // Cek localStorage saat mount
     const savedMenu = localStorage.getItem("dashboard-active-menu");
     if (savedMenu) {
       setActiveMenu(savedMenu as any);
@@ -3577,7 +3577,7 @@ export default function ForexDashboardLMS() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw         new Error(errorData.error || "Failed to delete article");
+        throw new Error(errorData.error || "Failed to delete article");
       }
 
       setArticles((prev) =>
@@ -3672,7 +3672,10 @@ export default function ForexDashboardLMS() {
       }
     };
 
-    if (activeMenu === "video-trading" || activeMenu === "video-trading-preview") {
+    if (
+      activeMenu === "video-trading" ||
+      activeMenu === "video-trading-preview"
+    ) {
       fetchVideos();
     }
   }, [activeMenu]);
@@ -3814,7 +3817,7 @@ export default function ForexDashboardLMS() {
       setVideos((prev) => prev.filter((v) => v.id !== videoDeleteTarget.id));
       setVideoDeleteTarget(null);
       setVideoConfirmOpen(false);
-      
+
       // Jika sedang preview video yang dihapus, kembali ke list
       if (selectedVideo?.id === videoDeleteTarget.id) {
         setSelectedVideo(null);
@@ -3852,7 +3855,9 @@ export default function ForexDashboardLMS() {
   // Helper: Get YouTube thumbnail
   const getYouTubeThumbnail = (url: string): string | null => {
     const videoId = extractYouTubeId(url);
-    return videoId ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg` : null;
+    return videoId
+      ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
+      : null;
   };
 
   /* ================= EXISTING CRUD HANDLERS ================= */
@@ -3877,7 +3882,7 @@ export default function ForexDashboardLMS() {
         const response = await fetch("/api/courses", {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-          body           JSON.stringify({
+          body: JSON.stringify({
             id: selectedCourse.id,
             title: data.title,
             description: data.description,
@@ -4193,7 +4198,7 @@ export default function ForexDashboardLMS() {
           <Card>
             <CardContent>
               <h3 className="text-sm text-muted-foreground">Kursus</h3>
-                            <div className="text-2xl font-semibold">{totalCourses}</div>
+              <div className="text-2xl font-semibold">{totalCourses}</div>
               <div className="text-xs mt-1 text-muted-foreground">
                 Total kursus tersedia
               </div>
@@ -4748,8 +4753,8 @@ export default function ForexDashboardLMS() {
       return (
         <div className="py-12 text-center text-muted-foreground">
           <p>Tidak ada video yang dipilih.</p>
-          <Button 
-            onClick={() => setActiveMenu("video-trading")} 
+          <Button
+            onClick={() => setActiveMenu("video-trading")}
             className="mt-4"
           >
             Kembali ke Video Trading
@@ -4764,7 +4769,13 @@ export default function ForexDashboardLMS() {
           <div>
             <h2 className="text-xl font-semibold">{selectedVideo.title}</h2>
             <div className="flex items-center gap-2 mt-1 text-sm text-muted-foreground">
-              <Badge variant={selectedVideo.videoType === "YOUTUBE" ? "default" : "secondary"}>
+              <Badge
+                variant={
+                  selectedVideo.videoType === "YOUTUBE"
+                    ? "default"
+                    : "secondary"
+                }
+              >
                 {selectedVideo.videoType === "YOUTUBE" ? "YouTube" : "Upload"}
               </Badge>
               <span>•</span>
@@ -4816,18 +4827,21 @@ export default function ForexDashboardLMS() {
                 </video>
               )}
             </div>
-            
+
             {/* Description */}
             <div className="p-6">
               <h3 className="font-semibold mb-2">Deskripsi</h3>
               <p className="text-muted-foreground">
-                {selectedVideo.description || "Tidak ada deskripsi untuk video ini."}
+                {selectedVideo.description ||
+                  "Tidak ada deskripsi untuk video ini."}
               </p>
-              
+
               <div className="flex items-center gap-4 mt-4 text-sm text-muted-foreground">
                 <span className="flex items-center gap-1">
                   <Calendar className="h-4 w-4" />
-                  {new Date(selectedVideo.createdAt).toLocaleDateString("id-ID")}
+                  {new Date(selectedVideo.createdAt).toLocaleDateString(
+                    "id-ID",
+                  )}
                 </span>
                 {!selectedVideo.published && (
                   <Badge variant="secondary">Draft</Badge>
@@ -5042,8 +5056,8 @@ export default function ForexDashboardLMS() {
       return (
         <div className="py-12 text-center text-muted-foreground">
           <p>Memuat artikel...</p>
-          <Button 
-            onClick={() => setActiveMenu("article-management")} 
+          <Button
+            onClick={() => setActiveMenu("article-management")}
             className="mt-4"
           >
             Kembali ke Manajemen Artikel
@@ -5322,9 +5336,7 @@ export default function ForexDashboardLMS() {
 
         <main className="p-6">
           <div className="flex items-center justify-between mb-6">
-            <h1 className="text-2xl font-bold capitalize">
-              {getPageTitle()}
-            </h1>
+            <h1 className="text-2xl font-bold capitalize">{getPageTitle()}</h1>
             <div className="flex items-center gap-3">
               <Button
                 variant="outline"
@@ -5343,8 +5355,9 @@ export default function ForexDashboardLMS() {
               </Button>
               <Button
                 variant={
-                  activeMenu === "video-trading" || activeMenu === "video-trading-preview" 
-                    ? "default" 
+                  activeMenu === "video-trading" ||
+                  activeMenu === "video-trading-preview"
+                    ? "default"
                     : "secondary"
                 }
                 onClick={() => {
@@ -5354,14 +5367,18 @@ export default function ForexDashboardLMS() {
               >
                 <Play className="mr-2 h-4 w-4" /> Video Trading
               </Button>
-              {selectedCourse && activeMenu !== "modules" && activeMenu !== "videos" && activeMenu !== "pdfs" && activeMenu !== "lesson-content" && (
-                <Button
-                  variant="secondary"
-                  onClick={() => setActiveMenu("modules")}
-                >
-                  Kembali ke {selectedCourse.title}
-                </Button>
-              )}
+              {selectedCourse &&
+                activeMenu !== "modules" &&
+                activeMenu !== "videos" &&
+                activeMenu !== "pdfs" &&
+                activeMenu !== "lesson-content" && (
+                  <Button
+                    variant="secondary"
+                    onClick={() => setActiveMenu("modules")}
+                  >
+                    Kembali ke {selectedCourse.title}
+                  </Button>
+                )}
               {selectedVideo && activeMenu === "video-trading-preview" && (
                 <Button
                   variant="secondary"
@@ -5387,7 +5404,9 @@ export default function ForexDashboardLMS() {
             {activeMenu === "articles" && <ArticlePanel />}
             {activeMenu === "article-management" && <ArticleManagementPanel />}
             {activeMenu === "video-trading" && <VideoTradingPanel />}
-            {activeMenu === "video-trading-preview" && <VideoTradingPreviewPanel />}
+            {activeMenu === "video-trading-preview" && (
+              <VideoTradingPreviewPanel />
+            )}
             {activeMenu === "lesson-content" && <LessonContentPanel />}
             {activeMenu === "quizzes" && <QuizPanel />}
             {activeMenu === "progress" && <ProgressPanel />}
@@ -5519,7 +5538,7 @@ export default function ForexDashboardLMS() {
                       <SelectItem value="pdf">PDF Document</SelectItem>
                       <SelectItem value="text">Teks Sederhana</SelectItem>
                       <SelectItem value="html">
-                                               Artikel dengan Format Kaya
+                        Artikel dengan Format Kaya
                       </SelectItem>
                     </SelectContent>
                   </Select>

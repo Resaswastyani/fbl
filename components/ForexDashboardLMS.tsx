@@ -3368,7 +3368,7 @@ export default function ForexDashboardLMS() {
     | "profile"
     | "article-management"
     | "video-trading"
-    | "video-trading-preview" // ✅ MENU BARU untuk preview trading video
+    | "video-trading-preview"
     | "lesson-content"
   >("dashboard");
 

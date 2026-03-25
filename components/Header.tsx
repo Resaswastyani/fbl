@@ -1114,7 +1114,7 @@ export const Header = () => {
             mx-auto transition-all duration-300 flex items-center justify-between
             ${
               isScrolled
-                ? "max-w-6xl bg-white shadow-lg rounded-2xl px-6 py-1.5 backdrop-blur-xl"
+                ? "max-w-5xl bg-white shadow-lg rounded-2xl px-6 py-1.5 backdrop-blur-xl"
                 : "max-w-7xl bg-transparent px-8 py-3"
             }
           `}

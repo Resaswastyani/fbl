@@ -250,14 +250,14 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  MessageCircle, 
-  X, 
-  Send, 
-  CheckCheck, 
-  Bot, 
-  User, 
-  ChevronDown, 
+import {
+  MessageCircle,
+  X,
+  Send,
+  CheckCheck,
+  Bot,
+  User,
+  ChevronDown,
   ChevronUp,
   Clock,
   HelpCircle,
@@ -272,7 +272,7 @@ import {
   History,
   Trash2,
   Menu,
-  ArrowLeft
+  ArrowLeft,
 } from "lucide-react";
 
 // Tipe data untuk pesan
@@ -301,55 +301,70 @@ const MENU_ITEMS: MenuItem[] = [
     label: "Program Edukasi",
     icon: <BookOpen size={18} />,
     description: "Info kelas, batch, dan kurikulum",
-    keywords: ["kursus", "kelas", "belajar", "edukasi", "batch", "program", "kurikulum"]
+    keywords: [
+      "kursus",
+      "kelas",
+      "belajar",
+      "edukasi",
+      "batch",
+      "program",
+      "kurikulum",
+    ],
   },
   {
     id: "trading",
     label: "Trading & Analisis",
     icon: <TrendingUp size={18} />,
     description: "Signal, analisa market, strategi",
-    keywords: ["trading", "analisa", "signal", "market", "forex", "strategi"]
+    keywords: ["trading", "analisa", "signal", "market", "forex", "strategi"],
   },
   {
     id: "biaya",
     label: "Biaya & Investasi",
     icon: <DollarSign size={18} />,
     description: "Harga, promo, dan pembayaran",
-    keywords: ["harga", "biaya", "investasi", "bayar", "promo", "diskon"]
+    keywords: ["harga", "biaya", "investasi", "bayar", "promo", "diskon"],
   },
   {
     id: "jadwal",
     label: "Jadwal & Lokasi",
     icon: <Calendar size={18} />,
     description: "Jadwal kelas dan lokasi offline",
-    keywords: ["jadwal", "lokasi", "alamat", "kantor", "waktu", "tempat"]
+    keywords: ["jadwal", "lokasi", "alamat", "kantor", "waktu", "tempat"],
   },
   {
     id: "tentang",
     label: "Tentang FBL",
     icon: <HelpCircle size={18} />,
     description: "Profil perusahaan dan legalitas",
-    keywords: ["tentang", "profil", "legal", "resmi", "pt akademi", "nusantara"]
-  }
+    keywords: [
+      "tentang",
+      "profil",
+      "legal",
+      "resmi",
+      "pt akademi",
+      "nusantara",
+    ],
+  },
 ];
 
 // Database respons detail berdasarkan kategori
 const DETAILED_RESPONSES: Record<string, string[]> = {
   kursus: [
-    "📚 **Program Edukasi FBL**\n\nKami menyediakan 3 level kelas:\n\n**1. Kelas Pemula (Basic)**\n• Pengenalan Forex & pasar keuangan\n• Dasar-dasar analisis teknikal\n• Money management dasar\n• Psychology trading pemula\n• Durasi: 4 pertemuan\n• Cocok untuk: Pemula tanpa pengalaman\n\n**2. Kelas Menengah (Intermediate)**\n• Analisis teknikal lanjutan\n• Fundamental analysis\n• Risk management mendalam\n• Strategi trading harian\n• Durasi: 6 pertemuan\n• Bonus: Akses grup signal 1 bulan\n\n**3. Kelas Mahir (Advanced)**\n• Institutional trading strategies\n• Portfolio management\n• Advanced risk & money management\n• Live trading session intensif\n• Durasi: 8 pertemuan + 2 minggu mentoring\n• Bonus: Lifetime akses update materi\n\nSemua kelas mencakup:\n✅ Materi PDF & video recording\n✅ Sertifikat penyelesaian\n✅ Akses komunitas trader FBL\n✅ Konsultasi lifetime\n\nBatch baru dibuka setiap bulan! 🎯"
+    "📚 **Program Edukasi FBL**\n\nKami menyediakan 3 level kelas:\n\n**1. Kelas Pemula (Basic)**\n• Pengenalan Forex & pasar keuangan\n• Dasar-dasar analisis teknikal\n• Money management dasar\n• Psychology trading pemula\n• Durasi: 4 pertemuan\n• Cocok untuk: Pemula tanpa pengalaman\n\n**2. Kelas Menengah (Intermediate)**\n• Analisis teknikal lanjutan\n• Fundamental analysis\n• Risk management mendalam\n• Strategi trading harian\n• Durasi: 6 pertemuan\n• Bonus: Akses grup signal 1 bulan\n\n**3. Kelas Mahir (Advanced)**\n• Institutional trading strategies\n• Portfolio management\n• Advanced risk & money management\n• Live trading session intensif\n• Durasi: 8 pertemuan + 2 minggu mentoring\n• Bonus: Lifetime akses update materi\n\nSemua kelas mencakup:\n✅ Materi PDF & video recording\n✅ Sertifikat penyelesaian\n✅ Akses komunitas trader FBL\n✅ Konsultasi lifetime\n\nBatch baru dibuka setiap bulan! 🎯",
   ],
   trading: [
-    "📈 **Layanan Trading & Analisis FBL**\n\n**Analisis Harian:**\n• EUR/USD, GBP/USD, USD/JPY\n• XAU/USD (Gold), XAG/USD (Silver)\n• Oil (WTI & Brent)\n• Major crypto pairs\n\n**Signal Trading:**\n• Entry point dengan risk ratio jelas\n• Stop loss & take level recommendations\n• Update real-time via WhatsApp grup\n• Win rate historis 70-75%\n\n**Instrumen yang Dipelajari:**\n• Major currency pairs\n• Cross currencies\n• Commodities (emas, perak, minyak)\n• Crypto-linked instruments\n• Index futures\n\n**Tools & Platform:**\n• MetaTrader 4/5 guidance\n• TradingView setup\n• Economic calendar analysis\n• Risk calculator tools\n\nSemua analisis menggunakan **institutional-grade data**! 📊"
+    "📈 **Layanan Trading & Analisis FBL**\n\n**Analisis Harian:**\n• EUR/USD, GBP/USD, USD/JPY\n• XAU/USD (Gold), XAG/USD (Silver)\n• Oil (WTI & Brent)\n• Major crypto pairs\n\n**Signal Trading:**\n• Entry point dengan risk ratio jelas\n• Stop loss & take level recommendations\n• Update real-time via WhatsApp grup\n• Win rate historis 70-75%\n\n**Instrumen yang Dipelajari:**\n• Major currency pairs\n• Cross currencies\n• Commodities (emas, perak, minyak)\n• Crypto-linked instruments\n• Index futures\n\n**Tools & Platform:**\n• MetaTrader 4/5 guidance\n• TradingView setup\n• Economic calendar analysis\n• Risk calculator tools\n\nSemua analisis menggunakan **institutional-grade data**! 📊",
   ],
   biaya: [
-    "💰 **Investasi Edukasi di FBL**\n\n**Kelas Pemula:**\n• Normal: Rp 1.500.000\n• Promo Early Bird: Rp 1.200.000\n• Group (3 orang): Rp 1.000.000/orang\n\n**Kelas Intermediate:**\n• Normal: Rp 2.500.000\n• Promo: Rp 2.000.000\n• Bundle dengan Basic: Rp 3.000.000\n\n**Kelas Advanced:**\n• Normal: Rp 4.000.000\n• Promo: Rp 3.200.000\n• Full Package (Basic-Adv): Rp 5.500.000\n\n**Metode Pembayaran:**\n• Transfer Bank (BCA, Mandiri, BNI)\n• E-wallet (OVO, GoPay, DANA)\n• Kartu Kredit (via midtrans)\n• Cicilan 0% (CC tertentu)\n\n**Garansi:**\n✅ Uang kembali 100% jika tidak puas setelah 2 pertemuan pertama\n✅ Free retake kelas (seumur hidup)\n✅ Diskon alumni 30% untuk kelas lanjutan\n\nPromo berlaku terbatas! 🎉"
+    "💰 **Investasi Edukasi di FBL**\n\n**Kelas Pemula:**\n• Normal: Rp 1.500.000\n• Promo Early Bird: Rp 1.200.000\n• Group (3 orang): Rp 1.000.000/orang\n\n**Kelas Intermediate:**\n• Normal: Rp 2.500.000\n• Promo: Rp 2.000.000\n• Bundle dengan Basic: Rp 3.000.000\n\n**Kelas Advanced:**\n• Normal: Rp 4.000.000\n• Promo: Rp 3.200.000\n• Full Package (Basic-Adv): Rp 5.500.000\n\n**Metode Pembayaran:**\n• Transfer Bank (BCA, Mandiri, BNI)\n• E-wallet (OVO, GoPay, DANA)\n• Kartu Kredit (via midtrans)\n• Cicilan 0% (CC tertentu)\n\n**Garansi:**\n✅ Uang kembali 100% jika tidak puas setelah 2 pertemuan pertama\n✅ Free retake kelas (seumur hidup)\n✅ Diskon alumni 30% untuk kelas lanjutan\n\nPromo berlaku terbatas! 🎉",
   ],
   jadwal: [
-    "📅 **Jadwal & Lokasi FBL**\n\n**Jadwal Kelas Reguler:**\n\n*Weekday Class:*\n• Senin & Rabu: 19.00 - 21.30 WIB\n• Selasa & Kamis: 19.00 - 21.30 WIB\n\n*Weekend Class:*\n• Sabtu: 09.00 - 12.00 & 13.00 - 16.00 WIB\n• Minggu: 13.00 - 16.00 WIB (khusus private)\n\n**Format Belajar:**\n• Offline: Jakarta Selatan (Tebet/Epicentrum)\n• Online Live: Zoom/Google Meet interactive\n• Hybrid: Bebas pilih sesi offline/online\n• Private: Jadwal fleksibel sesuai request\n\n**Lokasi Offline:**\n📍 Tebet, Jakarta Selatan\n📍 Epicentrum Walk, Kuningan\n📍 (Coming Soon) Surabaya & Bandung\n\n**Fasilitas Offline:**\n• Ruang kelas AC & proyektor\n• WiFi high-speed\n• Coffee break & snack\n• Stationery set\n\nBatch baru: **April 2026** sudah buka pendaftaran! 🚀"
+    "📅 **Jadwal & Lokasi FBL**\n\n**Jadwal Kelas Reguler:**\n\n*Weekday Class:*\n• Senin & Rabu: 19.00 - 21.30 WIB\n• Selasa & Kamis: 19.00 - 21.30 WIB\n\n*Weekend Class:*\n• Sabtu: 09.00 - 12.00 & 13.00 - 16.00 WIB\n• Minggu: 13.00 - 16.00 WIB (khusus private)\n\n**Format Belajar:**\n• Offline: Jakarta Selatan (Tebet/Epicentrum)\n• Online Live: Zoom/Google Meet interactive\n• Hybrid: Bebas pilih sesi offline/online\n• Private: Jadwal fleksibel sesuai request\n\n**Lokasi Offline:**\n📍 Tebet, Jakarta Selatan\n📍 Epicentrum Walk, Kuningan\n📍 (Coming Soon) Surabaya & Bandung\n\n**Fasilitas Offline:**\n• Ruang kelas AC & proyektor\n• WiFi high-speed\n• Coffee break & snack\n• Stationery set\n\nBatch baru: **April 2026** sudah buka pendaftaran! 🚀",
   ],
   tentang: [
-    "🏢 **Tentang Forex for Better Living**\n\n**Legalitas:**\n• Nama Resmi: PT Akademi Keuangan Nusantara\n• Bidang: Layanan edukasi & konsultasi bisnis Forex Trading\n• Fokus: Masyarakat Indonesia\n\n**Visi:**\nMenjadikan trading forex sebagai instrumen keuangan yang dipahami dan dikuasai secara praktis, efektif, dan berorientasi hasil oleh masyarakat Indonesia.\n\n**Misi:**\n• Edukasi trading berkualitas dengan harga terjangkau\n• Pendampingan dari dasar hingga mahir\n• Komunitas trader yang supportif\n• Update market & strategi terkini\n\n**Keunggulan FBL:**\n✅ Instruktur berpengalaman 5-10 tahun\n✅ Kurikulum praktis, bukan teori berlebihan\n✅ Komunitas aktif 1000+ member\n✅ Support 24/7 via grup WhatsApp\n✅ Update materi berkelanjutan (free)\n\n**Kontak:**\n📱 WhatsApp: 0857-0221-2770\n📧 Email: admin@forexforbetterliving.com\n🌐 Website: www.forexforbetterliving.com\n\nTerdaftar resmi & beroperasi sejak 2019! ⭐"
-  ]
+    "🏢 **Tentang Forex for Better Living**\n\n**Legalitas:**\n• Nama Resmi: PT Akademi Keuangan Nusantara\n• Bidang: Layanan edukasi & konsultasi bisnis Forex Trading\n• Fokus: Masyarakat Indonesia\n\n**Visi:**\nMenjadikan trading forex sebagai instrumen keuangan yang dipahami dan dikuasai secara praktis, efektif, dan berorientasi hasil oleh masyarakat Indonesia.\n\n**Misi:**\n• Edukasi trading berkualitas dengan harga terjangkau\n• Pendampingan dari dasar hingga mahir\n• Komunitas trader yang supportif\n• Update market & strategi terkini\n\n**Keunggulan FBL:**\n✅ Instruktur berpengalaman 5-10 tahun\n✅ Kurikulum praktis, bukan teori berlebihan\n✅ Komunitas aktif 1000+ member\n✅ Support 24/7 via grup WhatsApp\n✅ Update materi berkelanjutan (free)\n\n**Kontak:**\n📱 WhatsApp: 085187555440\n📧 Email: admin@forexforbetterliving.com\n🌐 Website: www.forexforbetterliving.com\n\nTerdaftar resmi & beroperasi sejak 2019! ⭐",
+  ],
 };
 
 // Quick replies suggestions
@@ -358,7 +373,7 @@ const QUICK_REPLIES = [
   "💰 Cek Biaya & Promo",
   "📅 Jadwal Kelas",
   "📈 Konsultasi Trading",
-  "👨‍💼 Hubungi Admin"
+  "👨‍💼 Hubungi Admin",
 ];
 
 // Fungsi untuk mendapatkan respons detail
@@ -372,25 +387,35 @@ const detectCategory = (message: string): string | null => {
   for (const [category, responses] of Object.entries(DETAILED_RESPONSES)) {
     if (lowerMsg.includes(category)) return category;
   }
-  
+
   // Check menu keywords
   for (const item of MENU_ITEMS) {
-    if (item.keywords.some(kw => lowerMsg.includes(kw))) {
+    if (item.keywords.some((kw) => lowerMsg.includes(kw))) {
       return item.id;
     }
   }
-  
+
   return null;
 };
 
 // Fungsi utama respons bot
-const getBotResponse = (userMessage: string, messageHistory: Message[]): string => {
+const getBotResponse = (
+  userMessage: string,
+  messageHistory: Message[],
+): string => {
   const lowerMsg = userMessage.toLowerCase();
-  const lastCategory = messageHistory.length > 0 ? 
-    messageHistory[messageHistory.length - 1].metadata?.category : null;
+  const lastCategory =
+    messageHistory.length > 0
+      ? messageHistory[messageHistory.length - 1].metadata?.category
+      : null;
 
   // Cek apakah user meminta detail dari kategori sebelumnya
-  if ((lowerMsg.includes("detail") || lowerMsg.includes("lengkap") || lowerMsg.includes("info")) && lastCategory) {
+  if (
+    (lowerMsg.includes("detail") ||
+      lowerMsg.includes("lengkap") ||
+      lowerMsg.includes("info")) &&
+    lastCategory
+  ) {
     return getDetailedResponse(lastCategory);
   }
 
@@ -399,7 +424,10 @@ const getBotResponse = (userMessage: string, messageHistory: Message[]): string 
   if (detectedCategory) {
     const summary = getDetailedResponse(detectedCategory);
     // Return summary pertama, offer detail
-    return summary.split('\n\n')[0] + "\n\nKetik *'detail'* untuk informasi lengkap, atau pilih menu lain.";
+    return (
+      summary.split("\n\n")[0] +
+      "\n\nKetik *'detail'* untuk informasi lengkap, atau pilih menu lain."
+    );
   }
 
   // Greetings
@@ -408,22 +436,41 @@ const getBotResponse = (userMessage: string, messageHistory: Message[]): string 
   }
 
   // Help
-  if (lowerMsg.includes("bantu") || lowerMsg.includes("help") || lowerMsg.includes("menu")) {
+  if (
+    lowerMsg.includes("bantu") ||
+    lowerMsg.includes("help") ||
+    lowerMsg.includes("menu")
+  ) {
     return "Saya bisa membantu Anda dengan:\n\n**Ketik keyword atau pilih menu:**\n• *Kursus/Kelas* - Info program edukasi\n• *Trading* - Analisis & strategi\n• *Harga/Biaya* - Investasi & promo\n• *Jadwal* - Waktu & lokasi kelas\n• *Tentang* - Profil FBL\n• *Admin* - Chat langsung WhatsApp\n\nAtau gunakan tombol menu (≡) di pojok kiri atas chat.";
   }
 
   // Thanks
-  if (lowerMsg.includes("terima kasih") || lowerMsg.includes("thanks") || lowerMsg.includes("makasih")) {
+  if (
+    lowerMsg.includes("terima kasih") ||
+    lowerMsg.includes("thanks") ||
+    lowerMsg.includes("makasih")
+  ) {
     return "Sama-sama! 😊 Senang bisa membantu.\n\nJika ada pertanyaan lain atau siap untuk memulai perjalanan trading Anda, jangan ragu untuk:\n• Lanjutkan chat di sini\n• Atau klik tombol hijau untuk chat langsung dengan Admin FBL\n\nSukses selalu! 🚀";
   }
 
   // Admin/Contact
-  if (lowerMsg.includes("admin") || lowerMsg.includes("hubungi") || lowerMsg.includes("wa") || lowerMsg.includes("whatsapp") || lowerMsg.includes("telepon") || lowerMsg.includes("hp")) {
+  if (
+    lowerMsg.includes("admin") ||
+    lowerMsg.includes("hubungi") ||
+    lowerMsg.includes("wa") ||
+    lowerMsg.includes("whatsapp") ||
+    lowerMsg.includes("telepon") ||
+    lowerMsg.includes("hp")
+  ) {
     return "Anda bisa menghubungi Admin FBL langsung via WhatsApp:\n\n📱 **0857-0221-2770**\n\n⏰ Jam operasional:\n• Senin-Jumat: 08.00 - 20.00 WIB\n• Sabtu: 09.00 - 17.00 WIB\n\nAdmin kami akan membantu Anda dengan:\n✅ Konsultasi personal\n✅ Pendaftaran kelas\n✅ Info promo terbaru\n✅ Technical support\n\nKlik tombol hijau di bawah untuk chat langsung! 👇";
   }
 
   // Bye
-  if (lowerMsg.includes("bye") || lowerMsg.includes("dadah") || lowerMsg.includes("selamat tinggal")) {
+  if (
+    lowerMsg.includes("bye") ||
+    lowerMsg.includes("dadah") ||
+    lowerMsg.includes("selamat tinggal")
+  ) {
     return "Sampai jumpa! 👋 Semoga harimu menyenangkan.\n\nJangan lupa: kesempatan bagus tidak datang dua kali. Batch kelas April 2026 sudah buka! 🎯\n\nChat kami kapan saja jika Anda siap memulai. Sukses! 🚀";
   }
 
@@ -431,11 +478,13 @@ const getBotResponse = (userMessage: string, messageHistory: Message[]): string 
   const contextAwareResponses = [
     "Menarik pertanyaannya! 🤔 Untuk informasi detail, saya sarankan:\n\n1. Pilih menu yang relevan di atas\n2. Atau ketik keyword seperti 'kursus', 'harga', 'jadwal'\n3. Atau langsung chat dengan Admin via WhatsApp\n\nAda yang spesifik ingin Anda tanyakan?",
     "Saya ingin memastikan jawaban yang tepat untuk Anda. 💡\n\nBisakah spesifikasikan:\n• Apakah ini tentang program kelas?\n• Informasi biaya?\n• Jadwal dan lokasi?\n• Atau konsultasi trading?\n\nAtau klik tombol menu untuk pilihan lengkap!",
-    "Baik, saya catat pertanyaan Anda. 📝\n\nUntuk respons terbaik, silakan:\n• Pilih kategori dari menu navigasi\n• Atau ketik 'help' untuk lihat semua opsi\n• Atau hubungi Admin langsung untuk diskusi mendalam\n\nBagaimana Anda ingin melanjutkan?"
+    "Baik, saya catat pertanyaan Anda. 📝\n\nUntuk respons terbaik, silakan:\n• Pilih kategori dari menu navigasi\n• Atau ketik 'help' untuk lihat semua opsi\n• Atau hubungi Admin langsung untuk diskusi mendalam\n\nBagaimana Anda ingin melanjutkan?",
   ];
-  
+
   // Pick random context-aware response
-  return contextAwareResponses[Math.floor(Math.random() * contextAwareResponses.length)];
+  return contextAwareResponses[
+    Math.floor(Math.random() * contextAwareResponses.length)
+  ];
 };
 
 export default function WhatsAppFloat() {
@@ -468,9 +517,9 @@ export default function WhatsAppFloat() {
           text: "Halo! 👋 Selamat datang di **Forex for Better Living**.\n\nSaya assistant virtual FBL siap membantu Anda 24/7 dengan:\n• 📚 Info program edukasi trading\n• 📈 Konsultasi strategi & analisis\n• 💰 Detail biaya & promo menarik\n• 📅 Jadwal kelas & lokasi\n\n**Pilih menu di atas** atau ketik pertanyaan Anda!",
           sender: "bot",
           timestamp: new Date(),
-          type: "text"
+          type: "text",
         });
-        
+
         // Add quick replies after welcome
         setTimeout(() => {
           addMessage({
@@ -478,7 +527,7 @@ export default function WhatsAppFloat() {
             text: "Pilih topik yang Anda minati:",
             sender: "bot",
             timestamp: new Date(),
-            type: "quick_reply"
+            type: "quick_reply",
           });
         }, 1000);
       }, 600);
@@ -515,7 +564,7 @@ export default function WhatsAppFloat() {
       text: inputValue,
       sender: "user",
       timestamp: new Date(),
-      type: "text"
+      type: "text",
     };
     addMessage(userMsg);
     setInputValue("");
@@ -534,7 +583,7 @@ export default function WhatsAppFloat() {
         sender: "bot",
         timestamp: new Date(),
         type: "text",
-        metadata: { category: detectedCategory }
+        metadata: { category: detectedCategory },
       });
     }, delay);
   }, [inputValue, messages, addMessage]);
@@ -553,11 +602,11 @@ export default function WhatsAppFloat() {
       "💰 Cek Biaya & Promo": "biaya",
       "📅 Jadwal Kelas": "jadwal",
       "📈 Konsultasi Trading": "trading",
-      "👨‍💼 Hubungi Admin": "admin"
+      "👨‍💼 Hubungi Admin": "admin",
     };
 
     const category = categoryMap[reply];
-    
+
     if (category === "admin") {
       handleStartChat();
       return;
@@ -569,7 +618,7 @@ export default function WhatsAppFloat() {
       text: reply,
       sender: "user",
       timestamp: new Date(),
-      type: "text"
+      type: "text",
     });
 
     setIsTyping(true);
@@ -582,7 +631,7 @@ export default function WhatsAppFloat() {
         sender: "bot",
         timestamp: new Date(),
         type: "text",
-        metadata: { category }
+        metadata: { category },
       });
     }, 800);
   };
@@ -593,13 +642,13 @@ export default function WhatsAppFloat() {
   };
 
   const handleStartChat = () => {
-    const phoneNumber = "6285702212770";
+    const phoneNumber = "6285187555440";
     const recentTopics = messages
-      .filter(m => m.sender === "user")
+      .filter((m) => m.sender === "user")
       .slice(-3)
-      .map(m => m.text)
+      .map((m) => m.text)
       .join(", ");
-    
+
     let waMessage = "Hi Admin FBL, saya ingin berkonsultasi";
     if (recentTopics) {
       waMessage = `Hi Admin FBL, saya baru chat dengan bot tentang: ${recentTopics.substring(0, 80)}... dan ingin konsultasi lebih lanjut.`;
@@ -627,7 +676,7 @@ export default function WhatsAppFloat() {
     return date.toLocaleDateString("id-ID", {
       day: "numeric",
       month: "short",
-      year: "numeric"
+      year: "numeric",
     });
   };
 
@@ -650,7 +699,11 @@ export default function WhatsAppFloat() {
             >
               <span className="absolute inset-0 rounded-full bg-[#25D366] animate-ping opacity-75"></span>
               <div className="relative bg-gradient-to-br from-[#25D366] to-[#128C7E] text-white p-3 sm:p-4 rounded-full shadow-2xl shadow-green-500/30 flex items-center justify-center">
-                <MessageCircle size={24} className="sm:w-7 sm:h-7" fill="currentColor" />
+                <MessageCircle
+                  size={24}
+                  className="sm:w-7 sm:h-7"
+                  fill="currentColor"
+                />
               </div>
               {(hasNotification || unreadCount > 0) && (
                 <motion.span
@@ -681,7 +734,6 @@ export default function WhatsAppFloat() {
             className="fixed bottom-0 right-0 sm:bottom-6 sm:right-6 z-50 w-full sm:w-[420px] max-w-full sm:max-w-[calc(100vw-2rem)] h-[100dvh] sm:h-[600px]"
           >
             <div className="bg-white sm:rounded-2xl shadow-2xl overflow-hidden border-0 sm:border border-gray-100 h-full flex flex-col">
-              
               {/* Header */}
               <div className="bg-gradient-to-r from-[#156d95] to-[#111A4A] p-4 relative flex-shrink-0">
                 <div className="flex items-center justify-between">
@@ -692,7 +744,7 @@ export default function WhatsAppFloat() {
                     >
                       <Menu size={20} />
                     </button>
-                    
+
                     <div className="relative">
                       <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
                         <Bot size={20} className="text-white" />
@@ -739,7 +791,9 @@ export default function WhatsAppFloat() {
                     className="bg-[#111A4A] border-b border-white/10 overflow-hidden flex-shrink-0"
                   >
                     <div className="p-3 space-y-1">
-                      <p className="text-white/60 text-xs uppercase tracking-wider px-2 mb-2">Menu Navigasi</p>
+                      <p className="text-white/60 text-xs uppercase tracking-wider px-2 mb-2">
+                        Menu Navigasi
+                      </p>
                       {MENU_ITEMS.map((item) => (
                         <button
                           key={item.id}
@@ -751,7 +805,9 @@ export default function WhatsAppFloat() {
                           </span>
                           <div>
                             <p className="text-sm font-medium">{item.label}</p>
-                            <p className="text-xs text-white/50">{item.description}</p>
+                            <p className="text-xs text-white/50">
+                              {item.description}
+                            </p>
                           </div>
                         </button>
                       ))}
@@ -761,7 +817,9 @@ export default function WhatsAppFloat() {
                           className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#25D366] hover:bg-white/10 transition text-left"
                         >
                           <Phone size={18} />
-                          <span className="text-sm font-medium">Chat WhatsApp Admin</span>
+                          <span className="text-sm font-medium">
+                            Chat WhatsApp Admin
+                          </span>
                         </button>
                       </div>
                     </div>
@@ -789,15 +847,27 @@ export default function WhatsAppFloat() {
                     </div>
                     <div className="flex-1 overflow-y-auto p-4 bg-gray-50">
                       {messages.length === 0 ? (
-                        <p className="text-center text-gray-400 text-sm py-8">Belum ada riwayat chat</p>
+                        <p className="text-center text-gray-400 text-sm py-8">
+                          Belum ada riwayat chat
+                        </p>
                       ) : (
                         <div className="space-y-3">
-                          {messages.filter(m => m.sender === "user").map((msg, idx) => (
-                            <div key={msg.id} className="bg-white p-3 rounded-lg shadow-sm border border-gray-100">
-                              <p className="text-xs text-gray-400 mb-1">{formatDate(msg.timestamp)} {formatTime(msg.timestamp)}</p>
-                              <p className="text-sm text-gray-800">{msg.text}</p>
-                            </div>
-                          ))}
+                          {messages
+                            .filter((m) => m.sender === "user")
+                            .map((msg, idx) => (
+                              <div
+                                key={msg.id}
+                                className="bg-white p-3 rounded-lg shadow-sm border border-gray-100"
+                              >
+                                <p className="text-xs text-gray-400 mb-1">
+                                  {formatDate(msg.timestamp)}{" "}
+                                  {formatTime(msg.timestamp)}
+                                </p>
+                                <p className="text-sm text-gray-800">
+                                  {msg.text}
+                                </p>
+                              </div>
+                            ))}
                         </div>
                       )}
                     </div>
@@ -817,7 +887,7 @@ export default function WhatsAppFloat() {
               </AnimatePresence>
 
               {/* Chat Body */}
-              <div 
+              <div
                 ref={chatBodyRef}
                 className="bg-[#E5DDD5] p-3 flex-1 overflow-y-auto min-h-0"
               >
@@ -843,7 +913,9 @@ export default function WhatsAppFloat() {
 
                     {msg.type === "quick_reply" ? (
                       <div className="w-full">
-                        <p className="text-xs text-gray-500 mb-2 ml-9">{msg.text}</p>
+                        <p className="text-xs text-gray-500 mb-2 ml-9">
+                          {msg.text}
+                        </p>
                         <div className="flex flex-wrap gap-2 ml-9">
                           {QUICK_REPLIES.map((reply, idx) => (
                             <motion.button
@@ -903,8 +975,14 @@ export default function WhatsAppFloat() {
                     <div className="bg-white rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm">
                       <div className="flex gap-1">
                         <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></span>
-                        <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0.1s" }}></span>
-                        <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0.2s" }}></span>
+                        <span
+                          className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                          style={{ animationDelay: "0.1s" }}
+                        ></span>
+                        <span
+                          className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                          style={{ animationDelay: "0.2s" }}
+                        ></span>
                       </div>
                     </div>
                   </motion.div>

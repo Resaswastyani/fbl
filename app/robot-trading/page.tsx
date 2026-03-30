@@ -1,4 +1,5 @@
-import dynamic from "next/dynamic";
+"use client";
+
 import { motion, useScroll, useTransform } from "framer-motion";
 import { 
   ArrowUpRight, 
@@ -16,37 +17,49 @@ import {
   Wallet
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 
-// Animated counter component
+// Animated counter component dengan error handling
 const AnimatedCounter = ({ target, suffix = "", duration = 2 }: { target: number; suffix?: string; duration?: number }) => {
   const [count, setCount] = useState(0);
-  const ref = useRef(null);
+  const [hasAnimated, setHasAnimated] = useState(false);
+  const ref = useRef<HTMLSpanElement>(null);
+  
+  useEffect(() => {
+    if (!ref.current || hasAnimated) return;
+    
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasAnimated) {
+          setHasAnimated(true);
+          let start = 0;
+          const end = target;
+          const increment = end / (duration * 60);
+          
+          const timer = setInterval(() => {
+            start += increment;
+            if (start >= end) {
+              setCount(end);
+              clearInterval(timer);
+            } else {
+              setCount(Math.floor(start));
+            }
+          }, 1000 / 60);
+          
+          return () => clearInterval(timer);
+        }
+      },
+      { threshold: 0.1 }
+    );
+    
+    observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [target, duration, hasAnimated]);
   
   return (
-    <motion.span
-      ref={ref}
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true }}
-      onViewportEnter={() => {
-        let start = 0;
-        const end = target;
-        const increment = end / (duration * 60);
-        const timer = setInterval(() => {
-          start += increment;
-          if (start >= end) {
-            setCount(end);
-            clearInterval(timer);
-          } else {
-            setCount(Math.floor(start));
-          }
-        }, 1000 / 60);
-      }}
-      className="font-bold"
-    >
+    <span ref={ref} className="font-bold">
       {count}{suffix}
-    </motion.span>
+    </span>
   );
 };
 
@@ -127,6 +140,12 @@ const TradingChart = () => {
 
 // Robot Card Component
 const RobotCard = ({ name, description, winRate, profit, trades, icon: Icon, delay }: any) => {
+  const handleWhatsApp = () => {
+    const message = `Halo, saya tertarik dengan robot trading ${name}. Mohon informasi lebih lanjut.`;
+    const waUrl = `https://wa.me/6281234567890?text=${encodeURIComponent(message)}`;
+    window.open(waUrl, '_blank');
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -170,8 +189,11 @@ const RobotCard = ({ name, description, winRate, profit, trades, icon: Icon, del
         </div>
       </div>
       
-      <button className="w-full py-2.5 bg-[#111A4A] text-white rounded-lg text-sm font-medium hover:bg-[#156d95] transition-colors flex items-center justify-center gap-2 group-hover:gap-3">
-        Detail Robot <ChevronRight size={16} />
+      <button 
+        onClick={handleWhatsApp}
+        className="w-full py-2.5 bg-[#111A4A] text-white rounded-lg text-sm font-medium hover:bg-[#156d95] transition-colors flex items-center justify-center gap-2 group-hover:gap-3"
+      >
+        Pesan via WhatsApp <ChevronRight size={16} />
       </button>
     </motion.div>
   );
@@ -179,6 +201,12 @@ const RobotCard = ({ name, description, winRate, profit, trades, icon: Icon, del
 
 // Pricing Card Component
 const PricingCard = ({ tier, price, originalPrice, features, recommended, delay }: any) => {
+  const handleWhatsApp = () => {
+    const message = `Halo, saya tertarik dengan paket ${tier} (Rp ${price}jt/bulan). Mohon informasi cara pembelian.`;
+    const waUrl = `https://wa.me/6281234567890?text=${encodeURIComponent(message)}`;
+    window.open(waUrl, '_blank');
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
@@ -234,6 +262,7 @@ const PricingCard = ({ tier, price, originalPrice, features, recommended, delay 
       </ul>
       
       <motion.button
+        onClick={handleWhatsApp}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         className={`w-full py-3 rounded-lg font-medium text-sm transition-all ${
@@ -242,7 +271,7 @@ const PricingCard = ({ tier, price, originalPrice, features, recommended, delay 
             : 'bg-[#156d95] text-white hover:bg-[#111A4A]'
         }`}
       >
-        Pilih Paket
+        Pesan via WhatsApp
       </motion.button>
     </motion.div>
   );
@@ -283,7 +312,13 @@ const BacktestRow = ({ date, pair, type, entry, exit, profit, delay }: any) => {
 // Main Component
 export const RobotTradingPage = () => {
   const router = useRouter();
-  const containerRef = useRef(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [mounted, setMounted] = useState(false);
+  
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  
   const { scrollYProgress } = useScroll({ target: containerRef });
   const y = useTransform(scrollYProgress, [0, 1], [0, -50]);
   
@@ -346,6 +381,21 @@ export const RobotTradingPage = () => {
     }
   ];
 
+  const handleWhatsAppGeneral = () => {
+    const message = `Halo, saya tertarik dengan Robot Trading Forex for Better Living. Mohon informasi lebih lanjut.`;
+    const waUrl = `https://wa.me/6281234567890?text=${encodeURIComponent(message)}`;
+    window.open(waUrl, '_blank');
+  };
+
+  // Prevent hydration mismatch
+  if (!mounted) {
+    return (
+      <div className="w-full bg-white min-h-screen flex items-center justify-center">
+        <div className="animate-pulse text-[#156d95]">Loading...</div>
+      </div>
+    );
+  }
+
   return (
     <div ref={containerRef} className="w-full bg-white min-h-screen overflow-hidden">
       {/* HERO SECTION */}
@@ -400,7 +450,7 @@ export const RobotTradingPage = () => {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => router.push("/robot-trading/register")}
+                onClick={handleWhatsAppGeneral}
                 className="inline-flex items-center justify-center bg-[#156d95] text-white rounded-lg px-6 py-3.5 text-sm sm:text-base font-medium transition-all hover:shadow-lg hover:shadow-[#156d95]/25"
               >
                 Mulai Sekarang <ArrowUpRight size={18} className="ml-1" />
@@ -682,10 +732,10 @@ export const RobotTradingPage = () => {
             <motion.button
               whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(21,109,149,0.3)" }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => router.push("/robot-trading/register")}
+              onClick={handleWhatsAppGeneral}
               className="bg-[#156d95] text-white rounded-xl px-8 py-4 text-lg font-medium inline-flex items-center gap-2 hover:bg-[#1a8bc2] transition-colors"
             >
-              Daftar Sekarang <ArrowRight size={20} />
+              Daftar Sekarang <ArrowUpRight size={20} />
             </motion.button>
           </motion.div>
         </div>
@@ -694,3 +744,4 @@ export const RobotTradingPage = () => {
   );
 };
 
+export default RobotTradingPage;

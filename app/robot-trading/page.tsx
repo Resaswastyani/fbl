@@ -696,4 +696,3 @@ export const RobotTradingPage = () => {
   );
 };
 
-export default RobotTradingPage;

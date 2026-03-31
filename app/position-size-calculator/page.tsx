@@ -250,7 +250,7 @@ export default function PositionSizeCalculatorPage() {
               <div className="relative aspect-video rounded-2xl overflow-hidden shadow-lg">
                 <iframe
                   className="w-full h-full"
-                  src="https://youtu.be/93P7ZoRv9bA"
+                  src="https://www.youtube.com/embed/27LMFv-uaag"
                   title="Langkah Penggunaan Position Size Calculator"
                   allowFullScreen
                 />

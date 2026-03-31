@@ -7,6 +7,7 @@ import { ForexTestimonials } from "@/components/CaseStudiesCarousel";
 import { IntegrationCarousel } from "@/components/IntegrationCarousel";
 import { PricingSection } from "@/components/PricingSection";
 import { FAQSection } from "@/components/FAQSection";
+import RobotTradingHero from "@/components/RobotTradingHero";
 import Footer from "@/components/Footer";
 
 export default function Page() {
@@ -18,6 +19,7 @@ export default function Page() {
       <ForexCarousel />
       {/* <CourseSection /> */}
       <ForexTestimonials />
+      <RobotTradingHero />
       <IntegrationCarousel />
       {/* <PricingSection /> */}
       <FAQSection />

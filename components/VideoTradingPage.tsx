@@ -226,7 +226,7 @@ export const VideoTradingPage = () => {
               </h2>
             </div>
             <a
-              href="#"
+              href="https://www.youtube.com/@forexforbetterliving"
               className="hidden md:flex items-center gap-1 text-[#156d95] text-sm font-medium hover:gap-2 transition-all"
             >
               Lihat Semua <ChevronRight size={16} />

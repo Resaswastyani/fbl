@@ -87,7 +87,7 @@ export const VideoTradingPage = () => {
           >
             {/* Small Link */}
             <a
-              href="#videos"
+              href="https://www.youtube.com/@forexforbetterliving"
               className="flex items-center gap-1 text-[#6e6e6e] mb-4 cursor-pointer"
             >
               <span className="text-xs uppercase tracking-tight font-mono flex items-center gap-1 hover:text-[#202020]">

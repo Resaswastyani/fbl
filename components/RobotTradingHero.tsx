@@ -363,6 +363,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 import {
   ArrowUpRight,
   TrendingUp,
@@ -715,7 +716,7 @@ const PricingCard = ({
 }: any) => {
   const handleWhatsApp = () => {
     const message = `Halo, saya tertarik dengan paket ${tier} (Rp ${price}jt/bulan). Mohon informasi cara pembelian.`;
-    const waUrl = `https://wa.me/6281234567890?text=${encodeURIComponent(message)}`;
+    const waUrl = `https://wa.me/6285187555440?text=${encodeURIComponent(message)}`;
     window.open(waUrl, "_blank");
   };
 
@@ -894,13 +895,15 @@ export const RobotTradingSection = () => {
                 Mulai Sekarang <ArrowUpRight size={18} className="ml-2" />
               </motion.button>
 
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="inline-flex items-center justify-center bg-white text-[#111A4A] border-2 border-[#111A4A] rounded-xl px-6 sm:px-8 py-3.5 sm:py-4 font-semibold hover:bg-[#111A4A] hover:text-white transition-all text-sm sm:text-base"
-              >
-                Lihat Backtest
-              </motion.button>
+              <Link href="/robot-trading">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="inline-flex items-center justify-center bg-white text-[#111A4A] border-2 border-[#111A4A] rounded-xl px-6 sm:px-8 py-3.5 sm:py-4 font-semibold hover:bg-[#111A4A] hover:text-white transition-all text-sm sm:text-base"
+                >
+                  Lihat Backtest
+                </motion.button>
+              </Link>
             </div>
 
             {/* Quick Stats */}

@@ -1143,7 +1143,7 @@ export const Header = () => {
               title="Trading lesson"
               items={[
                 { name: "Artikel Trading", href: "/articles", icon: FileText },
-                { name: "Strategy Trading", href: "#free-1", icon: TrendingUp },
+                // { name: "Strategy Trading", href: "#free-1", icon: TrendingUp },
                 {
                   name: "Video Trading",
                   href: "/video-trading",
@@ -1161,14 +1161,14 @@ export const Header = () => {
               Professional Course
             </button>
 
-            <button
+            {/* <button
               onClick={() => handleLinkClick("/mentor")}
               className={`font-medium text-gray-700 hover:text-primary transition 
                 ${isScrolled ? "text-sm" : "text-base"}
               `}
             >
               Mentor
-            </button>
+            </button> */}
 
             <button
               onClick={() => handleLinkClick("/broker-rekommendation")}
@@ -1291,12 +1291,12 @@ export const Header = () => {
                     >
                       <FileText size={16} /> Artikel Trading
                     </button>
-                    <button
+                    {/* <button
                       onClick={() => handleLinkClick("/strategy")}
                       className="flex gap-2 items-center text-gray-700 w-full"
                     >
                       <TrendingUp size={16} /> Strategy Trading
-                    </button>
+                    </button> */}
                     <button
                       onClick={() => handleLinkClick("/video-trading")}
                       className="flex gap-2 items-center text-gray-700 w-full"
@@ -1319,12 +1319,12 @@ export const Header = () => {
                   Rekomendasi Broker
                 </button>
 
-                <button
+                {/* <button
                   onClick={() => handleLinkClick("/mentor")}
                   className="block w-full text-left text-lg text-gray-800"
                 >
                   Mentor
-                </button>
+                </button> */}
 
                 <div>
                   <p className="text-gray-900 font-semibold mb-2">Tools</p>

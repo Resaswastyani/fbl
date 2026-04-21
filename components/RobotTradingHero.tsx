@@ -2091,7 +2091,7 @@ const FreeTrialSection = () => {
                     <FileText size={32} className="text-white" />
                   </motion.div>
                   <div>
-                    <h3 className="text-xl font-bold text-white">EA FBL Trial</h3>
+                    <h3 className="text-xl font-bold text-white">EA FBL Giveaway</h3>
                     <p className="text-sm text-gray-400">Expert Advisor for MetaTrader 5</p>
                     <div className="flex items-center gap-2 mt-1">
                       <span className="text-xs bg-green-500/20 text-green-400 px-2 py-0.5 rounded-full font-medium">
@@ -2126,7 +2126,7 @@ const FreeTrialSection = () => {
                       className="flex items-center gap-2 text-green-400"
                     >
                       <CheckCircle2 size={14} />
-                      <span>Strategy: FBL Scalping Pro</span>
+                      <span>Strategy: Day Trade</span>
                     </motion.div>
                     <motion.div
                       initial={{ opacity: 0, x: -20 }}
@@ -2232,7 +2232,7 @@ const FreeTrialSection = () => {
                 {[
                   { label: "Trade Accuracy", value: "Data-driven", icon: Target, color: "from-[#156d95] to-[#22d3ee]" },
                   { label: "Risk Control", value: "Fix Lots/Currency", icon: Shield, color: "from-green-500 to-emerald-600" },
-                  { label: "Strategy Type", value: "Scalping", icon: Gauge, color: "from-purple-500 to-indigo-600" },
+                  { label: "Strategy Type", value: "Day Trade", icon: Gauge, color: "from-purple-500 to-indigo-600" },
                   { label: "Markets", value: "XAUUSD", icon: Layers, color: "from-orange-500 to-red-500" },
                 ].map((stat, idx) => (
                   <motion.div

@@ -2135,7 +2135,7 @@ const FreeTrialSection = () => {
                       className="flex items-center gap-2 text-[#22d3ee]"
                     >
                       <CheckCircle2 size={14} />
-                      <span>Timeframe: H1 / M15</span>
+                      <span>Timeframe: H1</span>
                     </motion.div>
                     <motion.div
                       initial={{ opacity: 0, x: -20 }}
@@ -2144,7 +2144,7 @@ const FreeTrialSection = () => {
                       className="flex items-center gap-2 text-purple-400"
                     >
                       <CheckCircle2 size={14} />
-                      <span>Risk: Auto MM (1-2% per trade)</span>
+                      <span>Risk: Fix Lots/Currency</span>
                     </motion.div>
                     <motion.div
                       initial={{ opacity: 0, x: -20 }}
@@ -2153,7 +2153,7 @@ const FreeTrialSection = () => {
                       className="flex items-center gap-2 text-yellow-400"
                     >
                       <CheckCircle2 size={14} />
-                      <span>Pair: EURUSD, GBPUSD, XAUUSD</span>
+                      <span>Pair: XAUUSD</span>
                     </motion.div>
                   </div>
 
@@ -2235,9 +2235,9 @@ const FreeTrialSection = () => {
               <div className="grid grid-cols-2 gap-4">
                 {[
                   { label: "Trade Accuracy", value: "Data-driven", icon: Target, color: "from-[#156d95] to-[#22d3ee]" },
-                  { label: "Risk Control", value: "Auto MM", icon: Shield, color: "from-green-500 to-emerald-600" },
+                  { label: "Risk Control", value: "Fix Lots/Currency", icon: Shield, color: "from-green-500 to-emerald-600" },
                   { label: "Strategy Type", value: "Scalping", icon: Gauge, color: "from-purple-500 to-indigo-600" },
-                  { label: "Markets", value: "Multi-pair", icon: Layers, color: "from-orange-500 to-red-500" },
+                  { label: "Markets", value: "XAUUSD", icon: Layers, color: "from-orange-500 to-red-500" },
                 ].map((stat, idx) => (
                   <motion.div
                     key={idx}

@@ -2216,10 +2216,6 @@ const FreeTrialSection = () => {
                     </motion.div>
                   )}
                 </AnimatePresence>
-
-                <p className="text-xs text-gray-500 text-center mt-4">
-                  File tersimpan di: <span className="text-[#156d95]">D:\\laragon\\www\\FBL\\public\\ea</span>
-                </p>
               </div>
             </motion.div>
 
@@ -2290,7 +2286,6 @@ const FreeTrialSection = () => {
                     "Backtest report lengkap dengan statistik detail",
                     "File setup dan konfigurasi siap pakai",
                     "Support teknis via WhatsApp selama trial",
-                    "Upgrade seamless ke paket berlangganan",
                   ].map((item, idx) => (
                     <motion.li
                       key={idx}

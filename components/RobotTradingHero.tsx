@@ -2846,7 +2846,7 @@ export const RobotTradingSection = () => {
           className="w-full h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent mb-12 sm:mb-16"
         />
 
-        {/* PRICING AREA */}
+        {/* PRICING AREA
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -2864,15 +2864,15 @@ export const RobotTradingSection = () => {
             </span>{" "}
             (Anda 80%, Kami 20%).
           </p>
-        </motion.div>
-
-        {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 max-w-5xl mx-auto">
+        </motion.div> */}
+        {/* 
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 max-w-5xl mx-auto">
           {pricingPlans.map((plan, idx) => (
             <PricingCard key={idx} {...plan} delay={idx * 0.15} />
           ))}
         </div> */}
 
-        <motion.div
+        {/* <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
@@ -2882,7 +2882,7 @@ export const RobotTradingSection = () => {
             <Shield size={14} className="text-green-600" />
             Garansi uang kembali 30 hari jika tidak puas dengan performa robot
           </p>
-        </motion.div>
+        </motion.div> */}
       </div>
     </section>
   );

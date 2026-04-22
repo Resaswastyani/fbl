@@ -1592,9 +1592,27 @@ const RobotHead = () => {
 
 const FloatingCards = () => {
   const cards = [
-    { icon: TrendingUp, label: "BUY", value: "AI", color: "bg-green-500", delay: 0 },
-    { icon: DollarSign, label: "Auto", value: "MM", color: "bg-[#156d95]", delay: 0.5 },
-    { icon: Activity, label: "Active", value: "24/7", color: "bg-purple-500", delay: 1 },
+    {
+      icon: TrendingUp,
+      label: "BUY",
+      value: "AI",
+      color: "bg-green-500",
+      delay: 0,
+    },
+    {
+      icon: DollarSign,
+      label: "Auto",
+      value: "MM",
+      color: "bg-[#156d95]",
+      delay: 0.5,
+    },
+    {
+      icon: Activity,
+      label: "Active",
+      value: "24/7",
+      color: "bg-purple-500",
+      delay: 1,
+    },
   ];
 
   return (
@@ -1739,27 +1757,31 @@ const RobotAnimation = () => {
 // FREE TRIAL SECTION - FULL SCREEN
 // ==========================================
 
-const GlowButton = ({ 
-  children, 
-  onClick, 
+const GlowButton = ({
+  children,
+  onClick,
   variant = "primary",
   className = "",
   icon: Icon,
-  disabled = false
-}: { 
-  children: React.ReactNode; 
-  onClick?: () => void; 
+  disabled = false,
+}: {
+  children: React.ReactNode;
+  onClick?: () => void;
   variant?: "primary" | "secondary" | "outline";
   className?: string;
   icon?: React.ElementType;
   disabled?: boolean;
 }) => {
-  const baseStyles = "relative inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-300 overflow-hidden group disabled:opacity-50 disabled:cursor-not-allowed";
-  
+  const baseStyles =
+    "relative inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-300 overflow-hidden group disabled:opacity-50 disabled:cursor-not-allowed";
+
   const variants = {
-    primary: "bg-[#156d95] text-white hover:shadow-[0_0_30px_rgba(21,109,149,0.4)] hover:scale-105 disabled:hover:scale-100",
-    secondary: "bg-[#111A4A] text-white hover:shadow-[0_0_30px_rgba(17,26,74,0.4)] hover:scale-105",
-    outline: "bg-white/10 backdrop-blur-sm border border-white/30 text-white hover:bg-white/20 hover:scale-105"
+    primary:
+      "bg-[#156d95] text-white hover:shadow-[0_0_30px_rgba(21,109,149,0.4)] hover:scale-105 disabled:hover:scale-100",
+    secondary:
+      "bg-[#111A4A] text-white hover:shadow-[0_0_30px_rgba(17,26,74,0.4)] hover:scale-105",
+    outline:
+      "bg-white/10 backdrop-blur-sm border border-white/30 text-white hover:bg-white/20 hover:scale-105",
   };
 
   return (
@@ -1770,23 +1792,25 @@ const GlowButton = ({
       disabled={disabled}
       className={`${baseStyles} ${variants[variant]} ${className}`}
     >
-      {!disabled && <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />}
+      {!disabled && (
+        <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+      )}
       {Icon && <Icon size={18} />}
       <span className="relative z-10">{children}</span>
     </motion.button>
   );
 };
 
-const ImageModal = ({ 
-  isOpen, 
-  onClose, 
-  src, 
+const ImageModal = ({
+  isOpen,
+  onClose,
+  src,
   alt,
-  title 
-}: { 
-  isOpen: boolean; 
-  onClose: () => void; 
-  src: string; 
+  title,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  src: string;
   alt: string;
   title: string;
 }) => {
@@ -1836,17 +1860,17 @@ const ImageModal = ({
   );
 };
 
-const StepCard = ({ 
-  number, 
-  title, 
-  description, 
+const StepCard = ({
+  number,
+  title,
+  description,
   icon: Icon,
   delay,
-  children 
-}: { 
-  number: number; 
-  title: string; 
-  description: string; 
+  children,
+}: {
+  number: number;
+  title: string;
+  description: string;
   icon: React.ElementType;
   delay: number;
   children?: React.ReactNode;
@@ -1872,7 +1896,9 @@ const StepCard = ({
               </span>
             </div>
             <h4 className="text-lg font-bold text-[#111A4A] mb-2">{title}</h4>
-            <p className="text-sm text-gray-600 leading-relaxed">{description}</p>
+            <p className="text-sm text-gray-600 leading-relaxed">
+              {description}
+            </p>
             {children && <div className="mt-4">{children}</div>}
           </div>
         </div>
@@ -1881,7 +1907,13 @@ const StepCard = ({
   );
 };
 
-const FeatureBadge = ({ icon: Icon, text }: { icon: React.ElementType; text: string }) => (
+const FeatureBadge = ({
+  icon: Icon,
+  text,
+}: {
+  icon: React.ElementType;
+  text: string;
+}) => (
   <motion.div
     whileHover={{ scale: 1.05 }}
     className="inline-flex items-center gap-2 px-4 py-2 bg-[#156d95]/10 rounded-full text-sm text-[#156d95] font-medium border border-[#156d95]/20"
@@ -1911,7 +1943,7 @@ const TikTokGate = ({ onUnlock }: { onUnlock: () => void }) => {
       className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#111A4A] to-[#0a0f2e] border border-[#156d95]/30 p-8 text-center"
     >
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48ZyBmaWxsPSIjMTU2ZDk1IiBmaWxsLW9wYWNpdHk9IjAuMDMiPjxwYXRoIGQ9Ik0zNiAzNGg0djRoLTR6TTIwIDIwaDR2NGgtNHoiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-50" />
-      
+
       <motion.div
         animate={{ y: [0, -10, 0] }}
         transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
@@ -1920,17 +1952,15 @@ const TikTokGate = ({ onUnlock }: { onUnlock: () => void }) => {
         <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-[#156d95] to-[#22d3ee] rounded-2xl flex items-center justify-center shadow-lg shadow-[#156d95]/30">
           <Lock size={36} className="text-white" />
         </div>
-        
-        <h3 className="text-2xl font-bold text-white mb-3">
-          Konten Terkunci
-        </h3>
+
+        <h3 className="text-2xl font-bold text-white mb-3">Konten Terkunci</h3>
         <p className="text-gray-400 mb-6 max-w-md mx-auto">
-          Download EA Trial gratis tersedia setelah Anda follow TikTok kami. 
+          Download EA Trial gratis tersedia setelah Anda follow TikTok kami.
           Dapatkan update trading dan edukasi forex setiap hari!
         </p>
 
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <GlowButton 
+          <GlowButton
             onClick={handleFollow}
             icon={isVerifying ? Activity : MousePointerClick}
             className={isVerifying ? "animate-pulse" : ""}
@@ -1948,7 +1978,10 @@ const TikTokGate = ({ onUnlock }: { onUnlock: () => void }) => {
 };
 
 const FreeTrialSection = () => {
-  const [modalImage, setModalImage] = useState<{ src: string; title: string } | null>(null);
+  const [modalImage, setModalImage] = useState<{
+    src: string;
+    title: string;
+  } | null>(null);
   const [isHovered, setIsHovered] = useState(false);
   const [isUnlocked, setIsUnlocked] = useState(false);
 
@@ -2045,11 +2078,11 @@ const FreeTrialSection = () => {
                 Gratis 30 Hari
               </span>
             </h2>
-            
+
             <p className="text-gray-400 max-w-2xl mx-auto text-base sm:text-lg">
-              Rasakan pengalaman trading otomatis tanpa risiko. Download EA trial, 
-              lihat hasil backtest yang telah terbukti, dan mulai trading dengan 
-              confidence yang tinggi.
+              Rasakan pengalaman trading otomatis tanpa risiko. Download EA
+              trial, lihat hasil backtest yang telah terbukti, dan mulai trading
+              dengan confidence yang tinggi.
             </p>
 
             <div className="flex flex-wrap justify-center gap-3 mt-8">
@@ -2073,17 +2106,17 @@ const FreeTrialSection = () => {
               onMouseLeave={() => setIsHovered(false)}
             >
               <div className="absolute -inset-1 bg-gradient-to-r from-[#156d95] via-[#22d3ee] to-[#156d95] rounded-3xl opacity-50 blur-lg group-hover:opacity-75 transition duration-500" />
-              
+
               <div className="relative bg-gradient-to-br from-[#111A4A] to-[#0a0f2e] rounded-3xl p-6 sm:p-8 border border-[#156d95]/30 shadow-2xl">
                 {/* File Header */}
                 <div className="flex items-center gap-4 mb-6">
                   <motion.div
-                    animate={{ 
+                    animate={{
                       boxShadow: [
                         "0 0 20px rgba(21,109,149,0.3)",
                         "0 0 40px rgba(34,211,238,0.4)",
-                        "0 0 20px rgba(21,109,149,0.3)"
-                      ]
+                        "0 0 20px rgba(21,109,149,0.3)",
+                      ],
                     }}
                     transition={{ duration: 2, repeat: Infinity }}
                     className="w-16 h-16 bg-gradient-to-br from-[#156d95] to-[#22d3ee] rounded-2xl flex items-center justify-center"
@@ -2091,8 +2124,12 @@ const FreeTrialSection = () => {
                     <FileText size={32} className="text-white" />
                   </motion.div>
                   <div>
-                    <h3 className="text-xl font-bold text-white">EA FBL Giveaway</h3>
-                    <p className="text-sm text-gray-400">Expert Advisor for MetaTrader 5</p>
+                    <h3 className="text-xl font-bold text-white">
+                      EA FBL Giveaway
+                    </h3>
+                    <p className="text-sm text-gray-400">
+                      Expert Advisor for MetaTrader 5
+                    </p>
                     <div className="flex items-center gap-2 mt-1">
                       <span className="text-xs bg-green-500/20 text-green-400 px-2 py-0.5 rounded-full font-medium">
                         .ex5
@@ -2107,7 +2144,9 @@ const FreeTrialSection = () => {
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                      <span className="text-xs text-gray-400 font-mono">READY TO DOWNLOAD</span>
+                      <span className="text-xs text-gray-400 font-mono">
+                        READY TO DOWNLOAD
+                      </span>
                     </div>
                     <motion.div
                       animate={{ opacity: [0.5, 1, 0.5] }}
@@ -2117,7 +2156,7 @@ const FreeTrialSection = () => {
                       v2.4.1
                     </motion.div>
                   </div>
-                  
+
                   <div className="space-y-2 font-mono text-xs">
                     <motion.div
                       initial={{ opacity: 0, x: -20 }}
@@ -2168,7 +2207,9 @@ const FreeTrialSection = () => {
                       />
                     </div>
                     <div className="flex justify-between mt-1">
-                      <span className="text-[10px] text-gray-500">System Check</span>
+                      <span className="text-[10px] text-gray-500">
+                        System Check
+                      </span>
                       <span className="text-[10px] text-[#22d3ee]">100%</span>
                     </div>
                   </div>
@@ -2194,17 +2235,19 @@ const FreeTrialSection = () => {
                     >
                       <div className="flex items-center gap-2 mb-3 text-green-400 text-sm">
                         <Unlock size={18} />
-                        <span className="font-semibold">Akses Dibuka! Silakan download EA Anda.</span>
+                        <span className="font-semibold">
+                          Akses Dibuka! Silakan download EA Anda.
+                        </span>
                       </div>
                       <div className="flex flex-col sm:flex-row gap-3">
-                        <GlowButton 
+                        <GlowButton
                           onClick={handleDownload}
                           icon={Download}
                           className="flex-1"
                         >
                           Download EA Trial
                         </GlowButton>
-                        <GlowButton 
+                        <GlowButton
                           onClick={handleWhatsAppTrial}
                           variant="outline"
                           icon={MessageCircle}
@@ -2230,10 +2273,30 @@ const FreeTrialSection = () => {
               {/* Honest Performance Metrics */}
               <div className="grid grid-cols-2 gap-4">
                 {[
-                  { label: "Trade Accuracy", value: "Data-driven", icon: Target, color: "from-[#156d95] to-[#22d3ee]" },
-                  { label: "Risk Control", value: "Fix Lots/Currency", icon: Shield, color: "from-green-500 to-emerald-600" },
-                  { label: "Strategy Type", value: "Day Trade", icon: Gauge, color: "from-purple-500 to-indigo-600" },
-                  { label: "Markets", value: "XAUUSD", icon: Layers, color: "from-orange-500 to-red-500" },
+                  {
+                    label: "Trade Accuracy",
+                    value: "Data-driven",
+                    icon: Target,
+                    color: "from-[#156d95] to-[#22d3ee]",
+                  },
+                  {
+                    label: "Risk Control",
+                    value: "Fix Lots/Currency",
+                    icon: Shield,
+                    color: "from-green-500 to-emerald-600",
+                  },
+                  {
+                    label: "Strategy Type",
+                    value: "Day Trade",
+                    icon: Gauge,
+                    color: "from-purple-500 to-indigo-600",
+                  },
+                  {
+                    label: "Markets",
+                    value: "XAUUSD",
+                    icon: Layers,
+                    color: "from-orange-500 to-red-500",
+                  },
                 ].map((stat, idx) => (
                   <motion.div
                     key={idx}
@@ -2244,10 +2307,14 @@ const FreeTrialSection = () => {
                     whileHover={{ scale: 1.05, y: -5 }}
                     className="relative group"
                   >
-                    <div className={`absolute inset-0 bg-gradient-to-r ${stat.color} rounded-xl opacity-0 group-hover:opacity-20 blur transition duration-300`} />
+                    <div
+                      className={`absolute inset-0 bg-gradient-to-r ${stat.color} rounded-xl opacity-0 group-hover:opacity-20 blur transition duration-300`}
+                    />
                     <div className="relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4 hover:border-[#156d95]/50 transition-all duration-300">
                       <stat.icon size={20} className="text-[#22d3ee] mb-2" />
-                      <div className="text-lg font-bold text-white">{stat.value}</div>
+                      <div className="text-lg font-bold text-white">
+                        {stat.value}
+                      </div>
                       <div className="text-xs text-gray-400">{stat.label}</div>
                     </div>
                   </motion.div>
@@ -2262,13 +2329,19 @@ const FreeTrialSection = () => {
                 className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-4"
               >
                 <div className="flex items-start gap-3">
-                  <Shield size={20} className="text-yellow-400 flex-shrink-0 mt-0.5" />
+                  <Shield
+                    size={20}
+                    className="text-yellow-400 flex-shrink-0 mt-0.5"
+                  />
                   <div>
-                    <h4 className="text-yellow-400 font-semibold text-sm mb-1">Transparansi & Disclaimer</h4>
+                    <h4 className="text-yellow-400 font-semibold text-sm mb-1">
+                      Transparansi & Disclaimer
+                    </h4>
                     <p className="text-gray-300 text-xs leading-relaxed">
-                      Hasil trading di masa lalu tidak menjamin hasil di masa depan. 
-                      Performa EA bervariasi tergantung kondisi pasar, broker, dan konfigurasi. 
-                      Selalu gunakan manajemen risiko yang tepat dan trade dengan tanggung jawab.
+                      Hasil trading di masa lalu tidak menjamin hasil di masa
+                      depan. Performa EA bervariasi tergantung kondisi pasar,
+                      broker, dan konfigurasi. Selalu gunakan manajemen risiko
+                      yang tepat dan trade dengan tanggung jawab.
                     </p>
                   </div>
                 </div>
@@ -2295,7 +2368,10 @@ const FreeTrialSection = () => {
                       transition={{ delay: idx * 0.1 }}
                       className="flex items-start gap-3 text-sm text-gray-300"
                     >
-                      <CheckCircle2 size={18} className="text-[#22d3ee] flex-shrink-0 mt-0.5" />
+                      <CheckCircle2
+                        size={18}
+                        className="text-[#22d3ee] flex-shrink-0 mt-0.5"
+                      />
                       {item}
                     </motion.li>
                   ))}
@@ -2336,8 +2412,8 @@ const FreeTrialSection = () => {
               icon={Download}
               delay={0}
             >
-              <GlowButton 
-                onClick={() => isUnlocked ? handleDownload() : {}}
+              <GlowButton
+                onClick={() => (isUnlocked ? handleDownload() : {})}
                 variant="secondary"
                 className="w-full text-xs"
                 icon={ArrowDownCircle}
@@ -2356,10 +2432,12 @@ const FreeTrialSection = () => {
             >
               <div className="flex gap-2">
                 <button
-                  onClick={() => setModalImage({ 
-                    src: "/ea/GIVEAWAY%20setting%20H1.JPG.jpeg", 
-                    title: "Panduan Setup H1" 
-                  })}
+                  onClick={() =>
+                    setModalImage({
+                      src: "/ea/GIVEAWAY%20setting%20H1.JPG.jpeg",
+                      title: "Panduan Setup H1",
+                    })
+                  }
                   className="flex-1 py-2 px-3 bg-[#156d95]/10 hover:bg-[#156d95]/20 border border-[#156d95]/30 rounded-lg text-xs text-[#156d95] font-medium transition-all flex items-center justify-center gap-2"
                 >
                   <Eye size={14} />
@@ -2377,20 +2455,24 @@ const FreeTrialSection = () => {
             >
               <div className="flex gap-2">
                 <button
-                  onClick={() => setModalImage({ 
-                    src: "/ea/GIVEAWAY%20backtest%201.JPG.jpeg", 
-                    title: "Hasil Backtest 1" 
-                  })}
+                  onClick={() =>
+                    setModalImage({
+                      src: "/ea/GIVEAWAY%20backtest%201.JPG.jpeg",
+                      title: "Hasil Backtest 1",
+                    })
+                  }
                   className="flex-1 py-2 px-3 bg-[#156d95]/10 hover:bg-[#156d95]/20 border border-[#156d95]/30 rounded-lg text-xs text-[#156d95] font-medium transition-all flex items-center justify-center gap-2"
                 >
                   <Eye size={14} />
                   Backtest 1
                 </button>
                 <button
-                  onClick={() => setModalImage({ 
-                    src: "/ea/GIVEAWAY%20BACKTEST.JPG.jpeg", 
-                    title: "Hasil Backtest 2" 
-                  })}
+                  onClick={() =>
+                    setModalImage({
+                      src: "/ea/GIVEAWAY%20BACKTEST.JPG.jpeg",
+                      title: "Hasil Backtest 2",
+                    })
+                  }
                   className="flex-1 py-2 px-3 bg-[#156d95]/10 hover:bg-[#156d95]/20 border border-[#156d95]/30 rounded-lg text-xs text-[#156d95] font-medium transition-all flex items-center justify-center gap-2"
                 >
                   <Eye size={14} />
@@ -2412,30 +2494,32 @@ const FreeTrialSection = () => {
               <Eye size={18} className="text-[#22d3ee]" />
               Preview Dokumentasi & Hasil Backtest
             </h4>
-            
+
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {[
-                { 
-                  src: "/ea/GIVEAWAY%20setting%20H1.JPG.jpeg", 
+                {
+                  src: "/ea/GIVEAWAY%20setting%20H1.JPG.jpeg",
                   title: "Setup Konfigurasi H1",
-                  desc: "Parameter optimal untuk timeframe H1"
+                  desc: "Parameter optimal untuk timeframe H1",
                 },
-                { 
-                  src: "/ea/GIVEAWAY%20backtest%201.JPG.jpeg", 
+                {
+                  src: "/ea/GIVEAWAY%20backtest%201.JPG.jpeg",
                   title: "Backtest Report 1",
-                  desc: "Analisis performa dan statistik trading"
+                  desc: "Analisis performa dan statistik trading",
                 },
-                { 
-                  src: "/ea/GIVEAWAY%20BACKTEST.JPG.jpeg", 
+                {
+                  src: "/ea/GIVEAWAY%20BACKTEST.JPG.jpeg",
                   title: "Backtest Report 2",
-                  desc: "Grafik equity curve dan drawdown"
+                  desc: "Grafik equity curve dan drawdown",
                 },
               ].map((img, idx) => (
                 <motion.div
                   key={idx}
                   whileHover={{ scale: 1.03, y: -5 }}
                   whileTap={{ scale: 0.98 }}
-                  onClick={() => setModalImage({ src: img.src, title: img.title })}
+                  onClick={() =>
+                    setModalImage({ src: img.src, title: img.title })
+                  }
                   className="relative group cursor-pointer rounded-xl overflow-hidden border border-[#156d95]/20 hover:border-[#156d95]/60 transition-all duration-300"
                 >
                   <div className="absolute inset-0 bg-gradient-to-t from-[#111A4A] via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10" />
@@ -2447,7 +2531,9 @@ const FreeTrialSection = () => {
                     className="w-full h-48 object-cover"
                   />
                   <div className="absolute bottom-0 left-0 right-0 p-4 z-20 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                    <h5 className="text-white font-semibold text-sm">{img.title}</h5>
+                    <h5 className="text-white font-semibold text-sm">
+                      {img.title}
+                    </h5>
                     <p className="text-gray-300 text-xs">{img.desc}</p>
                   </div>
                   <div className="absolute top-3 right-3 z-20 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -2469,25 +2555,26 @@ const FreeTrialSection = () => {
             className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#156d95] to-[#111A4A] p-8 sm:p-10"
           >
             <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMSIgZmlsbD0id2hpdGUiIGZpbGwtb3BhY2l0eT0iMC4xIi8+PC9zdmc+')] opacity-30" />
-            
+
             <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
               <div className="text-center md:text-left">
                 <h3 className="text-2xl sm:text-3xl font-bold text-white mb-2">
                   Siap Meningkatkan Trading Anda?
                 </h3>
                 <p className="text-gray-300 text-sm sm:text-base">
-                  30 hari gratis untuk merasakan performa EA FBL. Tanpa kartu kredit, tanpa risiko.
+                  30 hari gratis untuk merasakan performa EA FBL. Tanpa kartu
+                  kredit, tanpa risiko.
                 </p>
               </div>
               <div className="flex flex-col sm:flex-row gap-3">
-                <GlowButton 
-                  onClick={() => isUnlocked ? handleDownload() : {}}
+                <GlowButton
+                  onClick={() => (isUnlocked ? handleDownload() : {})}
                   icon={Download}
                   disabled={!isUnlocked}
                 >
                   {isUnlocked ? "Download Gratis" : "Follow TikTok Dulu"}
                 </GlowButton>
-                <GlowButton 
+                <GlowButton
                   onClick={handleWhatsAppTrial}
                   variant="outline"
                   icon={MessageCircle}
@@ -2504,93 +2591,93 @@ const FreeTrialSection = () => {
 };
 
 // // Pricing Card Component (UNCHANGED)
-const PricingCard = ({
-  tier,
-  price,
-  originalPrice,
-  features,
-  recommended,
-  delay,
-}: any) => {
-  const handleWhatsApp = () => {
-    const message = `Halo, saya tertarik dengan paket ${tier} (Rp ${price}jt/bulan). Mohon informasi cara pembelian.`;
-    const waUrl = `https://wa.me/6285187555440?text=${encodeURIComponent(message)}`;
-    window.open(waUrl, "_blank");
-  };
+// const PricingCard = ({
+//   tier,
+//   price,
+//   originalPrice,
+//   features,
+//   recommended,
+//   delay,
+// }: any) => {
+//   const handleWhatsApp = () => {
+//     const message = `Halo, saya tertarik dengan paket ${tier} (Rp ${price}jt/bulan). Mohon informasi cara pembelian.`;
+//     const waUrl = `https://wa.me/6285187555440?text=${encodeURIComponent(message)}`;
+//     window.open(waUrl, "_blank");
+//   };
 
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5, delay }}
-      whileHover={{ y: -8 }}
-      className={`relative rounded-2xl p-6 ${recommended ? "bg-[#111A4A] text-white" : "bg-white border border-gray-200"} shadow-xl overflow-hidden`}
-    >
-      {recommended && (
-        <div className="absolute top-0 right-0 bg-[#156d95] text-white text-xs font-bold px-4 py-1 rounded-bl-lg">
-          PALING POPULER
-        </div>
-      )}
+//   return (
+//     <motion.div
+//       initial={{ opacity: 0, y: 30 }}
+//       whileInView={{ opacity: 1, y: 0 }}
+//       viewport={{ once: true }}
+//       transition={{ duration: 0.5, delay }}
+//       whileHover={{ y: -8 }}
+//       className={`relative rounded-2xl p-6 ${recommended ? "bg-[#111A4A] text-white" : "bg-white border border-gray-200"} shadow-xl overflow-hidden`}
+//     >
+//       {recommended && (
+//         <div className="absolute top-0 right-0 bg-[#156d95] text-white text-xs font-bold px-4 py-1 rounded-bl-lg">
+//           PALING POPULER
+//         </div>
+//       )}
 
-      <div className="mb-4">
-        <h3
-          className={`text-lg font-bold mb-1 ${recommended ? "text-white" : "text-[#111A4A]"}`}
-        >
-          {tier}
-        </h3>
-        <p
-          className={`text-xs ${recommended ? "text-gray-300" : "text-gray-500"}`}
-        >
-          Profit Sharing 20:80
-        </p>
-      </div>
+//       <div className="mb-4">
+//         <h3
+//           className={`text-lg font-bold mb-1 ${recommended ? "text-white" : "text-[#111A4A]"}`}
+//         >
+//           {tier}
+//         </h3>
+//         <p
+//           className={`text-xs ${recommended ? "text-gray-300" : "text-gray-500"}`}
+//         >
+//           Profit Sharing 20:80
+//         </p>
+//       </div>
 
-      <div className="mb-6">
-        <div className="flex items-baseline gap-2">
-          <span
-            className={`text-3xl font-bold ${recommended ? "text-white" : "text-[#111A4A]"}`}
-          >
-            Rp {price}jt
-          </span>
-          <span className="text-sm line-through text-gray-400">
-            Rp {originalPrice}jt
-          </span>
-        </div>
-        <span
-          className={`text-xs ${recommended ? "text-gray-300" : "text-gray-500"}`}
-        >
-          /bulan
-        </span>
-      </div>
+//       <div className="mb-6">
+//         <div className="flex items-baseline gap-2">
+//           <span
+//             className={`text-3xl font-bold ${recommended ? "text-white" : "text-[#111A4A]"}`}
+//           >
+//             Rp {price}jt
+//           </span>
+//           <span className="text-sm line-through text-gray-400">
+//             Rp {originalPrice}jt
+//           </span>
+//         </div>
+//         <span
+//           className={`text-xs ${recommended ? "text-gray-300" : "text-gray-500"}`}
+//         >
+//           /bulan
+//         </span>
+//       </div>
 
-      <ul className="space-y-3 mb-6">
-        {features.map((feature: string, idx: number) => (
-          <li key={idx} className="flex items-center gap-2 text-sm">
-            <CheckCircle2
-              size={16}
-              className={recommended ? "text-[#22d3ee]" : "text-[#156d95]"}
-            />
-            <span className={recommended ? "text-gray-200" : "text-gray-600"}>
-              {feature}
-            </span>
-          </li>
-        ))}
-      </ul>
+//       <ul className="space-y-3 mb-6">
+//         {features.map((feature: string, idx: number) => (
+//           <li key={idx} className="flex items-center gap-2 text-sm">
+//             <CheckCircle2
+//               size={16}
+//               className={recommended ? "text-[#22d3ee]" : "text-[#156d95]"}
+//             />
+//             <span className={recommended ? "text-gray-200" : "text-gray-600"}>
+//               {feature}
+//             </span>
+//           </li>
+//         ))}
+//       </ul>
 
-      <button
-        onClick={handleWhatsApp}
-        className={`w-full py-3 rounded-lg font-medium text-sm transition-all ${
-          recommended
-            ? "bg-white text-[#111A4A] hover:bg-gray-100"
-            : "bg-[#156d95] text-white hover:bg-[#111A4A]"
-        }`}
-      >
-        Pesan via WhatsApp
-      </button>
-    </motion.div>
-  );
-};
+//       <button
+//         onClick={handleWhatsApp}
+//         className={`w-full py-3 rounded-lg font-medium text-sm transition-all ${
+//           recommended
+//             ? "bg-white text-[#111A4A] hover:bg-gray-100"
+//             : "bg-[#156d95] text-white hover:bg-[#111A4A]"
+//         }`}
+//       >
+//         Pesan via WhatsApp
+//       </button>
+//     </motion.div>
+//   );
+// };
 
 // ==========================================
 // MAIN COMPONENT
@@ -2603,48 +2690,48 @@ export const RobotTradingSection = () => {
     window.open(waUrl, "_blank");
   };
 
-  const pricingPlans = [
-    {
-      tier: "Starter",
-      price: "5",
-      originalPrice: "7",
-      features: [
-        "1 Robot Trading",
-        "Backtest Report",
-        "Support 24/7",
-        "Risk Management Basic",
-      ],
-      recommended: false,
-    },
-    {
-      tier: "Professional",
-      price: "12",
-      originalPrice: "18",
-      features: [
-        "3 Robot Trading",
-        "Advanced Backtest",
-        "Priority Support",
-        "Risk Management Pro",
-        "Monthly Report",
-        "Custom Strategy",
-      ],
-      recommended: true,
-    },
-    {
-      tier: "Enterprise",
-      price: "25",
-      originalPrice: "35",
-      features: [
-        "Unlimited Robot",
-        "Full Backtest Access",
-        "Dedicated Manager",
-        "Custom Development",
-        "API Access",
-        "White Label Option",
-      ],
-      recommended: false,
-    },
-  ];
+  // const pricingPlans = [
+  //   {
+  //     tier: "Starter",
+  //     price: "5",
+  //     originalPrice: "7",
+  //     features: [
+  //       "1 Robot Trading",
+  //       "Backtest Report",
+  //       "Support 24/7",
+  //       "Risk Management Basic",
+  //     ],
+  //     recommended: false,
+  //   },
+  //   {
+  //     tier: "Professional",
+  //     price: "12",
+  //     originalPrice: "18",
+  //     features: [
+  //       "3 Robot Trading",
+  //       "Advanced Backtest",
+  //       "Priority Support",
+  //       "Risk Management Pro",
+  //       "Monthly Report",
+  //       "Custom Strategy",
+  //     ],
+  //     recommended: true,
+  //   },
+  //   {
+  //     tier: "Enterprise",
+  //     price: "25",
+  //     originalPrice: "35",
+  //     features: [
+  //       "Unlimited Robot",
+  //       "Full Backtest Access",
+  //       "Dedicated Manager",
+  //       "Custom Development",
+  //       "API Access",
+  //       "White Label Option",
+  //     ],
+  //     recommended: false,
+  //   },
+  // ];
 
   return (
     <section className="w-full bg-gradient-to-b from-gray-50 to-white py-16 sm:py-20 lg:py-24">
@@ -2668,7 +2755,7 @@ export const RobotTradingSection = () => {
             >
               <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
               <span className="text-sm text-[#156d95] font-medium">
-                AI Trading Bot Active
+                Trading Bot Active
               </span>
             </motion.div>
 
@@ -2693,7 +2780,7 @@ export const RobotTradingSection = () => {
                 Mulai Sekarang <ArrowUpRight size={18} className="ml-2" />
               </motion.button>
 
-              <Link href="/robot-trading">
+              {/* <Link href="/robot-trading">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -2701,11 +2788,10 @@ export const RobotTradingSection = () => {
                 >
                   Lihat Backtest
                 </motion.button>
-              </Link>
+              </Link> */}
             </div>
 
-            {/* Quick Stats */}
-            <div className="flex gap-6 sm:gap-8 justify-center lg:justify-start">
+            {/* <div className="flex gap-6 sm:gap-8 justify-center lg:justify-start">
               {[
                 { value: "78%", label: "Win Rate" },
                 { value: "5K+", label: "Trades" },
@@ -2720,7 +2806,7 @@ export const RobotTradingSection = () => {
                   </div>
                 </div>
               ))}
-            </div>
+            </div> */}
           </motion.div>
 
           {/* RIGHT: ROBOT ANIMATION */}
@@ -2780,11 +2866,11 @@ export const RobotTradingSection = () => {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 max-w-5xl mx-auto">
+        {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 max-w-5xl mx-auto">
           {pricingPlans.map((plan, idx) => (
             <PricingCard key={idx} {...plan} delay={idx * 0.15} />
           ))}
-        </div>
+        </div> */}
 
         <motion.div
           initial={{ opacity: 0 }}

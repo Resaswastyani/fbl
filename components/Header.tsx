@@ -1132,14 +1132,6 @@ export const Header = () => {
               style={{ width: isScrolled ? "110px" : "145px" }}
             />
           </button>
-          <button
-            onClick={() => handleLinkClick("/robot-trading")}
-            className={`font-medium text-gray-700 hover:text-primary transition 
-                ${isScrolled ? "text-sm" : "text-base"}
-              `}
-          >
-            Robot Trading
-          </button>
 
           <div
             className={`
@@ -1147,6 +1139,14 @@ export const Header = () => {
               ${isScrolled ? "gap-5" : "gap-8"}
             `}
           >
+            <button
+              onClick={() => handleLinkClick("/robot-trading")}
+              className={`font-medium text-gray-700 hover:text-primary transition 
+                ${isScrolled ? "text-sm" : "text-base"}
+              `}
+            >
+              Robot Trading
+            </button>
             <Dropdown
               title="Trading lesson"
               items={[
@@ -1287,14 +1287,13 @@ export const Header = () => {
                     </span>
                   </div>
                 )}
-
+                <button
+                  onClick={() => handleLinkClick("/robot-trading")}
+                  className="block w-full text-left text-lg text-gray-800"
+                >
+                  Robot Trading
+                </button>
                 <div>
-                  <button
-                    onClick={() => handleLinkClick("/robot-trading")}
-                    className="block w-full text-left text-lg text-gray-800"
-                  >
-                    Robot Trading
-                  </button>
                   <p className="text-gray-900 font-semibold mb-2">
                     Trading lesson
                   </p>

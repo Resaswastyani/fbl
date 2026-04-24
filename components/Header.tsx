@@ -1132,6 +1132,14 @@ export const Header = () => {
               style={{ width: isScrolled ? "110px" : "145px" }}
             />
           </button>
+          <button
+            onClick={() => handleLinkClick("/robot-trading")}
+            className={`font-medium text-gray-700 hover:text-primary transition 
+                ${isScrolled ? "text-sm" : "text-base"}
+              `}
+          >
+            Robot Trading
+          </button>
 
           <div
             className={`
@@ -1281,6 +1289,12 @@ export const Header = () => {
                 )}
 
                 <div>
+                  <button
+                    onClick={() => handleLinkClick("/robot-trading")}
+                    className="block w-full text-left text-lg text-gray-800"
+                  >
+                    Robot Trading
+                  </button>
                   <p className="text-gray-900 font-semibold mb-2">
                     Trading lesson
                   </p>

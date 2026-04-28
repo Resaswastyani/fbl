@@ -252,13 +252,13 @@ const defaultTopRowApps: IntegrationApp[] = [
   { name: "XM", logo: "/brokers/xm.png" },
   { name: "HFM", logo: "/brokers/hfm.jpg" },
   { name: "FBS", logo: "/brokers/fbs.png" },
-  { name: "OctaFX", logo: "/brokers/octafx.png" },
+  // { name: "OctaFX", logo: "/brokers/octafx.png" },
   { name: "Exness", logo: "/brokers/exness.png" },
   { name: "IC Markets", logo: "/brokers/icm.jpeg" },
   { name: "XM", logo: "/brokers/xm.png" },
   { name: "HFM", logo: "/brokers/hfm.jpg" },
   { name: "FBS", logo: "/brokers/fbs.png" },
-  { name: "OctaFX", logo: "/brokers/octafx.png" },
+  // { name: "OctaFX", logo: "/brokers/octafx.png" },
 ];
 
 const defaultBottomRowApps: IntegrationApp[] = [
@@ -267,13 +267,13 @@ const defaultBottomRowApps: IntegrationApp[] = [
   { name: "XM", logo: "/brokers/xm.png" },
   { name: "HFM", logo: "/brokers/hfm.jpg" },
   { name: "FBS", logo: "/brokers/fbs.png" },
-  { name: "OctaFX", logo: "/brokers/octafx.png" },
+  // { name: "OctaFX", logo: "/brokers/octafx.png" },
   { name: "Exness", logo: "/brokers/exness.png" },
   { name: "IC Markets", logo: "/brokers/icm.jpeg" },
   { name: "XM", logo: "/brokers/xm.png" },
   { name: "HFM", logo: "/brokers/hfm.jpg" },
   { name: "FBS", logo: "/brokers/fbs.png" },
-  { name: "OctaFX", logo: "/brokers/octafx.png" },
+  // { name: "OctaFX", logo: "/brokers/octafx.png" },
 ];
 
 // @component: IntegrationCarousel

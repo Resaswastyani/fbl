@@ -196,11 +196,32 @@ export default function Footer() {
             MANAGED BY
           </p>
 
-          <img
-            src="/logo-fbl.png"
-            alt="Managed By Logo"
-            className="w-40 h-auto opacity-90"
-          />
+          {/* LOGO CONTAINER + R BADGE */}
+          <div className="relative inline-block">
+            <img
+              src="/logo-fbl.png"
+              alt="Managed By Logo"
+              className="w-40 h-auto opacity-90"
+            />
+            {/* REGISTERED BADGE - POJOK KANAN ATAS LOGO */}
+            <span
+              className="
+                absolute -top-1.5 -right-1.5
+                w-5 h-5
+                rounded-full
+                border border-[#0a0a0f]/20
+                bg-white
+                text-[#0a0a0f]
+                flex items-center justify-center
+                text-[9px] font-bold leading-none
+                select-none
+                shadow-sm
+              "
+              aria-label="Registered Trademark"
+            >
+              R
+            </span>
+          </div>
         </div>
 
         {/* SOCIAL ICONS */}
@@ -301,12 +322,6 @@ export default function Footer() {
               </p>
               <p className="font-medium">70209, 74909, 85495</p>
             </div>
-            {/* <div>
-              <p className="font-medium opacity-60 text-xs mb-1">Alamat</p>
-              <p className="font-medium text-xs leading-relaxed">
-                Jl. Indronoto, Area Sawah, Ngabeyan, Ngabeyan, Kartasura, Sukoharjo, Jawa Tengah 57165
-              </p>
-            </div> */}
           </div>
         </div>
       </div>
@@ -330,23 +345,6 @@ export default function Footer() {
           publik.
         </p>
       </div>
-
-      {/* HUGE TEXT */}
-      {/* <div className="w-full py-6 md:py-5">
-        <h1
-          className="
-            font-semibold leading-[0.9] tracking-tight text-[#0a0a0f]
-            px-4 md:px-8
-            text-[15vw]
-            sm:text-[12vw]
-            md:text-[10vw]
-            lg:text-[9.8vw]
-            whitespace-normal md:whitespace-nowrap
-          "
-        >
-          Forex for Better Living
-        </h1>
-      </div> */}
 
       {/* BOTTOM */}
       <div className="w-full border-t border-[#e5e5e5]">

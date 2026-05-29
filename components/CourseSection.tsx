@@ -1023,7 +1023,7 @@ export default function CourseSection() {
       return sum + parseInt(price);
     }, 0);
 
-    const discounted = Math.round(total * 0.6);
+    const discounted = Math.round(total * 0.7342);
 
     return {
       originalPrice: total,
@@ -1424,7 +1424,7 @@ export default function CourseSection() {
                       variant="secondary"
                       className="bg-white/20 text-white backdrop-blur-sm"
                     >
-                      40% OFF
+                      73% OFF
                     </Badge>
                   </div>
                   <motion.h2

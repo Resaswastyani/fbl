@@ -1023,7 +1023,7 @@ export default function CourseSection() {
       return sum + parseInt(price);
     }, 0);
 
-    const discounted = Math.round(total * 0.7342);
+    const discounted = Math.round(total * 0.2658);
 
     return {
       originalPrice: total,

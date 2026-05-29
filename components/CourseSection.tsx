@@ -1222,7 +1222,7 @@ export default function CourseSection() {
       lessons: [
         {
           id: "l4",
-          title: "Breakout Setup",
+          title: "Breakout Setu",
           type: "video",
           contentUrl: "/videos/breakout.mp4",
           duration: "18",

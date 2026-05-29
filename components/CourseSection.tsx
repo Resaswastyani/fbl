@@ -1023,7 +1023,7 @@ export default function CourseSection() {
       return sum + parseInt(price);
     }, 0);
 
-    const discounted = Math.round(total * 0.2658);
+    const discounted = Math.round(total * 0.265847); // ~Rp 199.000 from Rp 748.550
 
     return {
       originalPrice: total,

@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Figtree, Inter, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { NextIntlClientProvider } from "next-intl";
+import { getLocale, getMessages } from "next-intl/server";
 import "./globals.css";
 
 import LayoutClient from "@/components/LayoutClient";
@@ -43,8 +44,8 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const locale = "id";
-  const messages = (await import(`../messages/${locale}.json`)).default;
+  const locale = await getLocale();
+  const messages = await getMessages();
 
   return (
     <html lang={locale} suppressHydrationWarning>

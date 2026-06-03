@@ -14,33 +14,12 @@ interface LanguageSwitcherProps {
 export default function LanguageSwitcher({
   isScrolled = false,
 }: LanguageSwitcherProps) {
-  let locale: string;
-  let pathname: string;
-  let router: ReturnType<typeof useRouter>;
-  let t: ReturnType<typeof useTranslations>;
-
-  try {
-    locale = useLocale();
-    pathname = usePathname();
-    router = useRouter();
-    t = useTranslations("Language");
-  } catch (e) {
-    // Fallback saat build/prerender tanpa i18n context
-    return (
-      <div className="relative">
-        <button
-          disabled
-          className="flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm border-gray-300/50 bg-white/60 text-[#111A4A] opacity-50 cursor-not-allowed"
-        >
-          <Globe size={14} className="text-[#111A4A]/70" />
-          <span className="font-semibold uppercase tracking-wide">ID</span>
-        </button>
-      </div>
-    );
-  }
-
+  const locale = useLocale();
+  const router = useRouter();
+  const pathname = usePathname();
   const [isPending, startTransition] = useTransition();
   const [isOpen, setIsOpen] = useState(false);
+  const t = useTranslations("Language");
 
   const switchLocale = (newLocale: "id" | "en") => {
     if (newLocale === locale) return;

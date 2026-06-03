@@ -61,7 +61,7 @@ export const ProductTeaserCard = ({
             dan menguasai dunia trading secara praktis, efektif, dan
             berorientasi hasil.
           </p>
-          <p className="mb-5">PT AKADEMI KEUANGAN NUSANTARA </p>
+          <p className="mb-5">PT AKADEM KEUANGAN NUSANTARA </p>
 
           {/* Small CTA Button */}
           <button

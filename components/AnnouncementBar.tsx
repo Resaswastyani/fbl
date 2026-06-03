@@ -2,25 +2,24 @@
 
 import { X } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 
 export default function AnnouncementBar() {
+  const t = useTranslations("Announcement");
   const [visible, setVisible] = useState(true);
-  const [closed, setClosed] = useState(false); // NEW → untuk close manual
+  const [closed, setClosed] = useState(false);
 
-  // Jika user klik X → sembunyikan permanen
   const handleClose = () => {
     setClosed(true);
-    setVisible(false); 
+    setVisible(false);
   };
 
-  // Scroll behavior (tetap seperti kode kamu)
   useEffect(() => {
     const onScroll = () => {
-      if (closed) return; // kalau sudah di-close, jangan muncul lagi
+      if (closed) return;
       if (window.scrollY > 40) setVisible(false);
       else setVisible(true);
     };
-
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, [closed]);
@@ -38,16 +37,15 @@ export default function AnnouncementBar() {
         animate-fade-in
       "
     >
-      <span className="font-medium">Batch kelas Forex baru dibuka!</span>
+      <span className="font-medium">{t("newBatch")}</span>
 
       <a
         href="/signup"
         className="underline font-medium text-[#111A4A] hover:opacity-70"
       >
-        Daftar Sekarang →
+        {t("registerNow")}
       </a>
 
-      {/* TOMBOL CLOSE (X) */}
       <button
         onClick={handleClose}
         className="

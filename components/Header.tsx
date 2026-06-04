@@ -1198,7 +1198,7 @@ export const Header = () => {
                 },
                 {
                   name: "Jurnal Trading",
-                  href: "/jurnal-trading",
+                  href: "/Jurnal-trading",
                   icon: Book,
                 },
               ]}
@@ -1357,7 +1357,7 @@ export const Header = () => {
                       <Calculator size={16} /> Position Size Calculator
                     </button>
                     <button
-                      onClick={() => handleLinkClick("/jurnal-trading")}
+                      onClick={() => handleLinkClick("/Jurnal-trading")}
                       className="flex gap-2 items-center text-gray-700 w-full"
                     >
                       <Book size={16} /> Jurnal Trading

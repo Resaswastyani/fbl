@@ -720,6 +720,7 @@ import {
   LogOut,
   Settings,
   ShoppingCart,
+  Book,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -1195,6 +1196,11 @@ export const Header = () => {
                   href: "/position-size-calculator",
                   icon: Calculator,
                 },
+                {
+                  name: "Jurnal Trading",
+                  href: "/jurnal-trading",
+                  icon: Book,
+                },
               ]}
             />
           </div>
@@ -1349,6 +1355,12 @@ export const Header = () => {
                       className="flex gap-2 items-center text-gray-700 w-full"
                     >
                       <Calculator size={16} /> Position Size Calculator
+                    </button>
+                    <button
+                      onClick={() => handleLinkClick("/jurnal-trading")}
+                      className="flex gap-2 items-center text-gray-700 w-full"
+                    >
+                      <Calculator size={16} /> Jurnal Trading
                     </button>
                   </div>
                 </div>

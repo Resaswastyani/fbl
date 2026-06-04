@@ -1360,7 +1360,7 @@ export const Header = () => {
                       onClick={() => handleLinkClick("/jurnal-trading")}
                       className="flex gap-2 items-center text-gray-700 w-full"
                     >
-                      <Calculator size={16} /> Jurnal Trading
+                      <Book size={16} /> Jurnal Trading
                     </button>
                   </div>
                 </div>

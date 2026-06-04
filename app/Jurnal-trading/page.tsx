@@ -1,5 +1,7 @@
+"use client";
+
 import { TradingJournalPage } from "@/components/TradingJurnalPage";
 
-export default function JournalPage() {
+export default function JurnalTradingPage() {
   return <TradingJournalPage />;
 }

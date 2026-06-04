@@ -2,7 +2,7 @@
 
 import { Menu, Bell, Search, ShoppingCart } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { useCart } from "@/app/context/cart-context";
+import { useCart } from "@/[locale]/context/cart-context";
 
 interface HeaderProps {
   openMobileSidebar: () => void;
@@ -47,7 +47,6 @@ export default function Header({ openMobileSidebar }: HeaderProps) {
 
       {/* RIGHT ICONS */}
       <div className="flex items-center gap-4 ml-auto">
-
         {/* CART ICON */}
         <button
           onClick={toggleCart}
@@ -79,4 +78,3 @@ export default function Header({ openMobileSidebar }: HeaderProps) {
     </header>
   );
 }
-

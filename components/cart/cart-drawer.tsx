@@ -1,17 +1,11 @@
 "use client";
 
-import { useCart } from "@/app/context/cart-context";
+import { useCart } from "@/[locale]/context/cart-context";
 import { useState } from "react";
 
 export default function CartDrawer() {
-  const {
-    items,
-    isOpen,
-    toggleCart,
-    removeFromCart,
-    clearCart,
-    checkout,
-  } = useCart();
+  const { items, isOpen, toggleCart, removeFromCart, clearCart, checkout } =
+    useCart();
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
@@ -28,7 +22,7 @@ export default function CartDrawer() {
       await checkout();
     } catch (err: any) {
       setErrorMessage(
-        err?.message || "Terjadi kesalahan saat memproses pembayaran."
+        err?.message || "Terjadi kesalahan saat memproses pembayaran.",
       );
     }
   };

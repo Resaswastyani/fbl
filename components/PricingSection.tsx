@@ -4,7 +4,7 @@ import * as React from "react";
 import { CheckIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { useCart } from "@/app/context/cart-context";
+import { useCart } from "@/[locale]/context/cart-context";
 import { useRouter } from "next/navigation"; // ← tambahan untuk redirect
 
 // ----------------------------
@@ -51,10 +51,14 @@ const plans: PricingPlan[] = [
 // ----------------------------
 // FEATURE CHECK HELPER
 // ----------------------------
-function shouldShowCheck(included: PricingFeature["included"], level: PlanLevel) {
+function shouldShowCheck(
+  included: PricingFeature["included"],
+  level: PlanLevel,
+) {
   if (included === "all") return true;
   if (included === "bundle10" && level === "bundle10") return true;
-  if (included === "bundle5" && (level === "bundle5" || level === "bundle10")) return true;
+  if (included === "bundle5" && (level === "bundle5" || level === "bundle10"))
+    return true;
   if (included === "bundle3" && level === "bundle3") return true;
   return false;
 }
@@ -117,7 +121,9 @@ export function PricingSection() {
             <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center">
               <CheckIcon className="text-[#156d95] w-4 h-4" />
             </div>
-            <span className="font-medium">Berhasil ditambahkan ke keranjang</span>
+            <span className="font-medium">
+              Berhasil ditambahkan ke keranjang
+            </span>
           </div>
         </div>
       )}
@@ -134,7 +140,8 @@ export function PricingSection() {
               Berhasil Ditambahkan!
             </h2>
             <p className="text-gray-700 mb-8 leading-relaxed">
-              {activePlan.name} sudah masuk ke keranjang.<br />
+              {activePlan.name} sudah masuk ke keranjang.
+              <br />
               Silakan <strong>login</strong> untuk melanjutkan ke pembayaran.
             </p>
 
@@ -168,8 +175,8 @@ export function PricingSection() {
             </h2>
 
             <p className="text-gray-700 mb-6">
-              Kamu akan menambahkan <b>{activePlan.name}</b> ke keranjang dengan harga{" "}
-              <b>Rp{activePlan.price.toLocaleString()}</b>.
+              Kamu akan menambahkan <b>{activePlan.name}</b> ke keranjang dengan
+              harga <b>Rp{activePlan.price.toLocaleString()}</b>.
             </p>
 
             <div className="flex justify-end gap-3">
@@ -194,14 +201,14 @@ export function PricingSection() {
       {/* ===================== CONTENT ===================== */}
       <section className="py-24 bg-background">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-
           {/* Title */}
           <div className="text-center mb-16">
             <h2 className="font-figtree text-[40px] font-normal leading-tight mb-4">
               Pilih Paket Bundle Materi
             </h2>
             <p className="font-figtree text-lg text-muted-foreground max-w-2xl mx-auto">
-              Pilih paket belajar Forex yang sesuai dengan kebutuhan dan tingkat kemampuanmu.
+              Pilih paket belajar Forex yang sesuai dengan kebutuhan dan tingkat
+              kemampuanmu.
             </p>
           </div>
 
@@ -216,7 +223,7 @@ export function PricingSection() {
                   "relative p-8 rounded-2xl text-left transition-all border-2",
                   selectedPlan === plan.level
                     ? "border-[#156d95] bg-[#156d95]/5"
-                    : "border-border hover:border-[#156d95]/50"
+                    : "border-border hover:border-[#156d95]/50",
                 )}
               >
                 {plan.popular && (
@@ -226,12 +233,16 @@ export function PricingSection() {
                 )}
 
                 <div className="mb-6">
-                  <h3 className="font-figtree text-2xl font-medium mb-2">{plan.name}</h3>
+                  <h3 className="font-figtree text-2xl font-medium mb-2">
+                    {plan.name}
+                  </h3>
                   <div className="flex items-baseline gap-1">
                     <span className="font-figtree text-4xl font-medium">
                       Rp{plan.price.toLocaleString()}
                     </span>
-                    <span className="font-figtree text-lg text-muted-foreground">/sekali bayar</span>
+                    <span className="font-figtree text-lg text-muted-foreground">
+                      /sekali bayar
+                    </span>
                   </div>
                 </div>
 
@@ -240,7 +251,7 @@ export function PricingSection() {
                     "w-full py-3 px-6 rounded-full font-figtree text-lg transition-all text-center",
                     selectedPlan === plan.level
                       ? "bg-[#156d95] text-white"
-                      : "bg-secondary text-foreground"
+                      : "bg-secondary text-foreground",
                   )}
                 >
                   {selectedPlan === plan.level ? "Dipilih" : "Pilih Paket"}
@@ -253,16 +264,20 @@ export function PricingSection() {
           <div className="border border-border rounded-2xl overflow-hidden bg-card">
             <div className="overflow-x-auto">
               <div className="min-w-[900px]">
-                
                 {/* Header */}
                 <div className="flex items-center p-6 bg-secondary border-b border-border">
                   <div className="flex-1">
-                    <h3 className="font-figtree text-xl font-medium">Manfaat yang Kamu Dapatkan</h3>
+                    <h3 className="font-figtree text-xl font-medium">
+                      Manfaat yang Kamu Dapatkan
+                    </h3>
                   </div>
 
                   <div className="flex items-center gap-8">
                     {plans.map((plan) => (
-                      <div key={plan.level} className="w-32 text-center font-figtree text-lg font-medium">
+                      <div
+                        key={plan.level}
+                        className="w-32 text-center font-figtree text-lg font-medium"
+                      >
                         {plan.name}
                       </div>
                     ))}
@@ -275,16 +290,21 @@ export function PricingSection() {
                     key={feature.name}
                     className={cn(
                       "flex items-center p-6 transition-colors border-b border-border last:border-b-0",
-                      index % 2 === 0 ? "bg-background" : "bg-secondary/30"
+                      index % 2 === 0 ? "bg-background" : "bg-secondary/30",
                     )}
                   >
                     <div className="flex-1">
-                      <span className="font-figtree text-lg">{feature.name}</span>
+                      <span className="font-figtree text-lg">
+                        {feature.name}
+                      </span>
                     </div>
 
                     <div className="flex items-center gap-8">
                       {plans.map((plan) => (
-                        <div key={plan.level} className="w-32 flex justify-center">
+                        <div
+                          key={plan.level}
+                          className="w-32 flex justify-center"
+                        >
                           {shouldShowCheck(feature.included, plan.level) ? (
                             <div className="w-6 h-6 rounded-full bg-[#156d95] flex items-center justify-center">
                               <CheckIcon className="w-4 h-4 text-white" />
@@ -297,7 +317,6 @@ export function PricingSection() {
                     </div>
                   </div>
                 ))}
-
               </div>
             </div>
           </div>
@@ -311,7 +330,6 @@ export function PricingSection() {
               Mulai dengan {activePlan.name}
             </button>
           </div>
-
         </div>
       </section>
     </>

@@ -631,7 +631,7 @@ import {
   Link as LinkIcon,
   Trash2,
 } from "lucide-react";
-import { useCart } from "@/app/context/cart-context";
+import { useCart } from "@/[locale]/context/cart-context";
 
 interface UserProfile {
   id: string;
@@ -976,7 +976,7 @@ export default function StudentProfilePage() {
       default:
         return (
           <Badge className="bg-[#156d95]/10 text-[#156d95] hover:bg-[#156d95]/10">
-           Pelanggan
+            Pelanggan
           </Badge>
         );
     }
@@ -1133,7 +1133,7 @@ export default function StudentProfilePage() {
                     }`}
                   >
                     <User className="h-5 w-5" />
-                   Informasi Profil
+                    Informasi Profil
                   </button>
                   <button
                     onClick={() => setActiveTab("password")}
@@ -1155,7 +1155,7 @@ export default function StudentProfilePage() {
                     }`}
                   >
                     <Shield className="h-5 w-5" />
-                   Keamanan & Koneksi
+                    Keamanan & Koneksi
                   </button>
                 </nav>
               </CardContent>

@@ -19,7 +19,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { useCart } from "@/app/context/cart-context";
+import { useCart } from "@/[locale]/context/cart-context";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 
@@ -749,7 +749,8 @@ export default function CourseSection() {
                         className="w-full bg-white text-[#156d95] hover:bg-gray-100 font-bold py-6 text-lg rounded-xl shadow-lg transition-all"
                         onClick={() => router.push("/student/cart")}
                       >
-                        <ShoppingCart className="mr-2 h-5 w-5" /> {t("viewCart")}
+                        <ShoppingCart className="mr-2 h-5 w-5" />{" "}
+                        {t("viewCart")}
                       </Button>
                     ) : (
                       <Button

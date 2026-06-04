@@ -16,7 +16,7 @@ import {
   GraduationCap,
 } from "lucide-react";
 import CourseSection from "@/components/CourseSection";
-import { useCart } from "@/app/context/cart-context";
+import { useCart } from "@/[locale]/context/cart-context";
 
 interface EnrolledCourse {
   id: string;

@@ -4,7 +4,7 @@ import { Figtree, Inter, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
-import "./globals.css";
+import "@/app/globals.css";
 
 import LayoutClient from "@/components/LayoutClient";
 import { CartProvider } from "@/[locale]/context/cart-context";

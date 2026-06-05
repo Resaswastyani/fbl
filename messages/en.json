@@ -332,5 +332,64 @@
     "priceColumnHint": "Price column appears only when needed",
     "pipValue": "Pip Value (1 lot)",
     "inAccountCurrency": "In account currency"
+  },
+  "DisclaimerPage": {
+    "title": "Disclaimer & Terms",
+    "subtitle": "Please read carefully before using our services.",
+    "backToHome": "Back to Home",
+    "sections": [
+      {
+        "title": "DISCLAIMER",
+        "content": [
+          "All information displayed on this channel is provided solely as a means of sharing experience and general knowledge. This content is not investment advice, trading recommendations, or an invitation to make certain transactions. We do not guarantee the accuracy, completeness, or suitability of the information for your needs.",
+          "All investment decisions and risks that arise are entirely the personal responsibility of the user. We do not bear responsibility for financial losses, transaction errors, or any consequences arising from the use of information on this channel."
+        ]
+      },
+      {
+        "title": "IMPORTANT",
+        "content": [
+          "Examples of transactions, strategies, and analyses displayed are for educational illustration purposes only. Results shown do not guarantee that users will achieve similar results. All trading activities carry high risk, and no method can promise profits or eliminate the risk of loss.",
+          "Before making transactions, consider your financial goals, risk tolerance level, and financial condition. Information in this content may not be relevant for all traders and may change according to market conditions.",
+          "This channel does not provide directions to buy, sell, or hold certain financial instruments. Users must conduct independent analysis before making decisions.",
+          "We are not responsible if other parties claim to represent this channel for any purpose. If there are differences between information here and applicable legal regulations, official regulations shall prevail.",
+          "We urge users to always be vigilant against fraud, identity forgery, or parties claiming to have a relationship with this channel.",
+          "We hope the information shared can broaden your insights, but all trading decisions remain entirely your responsibility."
+        ]
+      },
+      {
+        "title": "RISK WARNING",
+        "content": [
+          "Trading in financial markets such as forex, stocks, and cryptocurrency carries very high risk and is not suitable for everyone. Before starting, understand that:",
+          "1. You may potentially lose part or all of the capital you invest.",
+          "2. Market movements are very volatile and can change rapidly.",
+          "3. Leverage can amplify profit opportunities, but also increases potential losses.",
+          "4. Technical disruptions, internet connection, or system failures can affect your transactions.",
+          "5. Government regulations or new policies can directly impact your trading results.",
+          "Use only funds whose risk you are prepared to bear. Consult with a certified financial advisor if needed. Opinions or analyses presented are personal and may change without notice. Past results do not guarantee future results. By using this information, you understand that all risks are entirely yours. Content shared is not financial advice and is entirely based on experience and personal perspective. There is no profit guarantee. All materials in the form of text, images, videos, or other media displayed on this platform are protected by copyright. It is not permitted to copy, distribute, or use part or all of the content without written permission from the copyright owner."
+        ]
+      },
+      {
+        "title": "LEGAL & REGULATION WARNING",
+        "content": [
+          "Trading activities are subject to the rules and laws applicable in each country. In Indonesia, commodity futures trading activities (including forex) are regulated by:",
+          "1. Law No. 10 of 2011 concerning amendments to Law No. 32/1997.",
+          "2. BAPPEBTI regulations, as the official institution overseeing futures trading activities.",
+          "3. Consumer Protection Law No. 8 of 1999, related to consumer protection against harmful business practices.",
+          "Every party offering trading services must be registered and have a permit from BAPPEBTI. Using illegal brokers can bring legal risks and losses to users."
+        ]
+      },
+      {
+        "title": "USER RESPONSIBILITY",
+        "content": [
+          "Every user must:",
+          "1. Ensure to only transact with official brokers that have permits.",
+          "2. Understand all risks before investing.",
+          "3. Conduct independent research or professional consultation before making decisions.",
+          "We are not responsible for any losses arising from the use of information from this content. Comply with all applicable legal regulations and carry out trading activities consciously and responsibly."
+        ]
+      }
+    ],
+    "agreementText": "By using this website, you agree to all the terms above.",
+    "agreeButton": "I Understand and Agree"
   }
 }

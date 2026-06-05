@@ -1820,7 +1820,7 @@ export const TradingJournalPage = () => {
             </motion.button>
           </motion.div>
 
-          {/* Trust */}
+          {/* Trust
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -1842,7 +1842,7 @@ export const TradingJournalPage = () => {
             >
               Tidak puas? Uang kembali 100% dalam 7 hari setelah pembelian.
             </p>
-          </motion.div>
+          </motion.div> */}
         </div>
       </div>
     </section>

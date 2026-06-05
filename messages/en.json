@@ -391,5 +391,108 @@
     ],
     "agreementText": "By using this website, you agree to all the terms above.",
     "agreeButton": "I Understand and Agree"
+  },
+  "BrokerData": {
+    "xm": {
+      "description": "Global forex broker with trusted regulation and 24/7 customer service in Indonesian.",
+      "features": [
+        "Micro & Standard Accounts",
+        "Trading without requotes",
+        "50% deposit bonus",
+        "Free trading education"
+      ],
+      "pros": [
+        "Low spreads starting from 0.6 pips",
+        "Easy deposit/withdrawal via local bank",
+        "MT4 & MT5 platforms"
+      ],
+      "cons": ["Limited crypto instruments"],
+      "badge": "Most Popular"
+    },
+    "fbs": {
+      "description": "Broker with the lowest spreads and various attractive promotions for Indonesian traders.",
+      "features": [
+        "Cent account for beginners",
+        "Cashback rebate up to $15/lot",
+        "$100 no deposit bonus",
+        "Copy trading available"
+      ],
+      "pros": [
+        "0 pips spread on ECN account",
+        "Highest leverage 1:3000",
+        "Various bonuses"
+      ],
+      "cons": ["Regulation not as strong as major brokers"],
+      "badge": "Lowest Spread"
+    },
+    "exness": {
+      "description": "Broker with instant execution and super fast withdrawal in seconds.",
+      "features": [
+        "Instant withdrawal 24/7",
+        "Standard & Pro accounts",
+        "Social Trading",
+        "Free VPS hosting"
+      ],
+      "pros": [
+        "Fastest withdrawal in the industry",
+        "Instant order execution",
+        "Tier-1 FCA regulation"
+      ],
+      "cons": ["Pro account minimum deposit $200"],
+      "badge": "Best"
+    },
+    "octa": {
+      "description": "Beginner-friendly broker with modern trading platform and trading competitions with prizes.",
+      "features": [
+        "Own OctaTrader platform",
+        "Trading competitions with prizes",
+        "Trading Level status",
+        "Free daily analysis"
+      ],
+      "pros": [
+        "User-friendly platform",
+        "Many promos and contests",
+        "Complete education for beginners"
+      ],
+      "cons": ["Limited instruments vs major brokers"],
+      "badge": ""
+    },
+    "icmarkets": {
+      "description": "Best ECN broker for professional traders with competitive raw spreads.",
+      "features": [
+        "True ECN execution",
+        "Raw spread 0.0 pips",
+        "Servers at NY4 & LD5",
+        "MT4, MT5 & cTrader"
+      ],
+      "pros": [
+        "Lowest spreads for scalping",
+        "Ultra-fast execution",
+        "Suitable for algo trading"
+      ],
+      "cons": ["High minimum deposit", "No bonuses"],
+      "badge": "Pro Trader"
+    },
+    "hotforex": {
+      "description": "Multi-award broker with various account types for all trader levels.",
+      "features": [
+        "10+ trading account types",
+        "HF Bars loyalty program",
+        "Free deposit insurance",
+        "Trading Central analysis"
+      ],
+      "pros": [
+        "Very diverse account choices",
+        "Attractive reward program",
+        "Free premium education"
+      ],
+      "cons": ["Standard spread somewhat high"],
+      "badge": ""
+    }
+  },
+  "IntegrationCarousel": {
+    "title": "Trade across the global forex market.",
+    "subtitle": "Analyze major currency pairs, commodities, and crypto-linked instruments in real time with institutional-grade data.",
+    "buttonText": "Explore Forex Markets"
   }
 }

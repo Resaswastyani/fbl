@@ -28,14 +28,55 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Forex for Better Living",
-  description: "Created with v0",
-  generator: "v0.app",
+  title: {
+    template: "%s | Forex for Better Living",
+    default: "Forex for Better Living | Trading Automation & Education",
+  },
+  description: "Tingkatkan pengalaman dan profitabilitas trading Anda dengan Forex for Better Living (FBL). Menyediakan edukasi forex, robot trading (EA), dan indikator canggih untuk hasil trading yang lebih konsisten.",
+  keywords: [
+    "forex",
+    "trading forex",
+    "robot trading",
+    "EA forex",
+    "expert advisor",
+    "edukasi forex",
+    "indikator trading",
+    "forex automation",
+    "Forex for Better Living",
+    "FBL"
+  ],
+  authors: [{ name: "Forex for Better Living" }],
+  creator: "Forex for Better Living",
+  openGraph: {
+    type: "website",
+    locale: "id_ID",
+    title: "Forex for Better Living | Trading Automation & Education",
+    description: "Tingkatkan pengalaman dan profitabilitas trading Anda dengan Forex for Better Living (FBL). Menyediakan edukasi forex, robot trading (EA), dan indikator canggih.",
+    siteName: "Forex for Better Living",
+    images: [
+      {
+        url: "/icon.svg",
+        width: 1200,
+        height: 630,
+        alt: "Forex for Better Living",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Forex for Better Living | Trading Automation & Education",
+    description: "Tingkatkan pengalaman dan profitabilitas trading Anda dengan Forex for Better Living (FBL). Menyediakan edukasi forex, robot trading (EA), dan indikator canggih.",
+    images: ["/icon.svg"],
+  },
   icons: {
     icon: "/icon.svg",
+    apple: "/icon.svg", // Apple touch icon
   },
   verification: {
     google: "googlee3f2781a2b9fd80d",
+  },
+  alternates: {
+    canonical: "/",
   },
 };
 

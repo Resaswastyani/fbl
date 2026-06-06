@@ -43,7 +43,8 @@ export const metadata: Metadata = {
     "indikator trading",
     "forex automation",
     "Forex for Better Living",
-    "FBL"
+    "FBL",
+    "Forex Class"
   ],
   authors: [{ name: "Forex for Better Living" }],
   creator: "Forex for Better Living",

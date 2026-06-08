@@ -3107,7 +3107,9 @@ type UserRole = "PELANGGAN" | "ADMIN" | "MENTOR";
 type Article = {
   id: string;
   title: string;
+  title_en?: string | null;
   content: string;
+  content_en?: string | null;
   thumbnail?: string;
   published: boolean;
   viewCount: number;
@@ -3254,6 +3256,7 @@ export default function ForexDashboardLMS() {
   // RichTextEditor refs
   const contentEditorRef = useRef<RichTextEditorRef>(null);
   const articleContentRef = useRef<RichTextEditorRef>(null);
+  const articleContentEnRef = useRef<RichTextEditorRef>(null);
 
   // Role validation on mount
   useEffect(() => {
@@ -3449,12 +3452,15 @@ export default function ForexDashboardLMS() {
 
   const openAddArticle = () => {
     setEditingArticle(null);
-    resetArticle({ title: "", thumbnail: "", published: false });
+    resetArticle({ title: "", title_en: "", thumbnail: "", published: false });
 
     // Reset editor
     setTimeout(() => {
       if (articleContentRef.current) {
         articleContentRef.current.setValue("");
+      }
+      if (articleContentEnRef.current) {
+        articleContentEnRef.current.setValue("");
       }
     }, 100);
 
@@ -3465,6 +3471,7 @@ export default function ForexDashboardLMS() {
     setEditingArticle(article);
     resetArticle({
       title: article.title,
+      title_en: article.title_en || "",
       thumbnail: article.thumbnail || "",
       published: article.published,
     });
@@ -3475,6 +3482,9 @@ export default function ForexDashboardLMS() {
     setTimeout(() => {
       if (articleContentRef.current && article.content) {
         articleContentRef.current.setValue(article.content);
+      }
+      if (articleContentEnRef.current && article.content_en) {
+        articleContentEnRef.current.setValue(article.content_en);
       }
     }, 150);
   };
@@ -3597,6 +3607,7 @@ export default function ForexDashboardLMS() {
     try {
       // Get content dari editor ref
       const contentValue = articleContentRef.current?.getValue() || "";
+      const contentEnValue = articleContentEnRef.current?.getValue() || "";
 
       if (editingArticle) {
         const response = await fetch("/api/articles", {
@@ -3605,7 +3616,9 @@ export default function ForexDashboardLMS() {
           body: JSON.stringify({
             id: editingArticle.id,
             title: data.title,
+            title_en: data.title_en,
             content: contentValue,
+            content_en: contentEnValue,
             thumbnail: data.thumbnail,
             published: data.published,
           }),
@@ -3626,7 +3639,9 @@ export default function ForexDashboardLMS() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             title: data.title,
+            title_en: data.title_en,
             content: contentValue,
+            content_en: contentEnValue,
             thumbnail: data.thumbnail,
             published: data.published,
           }),
@@ -3646,6 +3661,9 @@ export default function ForexDashboardLMS() {
       // Reset editor
       if (articleContentRef.current) {
         articleContentRef.current.setValue("");
+      }
+      if (articleContentEnRef.current) {
+        articleContentEnRef.current.setValue("");
       }
     } catch (error) {
       console.error("Error saving article:", error);
@@ -5668,6 +5686,16 @@ export default function ForexDashboardLMS() {
                   />
                 </div>
 
+                {/* Judul English */}
+                <div>
+                  <Label htmlFor="article-title-en">Judul Artikel (English)</Label>
+                  <Input
+                    id="article-title-en"
+                    {...registerArticle("title_en")}
+                    placeholder="Masukkan judul artikel dalam bahasa Inggris"
+                  />
+                </div>
+
                 {/* Thumbnail Upload */}
                 <div>
                   <Label>Thumbnail Artikel</Label>
@@ -5752,6 +5780,21 @@ export default function ForexDashboardLMS() {
                     Tips: Gunakan heading, list, dan gambar untuk membuat
                     artikel lebih menarik
                   </p>
+                </div>
+
+                {/* Konten Artikel English dengan Rich Text Editor */}
+                <div>
+                  <Label>Konten Artikel (English)</Label>
+                  <div className="border rounded-md max-h-[500px] overflow-hidden">
+                    <RichTextEditor
+                      ref={articleContentEnRef}
+                      value={editingArticle?.content_en || ""}
+                      onChange={(value) => {
+                        // Value sudah di-handle oleh editor internal
+                      }}
+                      placeholder="Write the full article content in English here..."
+                    />
+                  </div>
                 </div>
 
                 <div className="flex justify-end gap-3 pt-4 border-t mt-4">

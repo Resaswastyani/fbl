@@ -136,7 +136,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
     }
 
-    const { title, content, thumbnail, published } = body;
+    const { title, title_en, content, content_en, thumbnail, published } = body;
 
     // Validasi required fields
     if (!title || !title.trim()) {
@@ -184,7 +184,9 @@ export async function POST(req: NextRequest) {
     const article = await prisma.article.create({
       data: {
         title: title.trim(),
+        title_en: title_en ? title_en.trim() : null,
         content: content.trim(),
+        content_en: content_en ? content_en.trim() : null,
         thumbnail: thumbnailUrl,
         published: published === true,
         authorId: user.id,
@@ -239,7 +241,7 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
     }
 
-    const { id, title, content, thumbnail, published } = body;
+    const { id, title, title_en, content, content_en, thumbnail, published } = body;
 
     if (!id) {
       return NextResponse.json(
@@ -306,7 +308,9 @@ export async function PUT(req: NextRequest) {
       where: { id },
       data: {
         title: title !== undefined ? title.trim() : undefined,
+        title_en: title_en !== undefined ? (title_en ? title_en.trim() : null) : undefined,
         content: content !== undefined ? content.trim() : undefined,
+        content_en: content_en !== undefined ? (content_en ? content_en.trim() : null) : undefined,
         thumbnail: thumbnailUrl !== undefined ? thumbnailUrl : undefined,
         published: published !== undefined ? published === true : undefined,
       },

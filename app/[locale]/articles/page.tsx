@@ -183,6 +183,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useLocale } from "next-intl";
 import Link from "next/link";
 import { Header } from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -190,7 +191,9 @@ import Footer from "@/components/Footer";
 interface Article {
   id: string;
   title: string;
+  title_en?: string | null;
   content: string;
+  content_en?: string | null;
   thumbnail?: string;
   published: boolean;
   viewCount: number;
@@ -203,6 +206,7 @@ interface Article {
 
 export default function ArticlesPage() {
   const router = useRouter();
+  const locale = useLocale();
   const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -322,7 +326,7 @@ export default function ArticlesPage() {
                         className="text-xl font-medium text-[#111A4A] mb-2 leading-tight group-hover:text-[#156d95] transition-colors"
                         style={{ fontFamily: "var(--font-figtree), Figtree" }}
                       >
-                        {article.title}
+                        {locale === 'en' && article.title_en ? article.title_en : article.title}
                       </h2>
 
                       {/* Excerpt */}
@@ -330,7 +334,7 @@ export default function ArticlesPage() {
                         className="text-sm text-[#6e6e6e] leading-relaxed mb-3"
                         style={{ fontFamily: "var(--font-figtree), Figtree" }}
                       >
-                        {stripHtml(article.content)}
+                        {stripHtml(locale === 'en' && article.content_en ? article.content_en : article.content)}
                       </p>
 
                       {/* Author */}

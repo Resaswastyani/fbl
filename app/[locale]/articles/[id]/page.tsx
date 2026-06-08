@@ -15,12 +15,15 @@ import {
   Share2,
 } from "lucide-react";
 import { useRouter, useParams } from "next/navigation";
+import { useLocale } from "next-intl";
 import Link from "next/link";
 
 interface Article {
   id: string;
   title: string;
+  title_en?: string | null;
   content: string;
+  content_en?: string | null;
   thumbnail?: string;
   published: boolean;
   viewCount: number;
@@ -35,6 +38,7 @@ interface Article {
 export default function ArticleDetailPage() {
   const router = useRouter();
   const params = useParams();
+  const locale = useLocale();
   const [article, setArticle] = useState<Article | null>(null);
   const [loading, setLoading] = useState(true);
   const [relatedArticles, setRelatedArticles] = useState<Article[]>([]);
@@ -87,7 +91,7 @@ export default function ArticleDetailPage() {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: article?.title,
+          title: locale === 'en' && article?.title_en ? article.title_en : article?.title,
           url: window.location.href,
         });
       } catch (err) {
@@ -157,7 +161,7 @@ export default function ArticleDetailPage() {
                   fontFamily: "var(--font-figtree), Figtree",
                 }}
               >
-                {article.title}
+                {locale === 'en' && article.title_en ? article.title_en : article.title}
               </h1>
 
               {/* Meta Info - Full width layout */}
@@ -232,7 +236,7 @@ export default function ArticleDetailPage() {
               {/* Custom prose styling to match theme - Full width */}
               <div
                 className="article-content text-[#111A4A] leading-relaxed w-full"
-                dangerouslySetInnerHTML={{ __html: article.content }}
+                dangerouslySetInnerHTML={{ __html: locale === 'en' && article.content_en ? article.content_en : article.content }}
               />
             </motion.div>
 
@@ -309,7 +313,7 @@ export default function ArticleDetailPage() {
                           className="text-lg font-medium text-[#111A4A] leading-tight group-hover:text-[#156d95] transition-colors line-clamp-2"
                           style={{ fontFamily: "var(--font-figtree), Figtree" }}
                         >
-                          {related.title}
+                          {locale === 'en' && related.title_en ? related.title_en : related.title}
                         </h3>
                       </div>
                     </motion.article>

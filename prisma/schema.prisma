@@ -176,7 +176,9 @@ model OrderItem {
 model Article {
   id          String   @id @default(cuid())
   title       String   @db.VarChar(255)     // ✅ Batasi judul
+  title_en    String?  @db.VarChar(255)     // ✅ Judul bahasa inggris
   content     String   @db.LongText         // ✅ WAJIB LongText untuk konten panjang
+  content_en  String?  @db.LongText         // ✅ Konten bahasa inggris
   thumbnail   String?  @db.VarChar(500)     // ✅ URL thumbnail
   published   Boolean  @default(false)
   viewCount   Int      @default(0)

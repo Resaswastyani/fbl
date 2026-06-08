@@ -198,7 +198,23 @@ export default function CourseSection() {
   const [loading, setLoading] = useState(true);
   const [enrolledCourses, setEnrolledCourses] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [usdRate, setUsdRate] = useState<number>(0.000063); // Default fallback rate
   const itemsPerPage = 5;
+
+  useEffect(() => {
+    const fetchRate = async () => {
+      try {
+        const res = await fetch("https://open.er-api.com/v6/latest/IDR");
+        const data = await res.json();
+        if (data?.rates?.USD) {
+          setUsdRate(data.rates.USD);
+        }
+      } catch (error) {
+        console.error("Failed to fetch exchange rate", error);
+      }
+    };
+    fetchRate();
+  }, []);
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -302,11 +318,22 @@ export default function CourseSection() {
 
   const formatPrice = (price: string | number) => {
     const priceStr = typeof price === "number" ? price.toString() : price;
-    if (priceStr === "Free") return "Free";
-    const numeric = priceStr.replace(/[^0-9]/g, "");
-    return numeric
-      ? `Rp ${parseInt(numeric).toLocaleString("id-ID")}`
-      : priceStr;
+    if (priceStr === "Free" || priceStr === "0" || !priceStr) return "Free";
+    
+    const numeric = parseInt(priceStr.replace(/[^0-9]/g, ""), 10);
+    if (isNaN(numeric)) return priceStr;
+
+    if (locale === "en") {
+      const usdValue = numeric * usdRate;
+      return new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(usdValue);
+    }
+
+    return `Rp ${numeric.toLocaleString("id-ID")}`;
   };
 
   const isCourseFree = (course: Course) => {

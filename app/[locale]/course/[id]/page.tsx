@@ -554,6 +554,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -947,7 +948,8 @@ export default function CourseDetailPage() {
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-4">
+              <LanguageSwitcher />
               {/* Toggle Sidebar Button - Desktop Only */}
               <Button
                 variant="outline"

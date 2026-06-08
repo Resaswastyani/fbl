@@ -51,8 +51,10 @@ export async function GET(
           select: {
             id: true,
             title: true,
+            title_en: true,
             type: true,
             content: true,
+            content_en: true,
             contentUrl: true,
             duration: true,
           },

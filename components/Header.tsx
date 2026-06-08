@@ -24,7 +24,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 
-import { useCart } from "@/[locale]/context/cart-context";
+import { useCart } from "@/context/cart-context";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 type UserData = {

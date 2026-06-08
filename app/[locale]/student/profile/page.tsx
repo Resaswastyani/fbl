@@ -631,7 +631,7 @@ import {
   Link as LinkIcon,
   Trash2,
 } from "lucide-react";
-import { useCart } from "@/[locale]/context/cart-context";
+import { useCart } from "@/context/cart-context";
 
 interface UserProfile {
   id: string;

@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ShoppingCart, Trash2, ArrowLeft, CheckCircle } from "lucide-react";
-import { useCart } from "@/[locale]/context/cart-context";
+import { useCart } from "@/context/cart-context";
 
 export default function CartPage() {
   const router = useRouter();

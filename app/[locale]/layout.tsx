@@ -7,7 +7,7 @@ import { getLocale, getMessages } from "next-intl/server";
 import "@/app/globals.css";
 
 import LayoutClient from "@/components/LayoutClient";
-import { CartProvider } from "@/[locale]/context/cart-context";
+import { CartProvider } from "@/context/cart-context";
 import CartDrawer from "@/components/cart/cart-drawer";
 
 const figtree = Figtree({

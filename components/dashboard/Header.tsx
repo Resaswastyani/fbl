@@ -2,7 +2,7 @@
 
 import { Menu, Bell, Search, ShoppingCart } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { useCart } from "@/[locale]/context/cart-context";
+import { useCart } from "@/context/cart-context";
 
 interface HeaderProps {
   openMobileSidebar: () => void;

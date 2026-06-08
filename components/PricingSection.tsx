@@ -4,7 +4,7 @@ import * as React from "react";
 import { CheckIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { useCart } from "@/[locale]/context/cart-context";
+import { useCart } from "@/context/cart-context";
 import { useRouter } from "next/navigation"; // ← tambahan untuk redirect
 
 // ----------------------------

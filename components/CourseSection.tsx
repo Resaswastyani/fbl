@@ -19,7 +19,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { useCart } from "@/[locale]/context/cart-context";
+import { useCart } from "@/context/cart-context";
 import { useRouter } from "next/navigation";
 import { useTranslations, useLocale } from "next-intl";
 

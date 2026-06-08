@@ -3068,7 +3068,9 @@ import Header from "@/components/dashboard/Header";
 type Course = {
   id: string;
   title: string;
+  title_en?: string;
   description?: string;
+  description_en?: string;
   price?: string;
   lessons: Lesson[];
   published?: boolean;
@@ -3077,8 +3079,10 @@ type Course = {
 type Lesson = {
   id: string;
   title: string;
+  title_en?: string;
   type: "video" | "pdf" | "text" | "html";
   content?: string;
+  content_en?: string;
   contentUrl?: string;
   duration?: string;
   quiz?: Quiz;
@@ -3255,6 +3259,7 @@ export default function ForexDashboardLMS() {
 
   // RichTextEditor refs
   const contentEditorRef = useRef<RichTextEditorRef>(null);
+  const contentEnEditorRef = useRef<RichTextEditorRef>(null);
   const articleContentRef = useRef<RichTextEditorRef>(null);
   const articleContentEnRef = useRef<RichTextEditorRef>(null);
 
@@ -3890,7 +3895,7 @@ export default function ForexDashboardLMS() {
   const openEditCourse = (c: Course) => {
     setEditMode(true);
     setSelectedCourse(c);
-    reset({ title: c.title, description: c.description, price: c.price });
+    reset({ title: c.title, title_en: c.title_en || "", description: c.description, description_en: c.description_en || "", price: c.price });
     setModalOpen(true);
   };
 
@@ -3900,10 +3905,12 @@ export default function ForexDashboardLMS() {
         const response = await fetch("/api/courses", {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
+           body: JSON.stringify({
             id: selectedCourse.id,
             title: data.title,
+            title_en: data.title_en,
             description: data.description,
+            description_en: data.description_en,
             price: data.price,
           }),
         });
@@ -3925,7 +3932,9 @@ export default function ForexDashboardLMS() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             title: data.title,
+            title_en: data.title_en,
             description: data.description,
+            description_en: data.description_en,
             price: data.price || "Free",
             published: false,
           }),
@@ -3993,12 +4002,15 @@ export default function ForexDashboardLMS() {
   const openAddLesson = (courseId: string) => {
     setEditingLesson(null);
     setSelectedCourse(courses.find((c) => c.id === courseId) || null);
-    resetLesson({ title: "", type: "html", contentUrl: "", duration: "" });
+    resetLesson({ title: "", title_en: "", type: "html", contentUrl: "", duration: "" });
 
     // Reset editor content
     setTimeout(() => {
       if (contentEditorRef.current) {
         contentEditorRef.current.setValue("");
+      }
+      if (contentEnEditorRef.current) {
+        contentEnEditorRef.current.setValue("");
       }
     }, 100);
 
@@ -4014,10 +4026,12 @@ export default function ForexDashboardLMS() {
     // Reset form dengan value yang benar
     resetLesson({
       title: lesson.title,
+      title_en: lesson.title_en || "",
       type: lesson.type,
       contentUrl: lesson.contentUrl || "",
       duration: lesson.duration || "",
       content: lesson.content || "",
+      content_en: lesson.content_en || "",
     });
 
     setLessonModalOpen(true);
@@ -4026,6 +4040,9 @@ export default function ForexDashboardLMS() {
     setTimeout(() => {
       if (contentEditorRef.current && lesson.content) {
         contentEditorRef.current.setValue(lesson.content);
+      }
+      if (contentEnEditorRef.current && lesson.content_en) {
+        contentEnEditorRef.current.setValue(lesson.content_en);
       }
     }, 150);
   };
@@ -4036,9 +4053,12 @@ export default function ForexDashboardLMS() {
     try {
       // Get content dari RichTextEditor ref
       let contentValue = "";
+      let contentEnValue = "";
       if (data.type === "html" || data.type === "text") {
         contentValue =
           contentEditorRef.current?.getValue() || data.content || "";
+        contentEnValue =
+          contentEnEditorRef.current?.getValue() || data.content_en || "";
       }
 
       let contentUrlValue = data.contentUrl || null;
@@ -4050,8 +4070,10 @@ export default function ForexDashboardLMS() {
           body: JSON.stringify({
             id: editingLesson.id,
             title: data.title,
+            title_en: data.title_en,
             type: data.type,
             content: contentValue || null,
+            content_en: contentEnValue || null,
             contentUrl: contentUrlValue,
             duration: data.duration,
           }),
@@ -4085,8 +4107,10 @@ export default function ForexDashboardLMS() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             title: data.title,
+            title_en: data.title_en,
             type: data.type,
             content: contentValue || null,
+            content_en: contentEnValue || null,
             contentUrl: contentUrlValue,
             duration: data.duration,
             courseId: selectedCourse.id,
@@ -4118,6 +4142,9 @@ export default function ForexDashboardLMS() {
       // Reset editor content
       if (contentEditorRef.current) {
         contentEditorRef.current.setValue("");
+      }
+      if (contentEnEditorRef.current) {
+        contentEnEditorRef.current.setValue("");
       }
     } catch (error) {
       console.error("Error saving lesson:", error);
@@ -5466,11 +5493,28 @@ export default function ForexDashboardLMS() {
                   />
                 </div>
                 <div>
+                  <Label htmlFor="title_en">Judul Course (English)</Label>
+                  <Input
+                    id="title_en"
+                    {...register("title_en")}
+                    placeholder="Masukkan judul course dalam bahasa Inggris"
+                  />
+                </div>
+                <div>
                   <Label htmlFor="description">Deskripsi</Label>
                   <Textarea
                     id="description"
                     {...register("description")}
                     placeholder="Deskripsi singkat course"
+                    rows={3}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="description_en">Deskripsi (English)</Label>
+                  <Textarea
+                    id="description_en"
+                    {...register("description_en")}
+                    placeholder="Deskripsi singkat course dalam bahasa Inggris"
                     rows={3}
                   />
                 </div>
@@ -5532,6 +5576,14 @@ export default function ForexDashboardLMS() {
                     id="lesson-title"
                     {...registerLesson("title", { required: true })}
                     placeholder="Masukkan judul lesson"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="lesson-title_en">Judul Lesson (English)</Label>
+                  <Input
+                    id="lesson-title_en"
+                    {...registerLesson("title_en")}
+                    placeholder="Masukkan judul lesson dalam bahasa Inggris"
                   />
                 </div>
                 <div>
@@ -5606,21 +5658,34 @@ export default function ForexDashboardLMS() {
                     </div>
                   </div>
                 ) : (
-                  <div>
-                    <Label htmlFor="content">Konten</Label>
-                    {/* ✅ RICH TEXT EDITOR DENGAN SCROLL */}
-                    <div className="max-h-[400px] overflow-hidden rounded-md border">
-                      <RichTextEditor
-                        ref={contentEditorRef}
-                        value={editingLesson?.content || ""}
-                        onChange={(value) => setLessonValue("content", value)}
-                        placeholder="Tulis konten pembelajaran di sini..."
-                      />
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="content">Konten</Label>
+                      {/* ✅ RICH TEXT EDITOR DENGAN SCROLL */}
+                      <div className="max-h-[400px] overflow-hidden rounded-md border">
+                        <RichTextEditor
+                          ref={contentEditorRef}
+                          value={editingLesson?.content || ""}
+                          onChange={(value) => setLessonValue("content", value)}
+                          placeholder="Tulis konten pembelajaran di sini..."
+                        />
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Gunakan toolbar untuk format kaya (gambar, tabel, heading,
+                        dll)
+                      </p>
                     </div>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      Gunakan toolbar untuk format kaya (gambar, tabel, heading,
-                      dll)
-                    </p>
+                    <div>
+                      <Label htmlFor="content_en">Konten (English)</Label>
+                      <div className="max-h-[400px] overflow-hidden rounded-md border">
+                        <RichTextEditor
+                          ref={contentEnEditorRef}
+                          value={editingLesson?.content_en || ""}
+                          onChange={(value) => setLessonValue("content_en", value)}
+                          placeholder="Write learning content in English here..."
+                        />
+                      </div>
+                    </div>
                   </div>
                 )}
 

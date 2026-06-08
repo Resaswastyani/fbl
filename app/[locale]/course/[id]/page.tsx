@@ -578,6 +578,7 @@ import {
 type Lesson = {
   id: string;
   title: string;
+  title_en?: string;
   type:
     | "VIDEO"
     | "PDF"
@@ -590,6 +591,7 @@ type Lesson = {
     | "text"
     | "html";
   content?: string;
+  content_en?: string;
   contentUrl?: string;
   duration?: string;
 };
@@ -597,7 +599,9 @@ type Lesson = {
 type Course = {
   id: string;
   title: string;
+  title_en?: string;
   description?: string;
+  description_en?: string;
   price?: string;
   published?: boolean;
   lessons: Lesson[];
@@ -607,6 +611,7 @@ export default function CourseDetailPage() {
   const params = useParams();
   const router = useRouter();
   const courseId = params.id as string;
+  const locale = (params.locale as string) || "id";
 
   const [course, setCourse] = useState<Course | null>(null);
   const [loading, setLoading] = useState(true);
@@ -742,6 +747,8 @@ export default function CourseDetailPage() {
   const renderLessonContent = () => {
     if (!selectedLesson) return null;
 
+    const actualContent = locale === "en" ? selectedLesson.content_en || selectedLesson.content : selectedLesson.content;
+
     // Normalize type to uppercase for comparison
     const lessonType = selectedLesson.type?.toUpperCase();
 
@@ -808,9 +815,9 @@ export default function CourseDetailPage() {
                 alt={selectedLesson.title}
                 className="w-full rounded-lg shadow-md"
               />
-              {selectedLesson.content && (
+              {actualContent && (
                 <div className="mt-4 p-4 bg-gray-50 rounded-lg">
-                  <p className="text-gray-700">{selectedLesson.content}</p>
+                  <p className="text-gray-700">{actualContent}</p>
                 </div>
               )}
             </div>
@@ -818,14 +825,14 @@ export default function CourseDetailPage() {
         }
         // Jika tidak ada contentUrl tapi ada content (base64 atau URL di content)
         if (
-          selectedLesson.content &&
-          (selectedLesson.content.startsWith("http") ||
-            selectedLesson.content.startsWith("data:image"))
+          actualContent &&
+          (actualContent.startsWith("http") ||
+            actualContent.startsWith("data:image"))
         ) {
           return (
             <div className="mb-4">
               <img
-                src={selectedLesson.content}
+                src={actualContent}
                 alt={selectedLesson.title}
                 className="w-full rounded-lg shadow-md"
               />
@@ -841,9 +848,9 @@ export default function CourseDetailPage() {
       case "TEXT":
         // ✅ PERBAIKAN: Render HTML content sebagai HTML, bukan teks biasa
         // Karena content dari RichTextEditor selalu berupa HTML
-        if (selectedLesson.content) {
+        if (actualContent) {
           // Cek apakah content mengandung HTML tag
-          const hasHtmlTags = /<[^>]+>/.test(selectedLesson.content);
+          const hasHtmlTags = /<[^>]+>/.test(actualContent);
 
           if (hasHtmlTags) {
             // Render sebagai HTML
@@ -851,7 +858,7 @@ export default function CourseDetailPage() {
               <div
                 className="prose max-w-none mb-4 p-6 bg-white border rounded-lg"
                 dangerouslySetInnerHTML={{
-                  __html: selectedLesson.content,
+                  __html: actualContent,
                 }}
               />
             );
@@ -860,7 +867,7 @@ export default function CourseDetailPage() {
             return (
               <div className="prose max-w-none mb-4 p-6 bg-gray-50 rounded-lg">
                 <p className="whitespace-pre-wrap text-gray-800 leading-relaxed text-base">
-                  {selectedLesson.content}
+                  {actualContent}
                 </p>
               </div>
             );
@@ -876,7 +883,7 @@ export default function CourseDetailPage() {
           <div
             className="prose max-w-none mb-4 p-6 bg-white border rounded-lg"
             dangerouslySetInnerHTML={{
-              __html: selectedLesson.content || "<p>Tidak ada konten</p>",
+              __html: actualContent || "<p>Tidak ada konten</p>",
             }}
           />
         );
@@ -933,7 +940,7 @@ export default function CourseDetailPage() {
               </Button>
               <div>
                 <h1 className="text-xl font-bold text-gray-900">
-                  {course.title}
+                  {locale === "en" ? course.title_en || course.title : course.title}
                 </h1>
                 <p className="text-sm text-gray-500">
                   {course.lessons.length} Lessons
@@ -986,7 +993,7 @@ export default function CourseDetailPage() {
                     <div>
                       <div className="flex items-center justify-between mb-4">
                         <h2 className="text-2xl font-bold">
-                          {selectedLesson.title}
+                          {locale === "en" ? selectedLesson.title_en || selectedLesson.title : selectedLesson.title}
                         </h2>
                         <Badge variant="outline" className="capitalize">
                           {selectedLesson.type?.toLowerCase()}
@@ -1065,7 +1072,7 @@ export default function CourseDetailPage() {
               <CardContent className="p-6">
                 <h3 className="text-lg font-bold mb-2">Deskripsi</h3>
                 <p className="text-gray-600">
-                  {course.description || "Tidak ada deskripsi"}
+                  {locale === "en" ? course.description_en || course.description || "Tidak ada deskripsi" : course.description || "Tidak ada deskripsi"}
                 </p>
               </CardContent>
             </Card>
@@ -1119,7 +1126,7 @@ export default function CourseDetailPage() {
                           </div>
                           <div className="flex-1 min-w-0">
                             <p className="font-medium text-sm truncate">
-                              {index + 1}. {lesson.title}
+                              {index + 1}. {locale === "en" ? lesson.title_en || lesson.title : lesson.title}
                             </p>
                             {lesson.duration && (
                               <p

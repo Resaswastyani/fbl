@@ -66,7 +66,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { title, description, price, published } = body;
+    const { title, title_en, description, description_en, price, published } = body;
 
     if (!title) {
       return NextResponse.json({ error: "Title is required" }, { status: 400 });
@@ -76,7 +76,9 @@ export async function POST(request: NextRequest) {
     const course = await prisma.course.create({
       data: {
         title,
+        title_en: title_en || null,
         description: description || null,
+        description_en: description_en || null,
         price: price || null,
         published: published !== undefined ? published : false,
       },
@@ -99,7 +101,7 @@ export async function POST(request: NextRequest) {
 export async function PUT(request: NextRequest) {
   try {
     const body = await request.json();
-    const { id, title, description, price, published } = body;
+    const { id, title, title_en, description, description_en, price, published } = body;
 
     if (!id) {
       return NextResponse.json(
@@ -121,10 +123,15 @@ export async function PUT(request: NextRequest) {
       where: { id },
       data: {
         title: title !== undefined ? title : existingCourse.title,
+        title_en: title_en !== undefined ? title_en || null : existingCourse.title_en,
         description:
           description !== undefined
             ? description || null
             : existingCourse.description,
+        description_en:
+          description_en !== undefined
+            ? description_en || null
+            : existingCourse.description_en,
         price: price !== undefined ? price || null : existingCourse.price,
         published:
           published !== undefined ? published : existingCourse.published,

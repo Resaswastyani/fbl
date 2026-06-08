@@ -34,9 +34,11 @@ model User {
 }
 model Course {
   id          String   @id @default(cuid())
-  title       String
-  description String?
-  price       String?  // "Free" atau harga dalam string
+  title          String
+  title_en       String?
+  description    String?
+  description_en String?
+  price          String?  // "Free" atau harga dalam string
   published   Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -51,8 +53,10 @@ model Course {
 model Lesson {
   id          String   @id @default(cuid())
   title       String
+  title_en    String?
   type        String   // "video", "pdf", "text", "html"
   content     String @db.LongText  // Untuk text/html
+  content_en  String? @db.LongText
   contentUrl  String?  // Untuk video/pdf
   duration    String?
   createdAt   DateTime @default(now())

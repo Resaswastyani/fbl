@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useRouter } from "next/navigation";
 
-export default function LessonPage({ params }: { params: { id: string } }) {
+export default function LessonPage({ params }: { params: { id: string, locale: string } }) {
   const [lesson, setLesson] = useState<any>(null);
   const [course, setCourse] = useState<any>(null);
   const router = useRouter();
@@ -45,11 +45,15 @@ export default function LessonPage({ params }: { params: { id: string } }) {
     );
   }
 
+  const locale = params.locale || "id";
+  const actualTitle = locale === "en" ? lesson.title_en || lesson.title : lesson.title;
+  const actualContent = locale === "en" ? lesson.content_en || lesson.content : lesson.content;
+
   return (
     <div className="min-h-screen bg-white">
       <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">{lesson.title}</h1>
+          <h1 className="text-2xl font-bold">{actualTitle}</h1>
           <Button variant="outline" onClick={() => router.back()}>
             Kembali
           </Button>
@@ -68,7 +72,7 @@ export default function LessonPage({ params }: { params: { id: string } }) {
                 </video>
               </div>
               <div className="mt-4">
-                <p className="text-gray-600">{lesson.content}</p>
+                <p className="text-gray-600">{actualContent}</p>
                 <div className="mt-4 flex justify-between">
                   <Button variant="outline" onClick={() => router.back()}>
                     Kembali
@@ -87,7 +91,7 @@ export default function LessonPage({ params }: { params: { id: string } }) {
           <Card className="mb-8">
             <CardContent className="p-6">
               <div className="prose prose-slate dark:prose-invert max-w-none">
-                <div dangerouslySetInnerHTML={{ __html: lesson.content }} />
+                <div dangerouslySetInnerHTML={{ __html: actualContent }} />
               </div>
               <div className="mt-4 flex justify-between">
                 <Button variant="outline" onClick={() => router.back()}>

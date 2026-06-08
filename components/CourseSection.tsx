@@ -21,12 +21,14 @@ import {
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useCart } from "@/[locale]/context/cart-context";
 import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 type Course = {
   id: string;
   title: string;
+  title_en?: string;
   description?: string;
+  description_en?: string;
   price?: string;
   lessons: Lesson[];
   published?: boolean;
@@ -35,8 +37,10 @@ type Course = {
 type Lesson = {
   id: string;
   title: string;
+  title_en?: string;
   type: "video" | "pdf" | "text" | "html";
   content?: string;
+  content_en?: string;
   contentUrl?: string;
   duration?: string;
 };
@@ -180,6 +184,7 @@ const lessonItemVariants = {
 
 export default function CourseSection() {
   const t = useTranslations("Course");
+  const locale = useLocale();
   const { addToCart, items, isLoggedIn } = useCart();
   const router = useRouter();
   const [courses, setCourses] = useState<Course[]>([]);
@@ -289,9 +294,9 @@ export default function CourseSection() {
       originalPrice: total,
       discountedPrice: discounted,
       courseCount: bundleCourses.length,
-      courseTitles: bundleCourses.map((c) => c.title).join(", "),
+      courseTitles: bundleCourses.map((c) => locale === "en" ? c.title_en || c.title : c.title).join(", "),
       courseIds: bundleCourses.map((c) => c.id),
-      courseNames: bundleCourses.map((c) => c.title),
+      courseNames: bundleCourses.map((c) => locale === "en" ? c.title_en || c.title : c.title),
     };
   };
 
@@ -345,14 +350,14 @@ export default function CourseSection() {
     } else if (course) {
       newItem = {
         id: course.id,
-        name: course.title,
+        name: locale === "en" ? course.title_en || course.title : course.title,
         price: isCourseFree(course)
           ? 0
           : parseFloat(course.price?.replace(/[^0-9]/g, "") || "0"),
         quantity: 1,
         isBundle: false,
         courseIds: [course.id],
-        courseNames: [course.title],
+        courseNames: [locale === "en" ? course.title_en || course.title : course.title],
       };
     } else {
       console.error("Invalid course or bundle");
@@ -794,7 +799,7 @@ export default function CourseSection() {
                                   animate={{ opacity: 1 }}
                                   className="text-xl font-bold text-gray-900"
                                 >
-                                  {course.title}
+                                  {locale === "en" ? course.title_en || course.title : course.title}
                                 </motion.h3>
                                 <AnimatePresence>
                                   {isEnrolled(course.id) && (
@@ -853,7 +858,7 @@ export default function CourseSection() {
                                 transition={{ delay: 0.3 }}
                                 className="text-gray-600 mt-2 text-sm line-clamp-2"
                               >
-                                {course.description}
+                                {locale === "en" ? course.description_en || course.description : course.description}
                               </motion.p>
                             </div>
                             <div className="flex flex-col sm:items-end gap-2">
@@ -987,7 +992,7 @@ export default function CourseSection() {
                       animate={{ opacity: 1, y: 0 }}
                       className="text-2xl font-bold text-gray-900 mb-4"
                     >
-                      {selectedCourse.title}
+                      {locale === "en" ? selectedCourse.title_en || selectedCourse.title : selectedCourse.title}
                     </motion.h3>
 
                     <motion.div
@@ -1028,7 +1033,7 @@ export default function CourseSection() {
                               <Play className="h-4 w-4" />
                             </motion.div>
                             <div className="flex-1">
-                              <h5 className="font-medium">{lesson.title}</h5>
+                              <h5 className="font-medium">{locale === "en" ? lesson.title_en || lesson.title : lesson.title}</h5>
                               <p className="text-sm opacity-90 flex items-center gap-2">
                                 <Clock className="w-3 h-3" />
                                 {lesson.duration} {t("minutes")} • {lesson.type}
@@ -1050,7 +1055,7 @@ export default function CourseSection() {
                           className="border-t pt-6"
                         >
                           <h4 className="text-xl font-bold text-gray-900 mb-4">
-                            {selectedLesson.title}
+                            {locale === "en" ? selectedLesson.title_en || selectedLesson.title : selectedLesson.title}
                           </h4>
                           <div className="mb-4">
                             <div className="text-sm text-gray-500 mb-1">
@@ -1067,7 +1072,7 @@ export default function CourseSection() {
                               Description
                             </div>
                             <div className="text-gray-600">
-                              {getPlainTextPreview(selectedLesson.content, 30)}
+                              {getPlainTextPreview(locale === "en" ? selectedLesson.content_en || selectedLesson.content : selectedLesson.content, 30)}
                             </div>
                           </div>
                         </motion.div>

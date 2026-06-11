@@ -2360,6 +2360,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import {
   ArrowUpRight,
   TrendingUp,
@@ -2867,6 +2868,7 @@ const FeatureBadge = ({
 // TikTok Follow Gate Component
 const TikTokGate = ({ onUnlock }: { onUnlock: () => void }) => {
   const [isVerifying, setIsVerifying] = useState(false);
+  const t = useTranslations("RobotTrading");
 
   const handleFollow = () => {
     window.open("https://www.tiktok.com/@forexforbetterliving", "_blank");
@@ -2894,10 +2896,9 @@ const TikTokGate = ({ onUnlock }: { onUnlock: () => void }) => {
           <Lock size={36} className="text-white" />
         </div>
 
-        <h3 className="text-2xl font-bold text-white mb-3">Konten Terkunci</h3>
+        <h3 className="text-2xl font-bold text-white mb-3">{t("lockedContent")}</h3>
         <p className="text-gray-400 mb-6 max-w-md mx-auto">
-          Download EA Trial gratis tersedia setelah Anda follow TikTok kami.
-          Dapatkan update trading dan edukasi forex setiap hari!
+          {t("lockedDesc")}
         </p>
 
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -2906,12 +2907,12 @@ const TikTokGate = ({ onUnlock }: { onUnlock: () => void }) => {
             icon={isVerifying ? Activity : MousePointerClick}
             className={isVerifying ? "animate-pulse" : ""}
           >
-            {isVerifying ? "Memverifikasi..." : "Follow @forexforbetterliving"}
+            {isVerifying ? t("verifying") : t("followTikTok")}
           </GlowButton>
         </div>
 
         <p className="text-xs text-gray-500 mt-4">
-          Klik tombol di atas untuk membuka TikTok dan follow akun kami
+          {t("clickButtonToFollow")}
         </p>
       </motion.div>
     </motion.div>
@@ -2919,6 +2920,7 @@ const TikTokGate = ({ onUnlock }: { onUnlock: () => void }) => {
 };
 
 const FreeTrialSection = () => {
+  const t = useTranslations("RobotTrading");
   const [modalImage, setModalImage] = useState<{
     src: string;
     title: string;
@@ -3003,7 +3005,7 @@ const FreeTrialSection = () => {
             >
               <Sparkles size={18} className="text-[#22d3ee]" />
               <span className="text-sm text-[#22d3ee] font-semibold">
-                FREE TRIAL 30 HARI
+                {t("freeTrialSubtitle")}
               </span>
               <motion.span
                 animate={{ rotate: [0, 15, -15, 0] }}
@@ -3014,16 +3016,14 @@ const FreeTrialSection = () => {
             </motion.div>
 
             <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6 leading-tight">
-              Coba EA FBL Trading{" "}
+              {t("freeTrialTitle").split(" ").slice(0, -3).join(" ")}{" "}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#22d3ee] to-[#156d95]">
-                Gratis 30 Hari
+                {t("freeTrialTitle").split(" ").slice(-3).join(" ")}
               </span>
             </h2>
 
             <p className="text-gray-400 max-w-2xl mx-auto text-base sm:text-lg">
-              Rasakan pengalaman trading otomatis tanpa risiko. Download EA
-              trial, lihat hasil backtest yang telah terbukti, dan mulai trading
-              dengan confidence yang tinggi.
+              {t("freeTrialDesc")}
             </p>
 
             <div className="flex flex-wrap justify-center gap-3 mt-8">
@@ -3066,10 +3066,10 @@ const FreeTrialSection = () => {
                   </motion.div>
                   <div>
                     <h3 className="text-xl font-bold text-white">
-                      EA FBL Giveaway
+                      {t("eaName")}
                     </h3>
                     <p className="text-sm text-gray-400">
-                      Expert Advisor for MetaTrader 5
+                      {t("eaSubtitle")}
                     </p>
                     <div className="flex items-center gap-2 mt-1">
                       <span className="text-xs bg-green-500/20 text-green-400 px-2 py-0.5 rounded-full font-medium">
@@ -3086,7 +3086,7 @@ const FreeTrialSection = () => {
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
                       <span className="text-xs text-gray-400 font-mono">
-                        READY TO DOWNLOAD
+                        {t("readyToDownload")}
                       </span>
                     </div>
                     <motion.div
@@ -3106,7 +3106,7 @@ const FreeTrialSection = () => {
                       className="flex items-center gap-2 text-green-400"
                     >
                       <CheckCircle2 size={14} />
-                      <span>Strategy: Day Trade</span>
+                      <span>{t("strategy")}: {t("dayTrade")}</span>
                     </motion.div>
                     <motion.div
                       initial={{ opacity: 0, x: -20 }}
@@ -3115,7 +3115,7 @@ const FreeTrialSection = () => {
                       className="flex items-center gap-2 text-[#22d3ee]"
                     >
                       <CheckCircle2 size={14} />
-                      <span>Timeframe: H1</span>
+                      <span>{t("timeframe")}: H1</span>
                     </motion.div>
                     <motion.div
                       initial={{ opacity: 0, x: -20 }}
@@ -3124,7 +3124,7 @@ const FreeTrialSection = () => {
                       className="flex items-center gap-2 text-purple-400"
                     >
                       <CheckCircle2 size={14} />
-                      <span>Risk: Fix Lots/Currency</span>
+                      <span>{t("risk")}: {t("fixLots")}</span>
                     </motion.div>
                     <motion.div
                       initial={{ opacity: 0, x: -20 }}
@@ -3133,7 +3133,7 @@ const FreeTrialSection = () => {
                       className="flex items-center gap-2 text-yellow-400"
                     >
                       <CheckCircle2 size={14} />
-                      <span>Pair: XAUUSD</span>
+                      <span>{t("pair")}: XAUUSD</span>
                     </motion.div>
                   </div>
 
@@ -3149,7 +3149,7 @@ const FreeTrialSection = () => {
                     </div>
                     <div className="flex justify-between mt-1">
                       <span className="text-[10px] text-gray-500">
-                        System Check
+                        {t("systemCheck")}
                       </span>
                       <span className="text-[10px] text-[#22d3ee]">100%</span>
                     </div>

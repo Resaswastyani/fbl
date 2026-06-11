@@ -3128,7 +3128,9 @@ type Article = {
 type TradingVideo = {
   id: string;
   title: string;
+  title_en?: string;
   description?: string;
+  description_en?: string;
   videoUrl: string;
   videoType: "YOUTUBE" | "UPLOAD";
   thumbnail?: string;
@@ -3709,7 +3711,9 @@ export default function ForexDashboardLMS() {
     setEditingVideo(null);
     resetVideo({
       title: "",
+      title_en: "",
       description: "",
+      description_en: "",
       videoUrl: "",
       videoType: "YOUTUBE",
       thumbnail: "",
@@ -3722,7 +3726,9 @@ export default function ForexDashboardLMS() {
     setEditingVideo(video);
     resetVideo({
       title: video.title,
+      title_en: video.title_en || "",
       description: video.description,
+      description_en: video.description_en || "",
       videoUrl: video.videoUrl,
       videoType: video.videoType,
       thumbnail: video.thumbnail || "",
@@ -3765,7 +3771,9 @@ export default function ForexDashboardLMS() {
           body: JSON.stringify({
             id: editingVideo.id,
             title: data.title,
+            title_en: data.title_en,
             description: data.description,
+            description_en: data.description_en,
             videoUrl: data.videoUrl,
             videoType: data.videoType,
             thumbnail: data.thumbnail,
@@ -3789,7 +3797,9 @@ export default function ForexDashboardLMS() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             title: data.title,
+            title_en: data.title_en,
             description: data.description,
+            description_en: data.description_en,
             videoUrl: data.videoUrl,
             videoType: data.videoType,
             thumbnail: data.thumbnail,
@@ -5909,7 +5919,7 @@ export default function ForexDashboardLMS() {
               >
                 {/* Judul */}
                 <div>
-                  <Label htmlFor="video-title">Judul Video</Label>
+                  <Label htmlFor="video-title">Judul Video (ID)</Label>
                   <Input
                     id="video-title"
                     {...registerVideo("title", { required: true })}
@@ -5917,13 +5927,34 @@ export default function ForexDashboardLMS() {
                   />
                 </div>
 
+                {/* Judul EN */}
+                <div>
+                  <Label htmlFor="video-title-en">Judul Video (EN)</Label>
+                  <Input
+                    id="video-title-en"
+                    {...registerVideo("title_en")}
+                    placeholder="Masukkan judul video (Bahasa Inggris)"
+                  />
+                </div>
+
                 {/* Deskripsi */}
                 <div>
-                  <Label htmlFor="video-description">Deskripsi</Label>
+                  <Label htmlFor="video-description">Deskripsi (ID)</Label>
                   <Textarea
                     id="video-description"
                     {...registerVideo("description")}
                     placeholder="Deskripsi singkat tentang video ini..."
+                    rows={3}
+                  />
+                </div>
+
+                {/* Deskripsi EN */}
+                <div>
+                  <Label htmlFor="video-description-en">Deskripsi (EN)</Label>
+                  <Textarea
+                    id="video-description-en"
+                    {...registerVideo("description_en")}
+                    placeholder="Deskripsi video dalam Bahasa Inggris..."
                     rows={3}
                   />
                 </div>

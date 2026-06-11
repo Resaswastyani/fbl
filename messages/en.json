@@ -494,5 +494,24 @@
     "title": "Trade across the global forex market.",
     "subtitle": "Analyze major currency pairs, commodities, and crypto-linked instruments in real time with institutional-grade data.",
     "buttonText": "Explore Forex Markets"
+  },
+  "VideoTrading": {
+    "seeAllVideos": "See all videos",
+    "heroTitle": "Trading Videos",
+    "heroSubtitle": "The most comprehensive collection of forex trading educational videos from experts. Learn strategies, technical analysis, and trading tips directly from experienced mentors.",
+    "videosAvailable": "Videos Available",
+    "totalViews": "Total Views",
+    "startLearningFree": "Start Learning for Free",
+    "latestVideo": "Latest Video",
+    "videoCollection": "Video Collection",
+    "latestTradingVideos": "Latest Trading Videos",
+    "seeAll": "See All",
+    "noVideos": "No videos available yet",
+    "loginToAccess": "Login to Access",
+    "noDescription": "No description",
+    "readyToStart": "Ready to Start Your Trading Journey?",
+    "readyDescription": "Join thousands of other traders and access all educational videos for free.",
+    "registerFree": "Register for Free",
+    "login": "Login"
   }
 }

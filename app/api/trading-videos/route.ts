@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { title, description, videoUrl, videoType, thumbnail, published } =
+    const { title, title_en, description, description_en, videoUrl, videoType, thumbnail, published } =
       body;
 
     if (!title || !videoUrl) {
@@ -68,7 +68,9 @@ export async function POST(req: NextRequest) {
     const video = await prisma.tradingVideo.create({
       data: {
         title,
+        title_en,
         description,
+        description_en,
         videoUrl,
         videoType: videoType || "YOUTUBE",
         thumbnail: finalThumbnail,
@@ -113,7 +115,9 @@ export async function PUT(req: NextRequest) {
     const {
       id,
       title,
+      title_en,
       description,
+      description_en,
       videoUrl,
       videoType,
       thumbnail,
@@ -153,7 +157,9 @@ export async function PUT(req: NextRequest) {
       where: { id },
       data: {
         title,
+        title_en,
         description,
+        description_en,
         videoUrl,
         videoType,
         thumbnail: finalThumbnail,

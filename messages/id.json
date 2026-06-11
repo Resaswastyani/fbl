@@ -492,7 +492,26 @@
   },
   "IntegrationCarousel": {
     "title": "Trading di pasar forex global.",
-    "subtitle": "Analisis pasangan mata uang utama, komoditas, dan instrumen terkait crypto secara real-time dengan data kelas institusi.",
+    "subtitle": "Analisis pasangan mata uang utama, komoditas, dan instrumen terkait kripto secara real-time dengan data tingkat institusional.",
     "buttonText": "Jelajahi Pasar Forex"
+  },
+  "VideoTrading": {
+    "seeAllVideos": "Lihat semua video",
+    "heroTitle": "Video Trading",
+    "heroSubtitle": "Koleksi video edukasi trading forex terlengkap dari para expert. Pelajari strategi, analisis teknikal, dan tips trading langsung dari mentor berpengalaman.",
+    "videosAvailable": "Video Tersedia",
+    "totalViews": "Total Views",
+    "startLearningFree": "Mulai Belajar Gratis",
+    "latestVideo": "Video Terbaru",
+    "videoCollection": "Koleksi Video",
+    "latestTradingVideos": "Video Trading Terbaru",
+    "seeAll": "Lihat Semua",
+    "noVideos": "Belum ada video tersedia",
+    "loginToAccess": "Login untuk Akses",
+    "noDescription": "Tidak ada deskripsi",
+    "readyToStart": "Siap Memulai Perjalanan Trading?",
+    "readyDescription": "Bergabung dengan ribuan trader lainnya dan akses semua video edukasi secara gratis.",
+    "registerFree": "Daftar Gratis",
+    "login": "Login"
   }
 }

@@ -201,7 +201,9 @@ model Article {
 model TradingVideo {
   id          String   @id @default(cuid())
   title       String   @db.VarChar(255)
+  title_en    String?  @db.VarChar(255)
   description String?  @db.Text
+  description_en String?  @db.Text
   videoUrl    String   @db.VarChar(500)  // URL YouTube atau URL file upload
   videoType   String   @default("YOUTUBE") // YOUTUBE atau UPLOAD
   thumbnail   String?  @db.VarChar(500)  // URL thumbnail (auto-generate untuk YouTube)

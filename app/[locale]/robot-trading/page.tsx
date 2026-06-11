@@ -3177,7 +3177,7 @@ const FreeTrialSection = () => {
                       <div className="flex items-center gap-2 mb-3 text-green-400 text-sm">
                         <Unlock size={18} />
                         <span className="font-semibold">
-                          Akses Dibuka! Silakan download EA Anda.
+                          {t("unlocked")}
                         </span>
                       </div>
                       <div className="flex flex-col sm:flex-row gap-3">
@@ -3186,7 +3186,7 @@ const FreeTrialSection = () => {
                           icon={Download}
                           className="flex-1"
                         >
-                          Download EA Trial
+                          {t("downloadEATrial")}
                         </GlowButton>
                         <GlowButton
                           onClick={handleWhatsAppTrial}
@@ -3194,7 +3194,7 @@ const FreeTrialSection = () => {
                           icon={MessageCircle}
                           className="flex-1"
                         >
-                          Butuh Bantuan?
+                          {t("needHelp")}
                         </GlowButton>
                       </div>
                     </motion.div>
@@ -3215,25 +3215,25 @@ const FreeTrialSection = () => {
               <div className="grid grid-cols-2 gap-4">
                 {[
                   {
-                    label: "Trade Accuracy",
-                    value: "Data-driven",
+                    label: t("tradeAccuracy"),
+                    value: t("dataDriven"),
                     icon: Target,
                     color: "from-[#156d95] to-[#22d3ee]",
                   },
                   {
-                    label: "Risk Control",
-                    value: "Fix Lots/Currency",
+                    label: t("riskControl"),
+                    value: t("fixLots"),
                     icon: Shield,
                     color: "from-green-500 to-emerald-600",
                   },
                   {
-                    label: "Strategy Type",
-                    value: "Day Trade",
+                    label: t("strategyType"),
+                    value: t("dayTrade"),
                     icon: Gauge,
                     color: "from-purple-500 to-indigo-600",
                   },
                   {
-                    label: "Markets",
+                    label: t("markets"),
                     value: "XAUUSD",
                     icon: Layers,
                     color: "from-orange-500 to-red-500",
@@ -3276,13 +3276,10 @@ const FreeTrialSection = () => {
                   />
                   <div>
                     <h4 className="text-yellow-400 font-semibold text-sm mb-1">
-                      Transparansi & Disclaimer
+                      {t("transparency")}
                     </h4>
                     <p className="text-gray-300 text-xs leading-relaxed">
-                      Hasil trading di masa lalu tidak menjamin hasil di masa
-                      depan. Performa EA bervariasi tergantung kondisi pasar,
-                      broker, dan konfigurasi. Selalu gunakan manajemen risiko
-                      yang tepat dan trade dengan tanggung jawab.
+                      {t("transparencyDesc")}
                     </p>
                   </div>
                 </div>
@@ -3292,14 +3289,14 @@ const FreeTrialSection = () => {
               <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
                 <h4 className="text-white font-semibold mb-4 flex items-center gap-2">
                   <Unlock size={18} className="text-[#22d3ee]" />
-                  Apa yang Anda Dapatkan?
+                  {t("whatYouGet")}
                 </h4>
                 <ul className="space-y-3">
                   {[
-                    "Akses penuh ke EA FBL selama 30 hari tanpa batasan",
-                    "Backtest report lengkap dengan statistik detail",
-                    "File setup dan konfigurasi siap pakai",
-                    "Support teknis via WhatsApp selama trial",
+                    t("benefit1"),
+                    t("benefit2"),
+                    t("benefit3"),
+                    t("benefit4"),
                   ].map((item, idx) => (
                     <motion.li
                       key={idx}
@@ -3338,18 +3335,18 @@ const FreeTrialSection = () => {
             className="text-center mb-10"
           >
             <h3 className="text-2xl sm:text-3xl font-bold text-white mb-3">
-              Cara Menggunakan <span className="text-[#22d3ee]">EA Trial</span>
+              {t("howToUse")} <span className="text-[#22d3ee]">{t("eaTrial")}</span>
             </h3>
             <p className="text-gray-400 text-sm sm:text-base">
-              3 langkah mudah untuk mulai trading otomatis
+              {t("stepsDesc")}
             </p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
             <StepCard
               number={1}
-              title="Download & Install"
-              description="Download file EA .ex5 dan letakkan di folder Experts MetaTrader 5 Anda. File sudah siap pakai tanpa perlu compile ulang."
+              title={t("step1Title")}
+              description={t("step1Desc")}
               icon={Download}
               delay={0}
             >
@@ -3360,14 +3357,14 @@ const FreeTrialSection = () => {
                 icon={ArrowDownCircle}
                 disabled={!isUnlocked}
               >
-                {isUnlocked ? "Download Sekarang" : "Follow TikTok Dulu"}
+                {isUnlocked ? t("downloadNow") : t("followTikTokFirst")}
               </GlowButton>
             </StepCard>
 
             <StepCard
               number={2}
-              title="Setup & Konfigurasi"
-              description="Ikuti panduan setup yang telah kami siapkan. Atur parameter risk management sesuai preferensi Anda untuk hasil optimal."
+              title={t("step2Title")}
+              description={t("step2Desc")}
               icon={Settings}
               delay={0.2}
             >
@@ -3382,15 +3379,15 @@ const FreeTrialSection = () => {
                   className="flex-1 py-2 px-3 bg-[#156d95]/10 hover:bg-[#156d95]/20 border border-[#156d95]/30 rounded-lg text-xs text-[#156d95] font-medium transition-all flex items-center justify-center gap-2"
                 >
                   <Eye size={14} />
-                  Lihat Setup
+                  {t("seeSetup")}
                 </button>
               </div>
             </StepCard>
 
             <StepCard
               number={3}
-              title="Verifikasi Backtest"
-              description="Lihat hasil backtest yang telah kami lakukan untuk memastikan performa EA sebelum digunakan di akun real."
+              title={t("step3Title")}
+              description={t("step3Desc")}
               icon={BarChart3}
               delay={0.4}
             >
@@ -3405,7 +3402,7 @@ const FreeTrialSection = () => {
                   className="flex-1 py-2 px-3 bg-[#156d95]/10 hover:bg-[#156d95]/20 border border-[#156d95]/30 rounded-lg text-xs text-[#156d95] font-medium transition-all flex items-center justify-center gap-2"
                 >
                   <Eye size={14} />
-                  Backtest 1
+                  {t("backtest1")}
                 </button>
                 <button
                   onClick={() =>
@@ -3417,7 +3414,7 @@ const FreeTrialSection = () => {
                   className="flex-1 py-2 px-3 bg-[#156d95]/10 hover:bg-[#156d95]/20 border border-[#156d95]/30 rounded-lg text-xs text-[#156d95] font-medium transition-all flex items-center justify-center gap-2"
                 >
                   <Eye size={14} />
-                  Backtest 2
+                  {t("backtest2")}
                 </button>
               </div>
             </StepCard>
@@ -3433,25 +3430,25 @@ const FreeTrialSection = () => {
           >
             <h4 className="text-white font-semibold text-center mb-6 flex items-center justify-center gap-2">
               <Eye size={18} className="text-[#22d3ee]" />
-              Preview Dokumentasi & Hasil Backtest
+              {t("previewDocs")}
             </h4>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {[
                 {
                   src: "/ea/GIVEAWAY%20setting%20H1.JPG.jpeg",
-                  title: "Setup Konfigurasi H1",
-                  desc: "Parameter optimal untuk timeframe H1",
+                  title: t("setupConfigH1"),
+                  desc: t("setupConfigH1Desc"),
                 },
                 {
                   src: "/ea/GIVEAWAY%20backtest%201.JPG.jpeg",
-                  title: "Backtest Report 1",
-                  desc: "Analisis performa dan statistik trading",
+                  title: t("backtestReport1"),
+                  desc: t("backtestReport1Desc"),
                 },
                 {
                   src: "/ea/GIVEAWAY%20BACKTEST.JPG.jpeg",
-                  title: "Backtest Report 2",
-                  desc: "Grafik equity curve dan drawdown",
+                  title: t("backtestReport2"),
+                  desc: t("backtestReport2Desc"),
                 },
               ].map((img, idx) => (
                 <motion.div
@@ -3500,11 +3497,10 @@ const FreeTrialSection = () => {
             <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
               <div className="text-center md:text-left">
                 <h3 className="text-2xl sm:text-3xl font-bold text-white mb-2">
-                  Siap Meningkatkan Trading Anda?
+                  {t("readyToUpgrade")}
                 </h3>
                 <p className="text-gray-300 text-sm sm:text-base">
-                  30 hari gratis untuk merasakan performa EA FBL. Tanpa kartu
-                  kredit, tanpa risiko.
+                  {t("readyDesc")}
                 </p>
               </div>
               <div className="flex flex-col sm:flex-row gap-3">
@@ -3513,14 +3509,14 @@ const FreeTrialSection = () => {
                   icon={Download}
                   disabled={!isUnlocked}
                 >
-                  {isUnlocked ? "Download Gratis" : "Follow TikTok Dulu"}
+                  {isUnlocked ? t("downloadFree") : t("followTikTokFirst")}
                 </GlowButton>
                 <GlowButton
                   onClick={handleWhatsAppTrial}
                   variant="outline"
                   icon={MessageCircle}
                 >
-                  Tanya Admin
+                  {t("askAdmin")}
                 </GlowButton>
               </div>
             </div>
@@ -3625,6 +3621,7 @@ const FreeTrialSection = () => {
 // ==========================================
 
 export const RobotTradingSection = () => {
+  const t = useTranslations("RobotTrading");
   const handleWhatsAppGeneral = () => {
     const message = `Halo, saya tertarik dengan Robot Trading. Mohon informasi lebih lanjut.`;
     const waUrl = `https://wa.me/6285187555440?text=${encodeURIComponent(message)}`;
@@ -3696,19 +3693,17 @@ export const RobotTradingSection = () => {
             >
               <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
               <span className="text-sm text-[#156d95] font-medium">
-                Trading Bot Active
+                {t("subtitle")}
               </span>
             </motion.div>
 
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#111A4A] leading-tight mb-4 sm:mb-6">
-              Robot Trading <br />
-              <span className="text-[#156d95]">Cerdas & Otomatis</span>
+              {t("title").split(" ").slice(0, -2).join(" ")} <br />
+              <span className="text-[#156d95]">{t("title").split(" ").slice(-2).join(" ")}</span>
             </h1>
 
             <p className="text-base sm:text-lg text-gray-600 mb-6 sm:mb-8 max-w-lg mx-auto lg:mx-0">
-              Tingkatkan potensi trading Anda dengan AI-powered trading bots
-              yang bekerja 24/7. Backtest terbukti, risk management otomatis,
-              dan profit sharing yang transparan.
+              {t("description")}
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start mb-8">
@@ -3718,7 +3713,7 @@ export const RobotTradingSection = () => {
                 onClick={handleWhatsAppGeneral}
                 className="inline-flex items-center justify-center bg-[#156d95] text-white rounded-xl px-6 sm:px-8 py-3.5 sm:py-4 font-semibold transition-all hover:shadow-lg hover:shadow-[#156d95]/25 text-sm sm:text-base"
               >
-                Mulai Sekarang <ArrowUpRight size={18} className="ml-2" />
+                {t("startNow")} <ArrowUpRight size={18} className="ml-2" />
               </motion.button>
 
               {/* <Link href="/robot-trading">

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -29,6 +30,7 @@ interface EnrolledCourse {
 }
 
 export default function MyCoursesPage() {
+  const t = useTranslations("StudentMyCourses");
   const router = useRouter();
   const [courses, setCourses] = useState<EnrolledCourse[]>([]);
   const [filteredCourses, setFilteredCourses] = useState<EnrolledCourse[]>([]);
@@ -99,14 +101,14 @@ export default function MyCoursesPage() {
   };
 
   const formatLastAccessed = (date: string) => {
-    if (!date) return "Belum diakses";
+    if (!date) return t("notAccessed");
     const d = new Date(date);
     const now = new Date();
     const diff = now.getTime() - d.getTime();
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
 
-    if (days === 0) return "Hari ini";
-    if (days === 1) return "Kemarin";
+    if (days === 0) return t("today");
+    if (days === 1) return t("yesterday");
     if (days < 7) return `${days} hari yang lalu`;
     return d.toLocaleDateString("id-ID");
   };
@@ -116,7 +118,7 @@ export default function MyCoursesPage() {
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
           <Loader2 className="animate-spin h-12 w-12 text-[#156d95] mx-auto" />
-          <p className="mt-4 text-gray-600">Memuat kursus Anda...</p>
+          <p className="mt-4 text-gray-600">{t("loadingMyCourses")}</p>
         </div>
       </div>
     );
@@ -137,9 +139,9 @@ export default function MyCoursesPage() {
               <ArrowLeft className="h-5 w-5" />
             </Button>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Kursus Saya</h1>
+              <h1 className="text-2xl font-bold text-gray-900">{t("myCourses")}</h1>
               <p className="text-sm text-gray-500">
-                {courses.length} kursus aktif
+                {t("activeCourses", { count: courses.length })}
               </p>
             </div>
           </div>
@@ -152,7 +154,7 @@ export default function MyCoursesPage() {
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
             <Input
-              placeholder="Cari kursus..."
+              placeholder={t("searchCourses")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10"
@@ -164,25 +166,19 @@ export default function MyCoursesPage() {
               size="sm"
               onClick={() => setFilterStatus("all")}
               className={filterStatus === "all" ? "bg-[#156d95]" : ""}
-            >
-              Semua
-            </Button>
+            >{t("all")}</Button>
             <Button
               variant={filterStatus === "in-progress" ? "default" : "outline"}
               size="sm"
               onClick={() => setFilterStatus("in-progress")}
               className={filterStatus === "in-progress" ? "bg-[#156d95]" : ""}
-            >
-              Berlangsung
-            </Button>
+            >{t("inProgress")}</Button>
             <Button
               variant={filterStatus === "completed" ? "default" : "outline"}
               size="sm"
               onClick={() => setFilterStatus("completed")}
               className={filterStatus === "completed" ? "bg-[#156d95]" : ""}
-            >
-              Selesai
-            </Button>
+            >{t("completed")}</Button>
           </div>
         </div>
 
@@ -208,18 +204,12 @@ export default function MyCoursesPage() {
                   <div className="flex justify-between items-start mb-4">
                     {course.progress === 100 ? (
                       <Badge className="bg-green-100 text-green-700">
-                        <CheckCircle className="h-3 w-3 mr-1" />
-                        Selesai
-                      </Badge>
+                        <CheckCircle className="h-3 w-3 mr-1" />{t("completed")}</Badge>
                     ) : course.progress > 0 ? (
                       <Badge className="bg-[#156d95]/10 text-[#156d95]">
-                        <Clock className="h-3 w-3 mr-1" />
-                        Berlangsung
-                      </Badge>
+                        <Clock className="h-3 w-3 mr-1" />{t("inProgress")}</Badge>
                     ) : (
-                      <Badge className="bg-gray-100 text-gray-600">
-                        Belum Dimulai
-                      </Badge>
+                      <Badge className="bg-gray-100 text-gray-600">{t("notStarted")}</Badge>
                     )}
                     <span className="text-xs text-gray-400">
                       {formatLastAccessed(course.lastAccessed)}
@@ -231,13 +221,13 @@ export default function MyCoursesPage() {
                     {course.title}
                   </h3>
                   <p className="text-gray-600 text-sm mb-6 line-clamp-2">
-                    {course.description || "Tidak ada deskripsi"}
+                    {course.description || t("noDescription")}
                   </p>
 
                   {/* Progress Info */}
                   <div className="mb-4">
                     <div className="flex justify-between text-sm mb-2">
-                      <span className="text-gray-500">Progress</span>
+                      <span className="text-gray-500">{t("progress")}</span>
                       <span className="font-bold text-[#156d95]">
                         {course.progress}%
                       </span>
@@ -255,16 +245,14 @@ export default function MyCoursesPage() {
                     <div className="flex items-center">
                       <BookOpen className="h-4 w-4 mr-1" />
                       <span>
-                        {course.lessonsCompleted} / {course.totalLessons} lesson
+                        {t("lessonProgress", { completed: course.lessonsCompleted, total: course.totalLessons })}
                       </span>
                     </div>
                     {course.progress === 100 && (
                       <Badge
                         variant="outline"
                         className="text-green-600 border-green-600"
-                      >
-                        Sertifikat
-                      </Badge>
+                      >{t("certificate")}</Badge>
                     )}
                   </div>
 
@@ -282,10 +270,10 @@ export default function MyCoursesPage() {
                   >
                     <Play className="h-4 w-4 mr-2" />
                     {course.progress === 0
-                      ? "Mulai Belajar"
+                      ? t("startLearning")
                       : course.progress === 100
-                        ? "Tinjau Ulang"
-                        : "Lanjutkan Belajar"}
+                        ? t("review")
+                        : t("continueLearning")}
                   </Button>
                 </CardContent>
               </Card>
@@ -302,16 +290,13 @@ export default function MyCoursesPage() {
                   Belum Ada Kursus
                 </h2>
                 <p className="text-gray-500 mb-6 max-w-md mx-auto">
-                  Anda belum memiliki kursus. Jelajahi katalog kursus kami dan
-                  mulai perjalanan belajar Anda.
+                  {t("startLearningJourney")}
                 </p>
                 <Button
                   onClick={() => router.push("/student/courses")}
                   className="bg-[#156d95] hover:bg-[#0d476e]"
                   size="lg"
-                >
-                  Jelajahi Kursus
-                </Button>
+                >{t("exploreCourses")}</Button>
               </>
             ) : (
               <>
@@ -322,7 +307,7 @@ export default function MyCoursesPage() {
                   Tidak Ditemukan
                 </h2>
                 <p className="text-gray-500 mb-4">
-                  Tidak ada kursus yang cocok dengan pencarian Anda.
+                  {t("noCoursesMatch")}
                 </p>
                 <Button
                   variant="outline"
@@ -330,9 +315,7 @@ export default function MyCoursesPage() {
                     setSearchQuery("");
                     setFilterStatus("all");
                   }}
-                >
-                  Reset Filter
-                </Button>
+                >{t("resetFilter")}</Button>
               </>
             )}
           </div>

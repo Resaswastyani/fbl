@@ -2,6 +2,7 @@
 
 // import { useEffect, useState } from "react";
 // import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 // import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 // import { Button } from "@/components/ui/button";
 // import { Input } from "@/components/ui/input";
@@ -42,6 +43,7 @@
 // }
 
 // export default function StudentProfilePage() {
+  const t = useTranslations("StudentProfile");
 //   const router = useRouter();
 //   const { clearCart } = useCart();
 //   const [user, setUser] = useState<UserProfile | null>(null);
@@ -144,19 +146,19 @@
 
 //       if (res.ok) {
 //         setUser((prev) => (prev ? { ...prev, name: formData.name } : null));
-//         setMessage({ type: "success", text: "Profil berhasil diperbarui!" });
+//         setMessage({ type: "success", text: t("profileUpdated") });
 //         setIsEditing(false);
 //       } else {
 //         setMessage({
 //           type: "error",
-//           text: data.error || "Gagal memperbarui profil",
+//           text: data.error || t("updateFailed"),
 //         });
 //       }
 //     } catch (error) {
 //       console.error("Error updating profile:", error);
 //       setMessage({
 //         type: "error",
-//         text: "Terjadi kesalahan saat memperbarui profil",
+//         text: t("updateError"),
 //       });
 //     } finally {
 //       setSaving(false);
@@ -169,7 +171,7 @@
 //     setMessage(null);
 
 //     if (formData.newPassword !== formData.confirmPassword) {
-//       setMessage({ type: "error", text: "Password baru tidak cocok" });
+//       setMessage({ type: "error", text: t("passwordUnmatched") });
 //       setSaving(false);
 //       return;
 //     }
@@ -188,7 +190,7 @@
 //       const data = await res.json();
 
 //       if (res.ok) {
-//         setMessage({ type: "success", text: "Password berhasil diubah!" });
+//         setMessage({ type: "success", text: t("passwordChanged") });
 //         setFormData((prev) => ({
 //           ...prev,
 //           currentPassword: "",
@@ -198,14 +200,14 @@
 //       } else {
 //         setMessage({
 //           type: "error",
-//           text: data.error || "Gagal mengubah password",
+//           text: data.error || t("passwordChangeFailed"),
 //         });
 //       }
 //     } catch (error) {
 //       console.error("Error changing password:", error);
 //       setMessage({
 //         type: "error",
-//         text: "Terjadi kesalahan saat mengubah password",
+//         text: t("passwordChangeError"),
 //       });
 //     } finally {
 //       setSaving(false);
@@ -230,12 +232,12 @@
 //   const getRoleBadge = (role: string) => {
 //     switch (role) {
 //       case "ADMIN":
-//         return <Badge className="bg-red-100 text-red-700">Admin</Badge>;
+//         return <Badge className="bg-red-100 text-red-700">{t("adminRole")}</Badge>;
 //       case "MENTOR":
-//         return <Badge className="bg-purple-100 text-purple-700">Mentor</Badge>;
+//         return <Badge className="bg-purple-100 text-purple-700">{t("mentorRole")}</Badge>;
 //       default:
 //         return (
-//           <Badge className="bg-[#156d95]/10 text-[#156d95]">Pelanggan</Badge>
+//           <Badge className="bg-[#156d95]/10 text-[#156d95]">{t("customerRole")}</Badge>
 //         );
 //     }
 //   };
@@ -245,7 +247,7 @@
 //       <div className="min-h-screen flex items-center justify-center bg-gray-50">
 //         <div className="text-center">
 //           <Loader2 className="animate-spin h-12 w-12 text-[#156d95] mx-auto" />
-//           <p className="mt-4 text-gray-600">Memuat profil...</p>
+//           <p className="mt-4 text-gray-600">{t("loadingProfile")}</p>
 //         </div>
 //       </div>
 //     );
@@ -270,7 +272,7 @@
 //               >
 //                 <ArrowLeft className="h-5 w-5" />
 //               </Button>
-//               <h1 className="text-2xl font-bold text-gray-900">Profil Saya</h1>
+//               <h1 className="text-2xl font-bold text-gray-900">{t("myProfile")}</h1>
 //             </div>
 //             <Button
 //               variant="outline"
@@ -328,7 +330,7 @@
 //             {/* Stats Card */}
 //             <Card>
 //               <CardHeader>
-//                 <CardTitle className="text-lg">Statistik Belajar</CardTitle>
+//                 <CardTitle className="text-lg">{t("learningStats")}</CardTitle>
 //               </CardHeader>
 //               <CardContent className="space-y-4">
 //                 <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
@@ -336,7 +338,7 @@
 //                     <div className="p-2 bg-[#156d95]/10 rounded-lg">
 //                       <BookOpen className="h-5 w-5 text-[#156d95]" />
 //                     </div>
-//                     <span className="text-gray-600">Total Kursus</span>
+//                     <span className="text-gray-600">{t("totalCourses")}</span>
 //                   </div>
 //                   <span className="font-bold text-lg">{stats.total}</span>
 //                 </div>
@@ -346,7 +348,7 @@
 //                     <div className="p-2 bg-yellow-100 rounded-lg">
 //                       <Loader2 className="h-5 w-5 text-yellow-600" />
 //                     </div>
-//                     <span className="text-gray-600">Sedang Dipelajari</span>
+//                     <span className="text-gray-600">{t("inProgress")}</span>
 //                   </div>
 //                   <span className="font-bold text-lg">{stats.inProgress}</span>
 //                 </div>
@@ -356,7 +358,7 @@
 //                     <div className="p-2 bg-green-100 rounded-lg">
 //                       <Award className="h-5 w-5 text-green-600" />
 //                     </div>
-//                     <span className="text-gray-600">Selesai</span>
+//                     <span className="text-gray-600">{t("completed")}</span>
 //                   </div>
 //                   <span className="font-bold text-lg">{stats.completed}</span>
 //                 </div>
@@ -366,7 +368,7 @@
 //                     <div className="p-2 bg-purple-100 rounded-lg">
 //                       <Shield className="h-5 w-5 text-purple-600" />
 //                     </div>
-//                     <span className="text-gray-600">Sertifikat</span>
+//                     <span className="text-gray-600">{t("certificates")}</span>
 //                   </div>
 //                   <span className="font-bold text-lg">
 //                     {stats.certificates}
@@ -401,7 +403,7 @@
 //                 {isEditing ? (
 //                   <form onSubmit={handleUpdateProfile} className="space-y-4">
 //                     <div>
-//                       <Label htmlFor="name">Nama Lengkap</Label>
+//                       <Label htmlFor="name">{t("fullName")}</Label>
 //                       <Input
 //                         id="name"
 //                         value={formData.name}
@@ -411,13 +413,13 @@
 //                             name: e.target.value,
 //                           }))
 //                         }
-//                         placeholder="Masukkan nama lengkap"
+//                         placeholder={t()}
 //                         required
 //                       />
 //                     </div>
 
 //                     <div>
-//                       <Label htmlFor="email">Email</Label>
+//                       <Label htmlFor="email">{t("email")}</Label>
 //                       <Input
 //                         id="email"
 //                         type="email"
@@ -463,7 +465,7 @@
 //                     <div className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg">
 //                       <User className="h-5 w-5 text-gray-400" />
 //                       <div>
-//                         <p className="text-sm text-gray-500">Nama Lengkap</p>
+//                         <p className="text-sm text-gray-500">{t("fullName")}</p>
 //                         <p className="font-medium">{user.name}</p>
 //                       </div>
 //                     </div>
@@ -471,7 +473,7 @@
 //                     <div className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg">
 //                       <Mail className="h-5 w-5 text-gray-400" />
 //                       <div>
-//                         <p className="text-sm text-gray-500">Email</p>
+//                         <p className="text-sm text-gray-500">{t("email")}</p>
 //                         <p className="font-medium">{user.email}</p>
 //                       </div>
 //                     </div>
@@ -479,7 +481,7 @@
 //                     <div className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg">
 //                       <Shield className="h-5 w-5 text-gray-400" />
 //                       <div>
-//                         <p className="text-sm text-gray-500">Role</p>
+//                         <p className="text-sm text-gray-500">{t("role")}</p>
 //                         <p className="font-medium capitalize">
 //                           {user.role.toLowerCase()}
 //                         </p>
@@ -501,7 +503,7 @@
 //               <CardContent>
 //                 <form onSubmit={handleChangePassword} className="space-y-4">
 //                   <div>
-//                     <Label htmlFor="currentPassword">Password Saat Ini</Label>
+//                     <Label htmlFor="currentPassword">{t("currentPassword")}</Label>
 //                     <Input
 //                       id="currentPassword"
 //                       type="password"
@@ -512,13 +514,13 @@
 //                           currentPassword: e.target.value,
 //                         }))
 //                       }
-//                       placeholder="Masukkan password saat ini"
+//                       placeholder={t()}
 //                       required
 //                     />
 //                   </div>
 
 //                   <div>
-//                     <Label htmlFor="newPassword">Password Baru</Label>
+//                     <Label htmlFor="newPassword">{t("newPassword")}</Label>
 //                     <Input
 //                       id="newPassword"
 //                       type="password"
@@ -529,7 +531,7 @@
 //                           newPassword: e.target.value,
 //                         }))
 //                       }
-//                       placeholder="Masukkan password baru"
+//                       placeholder={t()}
 //                       required
 //                       minLength={6}
 //                     />
@@ -549,7 +551,7 @@
 //                           confirmPassword: e.target.value,
 //                         }))
 //                       }
-//                       placeholder="Konfirmasi password baru"
+//                       placeholder={t()}
 //                       required
 //                     />
 //                   </div>
@@ -573,7 +575,7 @@
 //             {/* Quick Actions */}
 //             <Card>
 //               <CardHeader>
-//                 <CardTitle className="text-lg">Aksi Cepat</CardTitle>
+//                 <CardTitle className="text-lg">{t("quickActions")}</CardTitle>
 //               </CardHeader>
 //               <CardContent>
 //                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -753,7 +755,7 @@ export default function StudentProfilePage() {
       }
     } catch (error) {
       console.error("Error fetching profile:", error);
-      showMessage("error", "Gagal memuat profil");
+      showMessage("error", t("updateFailed"));
     } finally {
       setLoading(false);
     }
@@ -782,14 +784,14 @@ export default function StudentProfilePage() {
 
       if (res.ok) {
         setUser((prev) => (prev ? { ...prev, name: formData.name } : null));
-        showMessage("success", "Profil berhasil diperbarui!");
+        showMessage("success", t("profileUpdated"));
         setIsEditing(false);
       } else {
-        showMessage("error", data.error || "Gagal memperbarui profil");
+        showMessage("error", data.error || t("updateFailed"));
       }
     } catch (error) {
       console.error("Error updating profile:", error);
-      showMessage("error", "Terjadi kesalahan saat memperbarui profil");
+      showMessage("error", t("updateError"));
     } finally {
       setSaving(false);
     }
@@ -800,7 +802,7 @@ export default function StudentProfilePage() {
     setSaving(true);
 
     if (formData.newPassword !== formData.confirmPassword) {
-      showMessage("error", "Password baru tidak cocok");
+      showMessage("error", t("passwordUnmatched"));
       setSaving(false);
       return;
     }
@@ -825,7 +827,7 @@ export default function StudentProfilePage() {
       const data = await res.json();
 
       if (res.ok) {
-        showMessage("success", "Password berhasil diubah!");
+        showMessage("success", t("passwordChanged"));
         setFormData((prev) => ({
           ...prev,
           currentPassword: "",
@@ -833,11 +835,11 @@ export default function StudentProfilePage() {
           confirmPassword: "",
         }));
       } else {
-        showMessage("error", data.error || "Gagal mengubah password");
+        showMessage("error", data.error || t("passwordChangeFailed"));
       }
     } catch (error) {
       console.error("Error changing password:", error);
-      showMessage("error", "Terjadi kesalahan saat mengubah password");
+      showMessage("error", t("passwordChangeError"));
     } finally {
       setSaving(false);
     }
@@ -998,7 +1000,7 @@ export default function StudentProfilePage() {
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
           <Loader2 className="animate-spin h-12 w-12 text-[#156d95] mx-auto" />
-          <p className="mt-4 text-gray-600">Memuat profil...</p>
+          <p className="mt-4 text-gray-600">{t("loadingProfile")}</p>
         </div>
       </div>
     );
@@ -1023,7 +1025,7 @@ export default function StudentProfilePage() {
               >
                 <ArrowLeft className="h-5 w-5" />
               </Button>
-              <h1 className="text-2xl font-bold text-gray-900">Profil Saya</h1>
+              <h1 className="text-2xl font-bold text-gray-900">{t("myProfile")}</h1>
             </div>
             <Button
               variant="outline"
@@ -1164,7 +1166,7 @@ export default function StudentProfilePage() {
             {/* Stats Card */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-lg">Statistik Belajar</CardTitle>
+                <CardTitle className="text-lg">{t("learningStats")}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
@@ -1172,7 +1174,7 @@ export default function StudentProfilePage() {
                     <div className="p-2 bg-[#156d95]/10 rounded-lg">
                       <BookOpen className="h-5 w-5 text-[#156d95]" />
                     </div>
-                    <span className="text-gray-600">Total Kursus</span>
+                    <span className="text-gray-600">{t("totalCourses")}</span>
                   </div>
                   <span className="font-bold text-lg">{stats.total}</span>
                 </div>
@@ -1182,7 +1184,7 @@ export default function StudentProfilePage() {
                     <div className="p-2 bg-yellow-100 rounded-lg">
                       <Loader2 className="h-5 w-5 text-yellow-600" />
                     </div>
-                    <span className="text-gray-600">Sedang Dipelajari</span>
+                    <span className="text-gray-600">{t("inProgress")}</span>
                   </div>
                   <span className="font-bold text-lg">{stats.inProgress}</span>
                 </div>
@@ -1192,7 +1194,7 @@ export default function StudentProfilePage() {
                     <div className="p-2 bg-green-100 rounded-lg">
                       <Award className="h-5 w-5 text-green-600" />
                     </div>
-                    <span className="text-gray-600">Selesai</span>
+                    <span className="text-gray-600">{t("completed")}</span>
                   </div>
                   <span className="font-bold text-lg">{stats.completed}</span>
                 </div>
@@ -1202,7 +1204,7 @@ export default function StudentProfilePage() {
                     <div className="p-2 bg-purple-100 rounded-lg">
                       <Shield className="h-5 w-5 text-purple-600" />
                     </div>
-                    <span className="text-gray-600">Sertifikat</span>
+                    <span className="text-gray-600">{t("certificates")}</span>
                   </div>
                   <span className="font-bold text-lg">
                     {stats.certificates}
@@ -1238,7 +1240,7 @@ export default function StudentProfilePage() {
                   {isEditing ? (
                     <form onSubmit={handleUpdateProfile} className="space-y-4">
                       <div>
-                        <Label htmlFor="name">Nama Lengkap</Label>
+                        <Label htmlFor="name">{t("fullName")}</Label>
                         <Input
                           id="name"
                           value={formData.name}
@@ -1248,13 +1250,13 @@ export default function StudentProfilePage() {
                               name: e.target.value,
                             }))
                           }
-                          placeholder="Masukkan nama lengkap"
+                          placeholder={t()}
                           required
                         />
                       </div>
 
                       <div>
-                        <Label htmlFor="email">Email</Label>
+                        <Label htmlFor="email">{t("email")}</Label>
                         <Input
                           id="email"
                           type="email"
@@ -1300,7 +1302,7 @@ export default function StudentProfilePage() {
                       <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
                         <User className="h-5 w-5 text-gray-400" />
                         <div>
-                          <p className="text-sm text-gray-500">Nama Lengkap</p>
+                          <p className="text-sm text-gray-500">{t("fullName")}</p>
                           <p className="font-medium">{user.name}</p>
                         </div>
                       </div>
@@ -1308,7 +1310,7 @@ export default function StudentProfilePage() {
                       <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
                         <Mail className="h-5 w-5 text-gray-400" />
                         <div>
-                          <p className="text-sm text-gray-500">Email</p>
+                          <p className="text-sm text-gray-500">{t("email")}</p>
                           <p className="font-medium">{user.email}</p>
                         </div>
                       </div>
@@ -1316,7 +1318,7 @@ export default function StudentProfilePage() {
                       <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
                         <Shield className="h-5 w-5 text-gray-400" />
                         <div>
-                          <p className="text-sm text-gray-500">Role</p>
+                          <p className="text-sm text-gray-500">{t("role")}</p>
                           <p className="font-medium capitalize">
                             {user.role.toLowerCase()}
                           </p>
@@ -1462,7 +1464,7 @@ export default function StudentProfilePage() {
                               currentPassword: e.target.value,
                             }))
                           }
-                          placeholder="Masukkan password saat ini"
+                          placeholder={t()}
                           required
                         />
                       </div>
@@ -1470,7 +1472,7 @@ export default function StudentProfilePage() {
                       <Separator />
 
                       <div>
-                        <Label htmlFor="newPassword">Password Baru</Label>
+                        <Label htmlFor="newPassword">{t("newPassword")}</Label>
                         <Input
                           id="newPassword"
                           type="password"
@@ -1646,7 +1648,7 @@ export default function StudentProfilePage() {
             {activeTab === "profile" && (
               <Card className="mt-6">
                 <CardHeader>
-                  <CardTitle className="text-lg">Aksi Cepat</CardTitle>
+                  <CardTitle className="text-lg">{t("quickActions")}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

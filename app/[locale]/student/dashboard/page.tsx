@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import CourseSection from "@/components/CourseSection";
 import { useCart } from "@/context/cart-context";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 interface EnrolledCourse {
   id: string;
@@ -322,7 +323,10 @@ export default function StudentDashboardPage() {
         </div>
       </aside>
 
-      <main className="flex-1 min-w-0">
+      <main className="flex-1 min-w-0 relative">
+        <div className="absolute top-4 right-4 z-10">
+          <LanguageSwitcher />
+        </div>
         <div className="p-4 md:p-8 max-w-7xl mx-auto">
           <div className="mb-8 mt-12 md:mt-0">
             <h1 className="text-3xl font-bold text-gray-900">

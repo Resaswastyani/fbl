@@ -406,7 +406,9 @@
         "Easy deposit/withdrawal via local bank",
         "MT4 & MT5 platforms"
       ],
-      "cons": ["Limited crypto instruments"],
+      "cons": [
+        "Limited crypto instruments"
+      ],
       "badge": "Most Popular"
     },
     "fbs": {
@@ -422,7 +424,9 @@
         "Highest leverage 1:3000",
         "Various bonuses"
       ],
-      "cons": ["Regulation not as strong as major brokers"],
+      "cons": [
+        "Regulation not as strong as major brokers"
+      ],
       "badge": "Lowest Spread"
     },
     "exness": {
@@ -438,7 +442,9 @@
         "Instant order execution",
         "Tier-1 FCA regulation"
       ],
-      "cons": ["Pro account minimum deposit $200"],
+      "cons": [
+        "Pro account minimum deposit $200"
+      ],
       "badge": "Best"
     },
     "octa": {
@@ -454,7 +460,9 @@
         "Many promos and contests",
         "Complete education for beginners"
       ],
-      "cons": ["Limited instruments vs major brokers"],
+      "cons": [
+        "Limited instruments vs major brokers"
+      ],
       "badge": ""
     },
     "icmarkets": {
@@ -470,7 +478,10 @@
         "Ultra-fast execution",
         "Suitable for algo trading"
       ],
-      "cons": ["High minimum deposit", "No bonuses"],
+      "cons": [
+        "High minimum deposit",
+        "No bonuses"
+      ],
       "badge": "Pro Trader"
     },
     "hotforex": {
@@ -486,7 +497,9 @@
         "Attractive reward program",
         "Free premium education"
       ],
-      "cons": ["Standard spread somewhat high"],
+      "cons": [
+        "Standard spread somewhat high"
+      ],
       "badge": ""
     }
   },
@@ -575,5 +588,143 @@
     "description": "Description",
     "lessonList": "Lesson List",
     "minutes": "{time} minutes"
+  },
+  "StudentCart": {
+    "pleaseLogin": "Please login first to view the shopping cart.",
+    "cartEmptyAlert": "Your cart is empty!",
+    "checkoutOneByOne": "Please checkout one item per transaction.",
+    "checkoutError": "An error occurred during checkout. Please try again.",
+    "loadingCart": "Loading cart...",
+    "back": "Back",
+    "shoppingCart": "Shopping Cart",
+    "itemsInCart": "{count} items in cart",
+    "cartEmpty": "Your Cart is Empty",
+    "cartEmptyDesc": "There are no items in your cart. Find interesting courses and add them to the cart to start learning.",
+    "exploreCourses": "Explore Courses",
+    "bundle": "Bundle",
+    "singleCourse": "Single Course",
+    "includesCourses": "Includes {count} courses:",
+    "price": "Price",
+    "subtotal": "Subtotal",
+    "orderSummary": "Order Summary",
+    "totalItems": "Total Items",
+    "totalPrice": "Total Price",
+    "lifetimeAccess": "Lifetime access",
+    "freeUpdates": "Free material updates",
+    "checkoutSingle": "Checkout One by One",
+    "proceedToPayment": "Proceed to Payment",
+    "processing": "Processing...",
+    "clearCart": "Clear Cart",
+    "paymentInfo": "Payment Information",
+    "paymentGateway": "Payments are processed through Midtrans (trusted payment gateway)",
+    "instantAccess": "After successful payment, courses are immediately available on the dashboard",
+    "lifetimeAccessDesc": "Lifetime access to courses with free material updates",
+    "confirmRemove": "Remove this item from the cart?",
+    "confirmClear": "Are you sure you want to clear the cart?"
+  },
+  "StudentMyCourses": {
+    "searchCourses": "Search courses...",
+    "all": "All",
+    "inProgress": "In Progress",
+    "completed": "Completed",
+    "notStarted": "Not Started",
+    "notAccessed": "Not accessed yet",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "daysAgo": "{days} days ago",
+    "loadingMyCourses": "Loading your courses...",
+    "myCourses": "My Courses",
+    "activeCourses": "{count} active courses",
+    "certificate": "Certificate",
+    "startLearning": "Start Learning",
+    "review": "Review",
+    "continueLearning": "Continue Learning",
+    "noCoursesYet": "No Courses Yet",
+    "startLearningJourney": "You don't have any courses yet. Explore our course catalog and start your learning journey.",
+    "exploreCourses": "Explore Courses",
+    "notFound": "Not Found",
+    "noCoursesMatch": "No courses match your search.",
+    "resetFilter": "Reset Filter",
+    "progress": "Progress",
+    "lessonProgress": "{completed} / {total} lessons",
+    "noDescription": "No description"
+  },
+  "StudentProfile": {
+    "myProfile": "My Profile",
+    "logout": "Logout",
+    "profileUpdated": "Profile updated successfully!",
+    "updateFailed": "Failed to update profile",
+    "updateError": "An error occurred while updating the profile",
+    "passwordUnmatched": "New password does not match",
+    "passwordChanged": "Password changed successfully!",
+    "passwordChangeFailed": "Failed to change password",
+    "passwordChangeError": "An error occurred while changing password",
+    "adminRole": "Admin",
+    "mentorRole": "Mentor",
+    "customerRole": "Customer",
+    "loadingProfile": "Loading profile...",
+    "joined": "Joined {date}",
+    "learningStats": "Learning Statistics",
+    "totalCourses": "Total Courses",
+    "inProgress": "In Progress",
+    "completed": "Completed",
+    "certificates": "Certificates",
+    "profileInfo": "Profile Information",
+    "edit": "Edit",
+    "fullName": "Full Name",
+    "enterFullName": "Enter full name",
+    "email": "Email",
+    "emailCannotChange": "Email cannot be changed",
+    "save": "Save",
+    "cancel": "Cancel",
+    "role": "Role",
+    "changePassword": "Change Password",
+    "currentPassword": "Current Password",
+    "enterCurrentPassword": "Enter current password",
+    "newPassword": "New Password",
+    "enterNewPassword": "Enter new password",
+    "confirmNewPassword": "Confirm New Password",
+    "enterConfirmPassword": "Confirm new password",
+    "quickActions": "Quick Actions",
+    "myCourses": "My Courses",
+    "dashboard": "Dashboard",
+    "profileTab": "Profile",
+    "passwordTab": "Password"
+  },
+  "WhatsAppFloat": {
+    "botName": "FBL Assistant",
+    "onlineStatus": "Online 24/7 • PT Akademi Keuangan Nusantara",
+    "navMenu": "Navigation Menu",
+    "history": "Chat History",
+    "botTypeLabel": "Bot",
+    "userTypeLabel": "You",
+    "typeMessage": "Type your message...",
+    "welcomeMsg": "Hello! 👋 Welcome to **Forex for Better Living**.\n\nI am the virtual FBL assistant, ready to help you 24/7 with:\n• 🤖 Trading Robot Info (EA)\n• 📚 Professional Course Programs\n• 🛠️ Tools & Broker Recommendations\n• 🏢 Company Vision & Mission\n\n**Select a menu above** or type your question!",
+    "chooseTopic": "Choose a topic of interest:",
+    "menuRobotLabel": "Trading Robot (EA)",
+    "menuRobotDesc": "FBL EA Info, 30 days trial, AI features",
+    "menuCourseLabel": "Professional Course",
+    "menuCourseDesc": "Trading education & mentoring classes",
+    "menuToolsLabel": "Tools & Broker",
+    "menuToolsDesc": "Platform recommendations and trading tools",
+    "menuAboutLabel": "About FBL",
+    "menuAboutDesc": "PT Akademi Keuangan Nusantara Profile",
+    "robotDetail": "🤖 **Smart & Automated Trading Robot (EA FBL Trading)**\n\nEnhance your trading potential with AI-powered trading bots working 24/7.\n\n**Advantages:**\n✅ Proven & verified backtest\n✅ Automated risk management (Auto MM)\n✅ Transparent profit sharing\n✅ Real-time Analytics\n\n🎁 **Special Promo:** Get a **30 DAYS FREE TRIAL**! Experience risk-free automated trading.",
+    "courseDetail": "📚 **Professional Course**\n\nComprehensive educational services for those who want to develop into professional Traders.\n\n**Material includes:**\n• Practical & Simple: Beginner-friendly methods.\n• Core Business Material: Core trading business strategies.\n• Easy to Implement: Ready for practice.\n• Fast Mastery: Efficient curriculum for optimal results.\n\nContact our Admin for the latest class batch info!",
+    "toolsDetail": "🛠️ **Tools & Broker Recommendations**\n\nWe partner with various renowned brokers to ensure your trading security and comfort, including:\n\n• Exness\n• ICM\n• XM\n• HFM\n• FBS\n\nWe also provide **Trading Lessons** and analysis tools to support your trading decisions.",
+    "aboutDetail": "🏢 **About PT Akademi Keuangan Nusantara (FBL)**\n\n**Vision & Mission:**\nTo be a Forex Trading Education & Consultation Service that helps many people in Indonesia who want to develop into Traders capable of achieving *Trading For Living* or even *Trading For Business* level with a practical methods approach.\n\nBecause Forex Trading is one of the promising financial industries for business with specific advantages compared to other business industries.",
+    "botDefaultResponse": "Thank you for the message! For detailed info, please select the navigation menu above, or type keywords like \"Robot\", \"Course\", or \"Tools\". You can also contact the admin directly for a consultation.",
+    "botDefaultGreetings": "Hello! Is there anything we can help you with regarding Forex for Better Living services?",
+    "quickReplyRobot": "🤖 Trading Robot Info",
+    "quickReplyCourse": "📚 Education Class Info",
+    "quickReplyTools": "🛠️ Tools & Broker",
+    "quickReplyAbout": "🏢 About FBL",
+    "quickReplyAdmin": "👨‍💼 Contact Admin",
+    "startChatWA": "Start WhatsApp Chat",
+    "poweredBy": "Powered by Forex for Better Living",
+    "consultFree": "Free Consultation 24/7",
+    "clearHistoryConfirm": "Clear all chat history?",
+    "yesterday": "Yesterday",
+    "today": "Today"
   }
 }

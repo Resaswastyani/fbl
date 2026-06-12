@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -8,6 +9,7 @@ import { ShoppingCart, Trash2, ArrowLeft, CheckCircle } from "lucide-react";
 import { useCart } from "@/context/cart-context";
 
 export default function CartPage() {
+  const t = useTranslations("StudentCart");
   const router = useRouter();
   const {
     items,
@@ -30,7 +32,7 @@ export default function CartPage() {
       });
 
       if (res.status === 401 || !res.ok) {
-        alert("Silakan login terlebih dahulu untuk melihat keranjang belanja.");
+        alert(t("pleaseLogin"));
         router.push("/login");
         return;
       }
@@ -88,25 +90,25 @@ export default function CartPage() {
   };
 
   const handleRemoveItem = (id: string) => {
-    if (confirm("Hapus item ini dari keranjang?")) {
+    if (confirm(t("confirmRemove"))) {
       removeFromCart(id);
     }
   };
 
   const handleClearCart = () => {
-    if (confirm("Apakah Anda yakin ingin mengosongkan keranjang?")) {
+    if (confirm(t("confirmClear"))) {
       clearCart();
     }
   };
 
   const handleCheckout = async () => {
     if (items.length === 0) {
-      alert("Keranjang Anda kosong!");
+      alert(t("cartEmptyAlert"));
       return;
     }
 
     if (items.length > 1) {
-      alert("Silakan checkout satu item per transaksi.");
+      alert(t("checkoutOneByOne"));
       return;
     }
 
@@ -115,7 +117,7 @@ export default function CartPage() {
       await checkout();
     } catch (error) {
       console.error("Checkout error:", error);
-      alert("Terjadi kesalahan saat checkout. Silakan coba lagi.");
+      alert(t("checkoutError"));
     } finally {
       setProcessing(false);
     }
@@ -130,7 +132,7 @@ export default function CartPage() {
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#156d95] mx-auto"></div>
-          <p className="mt-4 text-gray-600">Memuat keranjang...</p>
+          <p className="mt-4 text-gray-600">{t("loadingCart")}</p>
         </div>
       </div>
     );
@@ -152,9 +154,7 @@ export default function CartPage() {
             onClick={() => router.back()}
             className="mb-4 text-gray-600 hover:text-[#156d95]"
           >
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Kembali
-          </Button>
+            <ArrowLeft className="mr-2 h-4 w-4" />{t("back")}</Button>
           <h1 className="text-3xl font-bold text-gray-900">
             Keranjang Belanja
           </h1>
@@ -172,16 +172,13 @@ export default function CartPage() {
               Keranjang Anda Kosong
             </h2>
             <p className="text-gray-600 mb-8 max-w-md mx-auto">
-              Tidak ada item dalam keranjang Anda. Temukan kursus menarik dan
-              tambahkan ke keranjang untuk memulai pembelajaran.
-            </p>
+                {t("cartEmptyDesc")}
+              </p>
             <Button
               onClick={handleContinueShopping}
               size="lg"
               className="bg-[#156d95] hover:bg-[#0d476e] text-white px-8 py-6 text-lg"
-            >
-              Jelajahi Kursus
-            </Button>
+            >{t("exploreCourses")}</Button>
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -212,7 +209,7 @@ export default function CartPage() {
                         {item.isBundle && item.courseNames && (
                           <div className="mt-3 p-4 bg-gray-50 rounded-lg">
                             <p className="text-sm font-medium text-gray-700 mb-2">
-                              Termasuk {item.courseNames.length} kursus:
+                              {t("includesCourses", { count: item.courseNames.length })}
                             </p>
                             <ul className="space-y-1">
                               {item.courseNames.map((name, index) => (
@@ -232,7 +229,7 @@ export default function CartPage() {
 
                         <div className="mt-4 flex items-center justify-between">
                           <div>
-                            <p className="text-sm text-gray-500">Harga</p>
+                            <p className="text-sm text-gray-500">{t("price")}</p>
                             <p className="text-lg font-bold text-[#156d95]">
                               {formatPrice(item.price)}
                             </p>
@@ -244,7 +241,7 @@ export default function CartPage() {
                             </p> */}
                           </div>
                           <div>
-                            <p className="text-sm text-gray-500">Subtotal</p>
+                            <p className="text-sm text-gray-500">{t("subtotal")}</p>
                             <p className="text-lg font-bold text-gray-900">
                               {formatPrice(item.price * item.quantity)}
                             </p>
@@ -270,17 +267,15 @@ export default function CartPage() {
             <div className="lg:col-span-1">
               <Card className="sticky top-24 border-0 shadow-xl overflow-hidden bg-gradient-to-br from-[#156d95] to-[#0d476e]">
                 <CardContent className="p-6">
-                  <h2 className="text-xl font-bold text-white mb-6">
-                    Ringkasan Pesanan
-                  </h2>
+                  <h2 className="text-xl font-bold text-white mb-6">{t("orderSummary")}</h2>
 
                   <div className="space-y-4 mb-6">
                     <div className="flex justify-between text-white/90">
-                      <span>Jumlah Item</span>
+                      <span>{t("totalItems")}</span>
                       <span>{items.length}</span>
                     </div>
                     <div className="flex justify-between text-white/90">
-                      <span>Total Harga</span>
+                      <span>{t("totalPrice")}</span>
                       <span className="font-bold text-white text-xl">
                         {formatPrice(total)}
                       </span>
@@ -290,7 +285,7 @@ export default function CartPage() {
                   <div className="space-y-3 mb-6 pt-4 border-t border-white/20">
                     <div className="flex items-center text-sm text-white/80">
                       <CheckCircle className="h-4 w-4 text-green-300 mr-2" />
-                      <span>Akses seumur hidup</span>
+                      <span>{t("lifetimeAccess")}</span>
                     </div>
                     {/* <div className="flex items-center text-sm text-white/80">
                       <CheckCircle className="h-4 w-4 text-green-300 mr-2" />
@@ -298,7 +293,7 @@ export default function CartPage() {
                     </div> */}
                     <div className="flex items-center text-sm text-white/80">
                       <CheckCircle className="h-4 w-4 text-green-300 mr-2" />
-                      <span>Update materi gratis</span>
+                      <span>{t("freeUpdates")}</span>
                     </div>
                   </div>
 
@@ -306,9 +301,7 @@ export default function CartPage() {
                     <Button
                       disabled
                       className="w-full bg-white/20 text-white hover:bg-white/30 cursor-not-allowed py-6 text-lg font-bold"
-                    >
-                      Checkout Satu Per Satu
-                    </Button>
+                    >{t("checkoutSingle")}</Button>
                   ) : (
                     <Button
                       onClick={handleCheckout}
@@ -331,17 +324,13 @@ export default function CartPage() {
                     onClick={handleClearCart}
                     className="w-full mt-3 text-white/70 hover:text-white hover:bg-white/10"
                   >
-                    <Trash2 className="mr-2 h-4 w-4" />
-                    Kosongkan Keranjang
-                  </Button>
+                    <Trash2 className="mr-2 h-4 w-4" />{t("clearCart")}</Button>
                 </CardContent>
               </Card>
 
               <Card className="mt-6 border border-gray-200">
                 <CardContent className="p-6">
-                  <h3 className="font-bold text-lg mb-4 text-gray-900">
-                    Informasi Pembayaran
-                  </h3>
+                  <h3 className="font-bold text-lg mb-4 text-gray-900">{t("paymentInfo")}</h3>
                   <ul className="space-y-3 text-sm text-gray-600">
                     <li className="flex items-start">
                       <span className="text-[#156d95] mr-2 mt-1">•</span>

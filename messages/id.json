@@ -406,7 +406,9 @@
         "Deposit/withdrawal mudah via lokal bank",
         "Platform MT4 & MT5"
       ],
-      "cons": ["Terbatasnya instrumen crypto"],
+      "cons": [
+        "Terbatasnya instrumen crypto"
+      ],
       "badge": "Paling Populer"
     },
     "fbs": {
@@ -422,7 +424,9 @@
         "Leverage tertinggi 1:3000",
         "Bonus beragam"
       ],
-      "cons": ["Regulasi tidak sekuat broker besar"],
+      "cons": [
+        "Regulasi tidak sekuat broker besar"
+      ],
       "badge": "Spread Terendah"
     },
     "exness": {
@@ -438,7 +442,9 @@
         "Eksekusi order instan",
         "Regulasi tier-1 FCA"
       ],
-      "cons": ["Minimum deposit akun Pro $200"],
+      "cons": [
+        "Minimum deposit akun Pro $200"
+      ],
       "badge": "Terbaik"
     },
     "octa": {
@@ -454,7 +460,9 @@
         "Banyak promo dan kontes",
         "Edukasi lengkap untuk pemula"
       ],
-      "cons": ["Instrumen terbatas vs broker besar"],
+      "cons": [
+        "Instrumen terbatas vs broker besar"
+      ],
       "badge": ""
     },
     "icmarkets": {
@@ -470,7 +478,10 @@
         "Eksekusi ultra-cepat",
         "Cocok untuk algo trading"
       ],
-      "cons": ["Minimum deposit tinggi", "Tidak ada bonus"],
+      "cons": [
+        "Minimum deposit tinggi",
+        "Tidak ada bonus"
+      ],
       "badge": "Pro Trader"
     },
     "hotforex": {
@@ -486,7 +497,9 @@
         "Program reward menarik",
         "Edukasi premium gratis"
       ],
-      "cons": ["Spread standard agak tinggi"],
+      "cons": [
+        "Spread standard agak tinggi"
+      ],
       "badge": ""
     }
   },
@@ -575,5 +588,143 @@
     "description": "Deskripsi",
     "lessonList": "Daftar Lesson",
     "minutes": "{time} menit"
+  },
+  "StudentCart": {
+    "pleaseLogin": "Silakan login terlebih dahulu untuk melihat keranjang belanja.",
+    "cartEmptyAlert": "Keranjang Anda kosong!",
+    "checkoutOneByOne": "Silakan checkout satu item per transaksi.",
+    "checkoutError": "Terjadi kesalahan saat checkout. Silakan coba lagi.",
+    "loadingCart": "Memuat keranjang...",
+    "back": "Kembali",
+    "shoppingCart": "Keranjang Belanja",
+    "itemsInCart": "{count} item dalam keranjang",
+    "cartEmpty": "Keranjang Anda Kosong",
+    "cartEmptyDesc": "Tidak ada item dalam keranjang Anda. Temukan kursus menarik dan tambahkan ke keranjang untuk memulai pembelajaran.",
+    "exploreCourses": "Jelajahi Kursus",
+    "bundle": "Bundle",
+    "singleCourse": "Kursus Tunggal",
+    "includesCourses": "Termasuk {count} kursus:",
+    "price": "Harga",
+    "subtotal": "Subtotal",
+    "orderSummary": "Ringkasan Pesanan",
+    "totalItems": "Jumlah Item",
+    "totalPrice": "Total Harga",
+    "lifetimeAccess": "Akses seumur hidup",
+    "freeUpdates": "Update materi gratis",
+    "checkoutSingle": "Checkout Satu Per Satu",
+    "proceedToPayment": "Lanjutkan ke Pembayaran",
+    "processing": "Memproses...",
+    "clearCart": "Kosongkan Keranjang",
+    "paymentInfo": "Informasi Pembayaran",
+    "paymentGateway": "Pembayaran diproses melalui Midtrans (payment gateway terpercaya)",
+    "instantAccess": "Setelah pembayaran berhasil, kursus langsung tersedia di dashboard",
+    "lifetimeAccessDesc": "Akses kursus seumur hidup dengan update materi gratis",
+    "confirmRemove": "Hapus item ini dari keranjang?",
+    "confirmClear": "Apakah Anda yakin ingin mengosongkan keranjang?"
+  },
+  "StudentMyCourses": {
+    "searchCourses": "Cari kursus...",
+    "all": "Semua",
+    "inProgress": "Berlangsung",
+    "completed": "Selesai",
+    "notStarted": "Belum Dimulai",
+    "notAccessed": "Belum diakses",
+    "today": "Hari ini",
+    "yesterday": "Kemarin",
+    "daysAgo": "{days} hari yang lalu",
+    "loadingMyCourses": "Memuat kursus Anda...",
+    "myCourses": "Kursus Saya",
+    "activeCourses": "{count} kursus aktif",
+    "certificate": "Sertifikat",
+    "startLearning": "Mulai Belajar",
+    "review": "Tinjau Ulang",
+    "continueLearning": "Lanjutkan Belajar",
+    "noCoursesYet": "Belum Ada Kursus",
+    "startLearningJourney": "Anda belum memiliki kursus. Jelajahi katalog kursus kami dan mulai perjalanan belajar Anda.",
+    "exploreCourses": "Jelajahi Kursus",
+    "notFound": "Tidak Ditemukan",
+    "noCoursesMatch": "Tidak ada kursus yang cocok dengan pencarian Anda.",
+    "resetFilter": "Reset Filter",
+    "progress": "Progress",
+    "lessonProgress": "{completed} / {total} lesson",
+    "noDescription": "Tidak ada deskripsi"
+  },
+  "StudentProfile": {
+    "myProfile": "Profil Saya",
+    "logout": "Logout",
+    "profileUpdated": "Profil berhasil diperbarui!",
+    "updateFailed": "Gagal memperbarui profil",
+    "updateError": "Terjadi kesalahan saat memperbarui profil",
+    "passwordUnmatched": "Password baru tidak cocok",
+    "passwordChanged": "Password berhasil diubah!",
+    "passwordChangeFailed": "Gagal mengubah password",
+    "passwordChangeError": "Terjadi kesalahan saat mengubah password",
+    "adminRole": "Admin",
+    "mentorRole": "Mentor",
+    "customerRole": "Pelanggan",
+    "loadingProfile": "Memuat profil...",
+    "joined": "Bergabung {date}",
+    "learningStats": "Statistik Belajar",
+    "totalCourses": "Total Kursus",
+    "inProgress": "Sedang Dipelajari",
+    "completed": "Selesai",
+    "certificates": "Sertifikat",
+    "profileInfo": "Informasi Profil",
+    "edit": "Edit",
+    "fullName": "Nama Lengkap",
+    "enterFullName": "Masukkan nama lengkap",
+    "email": "Email",
+    "emailCannotChange": "Email tidak dapat diubah",
+    "save": "Simpan",
+    "cancel": "Batal",
+    "role": "Role",
+    "changePassword": "Ubah Password",
+    "currentPassword": "Password Saat Ini",
+    "enterCurrentPassword": "Masukkan password saat ini",
+    "newPassword": "Password Baru",
+    "enterNewPassword": "Masukkan password baru",
+    "confirmNewPassword": "Konfirmasi Password Baru",
+    "enterConfirmPassword": "Konfirmasi password baru",
+    "quickActions": "Aksi Cepat",
+    "myCourses": "Kursus Saya",
+    "dashboard": "Dashboard",
+    "profileTab": "Profil",
+    "passwordTab": "Password"
+  },
+  "WhatsAppFloat": {
+    "botName": "FBL Assistant",
+    "onlineStatus": "Online 24/7 • PT Akademi Keuangan Nusantara",
+    "navMenu": "Menu Navigasi",
+    "history": "Riwayat Chat",
+    "botTypeLabel": "Bot",
+    "userTypeLabel": "Anda",
+    "typeMessage": "Ketik pesan Anda...",
+    "welcomeMsg": "Halo! 👋 Selamat datang di **Forex for Better Living**.\n\nSaya assistant virtual FBL siap membantu Anda 24/7 dengan:\n• 🤖 Info Robot Trading (EA)\n• 📚 Program Professional Course\n• 🛠️ Tools & Rekomendasi Broker\n• 🏢 Visi & Misi Perusahaan\n\n**Pilih menu di atas** atau ketik pertanyaan Anda!",
+    "chooseTopic": "Pilih topik yang Anda minati:",
+    "menuRobotLabel": "Robot Trading (EA)",
+    "menuRobotDesc": "Info EA FBL, trial 30 hari, fitur AI",
+    "menuCourseLabel": "Professional Course",
+    "menuCourseDesc": "Kelas edukasi & mentoring trading",
+    "menuToolsLabel": "Tools & Broker",
+    "menuToolsDesc": "Rekomendasi platform dan alat trading",
+    "menuAboutLabel": "Tentang FBL",
+    "menuAboutDesc": "Profil PT Akademi Keuangan Nusantara",
+    "robotDetail": "🤖 **Robot Trading Cerdas & Otomatis (EA FBL Trading)**\n\nTingkatkan potensi trading Anda dengan AI-powered trading bots yang bekerja 24/7.\n\n**Keunggulan:**\n✅ Backtest terbukti & diverifikasi\n✅ Risk management otomatis (Auto MM)\n✅ Profit sharing transparan\n✅ Real-time Analytics\n\n🎁 **Promo Khusus:** Dapatkan **FREE TRIAL 30 HARI**! Rasakan pengalaman trading otomatis tanpa risiko.",
+    "courseDetail": "📚 **Professional Course**\n\nLayanan edukasi komprehensif bagi Anda yang ingin berkembang menjadi Trader profesional.\n\n**Materi mencakup:**\n• Praktis & Sederhana: Metode ramah pemula.\n• Materi Core Business: Strategi inti bisnis trading.\n• Mudah Diimplementasikan: Siap praktik.\n• Penguasaan Cepat: Kurikulum efisien untuk hasil optimal.\n\nHubungi Admin kami untuk info batch kelas terbaru!",
+    "toolsDetail": "🛠️ **Tools & Rekomendasi Broker**\n\nKami bekerja sama dengan berbagai broker ternama untuk memastikan keamanan dan kenyamanan trading Anda, antara lain:\n\n• Exness\n• ICM\n• XM\n• HFM\n• FBS\n\nKami juga menyediakan **Trading Lesson** dan alat bantu analisis untuk mendukung keputusan trading Anda.",
+    "aboutDetail": "🏢 **Tentang PT Akademi Keuangan Nusantara (FBL)**\n\n**Visi & Misi:**\nMenjadi Jasa Edukasi & Konsultasi Forex Trading yang membantu banyak orang di Indonesia yang ingin berkembang menjadi Trader yang mampu mencapai level *Trading For Living* bahkan *Trading For Business* dengan pendekatan metode-metode yang praktis.\n\nKarena Forex Trading adalah salah satu industri keuangan yang menjanjikan untuk bisnis dengan kelebihan spesifik dibanding industri bisnis lainnya.",
+    "botDefaultResponse": "Terima kasih atas pesannya! Untuk info detail silakan pilih menu navigasi di atas, atau ketik kata kunci seperti \"Robot\", \"Course\", atau \"Tools\". Anda juga bisa hubungi admin langsung untuk konsultasi.",
+    "botDefaultGreetings": "Halo! Ada yang bisa kami bantu seputar layanan Forex for Better Living?",
+    "quickReplyRobot": "🤖 Info Robot Trading",
+    "quickReplyCourse": "📚 Info Kelas Edukasi",
+    "quickReplyTools": "🛠️ Tools & Broker",
+    "quickReplyAbout": "🏢 Tentang FBL",
+    "quickReplyAdmin": "👨‍💼 Hubungi Admin",
+    "startChatWA": "Mulai Chat WhatsApp",
+    "poweredBy": "Powered by Forex for Better Living",
+    "consultFree": "Konsultasi Gratis 24/7",
+    "clearHistoryConfirm": "Hapus semua riwayat chat?",
+    "yesterday": "Kemarin",
+    "today": "Hari ini"
   }
 }

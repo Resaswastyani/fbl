@@ -1,0 +1,178 @@
+const fs = require('fs');
+
+const idPath = 'messages/id.json';
+const enPath = 'messages/en.json';
+
+const id = JSON.parse(fs.readFileSync(idPath, 'utf8'));
+const en = JSON.parse(fs.readFileSync(enPath, 'utf8'));
+
+const studentProfileId = {
+    'myProfile': 'Profil Saya',
+    'logout': 'Logout',
+    'profileUpdated': 'Profil berhasil diperbarui!',
+    'updateFailed': 'Gagal memperbarui profil',
+    'updateError': 'Terjadi kesalahan saat memperbarui profil',
+    'passwordUnmatched': 'Password baru tidak cocok',
+    'passwordChanged': 'Password berhasil diubah!',
+    'passwordChangeFailed': 'Gagal mengubah password',
+    'passwordChangeError': 'Terjadi kesalahan saat mengubah password',
+    'adminRole': 'Admin',
+    'mentorRole': 'Mentor',
+    'customerRole': 'Pelanggan',
+    'loadingProfile': 'Memuat profil...',
+    'joined': 'Bergabung {date}',
+    'learningStats': 'Statistik Belajar',
+    'totalCourses': 'Total Kursus',
+    'inProgress': 'Sedang Dipelajari',
+    'completed': 'Selesai',
+    'certificates': 'Sertifikat',
+    'profileInfo': 'Informasi Profil',
+    'edit': 'Edit',
+    'fullName': 'Nama Lengkap',
+    'enterFullName': 'Masukkan nama lengkap',
+    'email': 'Email',
+    'emailCannotChange': 'Email tidak dapat diubah',
+    'save': 'Simpan',
+    'cancel': 'Batal',
+    'role': 'Role',
+    'changePassword': 'Ubah Password',
+    'currentPassword': 'Password Saat Ini',
+    'enterCurrentPassword': 'Masukkan password saat ini',
+    'newPassword': 'Password Baru',
+    'enterNewPassword': 'Masukkan password baru',
+    'confirmNewPassword': 'Konfirmasi Password Baru',
+    'enterConfirmPassword': 'Konfirmasi password baru',
+    'quickActions': 'Aksi Cepat',
+    'myCourses': 'Kursus Saya',
+    'dashboard': 'Dashboard',
+    'profileTab': 'Profil',
+    'passwordTab': 'Password'
+};
+
+const studentProfileEn = {
+    'myProfile': 'My Profile',
+    'logout': 'Logout',
+    'profileUpdated': 'Profile updated successfully!',
+    'updateFailed': 'Failed to update profile',
+    'updateError': 'An error occurred while updating the profile',
+    'passwordUnmatched': 'New password does not match',
+    'passwordChanged': 'Password changed successfully!',
+    'passwordChangeFailed': 'Failed to change password',
+    'passwordChangeError': 'An error occurred while changing password',
+    'adminRole': 'Admin',
+    'mentorRole': 'Mentor',
+    'customerRole': 'Customer',
+    'loadingProfile': 'Loading profile...',
+    'joined': 'Joined {date}',
+    'learningStats': 'Learning Statistics',
+    'totalCourses': 'Total Courses',
+    'inProgress': 'In Progress',
+    'completed': 'Completed',
+    'certificates': 'Certificates',
+    'profileInfo': 'Profile Information',
+    'edit': 'Edit',
+    'fullName': 'Full Name',
+    'enterFullName': 'Enter full name',
+    'email': 'Email',
+    'emailCannotChange': 'Email cannot be changed',
+    'save': 'Save',
+    'cancel': 'Cancel',
+    'role': 'Role',
+    'changePassword': 'Change Password',
+    'currentPassword': 'Current Password',
+    'enterCurrentPassword': 'Enter current password',
+    'newPassword': 'New Password',
+    'enterNewPassword': 'Enter new password',
+    'confirmNewPassword': 'Confirm New Password',
+    'enterConfirmPassword': 'Confirm new password',
+    'quickActions': 'Quick Actions',
+    'myCourses': 'My Courses',
+    'dashboard': 'Dashboard',
+    'profileTab': 'Profile',
+    'passwordTab': 'Password'
+};
+
+const whatsappFloatId = {
+    'botName': 'FBL Assistant',
+    'onlineStatus': 'Online 24/7 • PT Akademi Keuangan Nusantara',
+    'navMenu': 'Menu Navigasi',
+    'history': 'Riwayat Chat',
+    'botTypeLabel': 'Bot',
+    'userTypeLabel': 'Anda',
+    'typeMessage': 'Ketik pesan Anda...',
+    'welcomeMsg': 'Halo! 👋 Selamat datang di **Forex for Better Living**.\n\nSaya assistant virtual FBL siap membantu Anda 24/7 dengan:\n• 🤖 Info Robot Trading (EA)\n• 📚 Program Professional Course\n• 🛠️ Tools & Rekomendasi Broker\n• 🏢 Visi & Misi Perusahaan\n\n**Pilih menu di atas** atau ketik pertanyaan Anda!',
+    'chooseTopic': 'Pilih topik yang Anda minati:',
+    'menuRobotLabel': 'Robot Trading (EA)',
+    'menuRobotDesc': 'Info EA FBL, trial 30 hari, fitur AI',
+    'menuCourseLabel': 'Professional Course',
+    'menuCourseDesc': 'Kelas edukasi & mentoring trading',
+    'menuToolsLabel': 'Tools & Broker',
+    'menuToolsDesc': 'Rekomendasi platform dan alat trading',
+    'menuAboutLabel': 'Tentang FBL',
+    'menuAboutDesc': 'Profil PT Akademi Keuangan Nusantara',
+    'robotDetail': '🤖 **Robot Trading Cerdas & Otomatis (EA FBL Trading)**\n\nTingkatkan potensi trading Anda dengan AI-powered trading bots yang bekerja 24/7.\n\n**Keunggulan:**\n✅ Backtest terbukti & diverifikasi\n✅ Risk management otomatis (Auto MM)\n✅ Profit sharing transparan\n✅ Real-time Analytics\n\n🎁 **Promo Khusus:** Dapatkan **FREE TRIAL 30 HARI**! Rasakan pengalaman trading otomatis tanpa risiko.',
+    'courseDetail': '📚 **Professional Course**\n\nLayanan edukasi komprehensif bagi Anda yang ingin berkembang menjadi Trader profesional.\n\n**Materi mencakup:**\n• Praktis & Sederhana: Metode ramah pemula.\n• Materi Core Business: Strategi inti bisnis trading.\n• Mudah Diimplementasikan: Siap praktik.\n• Penguasaan Cepat: Kurikulum efisien untuk hasil optimal.\n\nHubungi Admin kami untuk info batch kelas terbaru!',
+    'toolsDetail': '🛠️ **Tools & Rekomendasi Broker**\n\nKami bekerja sama dengan berbagai broker ternama untuk memastikan keamanan dan kenyamanan trading Anda, antara lain:\n\n• Exness\n• ICM\n• XM\n• HFM\n• FBS\n\nKami juga menyediakan **Trading Lesson** dan alat bantu analisis untuk mendukung keputusan trading Anda.',
+    'aboutDetail': '🏢 **Tentang PT Akademi Keuangan Nusantara (FBL)**\n\n**Visi & Misi:**\nMenjadi Jasa Edukasi & Konsultasi Forex Trading yang membantu banyak orang di Indonesia yang ingin berkembang menjadi Trader yang mampu mencapai level *Trading For Living* bahkan *Trading For Business* dengan pendekatan metode-metode yang praktis.\n\nKarena Forex Trading adalah salah satu industri keuangan yang menjanjikan untuk bisnis dengan kelebihan spesifik dibanding industri bisnis lainnya.',
+    'botDefaultResponse': 'Terima kasih atas pesannya! Untuk info detail silakan pilih menu navigasi di atas, atau ketik kata kunci seperti "Robot", "Course", atau "Tools". Anda juga bisa hubungi admin langsung untuk konsultasi.',
+    'botDefaultGreetings': 'Halo! Ada yang bisa kami bantu seputar layanan Forex for Better Living?',
+    'quickReplyRobot': '🤖 Info Robot Trading',
+    'quickReplyCourse': '📚 Info Kelas Edukasi',
+    'quickReplyTools': '🛠️ Tools & Broker',
+    'quickReplyAbout': '🏢 Tentang FBL',
+    'quickReplyAdmin': '👨‍💼 Hubungi Admin',
+    'startChatWA': 'Mulai Chat WhatsApp',
+    'poweredBy': 'Powered by Forex for Better Living',
+    'consultFree': 'Konsultasi Gratis 24/7',
+    'clearHistoryConfirm': 'Hapus semua riwayat chat?',
+    'yesterday': 'Kemarin',
+    'today': 'Hari ini'
+};
+
+const whatsappFloatEn = {
+    'botName': 'FBL Assistant',
+    'onlineStatus': 'Online 24/7 • PT Akademi Keuangan Nusantara',
+    'navMenu': 'Navigation Menu',
+    'history': 'Chat History',
+    'botTypeLabel': 'Bot',
+    'userTypeLabel': 'You',
+    'typeMessage': 'Type your message...',
+    'welcomeMsg': 'Hello! 👋 Welcome to **Forex for Better Living**.\n\nI am the virtual FBL assistant, ready to help you 24/7 with:\n• 🤖 Trading Robot Info (EA)\n• 📚 Professional Course Programs\n• 🛠️ Tools & Broker Recommendations\n• 🏢 Company Vision & Mission\n\n**Select a menu above** or type your question!',
+    'chooseTopic': 'Choose a topic of interest:',
+    'menuRobotLabel': 'Trading Robot (EA)',
+    'menuRobotDesc': 'FBL EA Info, 30 days trial, AI features',
+    'menuCourseLabel': 'Professional Course',
+    'menuCourseDesc': 'Trading education & mentoring classes',
+    'menuToolsLabel': 'Tools & Broker',
+    'menuToolsDesc': 'Platform recommendations and trading tools',
+    'menuAboutLabel': 'About FBL',
+    'menuAboutDesc': 'PT Akademi Keuangan Nusantara Profile',
+    'robotDetail': '🤖 **Smart & Automated Trading Robot (EA FBL Trading)**\n\nEnhance your trading potential with AI-powered trading bots working 24/7.\n\n**Advantages:**\n✅ Proven & verified backtest\n✅ Automated risk management (Auto MM)\n✅ Transparent profit sharing\n✅ Real-time Analytics\n\n🎁 **Special Promo:** Get a **30 DAYS FREE TRIAL**! Experience risk-free automated trading.',
+    'courseDetail': '📚 **Professional Course**\n\nComprehensive educational services for those who want to develop into professional Traders.\n\n**Material includes:**\n• Practical & Simple: Beginner-friendly methods.\n• Core Business Material: Core trading business strategies.\n• Easy to Implement: Ready for practice.\n• Fast Mastery: Efficient curriculum for optimal results.\n\nContact our Admin for the latest class batch info!',
+    'toolsDetail': '🛠️ **Tools & Broker Recommendations**\n\nWe partner with various renowned brokers to ensure your trading security and comfort, including:\n\n• Exness\n• ICM\n• XM\n• HFM\n• FBS\n\nWe also provide **Trading Lessons** and analysis tools to support your trading decisions.',
+    'aboutDetail': '🏢 **About PT Akademi Keuangan Nusantara (FBL)**\n\n**Vision & Mission:**\nTo be a Forex Trading Education & Consultation Service that helps many people in Indonesia who want to develop into Traders capable of achieving *Trading For Living* or even *Trading For Business* level with a practical methods approach.\n\nBecause Forex Trading is one of the promising financial industries for business with specific advantages compared to other business industries.',
+    'botDefaultResponse': 'Thank you for the message! For detailed info, please select the navigation menu above, or type keywords like "Robot", "Course", or "Tools". You can also contact the admin directly for a consultation.',
+    'botDefaultGreetings': 'Hello! Is there anything we can help you with regarding Forex for Better Living services?',
+    'quickReplyRobot': '🤖 Trading Robot Info',
+    'quickReplyCourse': '📚 Education Class Info',
+    'quickReplyTools': '🛠️ Tools & Broker',
+    'quickReplyAbout': '🏢 About FBL',
+    'quickReplyAdmin': '👨‍💼 Contact Admin',
+    'startChatWA': 'Start WhatsApp Chat',
+    'poweredBy': 'Powered by Forex for Better Living',
+    'consultFree': 'Free Consultation 24/7',
+    'clearHistoryConfirm': 'Clear all chat history?',
+    'yesterday': 'Yesterday',
+    'today': 'Today'
+};
+
+
+id.StudentProfile = studentProfileId;
+en.StudentProfile = studentProfileEn;
+
+id.WhatsAppFloat = whatsappFloatId;
+en.WhatsAppFloat = whatsappFloatEn;
+
+fs.writeFileSync(idPath, JSON.stringify(id, null, 2));
+fs.writeFileSync(enPath, JSON.stringify(en, null, 2));
+console.log('Translations updated successfully.');

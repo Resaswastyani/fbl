@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { useParams, useRouter } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -34,6 +35,7 @@ type Course = {
 };
 
 export default function CourseDetailPage() {
+  const t = useTranslations("StudentCourses");
   const params = useParams();
   const router = useRouter();
   const courseId = params.id as string;
@@ -63,9 +65,9 @@ export default function CourseDetailPage() {
 
       if (!res.ok) {
         if (res.status === 404) {
-          setError("Course tidak ditemukan");
+          setError(t("courseNotFound"));
         } else {
-          setError("Terjadi kesalahan saat memuat course");
+          setError(t("errorLoadingCourse"));
         }
         return;
       }
@@ -90,7 +92,7 @@ export default function CourseDetailPage() {
       }
     } catch (error) {
       console.error("Error fetching course:", error);
-      setError("Terjadi kesalahan");
+      setError(t("errorOccurred"));
     } finally {
       setLoading(false);
     }
@@ -115,14 +117,14 @@ export default function CourseDetailPage() {
       if (res.ok) {
         setIsEnrolled(true);
         setCanAccess(true);
-        alert("Berhasil mendaftar ke course!");
+        alert(t("enrollSuccess"));
       } else {
         const data = await res.json();
-        alert(data.error || "Gagal mendaftar");
+        alert(data.error || t("enrollFailed"));
       }
     } catch (error) {
       console.error("Error enrolling:", error);
-      alert("Terjadi kesalahan saat mendaftar");
+      alert(t("enrollError"));
     }
   };
 
@@ -170,7 +172,7 @@ export default function CourseDetailPage() {
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
           <Loader2 className="animate-spin h-12 w-12 text-[#156d95] mx-auto" />
-          <p className="mt-4 text-gray-600">Memuat course...</p>
+          <p className="mt-4 text-gray-600">{t("loadingCourse")}</p>
         </div>
       </div>
     );
@@ -181,10 +183,9 @@ export default function CourseDetailPage() {
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
           <p className="text-red-500 text-lg mb-4">
-            {error || "Course tidak ditemukan"}
+            {error || t("courseNotFound")}
           </p>
-          <Button onClick={() => router.push("/student/courses")}>
-            Kembali ke Daftar Kursus
+            {t("backToCourseList")}
           </Button>
         </div>
       </div>
@@ -217,10 +218,10 @@ export default function CourseDetailPage() {
             </div>
             <div className="flex items-center gap-2">
               {isFree && (
-                <Badge className="bg-blue-100 text-blue-700">Gratis</Badge>
+                <Badge className="bg-blue-100 text-blue-700">{t("free")}</Badge>
               )}
               {isEnrolled && (
-                <Badge className="bg-green-100 text-green-700">Terdaftar</Badge>
+                <Badge className="bg-green-100 text-green-700">{t("enrolled")}</Badge>
               )}
             </div>
           </div>
@@ -261,7 +262,7 @@ export default function CourseDetailPage() {
                           className="prose max-w-none mb-4"
                           dangerouslySetInnerHTML={{
                             __html:
-                              selectedLesson.content || "Tidak ada konten",
+                              selectedLesson.content || t("noContent"),
                           }}
                         />
                       )}
@@ -275,15 +276,13 @@ export default function CourseDetailPage() {
                               rel="noopener noreferrer"
                               className="flex items-center text-[#156d95] hover:underline"
                             >
-                              <FileText className="h-6 w-6 mr-2" />
-                              Buka PDF
+                              {t("openPdf")}
                             </a>
                           </div>
                         )}
 
                       {selectedLesson.duration && (
-                        <p className="text-sm text-gray-500 mb-4">
-                          Durasi: {selectedLesson.duration} menit
+                          {t("duration", { time: selectedLesson.duration })}
                         </p>
                       )}
 
@@ -299,18 +298,16 @@ export default function CourseDetailPage() {
                         >
                           {completedLessons.includes(selectedLesson.id) ? (
                             <>
-                              <CheckCircle className="h-4 w-4 mr-2" />
-                              Sudah Selesai
+                              {t("alreadyCompleted")}
                             </>
                           ) : (
-                            "Tandai Selesai"
+                            t("markCompleted")
                           )}
                         </Button>
                       )}
                     </div>
                   ) : (
-                    <p className="text-center text-gray-500 py-12">
-                      Pilih lesson untuk memulai belajar
+                      {t("selectLesson")}
                     </p>
                   )}
                 </CardContent>
@@ -319,25 +316,25 @@ export default function CourseDetailPage() {
               <Card className="mb-6">
                 <CardContent className="p-12 text-center">
                   <Lock className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                  <h2 className="text-xl font-bold mb-2">Course Terkunci</h2>
+                  <h2 className="text-xl font-bold mb-2">{t("courseLocked")}</h2>
                   <p className="text-gray-500 mb-6">
                     {isFree
-                      ? "Daftar sekarang untuk mengakses course gratis ini"
-                      : "Beli course ini untuk mengakses semua materi"}
+                      ? t("enrollToAccessFree")
+                      : t("buyToAccess")}
                   </p>
                   {isFree ? (
                     <Button
                       onClick={handleEnroll}
                       className="bg-[#156d95] hover:bg-[#0d476e]"
                     >
-                      Daftar Sekarang
+                      {t("enrollNow")}
                     </Button>
                   ) : (
                     <Button
                       onClick={() => router.push("/student/courses")}
                       className="bg-[#156d95] hover:bg-[#0d476e]"
                     >
-                      Lihat Harga
+                      {t("viewPrice")}
                     </Button>
                   )}
                 </CardContent>
@@ -347,9 +344,9 @@ export default function CourseDetailPage() {
             {/* Course Description */}
             <Card>
               <CardContent className="p-6">
-                <h3 className="text-lg font-bold mb-2">Deskripsi</h3>
+                <h3 className="text-lg font-bold mb-2">{t("description")}</h3>
                 <p className="text-gray-600">
-                  {course.description || "Tidak ada deskripsi"}
+                  {course.description || t("noDescription")}
                 </p>
               </CardContent>
             </Card>
@@ -359,7 +356,7 @@ export default function CourseDetailPage() {
           <div className="lg:col-span-1">
             <Card className="sticky top-24">
               <CardContent className="p-4">
-                <h3 className="font-bold mb-4">Daftar Lesson</h3>
+                <h3 className="font-bold mb-4">{t("lessonList")}</h3>
                 <div className="space-y-2">
                   {course.lessons.map((lesson, index) => {
                     const isCompleted = completedLessons.includes(lesson.id);
@@ -399,7 +396,7 @@ export default function CourseDetailPage() {
                                   : "text-gray-500"
                               }`}
                             >
-                              {lesson.duration} menit
+                              {t("minutes", { time: lesson.duration })}
                             </p>
                           )}
                         </div>

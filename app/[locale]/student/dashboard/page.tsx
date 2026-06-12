@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState, useCallback } from "react";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -29,6 +30,7 @@ interface EnrolledCourse {
 }
 
 export default function StudentDashboardPage() {
+  const t = useTranslations("StudentDashboard");
   const router = useRouter();
   const { items: cartItems, clearCart, refreshAuth } = useCart();
   const [user, setUser] = useState<any>(null);
@@ -147,7 +149,7 @@ export default function StudentDashboardPage() {
 
   const handleViewCart = () => {
     if (cartItems.length === 0) {
-      alert("Keranjang Anda kosong!");
+      alert(t("cartEmptyAlert"));
       return;
     }
     router.push("/student/cart");
@@ -158,15 +160,15 @@ export default function StudentDashboardPage() {
   };
 
   const formatLastAccessed = (date: string) => {
-    if (!date) return "Belum diakses";
+    if (!date) return t("notAccessed");
     const d = new Date(date);
     const now = new Date();
     const diff = now.getTime() - d.getTime();
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
 
-    if (days === 0) return "Hari ini";
-    if (days === 1) return "Kemarin";
-    if (days < 7) return `${days} hari yang lalu`;
+    if (days === 0) return t("today");
+    if (days === 1) return t("yesterday");
+    if (days < 7) return t("daysAgo", { days });
     return d.toLocaleDateString("id-ID");
   };
 
@@ -175,7 +177,7 @@ export default function StudentDashboardPage() {
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#156d95] mx-auto"></div>
-          <p className="mt-4 text-gray-600">Memuat dashboard...</p>
+          <p className="mt-4 text-gray-600">{t("loadingDashboard")}</p>
         </div>
       </div>
     );
@@ -230,7 +232,7 @@ export default function StudentDashboardPage() {
                 }}
               >
                 <BookOpen className="mr-2 h-4 w-4" />
-                Dashboard
+                {t("dashboard")}
               </Button>
             </li>
             <li>
@@ -243,7 +245,7 @@ export default function StudentDashboardPage() {
                 }}
               >
                 <GraduationCap className="mr-2 h-4 w-4" />
-                Kursus Saya
+                {t("myCourses")}
               </Button>
             </li>
             <li>
@@ -256,7 +258,7 @@ export default function StudentDashboardPage() {
                 }}
               >
                 <ShoppingCart className="mr-2 h-4 w-4" />
-                Keranjang
+                {t("cart")}
                 {cartItems.length > 0 && (
                   <span className="absolute right-3 top-1/2 -translate-y-1/2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                     {cartItems.length}
@@ -288,7 +290,7 @@ export default function StudentDashboardPage() {
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                   <circle cx="12" cy="7" r="4" />
                 </svg>
-                Profil
+                {t("profile")}
               </Button>
             </li>
           </ul>
@@ -324,10 +326,10 @@ export default function StudentDashboardPage() {
         <div className="p-4 md:p-8 max-w-7xl mx-auto">
           <div className="mb-8 mt-12 md:mt-0">
             <h1 className="text-3xl font-bold text-gray-900">
-              Halo, {user.name}! 👋
+              {t("hello", { name: user.name })}
             </h1>
             <p className="text-gray-600 mt-2">
-              Selamat datang di dashboard Pembelajaran Anda
+              {t("welcomeMessage")}
             </p>
           </div>
 
@@ -336,7 +338,7 @@ export default function StudentDashboardPage() {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-500">Kursus Saya</p>
+                    <p className="text-sm text-gray-500">{t("myCoursesLabel")}</p>
                     <p className="text-2xl font-bold mt-1">
                       {enrolledCourses.length}
                     </p>
@@ -349,7 +351,7 @@ export default function StudentDashboardPage() {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-500">Dalam Keranjang</p>
+                    <p className="text-sm text-gray-500">{t("inCartLabel")}</p>
                     <p className="text-2xl font-bold mt-1">
                       {cartItems.length}
                     </p>
@@ -377,12 +379,12 @@ export default function StudentDashboardPage() {
 
           <section className="mb-12">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-              <h2 className="text-2xl font-bold text-gray-900">Kursus Saya</h2>
+              <h2 className="text-2xl font-bold text-gray-900">{t("myCoursesLabel")}</h2>
               <Button
                 variant="outline"
                 onClick={() => router.push("/student/courses")}
               >
-                Jelajahi Kursus
+                {t("exploreCourses")}
               </Button>
             </div>
             {enrolledCourses.length > 0 ? (
@@ -399,7 +401,7 @@ export default function StudentDashboardPage() {
                           variant="secondary"
                           className="bg-[#156d95]/10 text-[#156d95]"
                         >
-                          Aktif
+                          {t("active")}
                         </Badge>
                       </div>
 
@@ -407,12 +409,12 @@ export default function StudentDashboardPage() {
                         {course.title}
                       </h3>
                       <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-                        {course.description || "Tidak ada deskripsi"}
+                        {course.description || t("noDescription")}
                       </p>
 
                       <div className="mb-4">
                         <div className="flex justify-between text-sm mb-1">
-                          <span className="text-gray-500">Progress</span>
+                          <span className="text-gray-500">{t("progress")}</span>
                           <span className="font-medium text-[#156d95]">
                             {course.progress}%
                           </span>
@@ -429,8 +431,7 @@ export default function StudentDashboardPage() {
                         <div className="flex items-center">
                           <CheckCircle className="h-4 w-4 text-green-500 mr-1" />
                           <span>
-                            {course.lessonsCompleted} dari {course.totalLessons}{" "}
-                            lesson
+                            {t("lessonProgress", { completed: course.lessonsCompleted, total: course.totalLessons })}
                           </span>
                         </div>
                         <span className="bg-[#156d95]/10 text-[#156d95] px-2 py-1 rounded text-xs">
@@ -446,7 +447,7 @@ export default function StudentDashboardPage() {
                           handleContinueLearning(course.id);
                         }}
                       >
-                        Lanjutkan Belajar
+                        {t("continueLearning")}
                       </Button>
                     </CardContent>
                   </Card>
@@ -456,17 +457,17 @@ export default function StudentDashboardPage() {
               <div className="text-center py-12 bg-white rounded-lg border-2 border-dashed border-gray-200">
                 <div className="text-4xl mb-4">🎓</div>
                 <p className="text-gray-500 mb-4 text-lg">
-                  Anda belum memiliki kursus
+                  {t("noCoursesYet")}
                 </p>
                 <p className="text-gray-400 mb-6">
-                  Mulai perjalanan belajar Anda dengan membeli kursus pertama
+                  {t("startLearningJourney")}
                 </p>
                 <Button
                   onClick={() => router.push("/student/courses")}
                   size="lg"
                   className="bg-[#156d95] hover:bg-[#0d476e]"
                 >
-                  Jelajahi Kursus
+                  {t("exploreCourses")}
                 </Button>
               </div>
             )}
@@ -476,7 +477,7 @@ export default function StudentDashboardPage() {
                 onClick={() => router.push("/student/courses")}
                 className="bg-[#156d95] hover:bg-[#0d476e]"
               >
-                Jelajahi Kursus
+                {t("exploreCourses")}
               </Button>
             </div>
           </section>
@@ -484,7 +485,7 @@ export default function StudentDashboardPage() {
           <section className="mb-12">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
               <h2 className="text-2xl font-bold text-gray-900">
-                Keranjang Belanja
+                {t("shoppingCart")}
               </h2>
               {cartItems.length > 0 && (
                 <Button
@@ -493,7 +494,7 @@ export default function StudentDashboardPage() {
                   className="flex items-center"
                 >
                   <ShoppingCart className="mr-2 h-4 w-4" />
-                  Lihat Semua ({cartItems.length})
+                  {t("viewAll", { count: cartItems.length })}
                 </Button>
               )}
             </div>
@@ -509,7 +510,7 @@ export default function StudentDashboardPage() {
                           {item.isBundle && item.courseNames && (
                             <div className="mt-2">
                               <p className="text-sm text-gray-600 font-medium mb-1">
-                                Termasuk {item.courseNames.length} kursus:
+                                {t("includesCourses", { count: item.courseNames.length })}
                               </p>
                               <ul className="text-xs text-gray-500 space-y-1 max-h-24 overflow-y-auto pr-2">
                                 {item.courseNames.map(
@@ -529,7 +530,7 @@ export default function StudentDashboardPage() {
                             </div>
                           )}
                           <p className="text-gray-600 mt-1 text-sm">
-                            {item.isBundle ? "Paket Bundle" : "Kursus Tunggal"}
+                            {item.isBundle ? t("bundlePackage") : t("singleCourse")}
                           </p>
                         </div>
                         <div className="flex flex-row sm:flex-col items-center sm:items-end gap-2 sm:gap-0">
@@ -543,7 +544,7 @@ export default function StudentDashboardPage() {
                 ))}
                 {cartItems.length > 3 && (
                   <p className="text-center text-gray-500 text-sm">
-                    Dan {cartItems.length - 3} item lainnya...
+                    {t("andMoreItems", { count: cartItems.length - 3 })}
                   </p>
                 )}
                 <Button
@@ -551,24 +552,24 @@ export default function StudentDashboardPage() {
                   size="lg"
                   onClick={handleViewCart}
                 >
-                  Lanjutkan ke Checkout
+                  {t("proceedToCheckout")}
                 </Button>
               </div>
             ) : (
               <div className="text-center py-12 bg-white rounded-lg border-2 border-dashed border-gray-200">
                 <div className="text-4xl mb-4">🛒</div>
                 <p className="text-gray-500 mb-4 text-lg">
-                  Keranjang belanja Anda kosong
+                  {t("emptyCart")}
                 </p>
                 <p className="text-gray-400 mb-6">
-                  Temukan kursus yang menarik dan tambahkan ke keranjang
+                  {t("findCourses")}
                 </p>
                 <Button
                   onClick={() => router.push("/student/courses")}
                   size="lg"
                   className="bg-[#156d95] hover:bg-[#0d476e]"
                 >
-                  Tambah Kursus ke Keranjang
+                  {t("addCourseToCart")}
                 </Button>
               </div>
             )}
@@ -577,13 +578,13 @@ export default function StudentDashboardPage() {
           <section>
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
               <h2 className="text-2xl font-bold text-gray-900">
-                Kursus Populer
+                {t("popularCourses")}
               </h2>
               <Button
                 variant="outline"
                 onClick={() => router.push("/student/courses")}
               >
-                Lihat Semua
+                {t("viewAllSimple")}
               </Button>
             </div>
             <CourseSection />

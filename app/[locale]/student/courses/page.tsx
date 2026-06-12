@@ -185,6 +185,7 @@ export default function CourseDetailPage() {
           <p className="text-red-500 text-lg mb-4">
             {error || t("courseNotFound")}
           </p>
+          <Button onClick={() => router.back()}>
             {t("backToCourseList")}
           </Button>
         </div>
@@ -282,6 +283,7 @@ export default function CourseDetailPage() {
                         )}
 
                       {selectedLesson.duration && (
+                        <p className="text-sm text-gray-500 mb-4">
                           {t("duration", { time: selectedLesson.duration })}
                         </p>
                       )}
@@ -307,6 +309,7 @@ export default function CourseDetailPage() {
                       )}
                     </div>
                   ) : (
+                    <p className="text-gray-500 text-center py-8">
                       {t("selectLesson")}
                     </p>
                   )}

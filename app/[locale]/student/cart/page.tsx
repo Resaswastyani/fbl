@@ -200,11 +200,10 @@ export default function CartPage() {
                           </h3>
                           <Badge
                             variant="secondary"
-                            className={`${
-                              item.isBundle
+                            className={`${item.isBundle
                                 ? "bg-[#ff6b00]/10 text-[#ff6b00]"
                                 : "bg-[#156d95]/10 text-[#156d95]"
-                            }`}
+                              }`}
                           >
                             {item.isBundle ? "Bundle" : "Kursus Tunggal"}
                           </Badge>
@@ -293,10 +292,10 @@ export default function CartPage() {
                       <CheckCircle className="h-4 w-4 text-green-300 mr-2" />
                       <span>Akses seumur hidup</span>
                     </div>
-                    <div className="flex items-center text-sm text-white/80">
+                    {/* <div className="flex items-center text-sm text-white/80">
                       <CheckCircle className="h-4 w-4 text-green-300 mr-2" />
                       <span>Sertifikat resmi</span>
-                    </div>
+                    </div> */}
                     <div className="flex items-center text-sm text-white/80">
                       <CheckCircle className="h-4 w-4 text-green-300 mr-2" />
                       <span>Update materi gratis</span>

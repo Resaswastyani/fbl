@@ -116,6 +116,7 @@ const RightAnimationCard = dynamic(() => import("./RightAnimationCard"), {
 
 export const ProductTeaserCard = () => {
   const t = useTranslations("Hero");
+  const tFooter = useTranslations("Footer");
   const router = useRouter();
 
   return (
@@ -157,7 +158,28 @@ export const ProductTeaserCard = () => {
           >
             {t("description")}
           </p>
-          <p className="mb-5">PT AKADEM KEUANGAN NUSANTARA </p>
+          
+          <div className="mb-8">
+            <p className="font-semibold text-[#111A4A] mb-3">{tFooter("companyName")}</p>
+            <div className="grid grid-cols-2 gap-y-4 gap-x-4 text-sm text-[#111A4A] opacity-80">
+              <div>
+                <p className="text-xs opacity-60 mb-0.5">{tFooter("nib")}</p>
+                <p className="font-medium text-xs">1411250044219</p>
+              </div>
+              <div>
+                <p className="text-xs opacity-60 mb-0.5">{tFooter("npwp")}</p>
+                <p className="font-medium text-xs">1000000006570444</p>
+              </div>
+              <div>
+                <p className="text-xs opacity-60 mb-0.5">{tFooter("investmentStatusLabel")}</p>
+                <p className="font-medium text-xs">PMDN</p>
+              </div>
+              <div>
+                <p className="text-xs opacity-60 mb-0.5">{tFooter("registeredKbli")}</p>
+                <p className="font-medium text-xs">70209, 74909, 85495</p>
+              </div>
+            </div>
+          </div>
 
           {/* Small CTA Button */}
           <button

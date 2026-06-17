@@ -261,21 +261,11 @@ const BacktestSection = () => {
   const totalProfit = chartData.reduce((acc, curr) => acc + curr.profit, 0);
 
   const formatCurrency = (val: number, minimumFractionDigits = 0) => {
-    const trueUsdVal = val / 100;
-    if (locale === 'en') {
-      return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits }).format(trueUsdVal);
-    }
-    const idrVal = trueUsdVal * exchangeRate;
-    return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits }).format(idrVal);
+    return new Intl.NumberFormat(locale === 'en' ? 'en-US' : 'id-ID', { minimumFractionDigits }).format(val) + " USDC";
   };
 
   const formatCompact = (val: number) => {
-    const trueUsdVal = val / 100;
-    if (locale === 'en') {
-      return new Intl.NumberFormat('en-US', { notation: "compact", maximumFractionDigits: 1 }).format(trueUsdVal);
-    }
-    const idrVal = trueUsdVal * exchangeRate;
-    return new Intl.NumberFormat('id-ID', { notation: "compact", maximumFractionDigits: 1 }).format(idrVal);
+    return new Intl.NumberFormat(locale === 'en' ? 'en-US' : 'id-ID', { notation: "compact", maximumFractionDigits: 1 }).format(val) + " USDC";
   };
 
   const formatNumber = (val: number) => {

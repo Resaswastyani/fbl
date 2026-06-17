@@ -249,9 +249,9 @@
     "risk": "Risk",
     "pair": "Pair",
     "backtestPerfTitle": "Backtest Performance",
-    "backtestPerfDesc": "Below is the simulated performance history based on Cent starting capital. The chart visualizes monthly and weekly data.",
-    "monthlyCent": "Monthly (Cent)",
-    "weeklyCent": "Weekly (Cent)",
+    "backtestPerfDesc": "Below is the simulated performance history based on USDC starting capital. The chart visualizes monthly and weekly data.",
+    "monthlyCent": "Monthly (USDC)",
+    "weeklyCent": "Weekly (USDC)",
     "startCapital": "Start Capital",
     "totalProfit": "Total Profit",
     "totalTrades": "Total Trades",
@@ -427,7 +427,7 @@
     "fbs": {
       "description": "Broker with the lowest spreads and various attractive promotions for Indonesian traders.",
       "features": [
-        "Cent account for beginners",
+        "USDC account for beginners",
         "Cashback rebate up to $15/lot",
         "$100 no deposit bonus",
         "Copy trading available"

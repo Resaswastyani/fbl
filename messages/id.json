@@ -249,9 +249,9 @@
     "risk": "Risk",
     "pair": "Pair",
     "backtestPerfTitle": "Performa Backtest",
-    "backtestPerfDesc": "Berikut adalah simulasi riwayat performa sistem berdasarkan modal awal Cent. Grafik di bawah ini memvisualisasikan data bulanan dan mingguan.",
-    "monthlyCent": "Bulanan (Cent)",
-    "weeklyCent": "Mingguan (Cent)",
+    "backtestPerfDesc": "Berikut adalah simulasi riwayat performa sistem berdasarkan modal awal USDC. Grafik di bawah ini memvisualisasikan data bulanan dan mingguan.",
+    "monthlyCent": "Bulanan (USDC)",
+    "weeklyCent": "Mingguan (USDC)",
     "startCapital": "Modal Awal",
     "totalProfit": "Total Profit",
     "totalTrades": "Total Trade",
@@ -427,7 +427,7 @@
     "fbs": {
       "description": "Broker dengan spread terendah dan berbagai promo menarik untuk trader Indonesia.",
       "features": [
-        "Akun Cent untuk pemula",
+        "Akun USDC untuk pemula",
         "Cashback rebate hingga $15/lot",
         "Bonus tanpa deposit $100",
         "Copy trading tersedia"

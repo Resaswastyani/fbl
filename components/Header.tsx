@@ -22,7 +22,7 @@ import {
   ShoppingCart,
   Gift,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 
 import { useCart } from "@/context/cart-context";
@@ -46,7 +46,11 @@ export const Header = () => {
 
   const { items, refreshAuth } = useCart();
   const router = useRouter();
+  const pathname = usePathname();
   const itemCount = items.reduce((t, i) => t + i.quantity, 0);
+
+  const isDarkBgAtTop = pathname === '/' || pathname === '/id' || pathname === '/en' || pathname?.includes('/giveaway');
+  const textColorClass = isScrolled ? "text-gray-700" : (isDarkBgAtTop ? "text-white" : "text-gray-700");
 
   // Refs untuk tracking hover state
   const dropdownTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -256,7 +260,7 @@ export const Header = () => {
     >
       <button
         className={`flex items-center gap-1 font-medium hover:text-primary transition
-          ${isScrolled ? "text-sm text-gray-700" : "text-base text-white"}
+          ${isScrolled ? "text-sm" : "text-base"} ${textColorClass}
         `}
       >
         {title}
@@ -312,7 +316,7 @@ export const Header = () => {
       >
         <button
           className={`flex items-center gap-2 font-medium hover:text-primary transition
-            ${isScrolled ? "text-sm text-gray-700" : "text-base text-white"}
+            ${isScrolled ? "text-sm" : "text-base"} ${textColorClass}
           `}
         >
           <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center overflow-hidden">
@@ -478,7 +482,7 @@ export const Header = () => {
             <button
               onClick={() => handleLinkClick("/professional-course")}
               className={`font-medium hover:text-primary transition 
-                ${isScrolled ? "text-sm text-gray-700" : "text-base text-white"}
+                ${isScrolled ? "text-sm" : "text-base"} ${textColorClass}
               `}
             >
               {t("professionalCourse")}
@@ -487,7 +491,7 @@ export const Header = () => {
             <button
               onClick={() => handleLinkClick("/broker-rekommendation")}
               className={`font-medium hover:text-primary transition 
-                ${isScrolled ? "text-sm text-gray-700" : "text-base text-white"}
+                ${isScrolled ? "text-sm" : "text-base"} ${textColorClass}
               `}
             >
               {t("brokerRecommendation")}
@@ -511,7 +515,7 @@ export const Header = () => {
 
             <button
               onClick={() => router.push("/student/cart")}
-              className={`relative p-2 hover:text-primary transition ${isScrolled ? "text-gray-700" : "text-white"}`}
+              className={`relative p-2 hover:text-primary transition ${textColorClass}`}
             >
               <ShoppingCart size={20} />
               {itemCount > 0 && (
@@ -530,7 +534,7 @@ export const Header = () => {
                     <button
                       onClick={() => router.push("/login")}
                       className={`hover:text-primary transition hover:underline 
-                        ${isScrolled ? "text-sm text-gray-700" : "text-base text-white"}
+                        ${isScrolled ? "text-sm" : "text-base"} ${textColorClass}
                       `}
                     >
                       {t("login")}
@@ -542,7 +546,9 @@ export const Header = () => {
                         px-5 py-2.5 font-semibold rounded-lg transition
                         ${isScrolled 
                           ? "text-sm px-4 py-2 border border-primary text-primary hover:bg-primary hover:text-white" 
-                          : "text-base border border-white text-white hover:bg-white hover:text-[#111A4A]"}
+                          : (isDarkBgAtTop 
+                              ? "text-base border border-white text-white hover:bg-white hover:text-[#111A4A]" 
+                              : "text-base border border-primary text-primary hover:bg-primary hover:text-white")}
                       `}
                     >
                       {t("signup")}
@@ -555,7 +561,7 @@ export const Header = () => {
 
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className={`md:hidden p-2 hover:text-primary transition ${isScrolled ? "text-gray-800" : "text-white"}`}
+            className={`md:hidden p-2 hover:text-primary transition ${isScrolled ? "text-gray-800" : (isDarkBgAtTop ? "text-white" : "text-gray-800")}`}
           >
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>

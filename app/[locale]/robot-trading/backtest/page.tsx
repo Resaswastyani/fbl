@@ -3,9 +3,9 @@
 import { motion, AnimatePresence, animate } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { useTranslations, useLocale } from "next-intl";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Cell } from 'recharts';
+import { BarChart, Bar, AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Cell } from 'recharts';
 import {
   ArrowUpRight,
   TrendingUp,
@@ -166,12 +166,83 @@ const AnimatedNumber = ({ value, formatter }: { value: number, formatter: (val: 
   return <div ref={nodeRef} className="inline-block">{formatter(value)}</div>;
 };
 
+const BalanceChart = ({ robot, activeTab, formatCurrency, formatCompact, locale, t }: any) => {
+  const chartData = activeTab === 'monthly' ? robot.monthly : robot.weekly;
+
+  const balanceData = useMemo(() => {
+    let currentBalance = robot.startCapital;
+    return chartData.map((entry: any) => {
+      currentBalance += entry.profit;
+      return {
+        name: activeTab === 'monthly' ? entry.month : entry.week,
+        balance: currentBalance,
+      };
+    });
+  }, [chartData, robot.startCapital, activeTab]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.2 }}
+      className="h-[350px] sm:h-[450px] w-full bg-white border border-gray-100 rounded-2xl p-4 sm:p-8 shadow-xl mb-12"
+    >
+      <h3 className="text-xl font-bold text-[#111A4A] mb-6 text-center">
+        {t("balanceCurve") || "Balance Curve"}
+      </h3>
+      <div className="h-[250px] sm:h-[350px] w-full">
+        <ResponsiveContainer width="100%" height="100%">
+          <AreaChart data={balanceData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+            <defs>
+              <linearGradient id="colorBalance" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#156d95" stopOpacity={0.3}/>
+                <stop offset="95%" stopColor="#156d95" stopOpacity={0}/>
+              </linearGradient>
+            </defs>
+            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f3f4f6" />
+            <XAxis
+              dataKey="name"
+              tick={{ fill: '#6b7280', fontSize: 12 }}
+              axisLine={false}
+              tickLine={false}
+              dy={10}
+              minTickGap={20}
+            />
+            <YAxis
+              domain={['auto', 'auto']}
+              tickFormatter={(val) => formatCompact(val)}
+              tick={{ fill: '#6b7280', fontSize: 12 }}
+              axisLine={false}
+              tickLine={false}
+            />
+            <Tooltip
+              cursor={{ stroke: '#156d95', strokeWidth: 1, strokeDasharray: '3 3', fill: 'transparent' }}
+              contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1)' }}
+              formatter={(value: any) => [formatCurrency(value as number), t("balance") || "Balance"]}
+            />
+            <Area 
+              type="monotone" 
+              dataKey="balance" 
+              stroke="#156d95" 
+              strokeWidth={3}
+              fillOpacity={1} 
+              fill="url(#colorBalance)" 
+              animationDuration={2500}
+              activeDot={{ r: 6, fill: '#156d95', stroke: '#fff', strokeWidth: 2 }}
+            />
+          </AreaChart>
+        </ResponsiveContainer>
+      </div>
+    </motion.div>
+  );
+};
+
 const BacktestSection = () => {
   const t = useTranslations("RobotTrading");
   const locale = useLocale();
   const [activeTab, setActiveTab] = useState('monthly');
   const [selectedRobotId, setSelectedRobotId] = useState(robots[0].id);
-  const [exchangeRate, setExchangeRate] = useState(15000); // Default to 15000
+  const [exchangeRate, setExchangeRate] = useState(15000); 
 
   useEffect(() => {
     fetch("https://api.exchangerate-api.com/v4/latest/USD")
@@ -187,17 +258,13 @@ const BacktestSection = () => {
   const activeRobot = robots.find(r => r.id === selectedRobotId) || robots[0];
   const chartData = activeTab === 'monthly' ? activeRobot.monthly : activeRobot.weekly;
 
-  // Calculate total profit based on current data
   const totalProfit = chartData.reduce((acc, curr) => acc + curr.profit, 0);
 
   const formatCurrency = (val: number, minimumFractionDigits = 0) => {
-    // val is in USDC (Cents). So true USD value = val / 100.
     const trueUsdVal = val / 100;
-
     if (locale === 'en') {
       return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits }).format(trueUsdVal);
     }
-    // For IDR, multiply the true USD value by the exchange rate
     const idrVal = trueUsdVal * exchangeRate;
     return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits }).format(idrVal);
   };
@@ -277,37 +344,51 @@ const BacktestSection = () => {
             transition={{ duration: 0.3 }}
             className="h-[350px] sm:h-[450px] w-full bg-white border border-gray-100 rounded-2xl p-4 sm:p-8 shadow-xl mb-12"
           >
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f3f4f6" />
-                <XAxis
-                  dataKey={activeTab === 'monthly' ? 'month' : 'week'}
-                  tick={{ fill: '#6b7280', fontSize: 12 }}
-                  axisLine={false}
-                  tickLine={false}
-                  dy={10}
-                  minTickGap={20}
-                />
-                <YAxis
-                  tickFormatter={(val) => formatCompact(val)}
-                  tick={{ fill: '#6b7280', fontSize: 12 }}
-                  axisLine={false}
-                  tickLine={false}
-                />
-                <Tooltip
-                  cursor={{ fill: '#f9fafb' }}
-                  contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1)' }}
-                  formatter={(value: any) => [formatCurrency(value as number), t("profit")]}
-                />
-                <Bar dataKey="profit" radius={[4, 4, 4, 4]} maxBarSize={50} animationDuration={1000}>
-                  {chartData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.profit >= 0 ? '#10b981' : '#ef4444'} />
-                  ))}
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
+            <h3 className="text-xl font-bold text-[#111A4A] mb-6 text-center">
+              {t("profitChart") || "Profit Chart"}
+            </h3>
+            <div className="h-[250px] sm:h-[350px] w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f3f4f6" />
+                  <XAxis
+                    dataKey={activeTab === 'monthly' ? 'month' : 'week'}
+                    tick={{ fill: '#6b7280', fontSize: 12 }}
+                    axisLine={false}
+                    tickLine={false}
+                    dy={10}
+                    minTickGap={20}
+                  />
+                  <YAxis
+                    tickFormatter={(val) => formatCompact(val)}
+                    tick={{ fill: '#6b7280', fontSize: 12 }}
+                    axisLine={false}
+                    tickLine={false}
+                  />
+                  <Tooltip
+                    cursor={{ fill: '#f9fafb' }}
+                    contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1)' }}
+                    formatter={(value: any) => [formatCurrency(value as number), t("profit") || "Profit"]}
+                  />
+                  <Bar dataKey="profit" radius={[4, 4, 4, 4]} maxBarSize={50} animationDuration={1000}>
+                    {chartData.map((entry: any, index: number) => (
+                      <Cell key={`cell-${index}`} fill={entry.profit >= 0 ? '#10b981' : '#ef4444'} />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           </motion.div>
         </AnimatePresence>
+
+        <BalanceChart
+          robot={activeRobot}
+          activeTab={activeTab}
+          formatCurrency={formatCurrency}
+          formatCompact={formatCompact}
+          locale={locale}
+          t={t}
+        />
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="bg-white rounded-xl p-5 shadow-md text-center border border-gray-100 hover:shadow-lg transition-all group">
@@ -342,8 +423,6 @@ const BacktestSection = () => {
     </section>
   )
 }
-
-
 
 export default function BacktestPage() {
   return (

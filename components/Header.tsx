@@ -20,6 +20,7 @@ import {
   LogOut,
   Settings,
   ShoppingCart,
+  Gift,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -449,6 +450,11 @@ export const Header = () => {
                   name: "Overview",
                   href: "/robot-trading",
                   icon: BrainCircuit,
+                },
+                {
+                  name: t("giveawayMenu", { defaultMessage: "Giveaway EA" }),
+                  href: "/robot-trading#giveaway",
+                  icon: Gift,
                 },
                 {
                   name: "Backtest Performance",

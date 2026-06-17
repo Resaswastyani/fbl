@@ -245,7 +245,18 @@
     "strategy": "Strategy",
     "timeframe": "Timeframe",
     "risk": "Risk",
-    "pair": "Pair"
+    "pair": "Pair",
+    "backtestPerfTitle": "Performa Backtest",
+    "backtestPerfDesc": "Berikut adalah simulasi riwayat performa sistem berdasarkan modal awal Cent. Grafik di bawah ini memvisualisasikan data bulanan dan mingguan.",
+    "monthlyCent": "Bulanan (Cent)",
+    "weeklyCent": "Mingguan (Cent)",
+    "startCapital": "Modal Awal",
+    "totalProfit": "Total Profit",
+    "totalTrades": "Total Trade",
+    "mode": "Mode",
+    "giveawayMenu": "Giveaway EA",
+    "selectRobot": "Pilih EA",
+    "profit": "Profit"
   },
   "Broker": {
     "verified": "Broker Terverifikasi & Teregulasi",

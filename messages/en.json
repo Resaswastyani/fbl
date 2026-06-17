@@ -245,7 +245,18 @@
     "strategy": "Strategy",
     "timeframe": "Timeframe",
     "risk": "Risk",
-    "pair": "Pair"
+    "pair": "Pair",
+    "backtestPerfTitle": "Backtest Performance",
+    "backtestPerfDesc": "Below is the simulated performance history based on Cent starting capital. The chart visualizes monthly and weekly data.",
+    "monthlyCent": "Monthly (Cent)",
+    "weeklyCent": "Weekly (Cent)",
+    "startCapital": "Start Capital",
+    "totalProfit": "Total Profit",
+    "totalTrades": "Total Trades",
+    "mode": "Mode",
+    "giveawayMenu": "Giveaway EA",
+    "selectRobot": "Select EA",
+    "profit": "Profit"
   },
   "Broker": {
     "verified": "Verified & Regulated Brokers",

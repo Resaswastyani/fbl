@@ -726,5 +726,26 @@
     "clearHistoryConfirm": "Hapus semua riwayat chat?",
     "yesterday": "Kemarin",
     "today": "Hari ini"
+  },
+  "Cart": {
+    "errorOccurred": "Terjadi Kesalahan",
+    "errorProcessingPayment": "Terjadi kesalahan saat memproses pembayaran.",
+    "close": "Tutup",
+    "confirmOrder": "Konfirmasi Pesanan",
+    "ensureOrderCorrect": "Pastikan pesanan sudah benar sebelum melanjutkan pembayaran:",
+    "total": "Total",
+    "cancel": "Batal",
+    "proceedToPayment": "Lanjutkan Pembayaran",
+    "cartTitle": "Keranjang",
+    "emptyCart": "Keranjang masih kosong.",
+    "remove": "Hapus",
+    "clearCart": "Kosongkan keranjang",
+    "checkout": "Checkout",
+    "loginFirst": "Silakan login terlebih dahulu untuk melanjutkan pembayaran.",
+    "paymentNotReady": "Pembayaran belum siap. Tunggu 1–2 detik lalu coba lagi.",
+    "cartEmptyAlert": "Keranjang Anda kosong!",
+    "oneItemPerTransaction": "Silakan checkout satu item per transaksi.",
+    "failedToAdd": "Gagal menambahkan ke keranjang",
+    "errorAdding": "Terjadi kesalahan saat menambahkan ke keranjang"
   }
 }

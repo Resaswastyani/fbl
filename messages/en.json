@@ -726,5 +726,26 @@
     "clearHistoryConfirm": "Clear all chat history?",
     "yesterday": "Yesterday",
     "today": "Today"
+  },
+  "Cart": {
+    "errorOccurred": "Error Occurred",
+    "errorProcessingPayment": "An error occurred while processing payment.",
+    "close": "Close",
+    "confirmOrder": "Confirm Order",
+    "ensureOrderCorrect": "Please ensure your order is correct before proceeding with payment:",
+    "total": "Total",
+    "cancel": "Cancel",
+    "proceedToPayment": "Proceed to Payment",
+    "cartTitle": "Cart",
+    "emptyCart": "Your cart is empty.",
+    "remove": "Remove",
+    "clearCart": "Clear cart",
+    "checkout": "Checkout",
+    "loginFirst": "Please login first to proceed with payment.",
+    "paymentNotReady": "Payment is not ready. Wait 1-2 seconds and try again.",
+    "cartEmptyAlert": "Your cart is empty!",
+    "oneItemPerTransaction": "Please checkout one item per transaction.",
+    "failedToAdd": "Failed to add to cart",
+    "errorAdding": "An error occurred while adding to cart"
   }
 }

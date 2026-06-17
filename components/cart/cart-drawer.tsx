@@ -2,10 +2,12 @@
 
 import { useCart } from "@/context/cart-context";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 export default function CartDrawer() {
   const { items, isOpen, toggleCart, removeFromCart, clearCart, checkout } =
     useCart();
+  const t = useTranslations("Cart");
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
@@ -22,7 +24,7 @@ export default function CartDrawer() {
       await checkout();
     } catch (err: any) {
       setErrorMessage(
-        err?.message || "Terjadi kesalahan saat memproses pembayaran.",
+        err?.message || t('errorProcessingPayment')
       );
     }
   };
@@ -46,7 +48,7 @@ export default function CartDrawer() {
         <div className="fixed inset-0 z-100 bg-black/40 flex items-center justify-center">
           <div className="bg-white w-[90%] max-w-sm p-6 rounded-2xl shadow-xl text-center animate-pop">
             <h2 className="text-lg font-semibold text-red-600 mb-3">
-              Terjadi Kesalahan
+              {t('errorOccurred')}
             </h2>
 
             <p className="text-gray-700 mb-5">{errorMessage}</p>
@@ -55,7 +57,7 @@ export default function CartDrawer() {
               onClick={() => setErrorMessage(null)}
               className="px-5 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition w-full"
             >
-              Tutup
+              {t('close')}
             </button>
           </div>
         </div>
@@ -68,11 +70,11 @@ export default function CartDrawer() {
         <div className="fixed inset-0 z-90 bg-black/40 flex items-center justify-center">
           <div className="bg-white w-[90%] max-w-md p-6 rounded-2xl shadow-xl animate-pop">
             <h2 className="text-xl font-semibold mb-3 text-[#156d95]">
-              Konfirmasi Pesanan
+              {t('confirmOrder')}
             </h2>
 
             <p className="text-gray-700 mb-4">
-              Pastikan pesanan sudah benar sebelum melanjutkan pembayaran:
+              {t('ensureOrderCorrect')}
             </p>
 
             <div className="bg-gray-50 p-4 rounded-xl border mb-5 space-y-2">
@@ -86,7 +88,7 @@ export default function CartDrawer() {
               ))}
 
               <div className="border-t mt-3 pt-3 font-semibold flex justify-between">
-                <span>Total</span>
+                <span>{t('total')}</span>
                 <span>
                   Rp
                   {items
@@ -101,14 +103,14 @@ export default function CartDrawer() {
                 onClick={() => setConfirmOpen(false)}
                 className="px-5 py-2 rounded-lg border border-gray-300 hover:bg-gray-100 transition"
               >
-                Batal
+                {t('cancel')}
               </button>
 
               <button
                 onClick={handleConfirmCheckout}
                 className="px-5 py-2 rounded-lg bg-[#156d95] text-white hover:bg-[#0f5875] transition"
               >
-                Lanjutkan Pembayaran
+                {t('proceedToPayment')}
               </button>
             </div>
           </div>
@@ -128,7 +130,7 @@ export default function CartDrawer() {
       >
         {/* HEADER */}
         <div className="p-5 border-b flex justify-between items-center bg-white">
-          <h2 className="text-xl font-semibold">Keranjang</h2>
+          <h2 className="text-xl font-semibold">{t('cartTitle')}</h2>
           <button
             onClick={toggleCart}
             className="text-gray-500 hover:text-black text-xl leading-none"
@@ -141,7 +143,7 @@ export default function CartDrawer() {
         <div className="p-5 space-y-4 overflow-y-auto h-[70%] custom-scrollbar">
           {items.length === 0 && (
             <p className="text-gray-500 text-center mt-10">
-              Keranjang masih kosong.
+              {t('emptyCart')}
             </p>
           )}
 
@@ -161,7 +163,7 @@ export default function CartDrawer() {
                 onClick={() => removeFromCart(item.id)}
                 className="text-red-500 hover:text-red-700 text-sm font-medium"
               >
-                Hapus
+                {t('remove')}
               </button>
             </div>
           ))}
@@ -172,7 +174,7 @@ export default function CartDrawer() {
           {items.length > 0 && (
             <>
               <div className="mb-4 font-semibold text-lg">
-                Total:{" "}
+                {t('total')}:{" "}
                 <span className="text-[#156d95]">
                   Rp
                   {items
@@ -185,14 +187,14 @@ export default function CartDrawer() {
                 onClick={openConfirm}
                 className="w-full bg-[#156d95] text-white p-3 rounded-full hover:bg-[#0f5875] transition-all shadow-md"
               >
-                Checkout
+                {t('checkout')}
               </button>
 
               <button
                 onClick={clearCart}
                 className="w-full text-red-600 mt-4 font-medium hover:underline"
               >
-                Kosongkan keranjang
+                {t('clearCart')}
               </button>
             </>
           )}

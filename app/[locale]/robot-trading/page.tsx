@@ -4058,38 +4058,6 @@ export const RobotTradingSection = () => {
             <RobotAnimation />
           </motion.div>
         </div>
-          className="text-center mb-8 sm:mb-12"
-        >
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#111A4A] mb-3 sm:mb-4">
-            Paket Berlangganan
-          </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto text-sm sm:text-base">
-            Pilih paket sesuai kebutuhan Anda. Semua paket dilengkapi dengan
-            <span className="text-[#156d95] font-semibold">
-              {" "}
-              Profit Sharing 20:80
-            </span>{" "}
-            (Anda 80%, Kami 20%).
-          </p>
-        </motion.div> */}
-        {/* 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 max-w-5xl mx-auto">
-          {pricingPlans.map((plan, idx) => (
-            <PricingCard key={idx} {...plan} delay={idx * 0.15} />
-          ))}
-        </div> */}
-
-        {/* <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="mt-8 sm:mt-12 text-center"
-        >
-          <p className="text-xs sm:text-sm text-gray-500 flex items-center justify-center gap-2">
-            <Shield size={14} className="text-green-600" />
-            Garansi uang kembali 30 hari jika tidak puas dengan performa robot
-          </p>
-        </motion.div> */}
       </div>
     </section>
   );

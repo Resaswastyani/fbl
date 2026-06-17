@@ -442,14 +442,21 @@ export const Header = () => {
               ${isScrolled ? "gap-5" : "gap-8"}
             `}
           >
-            <button
-              onClick={() => handleLinkClick("/robot-trading")}
-              className={`font-medium text-gray-700 hover:text-primary transition 
-                ${isScrolled ? "text-sm" : "text-base"}
-              `}
-            >
-              {t("robotTrading")}
-            </button>
+            <Dropdown
+              title={t("robotTrading")}
+              items={[
+                {
+                  name: "Overview",
+                  href: "/robot-trading",
+                  icon: BrainCircuit,
+                },
+                {
+                  name: "Backtest Performance",
+                  href: "/robot-trading#backtest",
+                  icon: BarChart2,
+                },
+              ]}
+            />
             <Dropdown
               title={t("tradingLesson")}
               items={[
@@ -595,12 +602,25 @@ export const Header = () => {
                     </span>
                   </div>
                 )}
-                <button
-                  onClick={() => handleLinkClick("/robot-trading")}
-                  className="block w-full text-left text-lg text-gray-800"
-                >
-                  {t("robotTrading")}
-                </button>
+                <div>
+                  <p className="text-gray-900 font-semibold mb-2">
+                    {t("robotTrading")}
+                  </p>
+                  <div className="space-y-2 pl-3">
+                    <button
+                      onClick={() => handleLinkClick("/robot-trading")}
+                      className="flex gap-2 items-center text-gray-700 w-full"
+                    >
+                      <BrainCircuit size={16} /> Overview
+                    </button>
+                    <button
+                      onClick={() => handleLinkClick("/robot-trading#backtest")}
+                      className="flex gap-2 items-center text-gray-700 w-full"
+                    >
+                      <BarChart2 size={16} /> Backtest Performance
+                    </button>
+                  </div>
+                </div>
                 <div>
                   <p className="text-gray-900 font-semibold mb-2">
                     {t("tradingLesson")}

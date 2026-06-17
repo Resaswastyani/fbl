@@ -255,8 +255,8 @@ export const Header = () => {
       onMouseLeave={handleMouseLeave}
     >
       <button
-        className={`flex items-center gap-1 font-medium text-gray-700 hover:text-primary transition
-          ${isScrolled ? "text-sm" : "text-base"}
+        className={`flex items-center gap-1 font-medium hover:text-primary transition
+          ${isScrolled ? "text-sm text-gray-700" : "text-base text-white"}
         `}
       >
         {title}
@@ -311,8 +311,8 @@ export const Header = () => {
         onMouseLeave={handleMouseLeave}
       >
         <button
-          className={`flex items-center gap-2 font-medium text-gray-700 hover:text-primary transition
-            ${isScrolled ? "text-sm" : "text-base"}
+          className={`flex items-center gap-2 font-medium hover:text-primary transition
+            ${isScrolled ? "text-sm text-gray-700" : "text-base text-white"}
           `}
         >
           <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center overflow-hidden">
@@ -477,8 +477,8 @@ export const Header = () => {
 
             <button
               onClick={() => handleLinkClick("/professional-course")}
-              className={`font-medium text-gray-700 hover:text-primary transition 
-                ${isScrolled ? "text-sm" : "text-base"}
+              className={`font-medium hover:text-primary transition 
+                ${isScrolled ? "text-sm text-gray-700" : "text-base text-white"}
               `}
             >
               {t("professionalCourse")}
@@ -486,8 +486,8 @@ export const Header = () => {
 
             <button
               onClick={() => handleLinkClick("/broker-rekommendation")}
-              className={`font-medium text-gray-700 hover:text-primary transition 
-                ${isScrolled ? "text-sm" : "text-base"}
+              className={`font-medium hover:text-primary transition 
+                ${isScrolled ? "text-sm text-gray-700" : "text-base text-white"}
               `}
             >
               {t("brokerRecommendation")}
@@ -511,7 +511,7 @@ export const Header = () => {
 
             <button
               onClick={() => router.push("/student/cart")}
-              className="relative p-2 text-gray-700 hover:text-primary transition"
+              className={`relative p-2 hover:text-primary transition ${isScrolled ? "text-gray-700" : "text-white"}`}
             >
               <ShoppingCart size={20} />
               {itemCount > 0 && (
@@ -529,8 +529,8 @@ export const Header = () => {
                   <>
                     <button
                       onClick={() => router.push("/login")}
-                      className={`text-gray-700 hover:text-primary transition hover:underline 
-                        ${isScrolled ? "text-sm" : "text-base"}
+                      className={`hover:text-primary transition hover:underline 
+                        ${isScrolled ? "text-sm text-gray-700" : "text-base text-white"}
                       `}
                     >
                       {t("login")}
@@ -539,9 +539,10 @@ export const Header = () => {
                     <button
                       onClick={() => router.push("/signup")}
                       className={`
-                        px-5 py-2.5 border border-primary text-primary font-semibold rounded-lg
-                        hover:bg-primary hover:text-white transition
-                        ${isScrolled ? "text-sm px-4 py-2" : "text-base"}
+                        px-5 py-2.5 font-semibold rounded-lg transition
+                        ${isScrolled 
+                          ? "text-sm px-4 py-2 border border-primary text-primary hover:bg-primary hover:text-white" 
+                          : "text-base border border-white text-white hover:bg-white hover:text-[#111A4A]"}
                       `}
                     >
                       {t("signup")}
@@ -554,7 +555,7 @@ export const Header = () => {
 
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2 text-gray-800 hover:text-primary transition"
+            className={`md:hidden p-2 hover:text-primary transition ${isScrolled ? "text-gray-800" : "text-white"}`}
           >
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>

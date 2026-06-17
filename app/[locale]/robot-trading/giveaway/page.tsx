@@ -4058,6 +4058,51 @@ export const RobotTradingSection = () => {
             <RobotAnimation />
           </motion.div>
         </div>
+
+        {/* DIVIDER */}
+        <motion.div
+          initial={{ scaleX: 0 }}
+          whileInView={{ scaleX: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="w-full h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent mb-12 sm:mb-16"
+        />
+
+        {/* ============================ */}
+        {/* BACKTEST SECTION INSERTED */}
+        {/* ============================ */}
+        <BacktestSection />
+
+        {/* DIVIDER */}
+        <motion.div
+          initial={{ scaleX: 0 }}
+          whileInView={{ scaleX: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="w-full h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent my-12 sm:my-16"
+        />
+
+        {/* ============================ */}
+        {/* FREE TRIAL SECTION INSERTED */}
+        {/* ============================ */}
+        <div id="giveaway" className="mb-16 sm:mb-20">
+          <FreeTrialSection />
+        </div>
+
+        {/* DIVIDER */}
+        <motion.div
+          initial={{ scaleX: 0 }}
+          whileInView={{ scaleX: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="w-full h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent mb-12 sm:mb-16"
+        />
+
+        {/* PRICING AREA
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
           className="text-center mb-8 sm:mb-12"
         >
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#111A4A] mb-3 sm:mb-4">

@@ -453,12 +453,12 @@ export const Header = () => {
                 },
                 {
                   name: t("giveawayMenu"),
-                  href: "/robot-trading#giveaway",
+                  href: "/robot-trading/giveaway",
                   icon: Gift,
                 },
                 {
                   name: t("backtestPerformance"),
-                  href: "/robot-trading#backtest",
+                  href: "/robot-trading/backtest",
                   icon: BarChart2,
                 },
               ]}
@@ -620,13 +620,13 @@ export const Header = () => {
                       <BrainCircuit size={16} /> Overview
                     </button>
                     <button
-                      onClick={() => handleLinkClick("/robot-trading#giveaway")}
+                      onClick={() => handleLinkClick("/robot-trading/giveaway")}
                       className="flex gap-2 items-center text-gray-700 w-full"
                     >
                       <Gift size={16} /> {t("giveawayMenu")}
                     </button>
                     <button
-                      onClick={() => handleLinkClick("/robot-trading#backtest")}
+                      onClick={() => handleLinkClick("/robot-trading/backtest")}
                       className="flex gap-2 items-center text-gray-700 w-full"
                     >
                       <BarChart2 size={16} /> {t("backtestPerformance")}

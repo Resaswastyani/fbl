@@ -3774,19 +3774,24 @@ const BacktestSection = () => {
   const totalProfit = chartData.reduce((acc, curr) => acc + curr.profit, 0);
 
   const formatCurrency = (val: number, minimumFractionDigits = 0) => {
+    // val is in USDC (Cents). So true USD value = val / 100.
+    const trueUsdVal = val / 100;
+    
     if (locale === 'en') {
-      const usdVal = val / exchangeRate;
-      return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits }).format(usdVal);
+      return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits }).format(trueUsdVal);
     }
-    return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits }).format(val);
+    // For IDR, multiply the true USD value by the exchange rate
+    const idrVal = trueUsdVal * exchangeRate;
+    return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits }).format(idrVal);
   };
 
   const formatCompact = (val: number) => {
+    const trueUsdVal = val / 100;
     if (locale === 'en') {
-      const usdVal = val / exchangeRate;
-      return new Intl.NumberFormat('en-US', { notation: "compact", maximumFractionDigits: 1 }).format(usdVal);
+      return new Intl.NumberFormat('en-US', { notation: "compact", maximumFractionDigits: 1 }).format(trueUsdVal);
     }
-    return new Intl.NumberFormat('id-ID', { notation: "compact", maximumFractionDigits: 1 }).format(val);
+    const idrVal = trueUsdVal * exchangeRate;
+    return new Intl.NumberFormat('id-ID', { notation: "compact", maximumFractionDigits: 1 }).format(idrVal);
   };
 
   const formatNumber = (val: number) => {
@@ -4058,6 +4063,51 @@ export const RobotTradingSection = () => {
             <RobotAnimation />
           </motion.div>
         </div>
+
+        {/* DIVIDER */}
+        <motion.div
+          initial={{ scaleX: 0 }}
+          whileInView={{ scaleX: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="w-full h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent mb-12 sm:mb-16"
+        />
+
+        {/* ============================ */}
+        {/* BACKTEST SECTION INSERTED */}
+        {/* ============================ */}
+        <BacktestSection />
+
+        {/* DIVIDER */}
+        <motion.div
+          initial={{ scaleX: 0 }}
+          whileInView={{ scaleX: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="w-full h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent my-12 sm:my-16"
+        />
+
+        {/* ============================ */}
+        {/* FREE TRIAL SECTION INSERTED */}
+        {/* ============================ */}
+        <div id="giveaway" className="mb-16 sm:mb-20">
+          <FreeTrialSection />
+        </div>
+
+        {/* DIVIDER */}
+        <motion.div
+          initial={{ scaleX: 0 }}
+          whileInView={{ scaleX: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="w-full h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent mb-12 sm:mb-16"
+        />
+
+        {/* PRICING AREA
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
           className="text-center mb-8 sm:mb-12"
         >
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#111A4A] mb-3 sm:mb-4">

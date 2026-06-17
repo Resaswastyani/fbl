@@ -446,11 +446,7 @@ export const Header = () => {
             <Dropdown
               title={t("robotTrading")}
               items={[
-                {
-                  name: "Overview",
-                  href: "/robot-trading",
-                  icon: BrainCircuit,
-                },
+
                 {
                   name: t("giveawayMenu"),
                   href: "/robot-trading/giveaway",
@@ -613,12 +609,7 @@ export const Header = () => {
                     {t("robotTrading")}
                   </p>
                   <div className="space-y-2 pl-3">
-                    <button
-                      onClick={() => handleLinkClick("/robot-trading")}
-                      className="flex gap-2 items-center text-gray-700 w-full"
-                    >
-                      <BrainCircuit size={16} /> Overview
-                    </button>
+
                     <button
                       onClick={() => handleLinkClick("/robot-trading/giveaway")}
                       className="flex gap-2 items-center text-gray-700 w-full"

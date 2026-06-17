@@ -3725,28 +3725,6 @@ const robots = [
       { week: "W1 Jun 26", profit: 7427 },
       { week: "W2 Jun 26", profit: 18654 },
     ]
-  },
-  {
-    id: "fbl_scalping",
-    name: "FBL_Scalping_Pro.Ex5 (Konservatif)",
-    startCapital: 50000,
-    totalTrades: 1250,
-    mode: "Trend Following",
-    monthly: [
-      { month: "Jan 26", profit: 210000 },
-      { month: "Feb 26", profit: 150000 },
-      { month: "Mar 26", profit: -30000 },
-      { month: "Apr 26", profit: 420000 },
-      { month: "Mei 26", profit: 310000 },
-      { month: "Jun 26", profit: 180000 },
-    ],
-    weekly: [
-      { week: "W1 Jan 26", profit: 50000 },
-      { week: "W2 Jan 26", profit: 60000 },
-      { week: "W3 Jan 26", profit: 40000 },
-      { week: "W4 Jan 26", profit: 60000 },
-      { week: "W1 Feb 26", profit: 150000 },
-    ]
   }
 ];
 

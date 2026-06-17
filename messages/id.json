@@ -18,7 +18,9 @@
     "settings": "Pengaturan",
     "manageCourses": "Kelola Kursus",
     "logout": "Keluar",
-    "cart": "Keranjang"
+    "cart": "Keranjang",
+    "giveawayMenu": "Giveaway EA",
+    "backtestPerformance": "Performa Backtest"
   },
   "Hero": {
     "tagline": "Forex For Better Living",

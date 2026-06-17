@@ -18,7 +18,9 @@
     "settings": "Settings",
     "manageCourses": "Manage Courses",
     "logout": "Logout",
-    "cart": "Cart"
+    "cart": "Cart",
+    "giveawayMenu": "Giveaway EA",
+    "backtestPerformance": "Backtest Performance"
   },
   "Hero": {
     "tagline": "Forex For Better Living",

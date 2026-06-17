@@ -2372,6 +2372,7 @@ import {
   Zap,
   CheckCircle2,
   ChevronRight,
+  ChevronDown,
   Shield,
   Download,
   Play,

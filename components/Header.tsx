@@ -1292,12 +1292,12 @@ export const Header = () => {
                     </span>
                   </div>
                 )}
-                <button
+                {/* <button
                   onClick={() => handleLinkClick("/robot-trading")}
                   className="block w-full text-left text-lg text-gray-800"
                 >
                   Robot Trading
-                </button>
+                </button> */}
                 <div>
                   <p className="text-gray-900 font-semibold mb-2">
                     Trading lesson

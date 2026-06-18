@@ -423,7 +423,7 @@ export const Header = () => {
             ${
               isScrolled
                 ? "max-w-5xl bg-white shadow-lg rounded-2xl px-6 py-1.5 backdrop-blur-xl"
-                : "max-w-7xl bg-white/80 backdrop-blur-md rounded-2xl px-8 py-3 shadow-sm"
+                : "max-w-7xl bg-transparent px-8 py-3"
             }
           `}
         >

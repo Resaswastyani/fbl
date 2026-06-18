@@ -51,6 +51,7 @@ export const Header = () => {
 
   const isDarkBgAtTop = pathname === '/' || pathname === '/id' || pathname === '/en' || pathname?.includes('/giveaway');
   const textColorClass = isScrolled ? "text-gray-700" : (isDarkBgAtTop ? "text-white" : "text-gray-700");
+  const textShadowStyle = (!isScrolled && isDarkBgAtTop) ? { textShadow: '0 1px 4px rgba(0,0,0,0.5), 0 0px 12px rgba(0,0,0,0.3)' } : {};
 
   // Refs untuk tracking hover state
   const dropdownTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -262,6 +263,7 @@ export const Header = () => {
         className={`flex items-center gap-1 font-medium hover:text-primary transition
           ${isScrolled ? "text-sm" : "text-base"} ${textColorClass}
         `}
+        style={textShadowStyle}
       >
         {title}
         <ChevronDown size={15} className="mt-0.5" />
@@ -417,9 +419,19 @@ export const Header = () => {
           ${isScrolled ? "top-5" : "top-10"}
         `}
       >
+        {/* Gradient overlay behind header for text readability on dark-bg pages */}
+        {!isScrolled && isDarkBgAtTop && (
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background: 'linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.15) 60%, transparent 100%)',
+              borderRadius: 'inherit',
+            }}
+          />
+        )}
         <div
           className={`
-            mx-auto transition-all duration-300 flex items-center justify-between
+            mx-auto transition-all duration-300 flex items-center justify-between relative
             ${
               isScrolled
                 ? "max-w-5xl bg-white shadow-lg rounded-2xl px-6 py-1.5 backdrop-blur-xl"
@@ -484,6 +496,7 @@ export const Header = () => {
               className={`font-medium hover:text-primary transition 
                 ${isScrolled ? "text-sm" : "text-base"} ${textColorClass}
               `}
+              style={textShadowStyle}
             >
               {t("professionalCourse")}
             </button>
@@ -493,6 +506,7 @@ export const Header = () => {
               className={`font-medium hover:text-primary transition 
                 ${isScrolled ? "text-sm" : "text-base"} ${textColorClass}
               `}
+              style={textShadowStyle}
             >
               {t("brokerRecommendation")}
             </button>
@@ -516,6 +530,7 @@ export const Header = () => {
             <button
               onClick={() => router.push("/student/cart")}
               className={`relative p-2 hover:text-primary transition ${textColorClass}`}
+              style={textShadowStyle}
             >
               <ShoppingCart size={20} />
               {itemCount > 0 && (
@@ -536,6 +551,7 @@ export const Header = () => {
                       className={`hover:text-primary transition hover:underline 
                         ${isScrolled ? "text-sm" : "text-base"} ${textColorClass}
                       `}
+                      style={textShadowStyle}
                     >
                       {t("login")}
                     </button>

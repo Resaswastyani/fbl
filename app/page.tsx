@@ -19,7 +19,7 @@ export default function Page() {
       <ForexCarousel />
       {/* <CourseSection /> */}
       <ForexTestimonials />
-      <RobotTradingHero />
+      {/* <RobotTradingHero /> */}
       <IntegrationCarousel />
       {/* <PricingSection /> */}
       <FAQSection />

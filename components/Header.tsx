@@ -1113,10 +1113,9 @@ export const Header = () => {
         <div
           className={`
             mx-auto transition-all duration-300 flex items-center justify-between
-            ${
-              isScrolled
-                ? "max-w-5xl bg-white shadow-lg rounded-2xl px-6 py-1.5 backdrop-blur-xl"
-                : "max-w-7xl bg-transparent px-8 py-3"
+            ${isScrolled
+              ? "max-w-5xl bg-white shadow-lg rounded-2xl px-6 py-1.5 backdrop-blur-xl"
+              : "max-w-7xl bg-transparent px-8 py-3"
             }
           `}
         >
@@ -1140,14 +1139,14 @@ export const Header = () => {
               ${isScrolled ? "gap-5" : "gap-8"}
             `}
           >
-            <button
+            {/* <button
               onClick={() => handleLinkClick("/robot-trading")}
               className={`font-medium text-gray-700 hover:text-primary transition 
                 ${isScrolled ? "text-sm" : "text-base"}
               `}
             >
               Robot Trading
-            </button>
+            </button> */}
             <Dropdown
               title="Trading lesson"
               items={[

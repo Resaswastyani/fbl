@@ -17,7 +17,7 @@ export default function WebinarRegistrationPage() {
   useEffect(() => {
     if (!isMounted) return;
     const targetDate = new Date("2026-07-20T19:00:00+07:00").getTime();
-    
+
     const updateTimer = () => {
       const now = new Date().getTime();
       const difference = targetDate - now;
@@ -58,32 +58,32 @@ export default function WebinarRegistrationPage() {
       </Script>
       <noscript>
         <img height="1" width="1" style={{ display: "none" }}
-        src="https://www.facebook.com/tr?id=2516877158823911&ev=PageView&noscript=1"
-        alt="meta-pixel" />
+          src="https://www.facebook.com/tr?id=1534984315082438&ev=PageView&noscript=1"
+          alt="meta-pixel" />
       </noscript>
 
       {/* Animated Background Blob */}
-      <motion.div 
-        animate={{ 
+      <motion.div
+        animate={{
           scale: [1, 1.2, 1],
           opacity: [0.3, 0.5, 0.3],
           rotate: [0, 90, 0]
         }}
         transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute -top-[20%] -left-[10%] w-[50vw] h-[50vw] bg-[#00C9A7]/10 rounded-full blur-[120px] pointer-events-none" 
+        className="absolute -top-[20%] -left-[10%] w-[50vw] h-[50vw] bg-[#00C9A7]/10 rounded-full blur-[120px] pointer-events-none"
       />
-      <motion.div 
-        animate={{ 
+      <motion.div
+        animate={{
           scale: [1, 1.3, 1],
           opacity: [0.2, 0.4, 0.2],
           rotate: [0, -90, 0]
         }}
         transition={{ duration: 20, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-        className="absolute top-[40%] -right-[10%] w-[60vw] h-[60vw] bg-[#C9A84C]/10 rounded-full blur-[150px] pointer-events-none" 
+        className="absolute top-[40%] -right-[10%] w-[60vw] h-[60vw] bg-[#C9A84C]/10 rounded-full blur-[150px] pointer-events-none"
       />
 
       <div className="container mx-auto px-4 py-12 sm:py-20 relative z-10">
-        
+
         {/* Header Badge */}
         <div className="flex justify-center mb-8">
           <motion.div
@@ -97,7 +97,7 @@ export default function WebinarRegistrationPage() {
         </div>
 
         {/* Hero Title */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.2 }}
@@ -113,9 +113,9 @@ export default function WebinarRegistrationPage() {
 
         {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 max-w-7xl mx-auto">
-          
+
           {/* Left Column: Info & Countdown */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
@@ -176,8 +176,8 @@ export default function WebinarRegistrationPage() {
             </div>
 
             {/* Benefits */}
-            <motion.div 
-              animate={{ 
+            <motion.div
+              animate={{
                 boxShadow: ["0 0 0px rgba(0,201,167,0)", "0 0 25px rgba(0,201,167,0.4)", "0 0 0px rgba(0,201,167,0)"]
               }}
               transition={{ duration: 3, repeat: Infinity }}
@@ -198,7 +198,7 @@ export default function WebinarRegistrationPage() {
           </motion.div>
 
           {/* Right Column: Speakers & Registration */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
@@ -209,7 +209,7 @@ export default function WebinarRegistrationPage() {
               <h3 className="text-xl font-bold text-white mb-6 border-b border-gray-800 pb-4 flex items-center justify-between uppercase tracking-widest">
                 <span>Pembicara & Host</span>
               </h3>
-              
+
               <div className="space-y-6">
                 {/* Speaker 1 (SW) */}
                 <motion.div whileHover={{ scale: 1.03, x: 10 }} className="flex items-center space-x-5 cursor-default transition-transform">
@@ -249,12 +249,12 @@ export default function WebinarRegistrationPage() {
             {/* Registration Box */}
             <div className="bg-gradient-to-b from-[#111827] to-[#0A0E1A] rounded-3xl p-8 border border-[#00C9A7]/30 shadow-[0_20px_50px_rgba(0,201,167,0.15)] flex flex-col items-center text-center relative overflow-hidden">
               <div className="absolute top-0 w-full h-1 bg-gradient-to-r from-transparent via-[#00C9A7] to-transparent"></div>
-              
+
               <h3 className="text-2xl font-black text-white mb-2">Amankan Kursi Anda</h3>
               <p className="text-sm font-medium text-gray-400 mb-8">
                 Slot terbatas! Scan QR code atau klik tombol di bawah untuk mendaftar.
               </p>
-              
+
               <div className="bg-white p-3 rounded-3xl mb-8 shadow-[0_0_40px_rgba(0,201,167,0.3)] transform transition-transform hover:scale-105 duration-500 relative group">
                 <motion.div
                   animate={{ rotate: 360 }}
@@ -262,18 +262,18 @@ export default function WebinarRegistrationPage() {
                   className="absolute -inset-2 rounded-3xl border-2 border-dashed border-[#00C9A7]/60"
                 />
                 <div className="relative w-40 h-40 sm:w-48 sm:h-48 z-10">
-                  <Image 
-                    src="/webinar/tiny_cc_PendaftaranWebinarFBL.png" 
-                    alt="QR Code Pendaftaran" 
+                  <Image
+                    src="/webinar/tiny_cc_PendaftaranWebinarFBL.png"
+                    alt="QR Code Pendaftaran"
                     fill
                     className="object-contain"
                   />
                 </div>
               </div>
-              
-              <a 
-                href="http://tiny.cc/PendaftaranWebinarFBL" 
-                target="_blank" 
+
+              <a
+                href="http://tiny.cc/PendaftaranWebinarFBL"
+                target="_blank"
                 rel="noreferrer"
                 className="w-full relative overflow-hidden group rounded-2xl bg-[#00C9A7] px-8 py-5 font-bold text-[#0A0E1A] shadow-lg transition-all hover:shadow-[0_0_30px_rgba(0,201,167,0.6)] hover:-translate-y-2 active:translate-y-0"
               >

@@ -20,6 +20,7 @@ export default function LayoutClient({
     pathname === "/dashboard" ||
     pathname === "/forgot-password" ||
     pathname === "/reset-password" ||
+    pathname === "/webinar" ||
     pathname.startsWith("/auth") ||
     pathname.startsWith("/student/") ||
     pathname.startsWith("/course/");
@@ -31,6 +32,7 @@ export default function LayoutClient({
     pathname !== "/signup" &&
     pathname !== "/forgot-password" &&
     pathname !== "/reset-password" &&
+    pathname !== "/webinar" &&
     !pathname.startsWith("/auth") &&
     !pathname.startsWith("/student/") &&
     !pathname.startsWith("/dashboard");
@@ -41,6 +43,7 @@ export default function LayoutClient({
     pathname === "/signup" ||
     pathname === "/forgot-password" ||
     pathname === "/reset-password" ||
+    pathname === "/webinar" ||
     pathname.startsWith("/course/") ||
     pathname.startsWith("/student/") ||
     pathname.startsWith("/dashboard");
@@ -49,10 +52,11 @@ export default function LayoutClient({
     pathname === "/login" ||
     pathname === "/signup" ||
     pathname === "/forgot-password" ||
-    pathname === "/reset-password";
+    pathname === "/reset-password" ||
+    pathname === "/webinar";
 
   const hideFooter =
-    pathname.startsWith("/dashboard") || pathname.startsWith("/student/");
+    pathname.startsWith("/dashboard") || pathname.startsWith("/student/") || pathname === "/webinar";
 
   return (
     <div className="flex flex-col min-h-screen">

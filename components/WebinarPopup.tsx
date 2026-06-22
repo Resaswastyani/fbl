@@ -22,7 +22,7 @@ export default function WebinarPopup() {
   useEffect(() => {
     if (!isMounted) return;
     const targetDate = new Date("2026-07-20T19:00:00+07:00").getTime();
-    
+
     const updateTimer = () => {
       const now = new Date().getTime();
       const difference = targetDate - now;
@@ -47,7 +47,7 @@ export default function WebinarPopup() {
   return (
     <AnimatePresence>
       {isOpen && (
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -61,7 +61,7 @@ export default function WebinarPopup() {
             className="relative w-full max-w-4xl max-h-[95vh] rounded-3xl bg-[#0A0E1A] text-white shadow-[0_0_50px_rgba(0,201,167,0.2)] border border-[#00C9A7]/30 flex flex-col md:flex-row overflow-y-auto overflow-x-hidden md:overflow-hidden"
           >
             {/* Close Button */}
-            <button 
+            <button
               onClick={() => setIsOpen(false)}
               className="absolute top-4 right-4 z-50 rounded-full bg-black/50 p-2 text-white hover:bg-[#00C9A7] transition-colors"
             >
@@ -71,23 +71,23 @@ export default function WebinarPopup() {
             {/* Left Side: Info & Countdown */}
             <div className="flex-1 p-5 sm:p-8 flex flex-col justify-center relative overflow-hidden">
               {/* Animated Background accents */}
-              <motion.div 
-                animate={{ 
+              <motion.div
+                animate={{
                   scale: [1, 1.2, 1],
                   opacity: [0.3, 0.5, 0.3],
                 }}
                 transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute -top-20 -left-20 w-64 h-64 bg-[#00C9A7]/20 rounded-full blur-[80px] pointer-events-none" 
+                className="absolute -top-20 -left-20 w-64 h-64 bg-[#00C9A7]/20 rounded-full blur-[80px] pointer-events-none"
               />
-              <motion.div 
-                animate={{ 
+              <motion.div
+                animate={{
                   scale: [1, 1.3, 1],
                   opacity: [0.2, 0.4, 0.2],
                 }}
                 transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                className="absolute -bottom-20 -right-20 w-64 h-64 bg-[#C9A84C]/20 rounded-full blur-[80px] pointer-events-none" 
+                className="absolute -bottom-20 -right-20 w-64 h-64 bg-[#C9A84C]/20 rounded-full blur-[80px] pointer-events-none"
               />
-              
+
               <div className="relative z-10">
                 <motion.div
                   initial={{ opacity: 0, x: -20 }}
@@ -98,11 +98,11 @@ export default function WebinarPopup() {
                     <Sparkles className="w-3 h-3 mr-1" /> Webinar Eksklusif • 100% Gratis
                   </span>
                 </motion.div>
-                
+
                 <h2 className="text-2xl sm:text-4xl font-bold mb-2 leading-tight">
                   <span className="text-[#00C9A7]">ROBOT TRADING</span> FOREX
                 </h2>
-                
+
                 <p className="text-lg sm:text-xl text-gray-300 font-medium mb-5">
                   Peluang, Risiko & Cara Kerja Sebenarnya
                 </p>
@@ -145,8 +145,8 @@ export default function WebinarPopup() {
                 </div>
 
                 {/* Highlighted Benefits */}
-                <motion.div 
-                  animate={{ 
+                <motion.div
+                  animate={{
                     boxShadow: ["0 0 0px rgba(0,201,167,0)", "0 0 15px rgba(0,201,167,0.3)", "0 0 0px rgba(0,201,167,0)"]
                   }}
                   transition={{ duration: 2, repeat: Infinity }}
@@ -160,7 +160,7 @@ export default function WebinarPopup() {
                   </h4>
                   <ul className="text-xs sm:text-sm text-white space-y-1.5 font-medium relative z-10">
                     <li className="flex items-center"><CheckCircle2 className="w-4 h-4 text-[#C9A84C] mr-2 flex-shrink-0" /> Materi Profesional Trading Forex</li>
-                    <li className="flex items-center"><CheckCircle2 className="w-4 h-4 text-[#C9A84C] mr-2 flex-shrink-0" /> EA File Calculator .ex4 & .ex5</li>
+                    <li className="flex items-center"><CheckCircle2 className="w-4 h-4 text-[#C9A84C] mr-2 flex-shrink-0" /> Position Size Calculator .ex4 & .ex5</li>
                     <li className="flex items-center"><CheckCircle2 className="w-4 h-4 text-[#C9A84C] mr-2 flex-shrink-0" /> Free Trial Robot Trading 30 Hari</li>
                   </ul>
                 </motion.div>
@@ -169,15 +169,15 @@ export default function WebinarPopup() {
 
             {/* Right Side: Speakers & QR */}
             <div className="w-full md:w-[320px] bg-[#111827] p-5 sm:p-8 flex flex-col justify-between border-t md:border-t-0 md:border-l border-gray-800 relative z-10">
-              
+
               <div>
                 <h3 className="text-base font-bold text-white mb-4 border-b border-gray-800 pb-2 flex items-center justify-between">
                   <span>Pembicara & Host</span>
                 </h3>
-                
+
                 <div className="space-y-4">
                   {/* Speaker 1 (SW) */}
-                  <motion.div 
+                  <motion.div
                     whileHover={{ scale: 1.05, x: 5 }}
                     className="flex items-center space-x-3 cursor-default"
                   >
@@ -191,14 +191,14 @@ export default function WebinarPopup() {
                   </motion.div>
 
                   {/* Speaker 2 (Eka) */}
-                  <motion.div 
+                  <motion.div
                     whileHover={{ scale: 1.05, x: 5 }}
                     className="flex items-center space-x-3 cursor-default"
                   >
                     <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full overflow-hidden flex-shrink-0 shadow-lg border-2 border-[#111827] relative bg-gray-800">
-                      <Image 
-                        src="/mentors/Eka.jpeg" 
-                        alt="Eka Pramudhita" 
+                      <Image
+                        src="/mentors/Eka.jpeg"
+                        alt="Eka Pramudhita"
                         fill
                         className="object-cover"
                       />
@@ -210,14 +210,14 @@ export default function WebinarPopup() {
                   </motion.div>
 
                   {/* Host (Desi) */}
-                  <motion.div 
+                  <motion.div
                     whileHover={{ scale: 1.05, x: 5 }}
                     className="flex items-center space-x-3 cursor-default"
                   >
                     <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full overflow-hidden flex-shrink-0 shadow-lg border-2 border-[#111827] relative bg-gray-800">
-                      <Image 
-                        src="/mentors/Desi.jpeg" 
-                        alt="Desi Oktasari" 
+                      <Image
+                        src="/mentors/Desi.jpeg"
+                        alt="Desi Oktasari"
                         fill
                         className="object-cover object-top"
                       />
@@ -238,18 +238,18 @@ export default function WebinarPopup() {
                     className="absolute -inset-1 rounded-xl border border-dashed border-[#00C9A7]/50"
                   />
                   <div className="relative w-24 h-24">
-                    <Image 
-                      src="/webinar/tiny_cc_PendaftaranWebinarFBL.png" 
-                      alt="QR Code Pendaftaran" 
+                    <Image
+                      src="/webinar/tiny_cc_PendaftaranWebinarFBL.png"
+                      alt="QR Code Pendaftaran"
                       fill
                       className="object-contain"
                     />
                   </div>
                 </div>
-                
-                <a 
-                  href="http://tiny.cc/PendaftaranWebinarFBL" 
-                  target="_blank" 
+
+                <a
+                  href="http://tiny.cc/PendaftaranWebinarFBL"
+                  target="_blank"
                   rel="noreferrer"
                   className="w-full relative overflow-hidden group rounded-lg bg-[#00C9A7] px-4 py-3 font-bold text-[#0A0E1A] shadow-lg transition-all hover:shadow-[0_0_20px_rgba(0,201,167,0.5)] hover:-translate-y-1 active:translate-y-0"
                 >
@@ -261,7 +261,7 @@ export default function WebinarPopup() {
                 </a>
                 <p className="text-[10px] text-gray-400 mt-3 font-medium">Slot terbatas! Daftar sebelum kehabisan.</p>
               </div>
-              
+
             </div>
           </motion.div>
         </motion.div>

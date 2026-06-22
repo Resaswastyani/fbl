@@ -52,7 +52,7 @@ export default function WebinarRegistrationPage() {
           t.src=v;s=b.getElementsByTagName(e)[0];
           s.parentNode.insertBefore(t,s)}(window, document,'script',
           'https://connect.facebook.net/en_US/fbevents.js');
-          fbq('init', '2516877158823911');
+          fbq('init', '1534984315082438');
           fbq('track', 'PageView');
         `}
       </Script>

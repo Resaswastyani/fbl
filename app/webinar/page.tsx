@@ -121,19 +121,19 @@ export default function WebinarRegistrationPage() {
             Manajemen Trading Forex dengan <br className="hidden md:block" /><span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00C9A7] to-teal-200">EA/Robot FBL</span>
           </h1>
           <p className="text-xl sm:text-3xl text-gray-300 font-medium">
-            Peluang, Risiko & Cara Kerja Sebenarnya
+            Peluang & Risiko
           </p>
         </motion.div>
 
         {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 max-w-7xl mx-auto">
 
-          {/* Left Column: Info & Countdown */}
+          {/* Right Column: Info & Countdown */}
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
+            initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="lg:col-span-7 flex flex-col justify-center space-y-10 order-2 lg:order-1"
+            className="lg:col-span-7 flex flex-col justify-center space-y-10 order-2 lg:order-2"
           >
             {/* Event Details */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 p-8 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-sm shadow-2xl">
@@ -211,12 +211,12 @@ export default function WebinarRegistrationPage() {
             </motion.div>
           </motion.div>
 
-          {/* Right Column: Speakers & Registration */}
+          {/* Left Column: Speakers & Registration */}
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
+            initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="lg:col-span-5 flex flex-col space-y-8 order-1 lg:order-2"
+            className="lg:col-span-5 flex flex-col space-y-8 order-1 lg:order-1"
           >
             {/* Registration Box */}
             <div className="bg-gradient-to-b from-[#111827] to-[#0A0E1A] rounded-3xl p-8 border border-[#00C9A7]/30 shadow-[0_20px_50px_rgba(0,201,167,0.15)] flex flex-col items-center text-center relative overflow-hidden">

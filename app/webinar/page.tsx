@@ -231,7 +231,7 @@ export default function WebinarRegistrationPage() {
                     <Image src="/mentors/pakwi.jpeg" alt="Eka Pramudhita" fill className="object-cover" />
                   </div>
                   <div>
-                    <p className="font-bold text-white text-lg sm:text-xl leading-tight mb-1">Eka Pramudhita</p>
+                    <p className="font-bold text-white text-lg sm:text-xl leading-tight mb-1">Sindhurahardjo W.</p>
                     <span className="inline-block px-3 py-1 bg-[#C9A84C]/20 text-[#C9A84C] text-xs font-bold rounded-full uppercase tracking-widest">Pemateri</span>
                   </div>
                 </motion.div>

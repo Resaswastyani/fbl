@@ -118,7 +118,7 @@ export default function WebinarRegistrationPage() {
           className="text-center max-w-4xl mx-auto mb-16"
         >
           <h1 className="text-5xl sm:text-7xl font-extrabold mb-6 leading-tight tracking-tight">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00C9A7] to-teal-200">ROBOT TRADING</span> FOREX
+            Manajemen Trading Forex dengan <br className="hidden md:block" /><span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00C9A7] to-teal-200">EA/Robot FBL</span>
           </h1>
           <p className="text-xl sm:text-3xl text-gray-300 font-medium">
             Peluang, Risiko & Cara Kerja Sebenarnya
@@ -133,7 +133,7 @@ export default function WebinarRegistrationPage() {
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="lg:col-span-7 flex flex-col justify-center space-y-10"
+            className="lg:col-span-7 flex flex-col justify-center space-y-10 order-2 lg:order-1"
           >
             {/* Event Details */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 p-8 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-sm shadow-2xl">
@@ -216,8 +216,47 @@ export default function WebinarRegistrationPage() {
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="lg:col-span-5 flex flex-col space-y-8"
+            className="lg:col-span-5 flex flex-col space-y-8 order-1 lg:order-2"
           >
+            {/* Registration Box */}
+            <div className="bg-gradient-to-b from-[#111827] to-[#0A0E1A] rounded-3xl p-8 border border-[#00C9A7]/30 shadow-[0_20px_50px_rgba(0,201,167,0.15)] flex flex-col items-center text-center relative overflow-hidden">
+              <div className="absolute top-0 w-full h-1 bg-gradient-to-r from-transparent via-[#00C9A7] to-transparent"></div>
+
+              <h3 className="text-2xl font-black text-white mb-2">Amankan Kursi Anda</h3>
+              <p className="text-sm font-medium text-gray-400 mb-8">
+                Slot terbatas! Scan QR code atau klik tombol di bawah untuk mendaftar.
+              </p>
+
+              <div className="bg-white p-3 rounded-3xl mb-8 shadow-[0_0_40px_rgba(0,201,167,0.3)] transform transition-transform hover:scale-105 duration-500 relative group">
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+                  className="absolute -inset-2 rounded-3xl border-2 border-dashed border-[#00C9A7]/60"
+                />
+                <div className="relative w-40 h-40 sm:w-48 sm:h-48 z-10">
+                  <Image
+                    src="/webinar/tiny_cc_PendaftaranWebinarFBL.png"
+                    alt="QR Code Pendaftaran"
+                    fill
+                    className="object-contain"
+                  />
+                </div>
+              </div>
+
+              <a
+                href="http://tiny.cc/PendaftaranWebinarFBL"
+                target="_blank"
+                rel="noreferrer"
+                className="w-full relative overflow-hidden group rounded-2xl bg-[#00C9A7] px-8 py-5 font-bold text-[#0A0E1A] shadow-lg transition-all hover:shadow-[0_0_30px_rgba(0,201,167,0.6)] hover:-translate-y-2 active:translate-y-0"
+              >
+                <span className="relative z-10 flex items-center justify-center gap-3 text-lg uppercase tracking-widest">
+                  DAFTAR SEKARANG
+                  <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform duration-300" />
+                </span>
+                <div className="absolute inset-0 z-0 h-full w-full bg-gradient-to-r from-teal-400 to-teal-300 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+              </a>
+            </div>
+
             {/* Speakers Box */}
             <div className="bg-[#111827] rounded-3xl p-8 border border-gray-800 shadow-2xl">
               <h3 className="text-xl font-bold text-white mb-6 border-b border-gray-800 pb-4 flex items-center justify-between uppercase tracking-widest">
@@ -258,45 +297,6 @@ export default function WebinarRegistrationPage() {
                   </div>
                 </motion.div>
               </div>
-            </div>
-
-            {/* Registration Box */}
-            <div className="bg-gradient-to-b from-[#111827] to-[#0A0E1A] rounded-3xl p-8 border border-[#00C9A7]/30 shadow-[0_20px_50px_rgba(0,201,167,0.15)] flex flex-col items-center text-center relative overflow-hidden">
-              <div className="absolute top-0 w-full h-1 bg-gradient-to-r from-transparent via-[#00C9A7] to-transparent"></div>
-
-              <h3 className="text-2xl font-black text-white mb-2">Amankan Kursi Anda</h3>
-              <p className="text-sm font-medium text-gray-400 mb-8">
-                Slot terbatas! Scan QR code atau klik tombol di bawah untuk mendaftar.
-              </p>
-
-              <div className="bg-white p-3 rounded-3xl mb-8 shadow-[0_0_40px_rgba(0,201,167,0.3)] transform transition-transform hover:scale-105 duration-500 relative group">
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-                  className="absolute -inset-2 rounded-3xl border-2 border-dashed border-[#00C9A7]/60"
-                />
-                <div className="relative w-40 h-40 sm:w-48 sm:h-48 z-10">
-                  <Image
-                    src="/webinar/tiny_cc_PendaftaranWebinarFBL.png"
-                    alt="QR Code Pendaftaran"
-                    fill
-                    className="object-contain"
-                  />
-                </div>
-              </div>
-
-              <a
-                href="http://tiny.cc/PendaftaranWebinarFBL"
-                target="_blank"
-                rel="noreferrer"
-                className="w-full relative overflow-hidden group rounded-2xl bg-[#00C9A7] px-8 py-5 font-bold text-[#0A0E1A] shadow-lg transition-all hover:shadow-[0_0_30px_rgba(0,201,167,0.6)] hover:-translate-y-2 active:translate-y-0"
-              >
-                <span className="relative z-10 flex items-center justify-center gap-3 text-lg uppercase tracking-widest">
-                  DAFTAR SEKARANG
-                  <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform duration-300" />
-                </span>
-                <div className="absolute inset-0 z-0 h-full w-full bg-gradient-to-r from-teal-400 to-teal-300 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-              </a>
             </div>
 
           </motion.div>

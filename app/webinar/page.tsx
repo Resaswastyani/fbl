@@ -227,11 +227,11 @@ export default function WebinarRegistrationPage() {
               <div className="space-y-6">
                 {/* Speaker 1 (SW) */}
                 <motion.div whileHover={{ scale: 1.03, x: 10 }} className="flex items-center space-x-5 cursor-default transition-transform">
-                  <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-full bg-gradient-to-br from-[#00C9A7] to-blue-800 flex items-center justify-center flex-shrink-0 shadow-lg border-[3px] border-[#0A0E1A]">
-                    <span className="text-white font-black text-xl tracking-wider">SW</span>
+                  <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-full overflow-hidden flex-shrink-0 shadow-lg border-[3px] border-[#0A0E1A] relative bg-gray-800">
+                    <Image src="/mentors/pakwi.jpeg" alt="Eka Pramudhita" fill className="object-cover" />
                   </div>
                   <div>
-                    <p className="font-bold text-white text-lg sm:text-xl leading-tight mb-1">Sindhurahardjo W.</p>
+                    <p className="font-bold text-white text-lg sm:text-xl leading-tight mb-1">Eka Pramudhita</p>
                     <span className="inline-block px-3 py-1 bg-[#C9A84C]/20 text-[#C9A84C] text-xs font-bold rounded-full uppercase tracking-widest">Pemateri</span>
                   </div>
                 </motion.div>
@@ -250,7 +250,7 @@ export default function WebinarRegistrationPage() {
                 {/* Host (Desi) */}
                 <motion.div whileHover={{ scale: 1.03, x: 10 }} className="flex items-center space-x-5 cursor-default transition-transform">
                   <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-full overflow-hidden flex-shrink-0 shadow-lg border-[3px] border-[#0A0E1A] relative bg-gray-800">
-                    <Image src="/mentors/Desi.jpeg" alt="Desi Oktasari" fill className="object-cover object-top" />
+                    <Image src="/mentors/Desi2.jpeg" alt="Desi Oktasari" fill className="object-cover object-top" />
                   </div>
                   <div>
                     <p className="font-bold text-white text-lg sm:text-xl leading-tight mb-1">Desi Oktasari</p>

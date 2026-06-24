@@ -6,6 +6,7 @@ import DisclaimerPreview from "./DisclaimerPreview";
 import { Header } from "./Header";
 import Footer from "./Footer";
 import WhatsAppFloat from "@/components/whatsappFloat";
+import WebinarPopup from "@/components/WebinarPopup";
 
 export default function LayoutClient({
   children,
@@ -58,6 +59,14 @@ export default function LayoutClient({
   const hideFooter =
     pathname.startsWith("/dashboard") || pathname.startsWith("/student/") || pathname === "/webinar";
 
+  const hideWebinarPopup =
+    pathname === "/login" ||
+    pathname === "/signup" ||
+    pathname === "/forgot-password" ||
+    pathname === "/reset-password" ||
+    pathname === "/webinar" ||
+    pathname.startsWith("/auth");
+
   return (
     <div className="flex flex-col min-h-screen">
       {/* Announcement Bar */}
@@ -76,6 +85,8 @@ export default function LayoutClient({
       {!hideFooter && <Footer />}
 
       {!hideWhatsApp && <WhatsAppFloat />}
+
+      {!hideWebinarPopup && <WebinarPopup />}
     </div>
   );
 }

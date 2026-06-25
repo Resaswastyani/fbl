@@ -118,7 +118,7 @@ export default function WebinarPopup() {
                                     </div>
                                     <div className="flex items-center sm:col-span-2">
                                         <MapPin className="w-4 h-4 mr-2 text-[#C9A84C]" />
-                                        <span className="font-medium">Google Meet (Link via WA Group)</span>
+                                        <span className="font-medium">Zoom Meeting (Link via WA Group)</span>
                                     </div>
                                 </div>
 

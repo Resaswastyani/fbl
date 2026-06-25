@@ -207,7 +207,7 @@ export default function WebinarRegistrationPage() {
                 </div>
                 <div>
                   <p className="text-xs text-gray-400 uppercase tracking-widest mb-1">Lokasi</p>
-                  <p className="font-bold text-white text-lg">Google Meet (Link via WA Group)</p>
+                  <p className="font-bold text-white text-lg">Zoom Meeting(Link via WA Group)</p>
                 </div>
               </div>
             </div>

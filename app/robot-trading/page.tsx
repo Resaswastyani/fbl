@@ -62,13 +62,30 @@ const usageSteps = [
   },
 ];
 
-const resumeData = [
-  { year: "2026", month: "Januari", kon: 202256, mod: 204110, ag1: 326621, ag2: 6099036, maxDd: "6.85%", trades: 4134 },
-  { year: "2026", month: "Februari", kon: 123522, mod: 36773, ag1: 179185, ag2: 8622153, maxDd: "4.17%", trades: 5749 },
-  { year: "2026", month: "Maret", kon: 20877, mod: -3881, ag1: -4533, ag2: 1438072, maxDd: "3.33%", trades: 3197 },
-  { year: "2026", month: "April", kon: 4525, mod: -4654, ag1: -7589, ag2: 58054, maxDd: "1.32%", trades: 2011 },
-  { year: "2026", month: "Mei", kon: -1713, mod: -5256, ag1: -4973, ag2: 41879, maxDd: "1.71%", trades: 1542 },
-  { year: "2025", month: "Desember", kon: 3166, mod: -249, ag1: 26258, ag2: 568405, maxDd: "2.60%", trades: 4500 },
+const agresif2Data = [
+  { year: "2026", month: "Jan", week: "5-10", profit: -251, pct: "-0.25%", peak: 104696, maxDd: 707, maxDdPct: "0.99%", trades: 638 },
+  { year: "2026", month: "Jan", week: "12-17", profit: 17623, pct: "17.62%", peak: 117037, maxDd: 390, maxDdPct: "1.56%", trades: 814 },
+  { year: "2026", month: "Jan", week: "19-24", profit: 45488, pct: "45.49%", peak: 147602, maxDd: 156, maxDdPct: "1.73%", trades: 1068 },
+  { year: "2026", month: "Jan", week: "26-31", profit: 6036038, pct: "6036.04%", peak: 6049443, maxDd: 0, maxDdPct: "6.85%", trades: 3394 },
+  { year: "2026", month: "Feb", week: "2-7", profit: 8437838, pct: "8437.84%", peak: 8672134, maxDd: 0, maxDdPct: "4.17%", trades: 2757 },
+  { year: "2026", month: "Feb", week: "9-14", profit: 184971, pct: "184.97%", peak: 286018, maxDd: 277, maxDdPct: "1.99%", trades: 1939 },
+  { year: "2026", month: "Feb", week: "16-21", profit: 28015, pct: "28.01%", peak: 131155, maxDd: 1576, maxDdPct: "1.42%", trades: 1237 },
+  { year: "2026", month: "Feb", week: "23-28", profit: -443, pct: "-0.44%", peak: 106408, maxDd: 655, maxDdPct: "0.99%", trades: 966 },
+  { year: "2026", month: "Mar", week: "2-7", profit: 40398, pct: "40.40%", peak: 150692, maxDd: 20, maxDdPct: "1.46%", trades: 1079 },
+  { year: "2026", month: "Mar", week: "9-14", profit: -176, pct: "-0.18%", peak: 100037, maxDd: 889, maxDdPct: "0.90%", trades: 242 },
+  { year: "2026", month: "Mar", week: "16-21", profit: 279634, pct: "279.63%", peak: 378592, maxDd: 568, maxDdPct: "2.08%", trades: 2462 },
+  { year: "2026", month: "Mar", week: "23-28", profit: 1030224, pct: "1030.22%", peak: 1133472, maxDd: 633, maxDdPct: "3.33%", trades: 2058 },
+  { year: "2026", month: "Mar", week: "30-4", profit: 87492, pct: "87.49%", peak: 186168, maxDd: 504, maxDdPct: "1.63%", trades: 2008 },
+  { year: "2026", month: "Apr", week: "6-11", profit: 43260, pct: "43.26%", peak: 145438, maxDd: 0, maxDdPct: "1.32%", trades: 1703 },
+  { year: "2026", month: "Apr", week: "13-18", profit: -950, pct: "-0.95%", peak: 100053, maxDd: 981, maxDdPct: "0.86%", trades: 952 },
+  { year: "2026", month: "Apr", week: "20-25", profit: 15822, pct: "15.82%", peak: 117741, maxDd: 333, maxDdPct: "1.29%", trades: 998 },
+  { year: "2026", month: "Apr", week: "27-2", profit: 4222, pct: "4.22%", peak: 105053, maxDd: 1120, maxDdPct: "1.30%", trades: 962 },
+  { year: "2026", month: "Mei", week: "4-9", profit: -853, pct: "-0.85%", peak: 103178, maxDd: 1707, maxDdPct: "0.95%", trades: 1017 },
+  { year: "2026", month: "Mei", week: "11-16", profit: -1012, pct: "-1.01%", peak: 102529, maxDd: 1274, maxDdPct: "0.92%", trades: 1064 },
+  { year: "2026", month: "Mei", week: "18-23", profit: 29319, pct: "29.32%", peak: 135588, maxDd: 517, maxDdPct: "1.59%", trades: 1054 },
+  { year: "2026", month: "Mei", week: "25-30", profit: 14427, pct: "14.43%", peak: 117031, maxDd: 916, maxDdPct: "1.70%", trades: 752 },
+  { year: "2026", month: "Jun", week: "1-6", profit: 7427, pct: "7.43%", peak: 109425, maxDd: 0, maxDdPct: "1.61%", trades: 0 },
+  { year: "2026", month: "Jun", week: "8-13", profit: 18654, pct: "18.65%", peak: 124092, maxDd: 0, maxDdPct: "1.27%", trades: 0 },
 ];
 
 const formatCurrency = (val: number) => {
@@ -137,35 +154,35 @@ export default function RobotTradingCenter() {
     window.open(waUrl, "_blank");
   };
 
-  if (!mounted) return <div className="min-h-screen bg-slate-50" />; 
+  if (!mounted) return <div className="min-h-screen bg-slate-50" />;
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 overflow-hidden selection:bg-[#156d95] selection:text-white">
-      
+
       {/* 1. HERO SECTION */}
       <section ref={heroRef} className="relative w-full min-h-[90vh] flex items-center pt-24 pb-16 overflow-hidden bg-white">
         {/* Animated Background Gradients */}
         <div className="absolute inset-0 z-0">
-          <motion.div 
-            style={{ y: yBg }} 
-            className="absolute -top-[20%] -left-[10%] w-[50%] h-[70%] rounded-full bg-blue-100 opacity-60 blur-[100px]" 
+          <motion.div
+            style={{ y: yBg }}
+            className="absolute -top-[20%] -left-[10%] w-[50%] h-[70%] rounded-full bg-blue-100 opacity-60 blur-[100px]"
           />
-          <motion.div 
-            animate={{ 
+          <motion.div
+            animate={{
               scale: [1, 1.1, 1],
               opacity: [0.3, 0.5, 0.3]
             }}
             transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute top-[20%] -right-[10%] w-[60%] h-[80%] rounded-full bg-cyan-100 opacity-50 blur-[120px]" 
+            className="absolute top-[20%] -right-[10%] w-[60%] h-[80%] rounded-full bg-cyan-100 opacity-50 blur-[120px]"
           />
           {/* Subtle Grid */}
           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03]"></div>
         </div>
 
         <div className="max-w-7xl mx-auto px-6 md:px-12 w-full relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
-          
+
           {/* Hero Content */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
@@ -175,14 +192,14 @@ export default function RobotTradingCenter() {
               <span className="flex h-2 w-2 rounded-full bg-green-500 animate-pulse"></span>
               <span className="text-xs font-bold text-[#156d95] uppercase tracking-wider">REGIME DEPENDENT EA</span>
             </div>
-            
+
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1] tracking-tight text-[#111A4A]">
-              EA / Robot <br /> 
+              EA / Robot <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#156d95] to-cyan-500">Trading Center</span>
             </h1>
-            
+
             <p className="text-lg text-slate-600 max-w-xl leading-relaxed">
-              Maksimalkan potensi profit Anda dengan algoritma cerdas yang beradaptasi dengan market. 
+              Maksimalkan potensi profit Anda dengan algoritma cerdas yang beradaptasi dengan market.
               Tanpa emosi, presisi tinggi, dan strategi yang telah teruji melalui ribuan backtest.
             </p>
 
@@ -224,7 +241,7 @@ export default function RobotTradingCenter() {
           </motion.div>
 
           {/* Hero Visual Animation */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
@@ -232,7 +249,7 @@ export default function RobotTradingCenter() {
           >
             {/* Glass Container */}
             <div className="relative w-full max-w-md h-[400px] bg-white/80 border border-slate-200 rounded-3xl backdrop-blur-xl p-6 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] overflow-hidden flex flex-col z-10">
-              
+
               {/* Header inside glass */}
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
@@ -281,7 +298,7 @@ export default function RobotTradingCenter() {
                     animate={{ pathLength: 1 }}
                     transition={{ duration: 2, ease: "easeInOut", repeat: Infinity, repeatDelay: 1 }}
                   />
-                  
+
                   <motion.path
                     d="M0,150 Q40,160 80,120 T160,100 T240,60 T320,80 T400,20 L400,200 L0,200 Z"
                     fill="url(#heroAreaLight)"
@@ -318,15 +335,15 @@ export default function RobotTradingCenter() {
       {/* 2. LANGKAH PENGGUNAAN ROBOT (VIDEO + TEKS) */}
       <section className="relative w-full py-24 bg-white border-t border-slate-100">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
-          
+
           <div className="text-center mb-16">
-            <motion.h2 
+            <motion.h2
               initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
               className="text-3xl md:text-5xl font-bold mb-4 text-[#111A4A]"
             >
               Langkah Penggunaan <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#156d95] to-cyan-500">Robot</span>
             </motion.h2>
-            <motion.p 
+            <motion.p
               initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}
               className="text-slate-600 max-w-2xl mx-auto text-lg"
             >
@@ -335,17 +352,17 @@ export default function RobotTradingCenter() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            
+
             {/* Left: Video Embed */}
             <motion.div
               initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
               className="relative w-full rounded-3xl overflow-hidden shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] border border-slate-200 aspect-video bg-slate-900 flex items-center justify-center group"
             >
-              <iframe 
+              <iframe
                 className="absolute inset-0 w-full h-full"
-                src="https://www.youtube.com/embed/dQw4w9WgXcQ?si=placeholder" 
-                title="Panduan EA FBL" 
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                src="https://www.youtube.com/embed/dQw4w9WgXcQ?si=placeholder"
+                title="Panduan EA FBL"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
               ></iframe>
             </motion.div>
@@ -380,15 +397,15 @@ export default function RobotTradingCenter() {
       {/* 3. EA PROFILE & DATA BACKTEST */}
       <section id="backtest" className="relative w-full py-24 bg-slate-50 border-t border-slate-200">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
-          
+
           <div className="mb-12">
-            <motion.h2 
+            <motion.h2
               initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
               className="text-3xl md:text-4xl font-bold mb-4 text-[#111A4A]"
             >
               Data Backtest & <span className="text-[#156d95]">Resume Performa</span>
             </motion.h2>
-            <motion.p 
+            <motion.p
               initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}
               className="text-slate-600 max-w-2xl text-lg"
             >
@@ -397,9 +414,9 @@ export default function RobotTradingCenter() {
           </div>
 
           <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">
-            
+
             {/* EA Profile Summary Card */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
               className="xl:col-span-1 bg-white border border-slate-200 rounded-3xl p-6 shadow-sm flex flex-col gap-4"
             >
@@ -456,72 +473,62 @@ export default function RobotTradingCenter() {
             </motion.div>
 
             {/* Monthly Resume Table */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} delay={0.2}
               className="xl:col-span-3 bg-white border border-slate-200 rounded-3xl p-6 shadow-sm overflow-hidden flex flex-col"
             >
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h3 className="text-xl font-bold text-[#111A4A]">Resume Return Bulanan</h3>
-                  <p className="text-sm text-slate-500">Berdasarkan Total Pips/Profit per Mode Portofolio (100k Start Capital)</p>
+                  <h3 className="text-xl font-bold text-[#111A4A]">History Trade Lengkap (Mode Agresif 2)</h3>
+                  <p className="text-sm text-slate-500">Data backtest mingguan dengan start capital 100k</p>
                 </div>
                 <button className="hidden sm:flex items-center gap-2 px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm font-semibold text-[#111A4A] hover:bg-slate-100 transition">
                   <Download className="w-4 h-4" /> Download CSV
                 </button>
               </div>
 
-              <div className="w-full overflow-x-auto pb-4 custom-scrollbar">
+              <div className="w-full overflow-x-auto pb-4 custom-scrollbar max-h-[500px]">
                 <table className="w-full text-left border-collapse min-w-[800px]">
-                  <thead>
+                  <thead className="sticky top-0 z-10 bg-white">
                     <tr className="border-b border-slate-200">
                       <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider bg-slate-50 rounded-tl-xl">Periode</th>
-                      <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider bg-slate-50">Konservatif</th>
-                      <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider bg-slate-50">Moderat</th>
-                      <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider bg-slate-50">Agresif 1</th>
-                      <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider bg-slate-50">Agresif 2</th>
+                      <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider bg-slate-50">Nett Profit</th>
+                      <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider bg-slate-50">Peak Balance</th>
                       <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider bg-slate-50">Max DD</th>
                       <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider bg-slate-50 rounded-tr-xl">Total Trades</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {resumeData.map((row, i) => (
+                    {agresif2Data.map((row, i) => (
                       <tr key={i} className="border-b border-slate-100 hover:bg-slate-50/50 transition-colors">
                         <td className="py-4 px-4">
-                          <p className="font-bold text-[#111A4A]">{row.month}</p>
+                          <p className="font-bold text-[#111A4A]">{row.week} {row.month}</p>
                           <p className="text-xs text-slate-500">{row.year}</p>
                         </td>
                         <td className="py-4 px-4">
-                          <p className={`font-semibold ${row.kon > 0 ? 'text-green-600' : 'text-red-500'}`}>
-                            {row.kon > 0 ? '+' : ''}{row.kon}
+                          <p className={`font-semibold ${row.profit > 0 ? 'text-green-600' : 'text-red-500'}`}>
+                            {row.profit > 0 ? '+' : ''}{row.profit.toLocaleString('id-ID')}
+                          </p>
+                          <p className={`text-xs ${row.profit > 0 ? 'text-green-500' : 'text-red-400'}`}>
+                            {row.pct}
                           </p>
                         </td>
                         <td className="py-4 px-4">
-                          <p className={`font-semibold ${row.mod > 0 ? 'text-green-600' : 'text-red-500'}`}>
-                            {row.mod > 0 ? '+' : ''}{row.mod}
-                          </p>
+                          <p className="font-semibold text-[#111A4A]">{row.peak.toLocaleString('id-ID')}</p>
                         </td>
                         <td className="py-4 px-4">
-                          <p className={`font-semibold ${row.ag1 > 0 ? 'text-green-600' : 'text-red-500'}`}>
-                            {row.ag1 > 0 ? '+' : ''}{row.ag1}
-                          </p>
+                          <p className="font-semibold text-amber-600">{row.maxDd.toLocaleString('id-ID')}</p>
+                          <p className="text-xs text-amber-500">{row.maxDdPct}</p>
                         </td>
                         <td className="py-4 px-4">
-                          <p className={`font-semibold ${row.ag2 > 0 ? 'text-green-600' : 'text-red-500'}`}>
-                            {row.ag2 > 0 ? '+' : ''}{row.ag2}
-                          </p>
-                        </td>
-                        <td className="py-4 px-4">
-                          <p className="font-semibold text-amber-600">{row.maxDd}</p>
-                        </td>
-                        <td className="py-4 px-4">
-                          <p className="font-semibold text-[#111A4A]">{row.trades}</p>
+                          <p className="font-semibold text-[#111A4A]">{row.trades > 0 ? row.trades.toLocaleString('id-ID') : '-'}</p>
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               </div>
-              
+
               <div className="mt-4 p-4 bg-cyan-50/50 rounded-xl border border-cyan-100 flex items-start gap-3">
                 <BarChart3 className="w-5 h-5 text-cyan-600 shrink-0 mt-0.5" />
                 <p className="text-sm text-slate-600">
@@ -538,13 +545,13 @@ export default function RobotTradingCenter() {
       <section className="py-24 relative overflow-hidden bg-[#111A4A]">
         <div className="absolute inset-0 bg-gradient-to-br from-[#156d95]/40 to-[#111A4A] opacity-90 z-0"></div>
         <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
-          <motion.h2 
+          <motion.h2
             initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
             className="text-3xl md:text-5xl font-bold text-white mb-6"
           >
             Siap untuk Mengotomatiskan Trading Anda?
           </motion.h2>
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}
             className="text-blue-100/80 mb-10 text-lg max-w-2xl mx-auto"
           >
@@ -560,9 +567,10 @@ export default function RobotTradingCenter() {
           </motion.button>
         </div>
       </section>
-      
+
       {/* Scrollbar styling for table */}
-      <style dangerouslySetInnerHTML={{__html: `
+      <style dangerouslySetInnerHTML={{
+        __html: `
         .custom-scrollbar::-webkit-scrollbar {
           height: 6px;
         }

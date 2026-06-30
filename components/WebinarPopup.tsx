@@ -192,6 +192,7 @@ export default function WebinarPopup() {
                                         <div>
                                             <p className="font-bold text-white text-sm leading-tight">Sindhurahardjo W.</p>
                                             <p className="text-[10px] font-medium text-[#C9A84C] mt-0.5 uppercase tracking-wider">Pemateri</p>
+
                                         </div>
                                     </motion.div>
 

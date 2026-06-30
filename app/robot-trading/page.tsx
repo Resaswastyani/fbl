@@ -250,11 +250,9 @@ const AnimatedCounter = ({ target, suffix = "", duration = 2, prefix = "" }: { t
 // --- Page Layout ---
 export default function RobotTradingCenter() {
   const [mounted, setMounted] = useState(false);
-  const [showPricing, setShowPricing] = useState(false);
   const [backtestView, setBacktestView] = useState<"mingguan" | "bulanan">("mingguan");
   
   const heroRef = useRef<HTMLDivElement>(null);
-  const pricingRef = useRef<HTMLDivElement>(null);
   
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
   const yBg = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
@@ -268,21 +266,6 @@ export default function RobotTradingCenter() {
     const waUrl = `https://wa.me/6281234567890?text=${encodeURIComponent(message)}`;
     window.open(waUrl, "_blank");
   };
-
-  const handleRobotClick = () => {
-    setShowPricing(true);
-  };
-
-  useEffect(() => {
-    if (showPricing) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
-  }, [showPricing]);
 
   const monthlyData = useMemo(() => {
     const grouped = backtestData.reduce((acc, curr) => {
@@ -402,17 +385,10 @@ export default function RobotTradingCenter() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
-            className="relative w-full aspect-square md:aspect-auto md:h-[500px] flex items-center justify-center cursor-pointer group"
-            onClick={handleRobotClick}
+            className="relative w-full aspect-square md:aspect-auto md:h-[500px] flex items-center justify-center group"
           >
             {/* Glass Container */}
             <div className="relative w-full max-w-md h-[400px] bg-white/80 border border-slate-200 rounded-3xl backdrop-blur-xl p-6 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] group-hover:shadow-[0_30px_60px_-15px_rgba(21,109,149,0.3)] transition-all duration-500 overflow-hidden flex flex-col z-10 transform group-hover:-translate-y-2">
-
-              {/* Click Me Badge */}
-              <div className="absolute top-4 right-4 bg-gradient-to-r from-amber-400 to-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg animate-bounce flex items-center gap-1 z-20">
-                <CreditCard className="w-3 h-3" />
-                Klik untuk Harga
-              </div>
 
               {/* Header inside glass */}
               <div className="flex items-center justify-between mb-6">
@@ -496,95 +472,77 @@ export default function RobotTradingCenter() {
         </div>
       </section>
 
-      {/* PRICING MODAL (Animated Overlay) */}
-      <AnimatePresence>
-        {showPricing && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-slate-900/60 backdrop-blur-sm overflow-y-auto"
-            onClick={(e) => {
-              if (e.target === e.currentTarget) setShowPricing(false);
-            }}
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              transition={{ duration: 0.3, type: "spring", bounce: 0.4 }}
-              className="relative w-full max-w-6xl bg-white rounded-3xl shadow-2xl overflow-hidden my-auto"
+      {/* PRICING SECTION */}
+      <section className="w-full bg-gradient-to-b from-white to-slate-50 py-24 border-b border-slate-200 overflow-hidden relative">
+        <div className="max-w-7xl mx-auto px-6 md:px-12">
+          <div className="text-center mb-16">
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}
+              className="text-3xl md:text-5xl font-bold mb-4 text-[#111A4A]"
             >
-              {/* Close button */}
-              <button
-                onClick={() => setShowPricing(false)}
-                className="absolute top-4 right-4 md:top-6 md:right-6 w-10 h-10 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-full flex items-center justify-center transition-colors z-10"
+              Pilih <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#156d95] to-cyan-500">Paket Investasi</span> Anda
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }}
+              className="text-slate-600 max-w-2xl mx-auto text-lg"
+            >
+              Dapatkan akses penuh ke algoritma trading canggih kami dengan opsi berlangganan tetap atau sistem bagi hasil (sharing profit).
+            </motion.p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
+            {pricingPackages.map((pkg, idx) => (
+              <motion.div
+                key={pkg.id}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 + (idx * 0.1), duration: 0.5 }}
+                className={`relative flex flex-col bg-white rounded-3xl p-8 border ${pkg.isPopular ? 'border-cyan-400 shadow-[0_20px_40px_-15px_rgba(21,109,149,0.3)] md:-translate-y-2' : 'border-slate-200 shadow-lg'} transition-all duration-300 hover:shadow-2xl group`}
               >
-                <X className="w-5 h-5" />
-              </button>
-
-              <div className="p-6 md:p-10 lg:p-12 max-h-[85vh] overflow-y-auto custom-scrollbar">
-                <div className="text-center mb-10 mt-4 md:mt-0">
-                  <h2 className="text-3xl md:text-5xl font-bold mb-4 text-[#111A4A]">
-                    Pilih <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#156d95] to-cyan-500">Paket Investasi</span> Anda
-                  </h2>
-                  <p className="text-slate-600 max-w-2xl mx-auto text-lg">
-                    Dapatkan akses penuh ke algoritma trading canggih kami dengan opsi berlangganan tetap atau sistem bagi hasil (sharing profit).
-                  </p>
+                {pkg.isPopular && (
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-[#156d95] to-cyan-500 text-white px-4 py-1 rounded-full text-sm font-bold shadow-lg flex items-center gap-1 w-max">
+                    <Crown className="w-4 h-4" /> Pilihan Terfavorit
+                  </div>
+                )}
+                
+                <div className="mb-6">
+                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${pkg.color} flex items-center justify-center text-white mb-6 ${pkg.shadow} shadow-lg`}>
+                    <pkg.icon className="w-7 h-7" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-[#111A4A] mb-2">{pkg.name}</h3>
+                  <p className="text-slate-500 text-sm h-12">{pkg.description}</p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 items-stretch">
-                  {pricingPackages.map((pkg, idx) => (
-                    <div
-                      key={pkg.id}
-                      className={`relative flex flex-col bg-white rounded-3xl p-6 md:p-8 border ${pkg.isPopular ? 'border-cyan-400 shadow-[0_20px_40px_-15px_rgba(21,109,149,0.3)] md:-translate-y-2' : 'border-slate-200 shadow-lg'} transition-all duration-300`}
-                    >
-                      {pkg.isPopular && (
-                        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-[#156d95] to-cyan-500 text-white px-4 py-1 rounded-full text-sm font-bold shadow-lg flex items-center gap-1 w-max">
-                          <Crown className="w-4 h-4" /> Pilihan Terfavorit
-                        </div>
-                      )}
-                      
-                      <div className="mb-6">
-                        <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${pkg.color} flex items-center justify-center text-white mb-6 ${pkg.shadow} shadow-lg`}>
-                          <pkg.icon className="w-7 h-7" />
-                        </div>
-                        <h3 className="text-2xl font-bold text-[#111A4A] mb-2">{pkg.name}</h3>
-                        <p className="text-slate-500 text-sm h-12">{pkg.description}</p>
+                <div className="mb-8">
+                  <div className="flex items-baseline gap-1">
+                    <span className={`font-extrabold text-[#111A4A] ${pkg.price.length > 15 ? 'text-2xl md:text-3xl' : 'text-3xl md:text-4xl'}`}>{pkg.price}</span>
+                  </div>
+                  <span className="text-slate-500 font-medium">{pkg.period}</span>
+                </div>
+
+                <ul className="flex-1 flex flex-col gap-4 mb-8">
+                  {pkg.features.map((feature, i) => (
+                    <li key={i} className="flex items-start gap-3">
+                      <div className="shrink-0 w-5 h-5 rounded-full bg-cyan-50 flex items-center justify-center mt-0.5">
+                        <Check className="w-3 h-3 text-[#156d95]" />
                       </div>
-
-                      <div className="mb-8">
-                        <div className="flex items-baseline gap-1">
-                          <span className={`font-extrabold text-[#111A4A] ${pkg.price.length > 15 ? 'text-2xl md:text-3xl' : 'text-3xl md:text-4xl'}`}>{pkg.price}</span>
-                        </div>
-                        <span className="text-slate-500 font-medium">{pkg.period}</span>
-                      </div>
-
-                      <ul className="flex-1 flex flex-col gap-4 mb-8">
-                        {pkg.features.map((feature, i) => (
-                          <li key={i} className="flex items-start gap-3">
-                            <div className="shrink-0 w-5 h-5 rounded-full bg-cyan-50 flex items-center justify-center mt-0.5">
-                              <Check className="w-3 h-3 text-[#156d95]" />
-                            </div>
-                            <span className="text-slate-600 text-sm font-medium leading-tight">{feature}</span>
-                          </li>
-                        ))}
-                      </ul>
-
-                      <button
-                        onClick={handleWhatsAppGeneral}
-                        className={`w-full py-4 rounded-xl font-bold transition-all duration-300 ${pkg.isPopular ? 'bg-gradient-to-r from-[#111A4A] to-[#156d95] text-white shadow-xl hover:shadow-2xl' : 'bg-slate-50 text-[#111A4A] border border-slate-200 hover:bg-slate-100'}`}
-                      >
-                        Pilih {pkg.name}
-                      </button>
-                    </div>
+                      <span className="text-slate-600 text-sm font-medium leading-tight">{feature}</span>
+                    </li>
                   ))}
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+                </ul>
+
+                <button
+                  onClick={handleWhatsAppGeneral}
+                  className={`w-full py-4 rounded-xl font-bold transition-all duration-300 ${pkg.isPopular ? 'bg-gradient-to-r from-[#111A4A] to-[#156d95] text-white shadow-xl hover:shadow-2xl hover:scale-[1.02]' : 'bg-slate-50 text-[#111A4A] border border-slate-200 hover:bg-slate-100 hover:border-slate-300'}`}
+                >
+                  Pilih {pkg.name}
+                </button>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* 2. LANGKAH PENGGUNAAN ROBOT */}
       <section className="relative w-full py-24 bg-white border-t border-slate-100">

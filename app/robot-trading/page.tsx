@@ -21,7 +21,8 @@ import {
   Star,
   ChevronDown,
   ChevronUp,
-  CreditCard
+  CreditCard,
+  X
 } from "lucide-react";
 import {
   AreaChart,
@@ -59,17 +60,17 @@ const usageSteps = [
 
 const pricingPackages = [
   {
-    id: "basic",
-    name: "Starter",
+    id: "monthly",
+    name: "Paket Bulanan",
     price: "Rp 1.500.000",
     period: "/ bulan",
-    description: "Cocok untuk trader pemula yang ingin mencoba performa EA FBL.",
+    description: "Sempurna untuk menguji performa robot dalam jangka pendek.",
     features: [
       "Lisensi 1 Akun MT5",
       "Mode Konservatif & Moderat",
       "Support Telegram 24/7",
-      "Free Update Minor",
-      "Maksimal Balance $5,000"
+      "Maksimal Balance $5,000",
+      "Tanpa Sharing Profit (100% Milik Anda)"
     ],
     isPopular: false,
     icon: Star,
@@ -77,18 +78,18 @@ const pricingPackages = [
     shadow: "shadow-blue-200"
   },
   {
-    id: "pro",
-    name: "Professional",
-    price: "Rp 7.500.000",
-    period: "/ 6 bulan",
-    description: "Pilihan terpopuler dengan fitur lengkap untuk hasil optimal.",
+    id: "yearly",
+    name: "Paket Tahunan",
+    price: "Rp 12.000.000",
+    period: "/ tahun",
+    description: "Lebih hemat untuk investasi jangka panjang dengan fitur penuh.",
     features: [
       "Lisensi 2 Akun MT5",
       "Semua Mode (Termasuk Agresif)",
       "Prioritas Support 24/7",
-      "Free Update Mayor & Minor",
-      "Setup VPS Gratis",
-      "Tanpa Batas Balance"
+      "Gratis VPS 1 Tahun",
+      "Tanpa Batas Balance",
+      "Tanpa Sharing Profit (100% Milik Anda)"
     ],
     isPopular: true,
     icon: Crown,
@@ -97,17 +98,17 @@ const pricingPackages = [
   },
   {
     id: "lifetime",
-    name: "Lifetime VVIP",
-    price: "Rp 15.000.000",
-    period: "sekali bayar",
-    description: "Akses seumur hidup tanpa biaya langganan bulanan.",
+    name: "Lifetime + Sharing",
+    price: "Gratis Biaya Awal",
+    period: "selamanya",
+    description: "Sistem bagi hasil yang adil (Sharing Profit). Win-win solution.",
     features: [
-      "Lisensi Unlimited Akun MT5 (Nama Sama)",
-      "Semua Mode Premium",
+      "Lisensi Unlimited Akun MT5",
+      "Semua Mode Premium Tersedia",
       "Konsultasi Private 1-on-1",
-      "Free Update Selamanya",
-      "Gratis VPS Premium 1 Tahun",
-      "Tanpa Batas Balance"
+      "Gratis VPS Premium",
+      "Tanpa Batas Balance",
+      "Sharing Profit 70:30 (Trader:Developer)"
     ],
     isPopular: false,
     icon: Zap,
@@ -270,10 +271,18 @@ export default function RobotTradingCenter() {
 
   const handleRobotClick = () => {
     setShowPricing(true);
-    setTimeout(() => {
-      pricingRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 100);
   };
+
+  useEffect(() => {
+    if (showPricing) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [showPricing]);
 
   const monthlyData = useMemo(() => {
     const grouped = backtestData.reduce((acc, curr) => {
@@ -487,85 +496,93 @@ export default function RobotTradingCenter() {
         </div>
       </section>
 
-      {/* PRICING SECTION (Animated/Conditional) */}
+      {/* PRICING MODAL (Animated Overlay) */}
       <AnimatePresence>
         {showPricing && (
-          <motion.section 
-            ref={pricingRef}
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.5, ease: "easeInOut" }}
-            className="w-full bg-gradient-to-b from-white to-slate-50 py-20 border-b border-slate-200 overflow-hidden"
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-slate-900/60 backdrop-blur-sm overflow-y-auto"
+            onClick={(e) => {
+              if (e.target === e.currentTarget) setShowPricing(false);
+            }}
           >
-            <div className="max-w-7xl mx-auto px-6 md:px-12">
-              <div className="text-center mb-16">
-                <motion.h2
-                  initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
-                  className="text-3xl md:text-5xl font-bold mb-4 text-[#111A4A]"
-                >
-                  Pilih <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#156d95] to-cyan-500">Paket Investasi</span> Anda
-                </motion.h2>
-                <motion.p
-                  initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
-                  className="text-slate-600 max-w-2xl mx-auto text-lg"
-                >
-                  Dapatkan akses penuh ke algoritma trading canggih kami dengan harga yang terjangkau. Mulai otomatisasi profit Anda hari ini.
-                </motion.p>
-              </div>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ duration: 0.3, type: "spring", bounce: 0.4 }}
+              className="relative w-full max-w-6xl bg-white rounded-3xl shadow-2xl overflow-hidden my-auto"
+            >
+              {/* Close button */}
+              <button
+                onClick={() => setShowPricing(false)}
+                className="absolute top-4 right-4 md:top-6 md:right-6 w-10 h-10 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-full flex items-center justify-center transition-colors z-10"
+              >
+                <X className="w-5 h-5" />
+              </button>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
-                {pricingPackages.map((pkg, idx) => (
-                  <motion.div
-                    key={pkg.id}
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 + (idx * 0.1), duration: 0.5 }}
-                    className={`relative flex flex-col bg-white rounded-3xl p-8 border ${pkg.isPopular ? 'border-cyan-400 shadow-2xl scale-105 z-10' : 'border-slate-200 shadow-lg'} hover:shadow-2xl transition-all duration-300 group`}
-                  >
-                    {pkg.isPopular && (
-                      <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-[#156d95] to-cyan-500 text-white px-4 py-1 rounded-full text-sm font-bold shadow-lg flex items-center gap-1">
-                        <Crown className="w-4 h-4" /> Most Popular
-                      </div>
-                    )}
-                    
-                    <div className="mb-6">
-                      <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${pkg.color} flex items-center justify-center text-white mb-6 ${pkg.shadow} shadow-lg`}>
-                        <pkg.icon className="w-7 h-7" />
-                      </div>
-                      <h3 className="text-2xl font-bold text-[#111A4A] mb-2">{pkg.name}</h3>
-                      <p className="text-slate-500 text-sm h-10">{pkg.description}</p>
-                    </div>
+              <div className="p-6 md:p-10 lg:p-12 max-h-[85vh] overflow-y-auto custom-scrollbar">
+                <div className="text-center mb-10 mt-4 md:mt-0">
+                  <h2 className="text-3xl md:text-5xl font-bold mb-4 text-[#111A4A]">
+                    Pilih <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#156d95] to-cyan-500">Paket Investasi</span> Anda
+                  </h2>
+                  <p className="text-slate-600 max-w-2xl mx-auto text-lg">
+                    Dapatkan akses penuh ke algoritma trading canggih kami dengan opsi berlangganan tetap atau sistem bagi hasil (sharing profit).
+                  </p>
+                </div>
 
-                    <div className="mb-8">
-                      <div className="flex items-baseline gap-1">
-                        <span className="text-4xl font-extrabold text-[#111A4A]">{pkg.price}</span>
-                      </div>
-                      <span className="text-slate-500 font-medium">{pkg.period}</span>
-                    </div>
-
-                    <ul className="flex-1 flex flex-col gap-4 mb-8">
-                      {pkg.features.map((feature, i) => (
-                        <li key={i} className="flex items-start gap-3">
-                          <div className="shrink-0 w-5 h-5 rounded-full bg-cyan-50 flex items-center justify-center mt-0.5">
-                            <Check className="w-3 h-3 text-[#156d95]" />
-                          </div>
-                          <span className="text-slate-600 text-sm font-medium">{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
-
-                    <button
-                      onClick={handleWhatsAppGeneral}
-                      className={`w-full py-4 rounded-xl font-bold transition-all duration-300 ${pkg.isPopular ? 'bg-gradient-to-r from-[#111A4A] to-[#156d95] text-white shadow-xl hover:shadow-2xl hover:scale-[1.02]' : 'bg-slate-50 text-[#111A4A] border border-slate-200 hover:bg-slate-100 hover:border-slate-300'}`}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 items-stretch">
+                  {pricingPackages.map((pkg, idx) => (
+                    <div
+                      key={pkg.id}
+                      className={`relative flex flex-col bg-white rounded-3xl p-6 md:p-8 border ${pkg.isPopular ? 'border-cyan-400 shadow-[0_20px_40px_-15px_rgba(21,109,149,0.3)] md:-translate-y-2' : 'border-slate-200 shadow-lg'} transition-all duration-300`}
                     >
-                      Pilih Paket {pkg.name}
-                    </button>
-                  </motion.div>
-                ))}
+                      {pkg.isPopular && (
+                        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-[#156d95] to-cyan-500 text-white px-4 py-1 rounded-full text-sm font-bold shadow-lg flex items-center gap-1 w-max">
+                          <Crown className="w-4 h-4" /> Pilihan Terfavorit
+                        </div>
+                      )}
+                      
+                      <div className="mb-6">
+                        <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${pkg.color} flex items-center justify-center text-white mb-6 ${pkg.shadow} shadow-lg`}>
+                          <pkg.icon className="w-7 h-7" />
+                        </div>
+                        <h3 className="text-2xl font-bold text-[#111A4A] mb-2">{pkg.name}</h3>
+                        <p className="text-slate-500 text-sm h-12">{pkg.description}</p>
+                      </div>
+
+                      <div className="mb-8">
+                        <div className="flex items-baseline gap-1">
+                          <span className={`font-extrabold text-[#111A4A] ${pkg.price.length > 15 ? 'text-2xl md:text-3xl' : 'text-3xl md:text-4xl'}`}>{pkg.price}</span>
+                        </div>
+                        <span className="text-slate-500 font-medium">{pkg.period}</span>
+                      </div>
+
+                      <ul className="flex-1 flex flex-col gap-4 mb-8">
+                        {pkg.features.map((feature, i) => (
+                          <li key={i} className="flex items-start gap-3">
+                            <div className="shrink-0 w-5 h-5 rounded-full bg-cyan-50 flex items-center justify-center mt-0.5">
+                              <Check className="w-3 h-3 text-[#156d95]" />
+                            </div>
+                            <span className="text-slate-600 text-sm font-medium leading-tight">{feature}</span>
+                          </li>
+                        ))}
+                      </ul>
+
+                      <button
+                        onClick={handleWhatsAppGeneral}
+                        className={`w-full py-4 rounded-xl font-bold transition-all duration-300 ${pkg.isPopular ? 'bg-gradient-to-r from-[#111A4A] to-[#156d95] text-white shadow-xl hover:shadow-2xl' : 'bg-slate-50 text-[#111A4A] border border-slate-200 hover:bg-slate-100'}`}
+                      >
+                        Pilih {pkg.name}
+                      </button>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-          </motion.section>
+            </motion.div>
+          </motion.div>
         )}
       </AnimatePresence>
 

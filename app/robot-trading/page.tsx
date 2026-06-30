@@ -498,70 +498,70 @@ export default function RobotTradingCenter() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.2 + (idx * 0.1), duration: 0.5 }}
-                className={`relative flex flex-col bg-white rounded-[2rem] p-6 sm:p-8 border-2 ${pkg.isPopular ? 'border-cyan-400 shadow-[0_20px_40px_-15px_rgba(21,109,149,0.3)] md:-translate-y-4 scale-105 z-10' : 'border-transparent hover:border-slate-200 shadow-xl'} transition-all duration-500 hover:shadow-2xl group`}
+                className={`relative flex flex-col bg-gradient-to-br ${pkg.color} rounded-[2rem] p-6 sm:p-8 border-2 ${pkg.isPopular ? 'border-white shadow-[0_20px_40px_-15px_rgba(21,109,149,0.5)] md:-translate-y-4 scale-105 z-10' : 'border-white/10 hover:border-white/30 shadow-xl'} transition-all duration-500 hover:shadow-2xl group overflow-hidden text-white`}
               >
+                {/* Background rotating shapes for the whole card */}
+                <motion.div
+                  animate={{
+                    rotate: [0, 360],
+                  }}
+                  transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                  className="absolute -top-32 -right-32 flex items-center justify-center opacity-20 pointer-events-none"
+                >
+                  <div className="w-96 h-96 border-[40px] border-white/30 rounded-full blur-2xl filter"></div>
+                </motion.div>
+
                 {pkg.isPopular && (
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-[#156d95] to-cyan-500 text-white px-4 py-1.5 rounded-full text-sm font-bold shadow-lg flex items-center gap-1 w-max z-20">
+                  <div className="absolute top-4 right-4 bg-white text-[#111A4A] px-4 py-1.5 rounded-full text-xs font-bold shadow-lg flex items-center gap-1 z-20">
                     <Crown className="w-4 h-4" /> Pilihan Terfavorit
                   </div>
                 )}
                 
                 {/* Animated Graphic Header */}
-                <div className={`relative w-full h-40 rounded-2xl bg-gradient-to-br ${pkg.color} mb-8 overflow-hidden flex items-center justify-center ${pkg.shadow} shadow-lg group-hover:shadow-xl transition-all duration-500`}>
-                  {/* Background rotating shapes */}
-                  <motion.div
-                    animate={{
-                      rotate: [0, 360],
-                    }}
-                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                    className="absolute inset-0 flex items-center justify-center opacity-30"
-                  >
-                    <div className="w-64 h-64 border-[40px] border-white/20 rounded-full blur-xl filter"></div>
-                  </motion.div>
-                  
+                <div className="relative w-full h-32 mb-6 flex items-center justify-center z-10">
                   {/* Floating Icon */}
                   <motion.div
                     animate={{
                       y: [-8, 8, -8],
                     }}
                     transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                    className="relative z-10 text-white drop-shadow-2xl bg-white/10 p-5 rounded-3xl backdrop-blur-sm border border-white/20 group-hover:scale-110 transition-transform duration-500"
+                    className="relative z-10 text-white drop-shadow-2xl bg-white/20 p-5 rounded-3xl backdrop-blur-md border border-white/30 group-hover:scale-110 transition-transform duration-500 shadow-[0_0_30px_rgba(255,255,255,0.2)]"
                   >
                     <pkg.icon className="w-12 h-12" strokeWidth={1.5} />
                   </motion.div>
                   
                   {/* Floating particles */}
-                  <motion.div animate={{ y: [-10, -30], opacity: [0, 1, 0] }} transition={{ duration: 2, repeat: Infinity, delay: 0.2 }} className="absolute top-2/3 left-1/4 w-2 h-2 bg-white rounded-full blur-[1px]" />
-                  <motion.div animate={{ y: [-10, -40], opacity: [0, 1, 0] }} transition={{ duration: 2.5, repeat: Infinity, delay: 1 }} className="absolute top-3/4 right-1/4 w-3 h-3 bg-white rounded-full blur-[2px]" />
-                  <motion.div animate={{ y: [-10, -50], opacity: [0, 1, 0] }} transition={{ duration: 3, repeat: Infinity, delay: 0.5 }} className="absolute top-1/2 left-3/4 w-1.5 h-1.5 bg-white rounded-full" />
+                  <motion.div animate={{ y: [-10, -30], opacity: [0, 1, 0] }} transition={{ duration: 2, repeat: Infinity, delay: 0.2 }} className="absolute top-1/2 left-1/4 w-2 h-2 bg-white rounded-full blur-[1px]" />
+                  <motion.div animate={{ y: [-10, -40], opacity: [0, 1, 0] }} transition={{ duration: 2.5, repeat: Infinity, delay: 1 }} className="absolute top-2/3 right-1/4 w-3 h-3 bg-white rounded-full blur-[2px]" />
+                  <motion.div animate={{ y: [-10, -50], opacity: [0, 1, 0] }} transition={{ duration: 3, repeat: Infinity, delay: 0.5 }} className="absolute top-1/4 left-3/4 w-1.5 h-1.5 bg-white rounded-full" />
                 </div>
 
-                <div className="mb-6 text-center">
-                  <h3 className="text-2xl font-bold text-[#111A4A] mb-2">{pkg.name}</h3>
-                  <p className="text-slate-500 text-sm h-10">{pkg.description}</p>
+                <div className="mb-6 text-center z-10">
+                  <h3 className="text-2xl font-bold text-white mb-2">{pkg.name}</h3>
+                  <p className="text-white/80 text-sm h-10">{pkg.description}</p>
                 </div>
 
-                <div className="mb-8 text-center bg-slate-50 p-4 rounded-2xl border border-slate-100 group-hover:border-cyan-100 transition-colors">
+                <div className="mb-8 text-center bg-white/10 backdrop-blur-sm p-4 rounded-2xl border border-white/20 group-hover:bg-white/20 transition-colors z-10">
                   <div className="flex items-baseline justify-center gap-1">
-                    <span className={`font-extrabold text-[#111A4A] ${pkg.price.length > 15 ? 'text-2xl md:text-3xl' : 'text-3xl md:text-4xl'}`}>{pkg.price}</span>
+                    <span className={`font-extrabold text-white drop-shadow-md ${pkg.price.length > 15 ? 'text-2xl md:text-3xl' : 'text-3xl md:text-4xl'}`}>{pkg.price}</span>
                   </div>
-                  <span className="text-slate-500 font-semibold text-sm">{pkg.period}</span>
+                  <span className="text-white/80 font-semibold text-sm">{pkg.period}</span>
                 </div>
 
-                <ul className="flex-1 flex flex-col gap-4 mb-8 px-2">
+                <ul className="flex-1 flex flex-col gap-4 mb-8 px-2 z-10">
                   {pkg.features.map((feature, i) => (
                     <li key={i} className="flex items-start gap-3">
-                      <div className="shrink-0 w-6 h-6 rounded-full bg-gradient-to-br from-cyan-50 to-blue-50 flex items-center justify-center mt-0.5 border border-cyan-100 group-hover:bg-cyan-500 group-hover:border-cyan-500 transition-colors duration-300">
-                        <Check className="w-3.5 h-3.5 text-[#156d95] group-hover:text-white transition-colors duration-300" strokeWidth={3} />
+                      <div className="shrink-0 w-6 h-6 rounded-full bg-white/20 flex items-center justify-center mt-0.5 border border-white/30 group-hover:bg-white/40 transition-colors duration-300">
+                        <Check className="w-3.5 h-3.5 text-white drop-shadow-sm" strokeWidth={3} />
                       </div>
-                      <span className="text-slate-600 text-sm font-medium leading-tight pt-0.5">{feature}</span>
+                      <span className="text-white/90 text-sm font-medium leading-tight pt-0.5">{feature}</span>
                     </li>
                   ))}
                 </ul>
 
                 <button
                   onClick={handleWhatsAppGeneral}
-                  className={`w-full py-4 rounded-xl font-bold transition-all duration-300 ${pkg.isPopular ? 'bg-gradient-to-r from-[#111A4A] to-[#156d95] text-white shadow-xl hover:shadow-2xl hover:-translate-y-1' : 'bg-slate-50 text-[#111A4A] border border-slate-200 hover:bg-[#111A4A] hover:text-white hover:border-[#111A4A] hover:-translate-y-1'}`}
+                  className={`relative z-10 w-full py-4 rounded-xl font-bold transition-all duration-300 ${pkg.isPopular ? 'bg-white text-[#111A4A] shadow-xl hover:shadow-2xl hover:-translate-y-1' : 'bg-white/10 backdrop-blur-sm text-white border border-white/30 hover:bg-white hover:text-[#111A4A] hover:-translate-y-1'}`}
                 >
                   Pilih {pkg.name}
                 </button>

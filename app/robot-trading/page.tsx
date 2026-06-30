@@ -208,7 +208,7 @@ const formatCurrency = (val: number) => {
 };
 
 // --- Components ---
-const AnimatedCounter = ({ target, suffix = "", duration = 2, prefix = "" }: { target: number, suffix?: string, prefix?: string, duration?: number }) => {
+const AnimatedCounter = ({ target, suffix = "", prefix = "", duration = 2, decimals = 0 }: { target: number, suffix?: string, prefix?: string, duration?: number, decimals?: number }) => {
   const [count, setCount] = useState(0);
   const ref = useRef<HTMLSpanElement>(null);
   const [hasAnimated, setHasAnimated] = useState(false);
@@ -230,7 +230,7 @@ const AnimatedCounter = ({ target, suffix = "", duration = 2, prefix = "" }: { t
               setCount(target);
               clearInterval(timer);
             } else {
-              setCount(Math.floor(start));
+              setCount(start);
             }
           }, 1000 / 60);
 
@@ -244,7 +244,7 @@ const AnimatedCounter = ({ target, suffix = "", duration = 2, prefix = "" }: { t
     return () => observer.disconnect();
   }, [target, duration, hasAnimated]);
 
-  return <span ref={ref}>{prefix}{count}{suffix}</span>;
+  return <span ref={ref}>{prefix}{count.toFixed(decimals)}{suffix}</span>;
 };
 
 // --- Page Layout ---
@@ -623,6 +623,61 @@ export default function RobotTradingCenter() {
             >
               Transparansi penuh terhadap hasil pengujian dan simulasi yang ekstensif (Jan 2025 - April 2026). Initial Balance $100,000 (Mode Agresif 2).
             </motion.p>
+          </div>
+
+          {/* Animated Stats Grid */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-12">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: 0.1 }}
+              className="bg-white border border-slate-200 rounded-3xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] flex flex-col items-center justify-center text-center group hover:border-cyan-300 hover:shadow-lg transition-all"
+            >
+              <div className="w-14 h-14 rounded-full bg-green-50 text-green-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <TrendingUp className="w-7 h-7" />
+              </div>
+              <p className="text-slate-500 text-sm font-medium mb-1">Total Nett Profit</p>
+              <h3 className="text-2xl md:text-3xl font-bold text-[#111A4A] flex items-center gap-1">
+                $<AnimatedCounter target={16.8} duration={1.5} decimals={1} />M
+              </h3>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: 0.2 }}
+              className="bg-white border border-slate-200 rounded-3xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] flex flex-col items-center justify-center text-center group hover:border-cyan-300 hover:shadow-lg transition-all"
+            >
+              <div className="w-14 h-14 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <AlertTriangle className="w-7 h-7" />
+              </div>
+              <p className="text-slate-500 text-sm font-medium mb-1">Max Drawdown</p>
+              <h3 className="text-2xl md:text-3xl font-bold text-[#111A4A] flex items-center gap-1">
+                <AnimatedCounter target={1.71} duration={1.5} decimals={2} />%
+              </h3>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: 0.3 }}
+              className="bg-white border border-slate-200 rounded-3xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] flex flex-col items-center justify-center text-center group hover:border-cyan-300 hover:shadow-lg transition-all"
+            >
+              <div className="w-14 h-14 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <Activity className="w-7 h-7" />
+              </div>
+              <p className="text-slate-500 text-sm font-medium mb-1">Total Trades</p>
+              <h3 className="text-2xl md:text-3xl font-bold text-[#111A4A] flex items-center gap-1">
+                <AnimatedCounter target={7345} duration={2} />
+              </h3>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: 0.4 }}
+              className="bg-white border border-slate-200 rounded-3xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] flex flex-col items-center justify-center text-center group hover:border-cyan-300 hover:shadow-lg transition-all"
+            >
+              <div className="w-14 h-14 rounded-full bg-cyan-50 text-cyan-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <BarChart3 className="w-7 h-7" />
+              </div>
+              <p className="text-slate-500 text-sm font-medium mb-1">History Quality</p>
+              <h3 className="text-2xl md:text-3xl font-bold text-[#111A4A] flex items-center gap-1">
+                <AnimatedCounter target={100} duration={1.5} />%
+              </h3>
+            </motion.div>
           </div>
 
           <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">

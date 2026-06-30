@@ -254,7 +254,7 @@ export default function WebinarPopup() {
                                 </div>
 
                                 <a
-                                    href="http://tiny.cc/PendaftaranWebinarFBL"
+                                    href="https://docs.google.com/forms/d/e/1FAIpQLSeYVq0Hz5nSCdQ4ugCMcnMUpsqGF0iG_c9uRmw5BswlAJmN4w/viewform?usp=dialog"
                                     target="_blank"
                                     rel="noreferrer"
                                     className="w-full relative overflow-hidden group rounded-lg bg-[#00C9A7] px-4 py-3 font-bold text-[#0A0E1A] shadow-lg transition-all hover:shadow-[0_0_20px_rgba(0,201,167,0.5)] hover:-translate-y-1 active:translate-y-0"

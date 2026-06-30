@@ -148,7 +148,7 @@ export default function WebinarRegistrationPage() {
                 <div className="relative w-40 h-40 sm:w-48 sm:h-48 z-10">
                   <Image
                     src="/webinar/tiny_cc_PendaftaranWebinarFBL.png"
-                    alt="QR Code Pendaftaran"
+                    alt="QR Code Pendaftaran FBL"
                     fill
                     className="object-contain"
                   />

@@ -74,8 +74,8 @@ const pricingPackages = [
     ],
     isPopular: false,
     icon: Star,
-    color: "from-blue-400 to-blue-600",
-    shadow: "shadow-blue-200"
+    color: "from-[#00AADF] to-[#0082C8]",
+    shadow: "shadow-[#00AADF]/30"
   },
   {
     id: "yearly",
@@ -93,8 +93,8 @@ const pricingPackages = [
     ],
     isPopular: true,
     icon: Crown,
-    color: "from-[#156d95] to-cyan-500",
-    shadow: "shadow-cyan-200"
+    color: "from-[#5BAD34] to-[#3D8A1E]",
+    shadow: "shadow-[#5BAD34]/30"
   },
   {
     id: "lifetime",
@@ -112,8 +112,8 @@ const pricingPackages = [
     ],
     isPopular: false,
     icon: Zap,
-    color: "from-amber-400 to-orange-500",
-    shadow: "shadow-orange-200"
+    color: "from-[#F5961D] to-[#D4730A]",
+    shadow: "shadow-[#F5961D]/30"
   }
 ];
 

@@ -156,7 +156,7 @@ export default function WebinarRegistrationPage() {
               </div>
 
               <a
-                href="http://tiny.cc/PendaftaranWebinarFBL"
+                href="https://docs.google.com/forms/d/e/1FAIpQLSeYVq0Hz5nSCdQ4ugCMcnMUpsqGF0iG_c9uRmw5BswlAJmN4w/viewform?usp=dialog"
                 target="_blank"
                 rel="noreferrer"
                 className="w-full relative overflow-hidden group rounded-2xl bg-[#00C9A7] px-8 py-5 font-bold text-[#0A0E1A] shadow-lg transition-all hover:shadow-[0_0_30px_rgba(0,201,167,0.6)] hover:-translate-y-2 active:translate-y-0"

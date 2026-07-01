@@ -69,7 +69,7 @@ export default function WebinarPopup() {
                         </button>
 
                         {/* Left Side: Info & Countdown */}
-                        <div className="flex-1 p-5 sm:p-8 flex flex-col justify-center relative overflow-hidden">
+                        <div className="flex-none md:flex-1 p-4 sm:p-6 md:p-8 flex flex-col justify-center relative overflow-hidden">
                             {/* Animated Background accents & Chart */}
                             <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden opacity-40 md:opacity-100">
                                 <motion.div
@@ -229,7 +229,7 @@ export default function WebinarPopup() {
                         </div>
 
                         {/* Right Side: Speakers & QR */}
-                        <div className="w-full md:w-[320px] bg-[#111827] p-5 sm:p-8 flex flex-col justify-between border-t md:border-t-0 md:border-l border-gray-800 relative z-10">
+                        <div className="w-full md:w-[320px] shrink-0 bg-[#111827] p-4 sm:p-6 md:p-8 flex flex-col justify-between border-t md:border-t-0 md:border-l border-gray-800 relative z-10">
 
                             <div>
                                 <h3 className="text-base font-bold text-white mb-4 border-b border-gray-800 pb-2 flex items-center justify-between">

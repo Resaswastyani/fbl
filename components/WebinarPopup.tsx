@@ -70,23 +70,84 @@ export default function WebinarPopup() {
 
                         {/* Left Side: Info & Countdown */}
                         <div className="flex-1 p-5 sm:p-8 flex flex-col justify-center relative overflow-hidden">
-                            {/* Animated Background accents */}
-                            <motion.div
-                                animate={{
-                                    scale: [1, 1.2, 1],
-                                    opacity: [0.3, 0.5, 0.3],
-                                }}
-                                transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-                                className="absolute -top-20 -left-20 w-64 h-64 bg-[#00C9A7]/20 rounded-full blur-[80px] pointer-events-none"
-                            />
-                            <motion.div
-                                animate={{
-                                    scale: [1, 1.3, 1],
-                                    opacity: [0.2, 0.4, 0.2],
-                                }}
-                                transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                                className="absolute -bottom-20 -right-20 w-64 h-64 bg-[#C9A84C]/20 rounded-full blur-[80px] pointer-events-none"
-                            />
+                            {/* Animated Background accents & Chart */}
+                            <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden opacity-40 md:opacity-100">
+                                <motion.div
+                                    animate={{
+                                        scale: [1, 1.2, 1],
+                                        opacity: [0.3, 0.5, 0.3],
+                                    }}
+                                    transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+                                    className="absolute -top-20 -left-20 w-64 h-64 bg-[#00C9A7]/20 rounded-full blur-[80px]"
+                                />
+                                <motion.div
+                                    animate={{
+                                        scale: [1, 1.3, 1],
+                                        opacity: [0.2, 0.4, 0.2],
+                                    }}
+                                    transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                                    className="absolute -bottom-20 -right-20 w-64 h-64 bg-[#C9A84C]/20 rounded-full blur-[80px]"
+                                />
+
+                                {/* Animated Chart Background */}
+                                <div className="absolute bottom-0 left-0 right-0 h-48 opacity-40 md:opacity-60">
+                                    <svg className="w-full h-full" viewBox="0 0 400 150" preserveAspectRatio="none">
+                                        <defs>
+                                            <linearGradient id="popupLineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                                <stop offset="0%" stopColor="#00C9A7" stopOpacity="0" />
+                                                <stop offset="30%" stopColor="#00C9A7" stopOpacity="1" />
+                                                <stop offset="100%" stopColor="#C9A84C" stopOpacity="1" />
+                                            </linearGradient>
+                                            <linearGradient id="popupAreaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                                <stop offset="0%" stopColor="#00C9A7" stopOpacity="0.5" />
+                                                <stop offset="100%" stopColor="#00C9A7" stopOpacity="0" />
+                                            </linearGradient>
+                                        </defs>
+                                        
+                                        {/* Grid lines */}
+                                        {[1, 2, 3].map((i) => (
+                                            <line key={`h-${i}`} x1="0" y1={i * 35} x2="400" y2={i * 35} stroke="rgba(255,255,255,0.05)" strokeWidth="1" />
+                                        ))}
+                                        {[1, 2, 3, 4].map((i) => (
+                                            <line key={`v-${i}`} x1={i * 80} y1="0" x2={i * 80} y2="150" stroke="rgba(255,255,255,0.05)" strokeWidth="1" />
+                                        ))}
+
+                                        <motion.path
+                                            d="M0,120 Q40,130 80,90 T160,70 T240,40 T320,60 T400,20"
+                                            fill="none"
+                                            stroke="url(#popupLineGradient)"
+                                            strokeWidth="3"
+                                            initial={{ pathLength: 0, opacity: 0 }}
+                                            animate={{ pathLength: 1, opacity: 1 }}
+                                            transition={{ duration: 2.5, ease: "easeInOut", repeat: Infinity, repeatDelay: 1 }}
+                                        />
+                                        <motion.path
+                                            d="M0,120 Q40,130 80,90 T160,70 T240,40 T320,60 T400,20 L400,150 L0,150 Z"
+                                            fill="url(#popupAreaGradient)"
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            transition={{ duration: 1.5, delay: 0.5 }}
+                                        />
+                                        <motion.circle
+                                            cx="400" cy="20" r="5" fill="#C9A84C"
+                                            animate={{ scale: [1, 1.8, 1], opacity: [1, 0.4, 1] }}
+                                            transition={{ duration: 1.5, repeat: Infinity }}
+                                            className="drop-shadow-[0_0_8px_rgba(201,168,76,0.8)]"
+                                        />
+                                    </svg>
+                                </div>
+                                
+                                {/* Floating Background Candlesticks */}
+                                <motion.div animate={{ y: [-15, 15, -15] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }} className="absolute top-[20%] right-[10%] w-3 h-16 bg-[#00C9A7]/20 rounded-sm border border-[#00C9A7]/40 shadow-[0_0_15px_rgba(0,201,167,0.2)]">
+                                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-0.5 h-[150%] bg-[#00C9A7]/40"></div>
+                                </motion.div>
+                                <motion.div animate={{ y: [15, -15, 15] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }} className="absolute top-[40%] right-[25%] w-3 h-10 bg-red-500/20 rounded-sm border border-red-500/40 shadow-[0_0_15px_rgba(239,68,68,0.2)]">
+                                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-0.5 h-[160%] bg-red-500/40"></div>
+                                </motion.div>
+                                <motion.div animate={{ y: [-10, 10, -10], opacity: [0.4, 0.8, 0.4] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.5 }} className="absolute top-[60%] left-[10%] w-2.5 h-12 bg-[#C9A84C]/20 rounded-sm border border-[#C9A84C]/40">
+                                    <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-0.5 h-[130%] bg-[#C9A84C]/40"></div>
+                                </motion.div>
+                            </div>
 
                             <div className="relative z-10">
                                 <motion.div

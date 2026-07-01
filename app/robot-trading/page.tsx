@@ -480,11 +480,50 @@ export default function RobotTradingCenter() {
 
           {/* Hero Visual Animation */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
+            initial={{ opacity: 0, scale: 0.88, x: 40 }}
+            animate={{ opacity: 1, scale: 1, x: 0 }}
+            transition={{ duration: 1.1, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
             className="relative w-full aspect-square md:aspect-auto md:h-[500px] flex items-center justify-center group"
           >
+            {/* FLOATING ANIMATED IMAGES / GRAPHICS */}
+            
+            {/* 1. Floating Gold Coin */}
+            <motion.div
+              animate={{ y: [-15, 15, -15], rotate: [0, 10, -10, 0] }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute -top-6 -right-2 md:right-10 w-20 h-20 bg-gradient-to-br from-yellow-300 via-yellow-500 to-yellow-600 rounded-full shadow-[0_10px_25px_rgba(234,179,8,0.5)] border-4 border-yellow-200 flex items-center justify-center z-20"
+            >
+              <div className="w-14 h-14 rounded-full border-2 border-yellow-300/50 flex items-center justify-center">
+                <span className="text-2xl font-black text-yellow-100 drop-shadow-md">$</span>
+              </div>
+            </motion.div>
+
+            {/* 2. Floating Candlestick Chart 3D */}
+            <motion.div
+              animate={{ y: [15, -15, 15], x: [-5, 5, -5] }}
+              transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+              className="absolute top-1/3 -left-8 md:-left-12 w-16 h-24 bg-white/90 backdrop-blur-md rounded-xl shadow-xl border border-white/50 flex items-center justify-center z-20"
+            >
+              <div className="flex gap-2 items-end h-12">
+                <motion.div animate={{ height: ["40%", "80%", "40%"] }} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }} className="w-3 bg-green-500 rounded-sm relative">
+                  <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-0.5 h-full bg-green-500/50"></div>
+                </motion.div>
+                <motion.div animate={{ height: ["100%", "30%", "100%"] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} className="w-3 bg-red-500 rounded-sm relative">
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-0.5 h-[150%] bg-red-500/50"></div>
+                </motion.div>
+              </div>
+            </motion.div>
+
+            {/* 3. Floating Profit Badge */}
+            <motion.div
+              animate={{ scale: [1, 1.05, 1], rotate: [-5, 5, -5] }}
+              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+              className="absolute bottom-4 -right-4 md:bottom-12 md:-right-8 bg-gradient-to-r from-green-500 to-emerald-400 text-white px-4 py-2 rounded-2xl shadow-[0_10px_20px_rgba(16,185,129,0.4)] border-2 border-white/40 flex items-center gap-2 z-20"
+            >
+              <TrendingUp className="w-5 h-5 text-green-100" />
+              <span className="font-bold">+94% Win Rate</span>
+            </motion.div>
+
             {/* Glass Container */}
             <div className="relative w-full max-w-md h-[400px] bg-white/80 border border-slate-200 rounded-3xl backdrop-blur-xl p-6 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] group-hover:shadow-[0_30px_60px_-15px_rgba(21,109,149,0.3)] transition-all duration-500 overflow-hidden flex flex-col z-10 transform group-hover:-translate-y-2">
 
@@ -514,7 +553,7 @@ export default function RobotTradingCenter() {
                       <stop offset="100%" stopColor="#3b82f6" />
                     </linearGradient>
                     <linearGradient id="heroAreaLight" x1="0%" y1="0%" x2="0%" y2="100%">
-                      <stop offset="0%" stopColor="rgba(14,165,233,0.2)" />
+                      <stop offset="0%" stopColor="rgba(14,165,233,0.3)" />
                       <stop offset="100%" stopColor="rgba(14,165,233,0)" />
                     </linearGradient>
                   </defs>
@@ -532,9 +571,9 @@ export default function RobotTradingCenter() {
                     fill="none"
                     stroke="url(#heroLineLight)"
                     strokeWidth="4"
-                    initial={{ pathLength: 0 }}
-                    animate={{ pathLength: 1 }}
-                    transition={{ duration: 2, ease: "easeInOut", repeat: Infinity, repeatDelay: 1 }}
+                    initial={{ pathLength: 0, opacity: 0 }}
+                    animate={{ pathLength: 1, opacity: 1 }}
+                    transition={{ duration: 2, ease: "easeInOut", repeat: Infinity, repeatDelay: 0.5 }}
                   />
 
                   <motion.path
@@ -544,20 +583,34 @@ export default function RobotTradingCenter() {
                     animate={{ opacity: 1 }}
                     transition={{ duration: 1.5, delay: 0.5 }}
                   />
+                  
+                  {/* Pulsing Trading Node */}
+                  <motion.circle
+                    cx="400" cy="20" r="6" fill="#0ea5e9"
+                    animate={{ scale: [1, 1.5, 1], opacity: [1, 0.5, 1] }}
+                    transition={{ duration: 1, repeat: Infinity }}
+                  />
                 </svg>
               </div>
 
               {/* Fake Live Trades */}
               <div className="mt-6 flex flex-col gap-2">
-                <div className="flex items-center justify-between p-3 rounded-lg bg-white border border-slate-100 shadow-sm">
-                  <div className="flex items-center gap-3">
+                <div className="flex items-center justify-between p-3 rounded-lg bg-white border border-slate-100 shadow-sm relative overflow-hidden group/trade">
+                  <div className="absolute inset-0 bg-green-50 translate-y-[100%] group-hover/trade:translate-y-0 transition-transform duration-300" />
+                  <div className="flex items-center gap-3 relative z-10">
                     <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 text-xs font-bold">B</div>
                     <div>
                       <p className="text-sm font-bold text-[#111A4A]">XAUUSD</p>
                       <p className="text-xs text-slate-500">Entry: 2345.50</p>
                     </div>
                   </div>
-                  <p className="text-green-600 font-bold text-sm">+$125.00</p>
+                  <motion.p 
+                    animate={{ color: ["#16a34a", "#22c55e", "#16a34a"] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                    className="font-bold text-sm relative z-10"
+                  >
+                    +$125.00
+                  </motion.p>
                 </div>
               </div>
 

@@ -380,7 +380,7 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { title, type, content, contentUrl, duration, courseId } = body;
+    const { title, title_en, type, content, content_en, contentUrl, duration, courseId } = body;
 
     if (!title || !type || !courseId) {
       return NextResponse.json(
@@ -405,8 +405,10 @@ export async function POST(req: NextRequest) {
     const lesson = await prisma.lesson.create({
       data: {
         title,
+        title_en: title_en || null,
         type,
         content: content || null,
+        content_en: content_en || null,
         contentUrl: contentUrl || null,
         duration: duration || null,
         courseId,
@@ -437,7 +439,7 @@ export async function PUT(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { id, title, type, content, contentUrl, duration } = body;
+    const { id, title, title_en, type, content, content_en, contentUrl, duration } = body;
 
     if (!id) {
       return NextResponse.json(
@@ -467,10 +469,12 @@ export async function PUT(req: NextRequest) {
       where: { id },
       data: {
         title,
+        title_en: title_en !== undefined ? title_en || null : undefined,
         type,
-        content: content || null,
-        contentUrl: contentUrl || null,
-        duration: duration || null,
+        content: content !== undefined ? content || null : undefined,
+        content_en: content_en !== undefined ? content_en || null : undefined,
+        contentUrl: contentUrl !== undefined ? contentUrl || null : undefined,
+        duration: duration !== undefined ? duration || null : undefined,
       },
     });
 

@@ -67,6 +67,10 @@ export default function LayoutClient({
     pathname === "/webinar" ||
     pathname.startsWith("/auth");
 
+  const showWebinarPopup =
+    pathname !== "/login" &&
+    pathname !== "/signup";
+
   return (
     <div className="flex flex-col min-h-screen">
       {/* Announcement Bar */}
@@ -85,7 +89,6 @@ export default function LayoutClient({
       {!hideFooter && <Footer />}
 
       {!hideWhatsApp && <WhatsAppFloat />}
-
       {!hideWebinarPopup && <WebinarPopup />}
     </div>
   );

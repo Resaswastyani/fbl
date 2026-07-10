@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { ArrowUpRight, Play, Eye, Clock, ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import { useLocale, useTranslations } from "next-intl";
 
 const RightAnimationCard = dynamic(() => import("./RightAnimationCard"), {
   ssr: false,
@@ -13,7 +14,9 @@ const RightAnimationCard = dynamic(() => import("./RightAnimationCard"), {
 type TradingVideo = {
   id: string;
   title: string;
+  title_en?: string;
   description?: string;
+  description_en?: string;
   videoUrl: string;
   videoType: "YOUTUBE" | "UPLOAD";
   thumbnail?: string;
@@ -28,6 +31,8 @@ type TradingVideo = {
 
 export const VideoTradingPage = () => {
   const router = useRouter();
+  const locale = useLocale();
+  const t = useTranslations("VideoTrading");
   const [videos, setVideos] = useState<TradingVideo[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedVideo, setSelectedVideo] = useState<TradingVideo | null>(null);
@@ -91,7 +96,7 @@ export const VideoTradingPage = () => {
               className="flex items-center gap-1 text-[#6e6e6e] mb-4 cursor-pointer"
             >
               <span className="text-xs uppercase tracking-tight font-mono flex items-center gap-1 hover:text-[#202020]">
-                Lihat semua video <ArrowUpRight size={14} strokeWidth={1.5} />
+                {t("seeAllVideos")} <ArrowUpRight size={14} strokeWidth={1.5} />
               </span>
             </a>
 
@@ -104,7 +109,7 @@ export const VideoTradingPage = () => {
                 fontWeight: "500",
               }}
             >
-              Video Trading
+              {t("heroTitle")}
             </h1>
 
             {/* Subheadline */}
@@ -112,9 +117,7 @@ export const VideoTradingPage = () => {
               className="text-lg leading-6 text-[#111A4A] opacity-60 mt-0 mb-6"
               style={{ fontFamily: "var(--font-figtree), Figtree" }}
             >
-              Koleksi video edukasi trading forex terlengkap dari para expert.
-              Pelajari strategi, analisis teknikal, dan tips trading langsung
-              dari mentor berpengalaman.
+              {t("heroSubtitle")}
             </p>
             <p className="mb-5 text-sm text-[#111A4A] opacity-40">
               PT AKADEMI KEUANGAN NUSANTARA
@@ -126,7 +129,7 @@ export const VideoTradingPage = () => {
                 <div className="text-3xl font-semibold text-[#156d95]">
                   {videos.length}+
                 </div>
-                <div className="text-sm text-[#6e6e6e]">Video Tersedia</div>
+                <div className="text-sm text-[#6e6e6e]">{t("videosAvailable")}</div>
               </div>
               <div>
                 <div className="text-3xl font-semibold text-[#156d95]">
@@ -134,7 +137,7 @@ export const VideoTradingPage = () => {
                     videos.reduce((acc, v) => acc + v.viewCount, 0),
                   )}
                 </div>
-                <div className="text-sm text-[#6e6e6e]">Total Views</div>
+                <div className="text-sm text-[#6e6e6e]">{t("totalViews")}</div>
               </div>
             </div>
 
@@ -153,7 +156,7 @@ export const VideoTradingPage = () => {
                 transition-all hover:translate-x-1
               "
             >
-              Mulai Belajar Gratis
+              {t("startLearningFree")}
             </button>
           </motion.div>
 
@@ -186,10 +189,10 @@ export const VideoTradingPage = () => {
                   </div>
                   <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent">
                     <span className="text-xs text-white/70 uppercase tracking-wider font-mono">
-                      Video Terbaru
+                      {t("latestVideo")}
                     </span>
                     <h3 className="text-xl font-semibold text-white mt-1 line-clamp-2">
-                      {videos[0].title}
+                      {locale === "en" && videos[0].title_en ? videos[0].title_en : videos[0].title}
                     </h3>
                   </div>
                 </div>
@@ -216,20 +219,20 @@ export const VideoTradingPage = () => {
           >
             <div>
               <span className="text-xs uppercase tracking-tight font-mono text-[#6e6e6e]">
-                Koleksi Video
+                {t("videoCollection")}
               </span>
               <h2
                 className="text-3xl font-semibold text-[#111A4A] mt-2"
                 style={{ fontFamily: "var(--font-figtree), Figtree" }}
               >
-                Video Trading Terbaru
+                {t("latestTradingVideos")}
               </h2>
             </div>
             <a
               href="https://www.youtube.com/@forexforbetterliving"
               className="hidden md:flex items-center gap-1 text-[#156d95] text-sm font-medium hover:gap-2 transition-all"
             >
-              Lihat Semua <ChevronRight size={16} />
+              {t("seeAll")} <ChevronRight size={16} />
             </a>
           </motion.div>
 
@@ -251,12 +254,12 @@ export const VideoTradingPage = () => {
             </div>
           ) : videos.length === 0 ? (
             <div className="text-center py-20">
-              <p className="text-[#6e6e6e] text-lg">Belum ada video tersedia</p>
+              <p className="text-[#6e6e6e] text-lg">{t("noVideos")}</p>
               <button
                 onClick={() => router.push("/login")}
                 className="mt-4 inline-flex items-center justify-center bg-[#156d95] text-white rounded-lg px-5 py-3 text-sm font-medium"
               >
-                Login untuk Akses
+                {t("loginToAccess")}
               </button>
             </div>
           ) : (
@@ -300,10 +303,10 @@ export const VideoTradingPage = () => {
                       className="font-semibold text-[#111A4A] line-clamp-2 mb-2 group-hover:text-[#156d95] transition-colors"
                       style={{ fontFamily: "var(--font-figtree), Figtree" }}
                     >
-                      {video.title}
+                      {locale === "en" && video.title_en ? video.title_en : video.title}
                     </h3>
                     <p className="text-sm text-[#6e6e6e] line-clamp-2 mb-4">
-                      {video.description || "Tidak ada deskripsi"}
+                      {locale === "en" && video.description_en ? video.description_en : video.description || t("noDescription")}
                     </p>
                     <div className="flex items-center justify-between text-xs text-[#9ca3af]">
                       <span className="flex items-center gap-1">
@@ -327,7 +330,7 @@ export const VideoTradingPage = () => {
               href="#"
               className="inline-flex items-center gap-1 text-[#156d95] text-sm font-medium"
             >
-              Lihat Semua Video <ChevronRight size={16} />
+              {t("seeAllVideos")} <ChevronRight size={16} />
             </a>
           </div>
         </div>
@@ -346,24 +349,23 @@ export const VideoTradingPage = () => {
               className="text-3xl md:text-4xl font-semibold text-white mb-4"
               style={{ fontFamily: "var(--font-figtree), Figtree" }}
             >
-              Siap Memulai Perjalanan Trading?
+              {t("readyToStart")}
             </h2>
             <p className="text-lg text-white/70 mb-8 max-w-2xl mx-auto">
-              Bergabung dengan ribuan trader lainnya dan akses semua video
-              edukasi secara gratis.
+              {t("readyDescription")}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button
                 onClick={() => router.push("/signup")}
                 className="inline-flex items-center justify-center bg-[#156d95] text-white rounded-lg px-8 py-4 text-base font-medium hover:bg-[#0d5a7a] transition-colors"
               >
-                Daftar Gratis
+                {t("registerFree")}
               </button>
               <button
                 onClick={() => router.push("/login")}
                 className="inline-flex items-center justify-center bg-transparent border-2 border-white/30 text-white rounded-lg px-8 py-4 text-base font-medium hover:bg-white/10 transition-colors"
               >
-                Login
+                {t("login")}
               </button>
             </div>
           </motion.div>
@@ -407,9 +409,11 @@ export const VideoTradingPage = () => {
                 className="text-xl font-semibold text-[#111A4A] mb-2"
                 style={{ fontFamily: "var(--font-figtree), Figtree" }}
               >
-                {selectedVideo.title}
+                {locale === "en" && selectedVideo.title_en ? selectedVideo.title_en : selectedVideo.title}
               </h3>
-              <p className="text-[#6e6e6e] mb-4">{selectedVideo.description}</p>
+              <p className="text-[#6e6e6e] mb-4">
+                {locale === "en" && selectedVideo.description_en ? selectedVideo.description_en : selectedVideo.description || t("noDescription")}
+              </p>
               <div className="flex items-center gap-4 text-sm text-[#9ca3af]">
                 <span className="flex items-center gap-1">
                   <Eye size={16} />

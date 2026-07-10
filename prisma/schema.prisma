@@ -34,9 +34,11 @@ model User {
 }
 model Course {
   id          String   @id @default(cuid())
-  title       String
-  description String?
-  price       String?  // "Free" atau harga dalam string
+  title          String
+  title_en       String?
+  description    String?
+  description_en String?
+  price          String?  // "Free" atau harga dalam string
   published   Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -51,8 +53,10 @@ model Course {
 model Lesson {
   id          String   @id @default(cuid())
   title       String
+  title_en    String?
   type        String   // "video", "pdf", "text", "html"
   content     String @db.LongText  // Untuk text/html
+  content_en  String? @db.LongText
   contentUrl  String?  // Untuk video/pdf
   duration    String?
   createdAt   DateTime @default(now())
@@ -176,7 +180,9 @@ model OrderItem {
 model Article {
   id          String   @id @default(cuid())
   title       String   @db.VarChar(255)     // ✅ Batasi judul
+  title_en    String?  @db.VarChar(255)     // ✅ Judul bahasa inggris
   content     String   @db.LongText         // ✅ WAJIB LongText untuk konten panjang
+  content_en  String?  @db.LongText         // ✅ Konten bahasa inggris
   thumbnail   String?  @db.VarChar(500)     // ✅ URL thumbnail
   published   Boolean  @default(false)
   viewCount   Int      @default(0)
@@ -195,7 +201,9 @@ model Article {
 model TradingVideo {
   id          String   @id @default(cuid())
   title       String   @db.VarChar(255)
+  title_en    String?  @db.VarChar(255)
   description String?  @db.Text
+  description_en String?  @db.Text
   videoUrl    String   @db.VarChar(500)  // URL YouTube atau URL file upload
   videoType   String   @default("YOUTUBE") // YOUTUBE atau UPLOAD
   thumbnail   String?  @db.VarChar(500)  // URL thumbnail (auto-generate untuk YouTube)

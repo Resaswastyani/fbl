@@ -1,17 +1,9 @@
-// components/brokers/BrokerCard.tsx
 "use client";
 
 import { motion } from "framer-motion";
-import {
-  Star,
-  Check,
-  X,
-  ExternalLink,
-  Shield,
-  TrendingUp,
-  Wallet,
-} from "lucide-react";
+import { Star, Check, X, ExternalLink, Shield, TrendingUp } from "lucide-react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import type { Broker } from "@/types/brokers";
 
 interface BrokerCardProps {
@@ -20,6 +12,16 @@ interface BrokerCardProps {
 }
 
 export default function BrokerCard({ broker, index }: BrokerCardProps) {
+  const t = useTranslations("Broker");
+  const tData = useTranslations("BrokerData");
+
+  // Ambil konten terjemahan berdasarkan broker.id
+  const description = tData(`${broker.id}.description`);
+  const features = tData.raw(`${broker.id}.features`) as string[];
+  const pros = tData.raw(`${broker.id}.pros`) as string[];
+  const cons = tData.raw(`${broker.id}.cons`) as string[];
+  const badge = tData(`${broker.id}.badge`);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -30,10 +32,10 @@ export default function BrokerCard({ broker, index }: BrokerCardProps) {
     >
       {/* Header with Badge */}
       <div className="relative bg-gradient-to-br from-gray-50 to-white p-6 pb-4">
-        {broker.badge && (
+        {badge && (
           <div className="absolute top-4 right-4">
             <span className="bg-gradient-to-r from-[#156d95] to-[#111A4A] text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-lg">
-              {broker.badge}
+              {badge}
             </span>
           </div>
         )}
@@ -91,19 +93,19 @@ export default function BrokerCard({ broker, index }: BrokerCardProps) {
       {/* Key Stats */}
       <div className="grid grid-cols-3 gap-4 px-6 py-4 bg-[#f8fafc] border-y border-gray-100">
         <div className="text-center">
-          <p className="text-xs text-gray-500 mb-1">Min. Deposit</p>
+          <p className="text-xs text-gray-500 mb-1">{t("minDeposit")}</p>
           <p className="text-sm font-semibold text-[#111A4A]">
             {broker.minDeposit}
           </p>
         </div>
         <div className="text-center border-x border-gray-200">
-          <p className="text-xs text-gray-500 mb-1">Spread</p>
+          <p className="text-xs text-gray-500 mb-1">{t("spread")}</p>
           <p className="text-sm font-semibold text-[#111A4A]">
             {broker.spread}
           </p>
         </div>
         <div className="text-center">
-          <p className="text-xs text-gray-500 mb-1">Leverage</p>
+          <p className="text-xs text-gray-500 mb-1">{t("leverage")}</p>
           <p className="text-sm font-semibold text-[#111A4A]">
             {broker.leverage}
           </p>
@@ -116,12 +118,12 @@ export default function BrokerCard({ broker, index }: BrokerCardProps) {
           className="text-sm text-gray-600 leading-relaxed mb-4"
           style={{ fontFamily: "var(--font-figtree), Figtree" }}
         >
-          {broker.description}
+          {description}
         </p>
 
         {/* Features */}
         <div className="space-y-2 mb-5">
-          {broker.features.slice(0, 3).map((feature, idx) => (
+          {features.slice(0, 3).map((feature, idx) => (
             <div
               key={idx}
               className="flex items-center gap-2 text-sm text-gray-700"
@@ -138,19 +140,15 @@ export default function BrokerCard({ broker, index }: BrokerCardProps) {
         <div className="grid grid-cols-2 gap-3 mb-5">
           <div className="bg-green-50 rounded-lg p-3">
             <p className="text-xs font-semibold text-green-700 mb-2 flex items-center gap-1">
-              <TrendingUp size={12} /> Keunggulan
+              <TrendingUp size={12} /> {t("advantages")}
             </p>
-            <p className="text-xs text-green-800 line-clamp-2">
-              {broker.pros[0]}
-            </p>
+            <p className="text-xs text-green-800 line-clamp-2">{pros[0]}</p>
           </div>
           <div className="bg-red-50 rounded-lg p-3">
             <p className="text-xs font-semibold text-red-700 mb-2 flex items-center gap-1">
-              <X size={12} /> Kekurangan
+              <X size={12} /> {t("disadvantages")}
             </p>
-            <p className="text-xs text-red-800 line-clamp-2">
-              {broker.cons[0]}
-            </p>
+            <p className="text-xs text-red-800 line-clamp-2">{cons[0]}</p>
           </div>
         </div>
 
@@ -161,7 +159,7 @@ export default function BrokerCard({ broker, index }: BrokerCardProps) {
           rel="noopener noreferrer"
           className="group/btn w-full bg-gradient-to-r from-[#156d95] to-[#111A4A] hover:from-[#0d5a7c] hover:to-[#0a1230] text-white font-semibold py-3 px-6 rounded-xl flex items-center justify-center gap-2 transition-all duration-300 shadow-lg shadow-[#156d95]/25 hover:shadow-xl hover:shadow-[#156d95]/30"
         >
-          Kunjungi Website
+          {t("visitWebsite")}
           <ExternalLink
             size={16}
             className="transition-transform group-hover/btn:translate-x-1"

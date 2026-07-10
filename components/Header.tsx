@@ -27,6 +27,7 @@ import { useTranslations } from "next-intl";
 
 import { useCart } from "@/context/cart-context";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 type UserData = {
   id: string;
@@ -50,7 +51,7 @@ export const Header = () => {
   const itemCount = items.reduce((t, i) => t + i.quantity, 0);
 
   const isDarkBgAtTop = pathname === '/' || pathname === '/id' || pathname === '/en' || pathname?.includes('/giveaway');
-  const textColorClass = "text-gray-700";
+  const textColorClass = "text-gray-700 dark:text-gray-200";
 
   // Refs untuk tracking hover state
   const dropdownTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -422,7 +423,7 @@ export const Header = () => {
             mx-auto transition-all duration-300 flex items-center justify-between
             ${
               isScrolled
-                ? "max-w-5xl bg-white shadow-lg rounded-2xl px-6 py-1.5 backdrop-blur-xl"
+                ? "max-w-5xl bg-white dark:bg-gray-950 shadow-lg rounded-2xl px-6 py-1.5 backdrop-blur-xl border border-gray-100 dark:border-gray-800"
                 : "max-w-7xl bg-transparent px-8 py-3"
             }
           `}
@@ -512,6 +513,8 @@ export const Header = () => {
           <div className="hidden md:flex items-center gap-4">
             {/* LANGUAGE SWITCHER - Added here */}
             <LanguageSwitcher isScrolled={isScrolled} />
+            
+            <ThemeToggle />
 
             <button
               onClick={() => router.push("/student/cart")}
@@ -559,7 +562,7 @@ export const Header = () => {
 
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className={`md:hidden p-2 hover:text-primary transition text-gray-800`}
+            className={`md:hidden p-2 hover:text-primary transition text-gray-800 dark:text-gray-100`}
           >
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -572,10 +575,16 @@ export const Header = () => {
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.25 }}
-              className="md:hidden bg-white/95 backdrop-blur-lg border-t border-gray-200"
+              className="md:hidden bg-white/95 dark:bg-gray-950/95 backdrop-blur-lg border-t border-gray-200 dark:border-gray-800"
             >
               <div className="px-6 py-6 space-y-5">
                 {/* LANGUAGE SWITCHER MOBILE - Added here */}
+                <div className="flex items-center justify-between pb-4 border-b border-gray-200">
+                  <span className="text-gray-500 text-sm">
+                    Tema / Theme
+                  </span>
+                  <ThemeToggle />
+                </div>
                 <div className="flex items-center justify-between pb-4 border-b border-gray-200">
                   <span className="text-gray-500 text-sm">
                     Bahasa / Language
@@ -584,7 +593,7 @@ export const Header = () => {
                 </div>
 
                 {user && (
-                  <div className="border-b border-gray-200 pb-4">
+                  <div className="border-b border-gray-200 dark:border-gray-700 pb-4">
                     <div className="flex items-center gap-3 mb-3">
                       <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center overflow-hidden">
                         {user.image ? (
@@ -598,10 +607,10 @@ export const Header = () => {
                         )}
                       </div>
                       <div>
-                        <p className="font-semibold text-gray-900">
+                        <p className="font-semibold text-gray-900 dark:text-gray-100">
                           {user.name || "User"}
                         </p>
-                        <p className="text-sm text-gray-500">{user.email}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">{user.email}</p>
                       </div>
                     </div>
                     <span className="inline-block px-2 py-0.5 bg-primary/10 text-primary text-xs rounded-full capitalize">
@@ -610,39 +619,39 @@ export const Header = () => {
                   </div>
                 )}
                 <div>
-                  <p className="text-gray-900 font-semibold mb-2">
+                  <p className="text-gray-900 dark:text-gray-100 font-semibold mb-2">
                     {t("robotTrading")}
                   </p>
                   <div className="space-y-2 pl-3">
 
                     <button
                       onClick={() => handleLinkClick("/robot-trading/giveaway")}
-                      className="flex gap-2 items-center text-gray-700 w-full"
+                      className="flex gap-2 items-center text-gray-700 dark:text-gray-300 w-full"
                     >
                       <Gift size={16} /> {t("giveawayMenu")}
                     </button>
                     <button
                       onClick={() => handleLinkClick("/robot-trading/backtest")}
-                      className="flex gap-2 items-center text-gray-700 w-full"
+                      className="flex gap-2 items-center text-gray-700 dark:text-gray-300 w-full"
                     >
                       <BarChart2 size={16} /> {t("backtestPerformance")}
                     </button>
                   </div>
                 </div>
                 <div>
-                  <p className="text-gray-900 font-semibold mb-2">
+                  <p className="text-gray-900 dark:text-gray-100 font-semibold mb-2">
                     {t("tradingLesson")}
                   </p>
                   <div className="space-y-2 pl-3">
                     <button
                       onClick={() => handleLinkClick("/articles")}
-                      className="flex gap-2 items-center text-gray-700 w-full"
+                      className="flex gap-2 items-center text-gray-700 dark:text-gray-300 w-full"
                     >
                       <FileText size={16} /> {t("articleTrading")}
                     </button>
                     <button
                       onClick={() => handleLinkClick("/video-trading")}
-                      className="flex gap-2 items-center text-gray-700 w-full"
+                      className="flex gap-2 items-center text-gray-700 dark:text-gray-300 w-full"
                     >
                       <PlayCircle size={16} /> {t("videoTrading")}
                     </button>
@@ -651,19 +660,19 @@ export const Header = () => {
 
                 <button
                   onClick={() => handleLinkClick("/professional-course")}
-                  className="block w-full text-left text-lg text-gray-800"
+                  className="block w-full text-left text-lg text-gray-800 dark:text-gray-100"
                 >
                   {t("professionalCourse")}
                 </button>
                 <button
                   onClick={() => handleLinkClick("/broker-rekommendation")}
-                  className="block w-full text-left text-lg text-gray-800"
+                  className="block w-full text-left text-lg text-gray-800 dark:text-gray-100"
                 >
                   {t("brokerRecommendation")}
                 </button>
 
                 <div>
-                  <p className="text-gray-900 font-semibold mb-2">
+                  <p className="text-gray-900 dark:text-gray-100 font-semibold mb-2">
                     {t("tools")}
                   </p>
                   <div className="space-y-2 pl-3">
@@ -671,7 +680,7 @@ export const Header = () => {
                       onClick={() =>
                         handleLinkClick("/position-size-calculator")
                       }
-                      className="flex gap-2 items-center text-gray-700 w-full"
+                      className="flex gap-2 items-center text-gray-700 dark:text-gray-300 w-full"
                     >
                       <Calculator size={16} /> {t("positionSizeCalculator")}
                     </button>
@@ -680,7 +689,7 @@ export const Header = () => {
 
                 <button
                   onClick={() => handleLinkClick("/cart")}
-                  className="flex items-center gap-2 w-full text-lg text-gray-800"
+                  className="flex items-center gap-2 w-full text-lg text-gray-800 dark:text-gray-100"
                 >
                   <ShoppingCart size={20} />
                   {t("cart")}
@@ -694,19 +703,19 @@ export const Header = () => {
                 {!loading && (
                   <>
                     {user ? (
-                      <div className="space-y-3 pt-4 border-t border-gray-200">
+                      <div className="space-y-3 pt-4 border-t border-gray-200 dark:border-gray-700">
                         <button
                           onClick={() =>
                             handleLinkClick(getDashboardUrl(user.role))
                           }
-                          className="flex items-center gap-2 w-full text-lg text-gray-800"
+                          className="flex items-center gap-2 w-full text-lg text-gray-800 dark:text-gray-100"
                         >
                           <LayoutDashboard size={20} />
                           {t("dashboard")}
                         </button>
                         <button
                           onClick={() => handleLinkClick("/profile")}
-                          className="flex items-center gap-2 w-full text-lg text-gray-800"
+                          className="flex items-center gap-2 w-full text-lg text-gray-800 dark:text-gray-100"
                         >
                           <Settings size={20} />
                           {t("settings")}
@@ -715,7 +724,7 @@ export const Header = () => {
                         {isAdminOrMentor(user.role) && (
                           <button
                             onClick={handleManageCourses}
-                            className="flex items-center gap-2 w-full text-lg text-gray-800"
+                            className="flex items-center gap-2 w-full text-lg text-gray-800 dark:text-gray-100"
                           >
                             <BookOpen size={20} />
                             {t("manageCourses")}
@@ -730,10 +739,10 @@ export const Header = () => {
                         </button>
                       </div>
                     ) : (
-                      <div className="space-y-3 pt-4 border-t border-gray-200">
+                      <div className="space-y-3 pt-4 border-t border-gray-200 dark:border-gray-700">
                         <button
                           onClick={() => handleLinkClick("/login")}
-                          className="block w-full text-left text-lg text-gray-800"
+                          className="block w-full text-left text-lg text-gray-800 dark:text-gray-100"
                         >
                           {t("login")}
                         </button>

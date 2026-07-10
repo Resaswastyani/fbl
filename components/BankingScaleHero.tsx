@@ -318,7 +318,7 @@ export const BankingScaleHero = () => {
   };
 
   return (
-    <div className="w-full overflow-hidden bg-white relative">
+    <div className="w-full overflow-hidden bg-background relative transition-colors duration-300">
       <div className="mx-auto max-w-7xl px-8 py-24 pt-16 relative">
         <div className="grid grid-cols-12 gap-5 gap-y-16 relative">
           {/* LEFT CONTENT */}
@@ -362,7 +362,7 @@ export const BankingScaleHero = () => {
 
             {/* TITLE */}
             <motion.h2
-              className="text-[40px] font-normal leading-tight tracking-tight text-[#111A4A] mb-6"
+              className="text-[40px] font-normal leading-tight tracking-tight text-foreground mb-6 transition-colors duration-300"
               variants={titleVariants}
               initial="hidden"
               animate="visible"
@@ -372,7 +372,7 @@ export const BankingScaleHero = () => {
 
             {/* DESCRIPTION */}
             <motion.p
-              className="text-lg leading-6 text-[#111A4A] opacity-60 mt-0 mb-6"
+              className="text-lg leading-6 text-foreground/80 dark:text-gray-300 opacity-60 mt-0 mb-6 transition-colors duration-300"
               variants={descriptionVariants}
               initial="hidden"
               animate="visible"
@@ -450,7 +450,7 @@ export const BankingScaleHero = () => {
                     }}
                   >
                     <motion.div
-                      className="flex flex-col gap-2 p-4 rounded-xl transition-all duration-300 hover:bg-[#167E6C]/5 cursor-default bg-white/80 backdrop-blur-sm"
+                      className="flex flex-col gap-2 p-4 rounded-xl transition-all duration-300 hover:bg-[#167E6C]/5 cursor-default bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border border-transparent dark:border-gray-800"
                       whileHover={{
                         boxShadow: "0 20px 40px -15px rgba(22, 126, 108, 0.2)",
                       }}
@@ -466,7 +466,7 @@ export const BankingScaleHero = () => {
                         </ShimmerText>
                       </motion.span>
                       <motion.p
-                        className="text-xs leading-[1.4] text-[#7C7F88] m-0 whitespace-pre-line"
+                        className="text-xs leading-[1.4] text-muted-foreground m-0 whitespace-pre-line"
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: stat.delay + 0.7, duration: 0.5 }}

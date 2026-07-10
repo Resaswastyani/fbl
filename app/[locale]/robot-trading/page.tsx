@@ -3794,31 +3794,31 @@ const BacktestSection = () => {
   };
 
   return (
-    <section id="backtest" className="w-full py-16 bg-white relative">
+    <section id="backtest" className="w-full py-16 bg-background relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
          <motion.div
            initial={{ opacity: 0, y: 20 }}
            whileInView={{ opacity: 1, y: 0 }}
            viewport={{ once: true }}
          >
-           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#111A4A] mb-4 text-center">
+           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-4 text-center">
              {t("backtestPerfTitle")}
            </h2>
-           <p className="text-gray-600 text-center mb-8 max-w-2xl mx-auto">
+           <p className="text-muted-foreground text-center mb-8 max-w-2xl mx-auto">
              {t("backtestPerfDesc")}
            </p>
          </motion.div>
 
-         <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4 bg-gray-50 p-4 rounded-2xl border border-gray-100 shadow-sm">
+         <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4 bg-muted/30 p-4 rounded-2xl border border-border shadow-sm">
             <div className="flex items-center gap-3 w-full sm:w-auto">
-               <label className="text-sm font-semibold text-gray-700 whitespace-nowrap">
+               <label className="text-sm font-semibold text-foreground whitespace-nowrap">
                  {t("selectRobot")}:
                </label>
                <div className="relative w-full sm:w-64">
                  <select 
                    value={selectedRobotId}
                    onChange={(e) => setSelectedRobotId(e.target.value)}
-                   className="w-full appearance-none bg-white border border-gray-200 text-gray-700 py-2.5 px-4 pr-10 rounded-xl leading-tight focus:outline-none focus:ring-2 focus:ring-[#156d95] focus:border-transparent font-medium shadow-sm transition-all cursor-pointer"
+                   className="w-full appearance-none bg-background border border-border text-foreground py-2.5 px-4 pr-10 rounded-xl leading-tight focus:outline-none focus:ring-2 focus:ring-[#156d95] focus:border-transparent font-medium shadow-sm transition-all cursor-pointer"
                  >
                    {robots.map(robot => (
                      <option key={robot.id} value={robot.id}>{robot.name}</option>
@@ -3830,7 +3830,7 @@ const BacktestSection = () => {
                </div>
             </div>
 
-            <div className="flex bg-white p-1 rounded-xl shadow-sm border border-gray-200 w-full sm:w-auto">
+            <div className="flex bg-background p-1 rounded-xl shadow-sm border border-border w-full sm:w-auto">
                <button 
                   onClick={() => setActiveTab('monthly')} 
                   className={`flex-1 sm:flex-none px-6 py-2 rounded-lg font-medium transition-all text-sm ${activeTab === 'monthly' ? 'bg-[#156d95] text-white shadow-md' : 'text-gray-600 hover:bg-gray-50'}`}
@@ -3839,7 +3839,7 @@ const BacktestSection = () => {
                </button>
                <button 
                   onClick={() => setActiveTab('weekly')} 
-                  className={`flex-1 sm:flex-none px-6 py-2 rounded-lg font-medium transition-all text-sm ${activeTab === 'weekly' ? 'bg-[#156d95] text-white shadow-md' : 'text-gray-600 hover:bg-gray-50'}`}
+                  className={`flex-1 sm:flex-none px-6 py-2 rounded-lg font-medium transition-all text-sm ${activeTab === 'weekly' ? 'bg-[#156d95] text-white shadow-md' : 'text-foreground/70 hover:bg-muted/50'}`}
                >
                   {t("weeklyCent")}
                </button>
@@ -3853,7 +3853,7 @@ const BacktestSection = () => {
              animate={{ opacity: 1, y: 0 }}
              exit={{ opacity: 0, y: -10 }}
              transition={{ duration: 0.3 }}
-             className="h-[350px] sm:h-[450px] w-full bg-white border border-gray-100 rounded-2xl p-4 sm:p-8 shadow-xl mb-12"
+             className="h-[350px] sm:h-[450px] w-full bg-background border border-border rounded-2xl p-4 sm:p-8 shadow-xl mb-12"
            >
              <ResponsiveContainer width="100%" height="100%">
                <BarChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
@@ -3888,14 +3888,14 @@ const BacktestSection = () => {
          </AnimatePresence>
 
          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="bg-white rounded-xl p-5 shadow-md text-center border border-gray-100 hover:shadow-lg transition-all group">
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="bg-background rounded-xl p-5 shadow-md text-center border border-border hover:shadow-lg transition-all group">
                <div className="flex items-center justify-center mb-3 text-[#156d95] group-hover:scale-110 transition-transform"><DollarSign size={24} /></div>
-               <div className="text-lg sm:text-xl font-bold text-[#111A4A]">
+               <div className="text-lg sm:text-xl font-bold text-foreground">
                   <AnimatedNumber value={activeRobot.startCapital} formatter={(val) => formatCurrency(Math.floor(val))} />
                </div>
-               <div className="text-xs sm:text-sm text-gray-500 mt-1">{t("startCapital")}</div>
+               <div className="text-xs sm:text-sm text-muted-foreground mt-1">{t("startCapital")}</div>
             </motion.div>
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="bg-white rounded-xl p-5 shadow-md text-center border border-gray-100 hover:shadow-lg transition-all group">
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="bg-background rounded-xl p-5 shadow-md text-center border border-border hover:shadow-lg transition-all group">
                <div className="flex items-center justify-center mb-3 text-green-500 group-hover:scale-110 transition-transform"><TrendingUp size={24} /></div>
                <div className={`text-lg sm:text-xl font-bold ${totalProfit >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                   {totalProfit >= 0 ? '+' : ''}
@@ -3903,14 +3903,14 @@ const BacktestSection = () => {
                </div>
                <div className="text-xs sm:text-sm text-gray-500 mt-1">{t("totalProfit")}</div>
             </motion.div>
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.3 }} className="bg-white rounded-xl p-5 shadow-md text-center border border-gray-100 hover:shadow-lg transition-all group">
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.3 }} className="bg-background rounded-xl p-5 shadow-md text-center border border-border hover:shadow-lg transition-all group">
                <div className="flex items-center justify-center mb-3 text-[#22d3ee] group-hover:scale-110 transition-transform"><Activity size={24} /></div>
-               <div className="text-lg sm:text-xl font-bold text-[#111A4A]">
+               <div className="text-lg sm:text-xl font-bold text-foreground">
                   <AnimatedNumber value={activeRobot.totalTrades} formatter={(val) => formatNumber(Math.floor(val)) + "+"} />
                </div>
-               <div className="text-xs sm:text-sm text-gray-500 mt-1">{t("totalTrades")}</div>
+               <div className="text-xs sm:text-sm text-muted-foreground mt-1">{t("totalTrades")}</div>
             </motion.div>
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.4 }} className="bg-white rounded-xl p-5 shadow-md text-center border border-gray-100 hover:shadow-lg transition-all group">
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.4 }} className="bg-background rounded-xl p-5 shadow-md text-center border border-border hover:shadow-lg transition-all group">
                <div className="flex items-center justify-center mb-3 text-purple-500 group-hover:scale-110 transition-transform"><Cpu size={24} /></div>
                <div className="text-base sm:text-lg font-bold text-[#111A4A] leading-tight mt-1">{activeRobot.name.split(' ')[0]}</div>
                <div className="text-xs sm:text-sm text-gray-500 mt-1">{t("mode")} / {activeRobot.mode}</div>
@@ -3974,7 +3974,7 @@ export const RobotTradingSection = () => {
   // ];
 
   return (
-    <section className="w-full bg-gradient-to-b from-gray-50 to-white py-16 sm:py-20 lg:py-24">
+    <section className="w-full bg-gradient-to-b from-muted/40 dark:from-gray-950 to-background py-16 sm:py-20 lg:py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* HERO AREA */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center mb-16 sm:mb-20">
@@ -3999,12 +3999,12 @@ export const RobotTradingSection = () => {
               </span>
             </motion.div>
 
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#111A4A] leading-tight mb-4 sm:mb-6">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground leading-tight mb-4 sm:mb-6">
               {t("title").split(" ").slice(0, -2).join(" ")} <br />
               <span className="text-[#156d95]">{t("title").split(" ").slice(-2).join(" ")}</span>
             </h1>
 
-            <p className="text-base sm:text-lg text-gray-600 mb-6 sm:mb-8 max-w-lg mx-auto lg:mx-0">
+            <p className="text-base sm:text-lg text-muted-foreground mb-6 sm:mb-8 max-w-lg mx-auto lg:mx-0">
               {t("description")}
             </p>
 

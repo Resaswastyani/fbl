@@ -325,7 +325,7 @@ export const BankingScaleHero = () => {
           <div className="col-span-12 md:col-span-6 relative z-20">
             {/* TOP TAGLINE */}
             <motion.div
-              className="relative h-6 inline-flex items-center font-mono uppercase text-xs text-[#167E6C] mb-12 px-2"
+              className="relative h-6 inline-flex items-center font-mono text-xs text-[#167E6C] mb-12 px-2"
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, ease: "easeOut" }}
@@ -347,7 +347,7 @@ export const BankingScaleHero = () => {
                         transition={{ delay: i * 0.03, duration: 0.3 }}
                         className="inline-block"
                       >
-                        {char === " " ? "\\u00A0" : char}
+                        {char === " " ? "\u00A0" : char}
                       </motion.span>
                     ))}
                 </motion.span>

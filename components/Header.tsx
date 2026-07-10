@@ -448,14 +448,14 @@ export const Header = () => {
             `}
           >
 
-            <button
+            {/* <button
               onClick={() => handleLinkClick("/robot-trading")}
               className={`font-medium hover:text-primary transition 
                 ${isScrolled ? "text-sm" : "text-base"} ${textColorClass}
               `}
             >
               {t("robotTrading")}
-            </button>
+            </button> */}
             <Dropdown
               title={t("tradingLesson")}
               items={[
@@ -542,8 +542,8 @@ export const Header = () => {
                       onClick={() => router.push("/signup")}
                       className={`
                         px-5 py-2.5 font-semibold rounded-lg transition
-                        ${isScrolled 
-                          ? "text-sm px-4 py-2 border border-primary text-primary hover:bg-primary hover:text-white" 
+                        ${isScrolled
+                          ? "text-sm px-4 py-2 border border-primary text-primary hover:bg-primary hover:text-white"
                           : "text-base border border-primary text-primary hover:bg-primary hover:text-white"}
                       `}
                     >
@@ -607,7 +607,7 @@ export const Header = () => {
                     </span>
                   </div>
                 )}
-
+                {/* 
                 <div>
                   <button
                     onClick={() => handleLinkClick("/robot-trading")}
@@ -615,7 +615,7 @@ export const Header = () => {
                   >
                     {t("robotTrading")}
                   </button>
-                </div>
+                </div> */}
                 <div>
                   <p className="text-gray-900 font-semibold mb-2">
                     {t("tradingLesson")}

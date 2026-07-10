@@ -392,10 +392,10 @@ export default function StudentProfilePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center">
           <Loader2 className="animate-spin h-12 w-12 text-[#156d95] mx-auto" />
-          <p className="mt-4 text-gray-600">{t("loadingProfile")}</p>
+          <p className="mt-4 text-muted-foreground">{t("loadingProfile")}</p>
         </div>
       </div>
     );
@@ -406,9 +406,9 @@ export default function StudentProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="bg-white border-b sticky top-0 z-10">
+      <header className="bg-background border-b sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center">
@@ -420,7 +420,7 @@ export default function StudentProfilePage() {
               >
                 <ArrowLeft className="h-5 w-5" />
               </Button>
-              <h1 className="text-2xl font-bold text-gray-900">{t("myProfile")}</h1>
+              <h1 className="text-2xl font-bold text-foreground">{t("myProfile")}</h1>
             </div>
             <Button
               variant="outline"
@@ -471,13 +471,13 @@ export default function StudentProfilePage() {
                       getInitials(user.name)
                     )}
                   </div>
-                  <button className="absolute bottom-0 right-0 bg-gray-100 p-2 rounded-full hover:bg-gray-200 transition shadow-sm">
-                    <Camera className="h-4 w-4 text-gray-600" />
+                  <button className="absolute bottom-0 right-0 bg-secondary p-2 rounded-full hover:bg-muted transition shadow-sm">
+                    <Camera className="h-4 w-4 text-muted-foreground" />
                   </button>
                 </div>
 
-                <h2 className="text-xl font-bold text-gray-900">{user.name}</h2>
-                <p className="text-gray-500 mb-3">{user.email}</p>
+                <h2 className="text-xl font-bold text-foreground">{user.name}</h2>
+                <p className="text-muted-foreground mb-3">{user.email}</p>
 
                 <div className="flex items-center justify-center gap-2 mb-3">
                   {getRoleBadge(user.role)}
@@ -508,7 +508,7 @@ export default function StudentProfilePage() {
                   </div>
                 )}
 
-                <div className="mt-4 pt-4 border-t text-sm text-gray-500">
+                <div className="mt-4 pt-4 border-t border-border text-sm text-muted-foreground">
                   <div className="flex items-center justify-center gap-2">
                     <Calendar className="h-4 w-4" />
                     Bergabung {formatDate(user.createdAt)}
@@ -526,7 +526,7 @@ export default function StudentProfilePage() {
                     className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition ${
                       activeTab === "profile"
                         ? "bg-[#156d95]/10 text-[#156d95] font-medium"
-                        : "text-gray-600 hover:bg-gray-50"
+                        : "text-muted-foreground hover:bg-muted"
                     }`}
                   >
                     <User className="h-5 w-5" />
@@ -537,7 +537,7 @@ export default function StudentProfilePage() {
                     className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition ${
                       activeTab === "password"
                         ? "bg-[#156d95]/10 text-[#156d95] font-medium"
-                        : "text-gray-600 hover:bg-gray-50"
+                        : "text-muted-foreground hover:bg-muted"
                     }`}
                   >
                     <Key className="h-5 w-5" />
@@ -548,7 +548,7 @@ export default function StudentProfilePage() {
                     className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition ${
                       activeTab === "security"
                         ? "bg-[#156d95]/10 text-[#156d95] font-medium"
-                        : "text-gray-600 hover:bg-gray-50"
+                        : "text-muted-foreground hover:bg-muted"
                     }`}
                   >
                     <Shield className="h-5 w-5" />
@@ -564,32 +564,32 @@ export default function StudentProfilePage() {
                 <CardTitle className="text-lg">{t("learningStats")}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <div className="flex items-center justify-between p-3 bg-secondary rounded-lg">
                   <div className="flex items-center gap-3">
                     <div className="p-2 bg-[#156d95]/10 rounded-lg">
                       <BookOpen className="h-5 w-5 text-[#156d95]" />
                     </div>
-                    <span className="text-gray-600">{t("totalCourses")}</span>
+                    <span className="text-muted-foreground">{t("totalCourses")}</span>
                   </div>
                   <span className="font-bold text-lg">{stats.total}</span>
                 </div>
 
-                <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <div className="flex items-center justify-between p-3 bg-secondary rounded-lg">
                   <div className="flex items-center gap-3">
-                    <div className="p-2 bg-yellow-100 rounded-lg">
+                    <div className="p-2 bg-yellow-100/50 rounded-lg">
                       <Loader2 className="h-5 w-5 text-yellow-600" />
                     </div>
-                    <span className="text-gray-600">{t("inProgress")}</span>
+                    <span className="text-muted-foreground">{t("inProgress")}</span>
                   </div>
                   <span className="font-bold text-lg">{stats.inProgress}</span>
                 </div>
 
-                <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <div className="flex items-center justify-between p-3 bg-secondary rounded-lg">
                   <div className="flex items-center gap-3">
-                    <div className="p-2 bg-green-100 rounded-lg">
+                    <div className="p-2 bg-green-100/50 rounded-lg">
                       <Award className="h-5 w-5 text-green-600" />
                     </div>
-                    <span className="text-gray-600">{t("completed")}</span>
+                    <span className="text-muted-foreground">{t("completed")}</span>
                   </div>
                   <span className="font-bold text-lg">{stats.completed}</span>
                 </div>
@@ -657,9 +657,9 @@ export default function StudentProfilePage() {
                           type="email"
                           value={formData.email}
                           disabled
-                          className="bg-gray-100"
+                          className="bg-secondary"
                         />
-                        <p className="text-xs text-gray-500 mt-1">
+                        <p className="text-xs text-muted-foreground mt-1">
                           Email tidak dapat diubah
                         </p>
                       </div>
@@ -694,26 +694,26 @@ export default function StudentProfilePage() {
                     </form>
                   ) : (
                     <div className="space-y-4">
-                      <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
-                        <User className="h-5 w-5 text-gray-400" />
+                      <div className="flex items-center gap-4 p-4 bg-secondary rounded-lg">
+                        <User className="h-5 w-5 text-muted-foreground" />
                         <div>
-                          <p className="text-sm text-gray-500">{t("fullName")}</p>
+                          <p className="text-sm text-muted-foreground">{t("fullName")}</p>
                           <p className="font-medium">{user.name}</p>
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
-                        <Mail className="h-5 w-5 text-gray-400" />
+                      <div className="flex items-center gap-4 p-4 bg-secondary rounded-lg">
+                        <Mail className="h-5 w-5 text-muted-foreground" />
                         <div>
-                          <p className="text-sm text-gray-500">{t("email")}</p>
+                          <p className="text-sm text-muted-foreground">{t("email")}</p>
                           <p className="font-medium">{user.email}</p>
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
-                        <Shield className="h-5 w-5 text-gray-400" />
+                      <div className="flex items-center gap-4 p-4 bg-secondary rounded-lg">
+                        <Shield className="h-5 w-5 text-muted-foreground" />
                         <div>
-                          <p className="text-sm text-gray-500">{t("role")}</p>
+                          <p className="text-sm text-muted-foreground">{t("role")}</p>
                           <p className="font-medium capitalize">
                             {user.role.toLowerCase()}
                           </p>
@@ -936,7 +936,7 @@ export default function StudentProfilePage() {
                     {/* Google Connection */}
                     <div className="flex items-center justify-between p-4 border rounded-lg">
                       <div className="flex items-center gap-4">
-                        <div className="p-2 bg-white border rounded-lg">
+                        <div className="p-2 bg-card border border-border rounded-lg">
                           <svg className="h-6 w-6" viewBox="0 0 24 24">
                             <path
                               d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -958,7 +958,7 @@ export default function StudentProfilePage() {
                         </div>
                         <div>
                           <p className="font-medium">Google</p>
-                          <p className="text-sm text-gray-500">
+                          <p className="text-sm text-muted-foreground">
                             {user.providers?.includes("google")
                               ? "Terhubung"
                               : "Tidak terhubung"}
@@ -1019,10 +1019,10 @@ export default function StudentProfilePage() {
                   <CardContent className="space-y-4">
                     <div className="flex items-center justify-between p-4 border border-red-100 rounded-lg bg-red-50/50">
                       <div>
-                        <p className="font-medium text-gray-900">
+                        <p className="font-medium text-foreground">
                           Logout dari Semua Perangkat
                         </p>
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-muted-foreground">
                           Keluar dari semua sesi aktif
                         </p>
                       </div>

@@ -4075,7 +4075,7 @@ export const RobotTradingSection = () => {
   };
 
   return (
-    <section className="w-full bg-gradient-to-b from-gray-50 to-white py-16 sm:py-20 lg:py-24">
+    <section className="w-full bg-gradient-to-b from-muted/30 to-background py-16 sm:py-20 lg:py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* HERO AREA */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center mb-16 sm:mb-20">
@@ -4100,14 +4100,14 @@ export const RobotTradingSection = () => {
               </span>
             </motion.div>
 
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#111A4A] leading-tight mb-4 sm:mb-6">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground leading-tight mb-4 sm:mb-6">
               {t("title").split(" ").slice(0, -2).join(" ")} <br />
               <span className="text-[#156d95]">
                 {t("title").split(" ").slice(-2).join(" ")}
               </span>
             </h1>
 
-            <p className="text-base sm:text-lg text-gray-600 mb-6 sm:mb-8 max-w-lg mx-auto lg:mx-0">
+            <p className="text-base sm:text-lg text-muted-foreground mb-6 sm:mb-8 max-w-lg mx-auto lg:mx-0">
               {t("description")}
             </p>
 

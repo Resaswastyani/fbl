@@ -50,7 +50,7 @@ const FloatingCard = ({
       scale: 1.02,
       transition: { duration: 0.2 },
     }}
-    className={`absolute backdrop-blur-xl bg-white/90 rounded-2xl shadow-2xl border border-white/50 ${className}`}
+    className={`absolute backdrop-blur-xl bg-background/90 rounded-2xl shadow-2xl border border-white/10 dark:border-white/5 ${className}`}
     style={style}
   >
     {children}
@@ -129,7 +129,7 @@ const AnimatedChart = ({ accentColor }: { accentColor: string }) => (
     style={{ top: "10%", right: "15%" }}
   >
     <div className="flex items-center justify-between mb-4">
-      <span className="text-xs font-semibold text-gray-600">Performance</span>
+      <span className="text-xs font-semibold text-muted-foreground">Performance</span>
       <span className="text-xs text-green-500 font-medium">+24.5%</span>
     </div>
     <div className="flex items-end gap-2 h-24">
@@ -154,8 +154,8 @@ const StatsCard = ({ accentColor }: { accentColor: string }) => (
     <div className="flex items-center gap-3">
       <CircularProgress percentage={92} color={accentColor} size={60} />
       <div>
-        <p className="text-xs text-gray-500 mb-1">Materi Tuntas</p>
-        <p className="text-lg font-bold text-gray-800">92%</p>
+        <p className="text-xs text-muted-foreground mb-1">Materi Tuntas</p>
+        <p className="text-lg font-bold text-foreground">92%</p>
         <p className="text-xs text-green-500">Tingkat penyelesaian</p>
       </div>
     </div>
@@ -181,11 +181,11 @@ const FloatingBadge = ({
     initial={{ opacity: 0, scale: 0.5, x: -20 }}
     animate={{ opacity: 1, scale: 1, x: 0 }}
     transition={{ duration: 0.5, delay, type: "spring", stiffness: 200 }}
-    className="absolute flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-lg border border-gray-100"
+    className="absolute flex items-center gap-2 px-4 py-2 bg-background rounded-full shadow-lg border border-border"
     style={{ top, left }}
   >
     <span className="text-lg">{icon}</span>
-    <span className="text-sm font-medium text-gray-700">{text}</span>
+    <span className="text-sm font-medium text-foreground">{text}</span>
     <motion.div
       className="w-2 h-2 rounded-full"
       style={{ backgroundColor: color }}
@@ -371,7 +371,7 @@ export const ForexTestimonials = () => {
                 transition={{ duration: 0.6 }}
                 className="space-y-6"
               >
-                <div className="inline-flex items-center gap-3 bg-black text-white px-4 py-1.5 rounded-full text-sm font-medium">
+                <div className="inline-flex items-center gap-3 bg-foreground text-background px-4 py-1.5 rounded-full text-sm font-medium">
                   {currentStudy.logo}
                   {currentStudy.program}
                 </div>

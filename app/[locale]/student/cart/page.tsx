@@ -129,10 +129,10 @@ export default function CartPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#156d95] mx-auto"></div>
-          <p className="mt-4 text-gray-600">{t("loadingCart")}</p>
+          <p className="mt-4 text-muted-foreground">{t("loadingCart")}</p>
         </div>
       </div>
     );
@@ -146,32 +146,32 @@ export default function CartPage() {
   const isEmpty = items.length === 0;
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-background py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
           <Button
             variant="ghost"
             onClick={() => router.back()}
-            className="mb-4 text-gray-600 hover:text-[#156d95]"
+            className="mb-4 text-muted-foreground hover:text-[#156d95]"
           >
             <ArrowLeft className="mr-2 h-4 w-4" />{t("back")}</Button>
-          <h1 className="text-3xl font-bold text-gray-900">
+          <h1 className="text-3xl font-bold text-foreground">
             Keranjang Belanja
           </h1>
-          <p className="text-gray-600 mt-2">
+          <p className="text-muted-foreground mt-2">
             {items.length} item{items.length !== 1 ? "s" : ""} dalam keranjang
           </p>
         </div>
 
         {isEmpty ? (
-          <div className="bg-white rounded-2xl shadow-lg p-12 text-center">
+          <div className="bg-card rounded-2xl shadow-lg p-12 text-center">
             <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-[#156d95]/10 flex items-center justify-center">
               <ShoppingCart className="w-10 h-10 text-[#156d95]" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-3">
+            <h2 className="text-2xl font-bold text-foreground mb-3">
               Keranjang Anda Kosong
             </h2>
-            <p className="text-gray-600 mb-8 max-w-md mx-auto">
+            <p className="text-muted-foreground mb-8 max-w-md mx-auto">
                 {t("cartEmptyDesc")}
               </p>
             <Button
@@ -186,13 +186,13 @@ export default function CartPage() {
               {items.map((item) => (
                 <Card
                   key={item.id}
-                  className="border border-gray-200 hover:shadow-md transition-shadow"
+                  className="border border-border hover:shadow-md transition-shadow"
                 >
                   <CardContent className="p-6">
                     <div className="flex flex-col md:flex-row md:items-center md:justify-between">
                       <div className="mb-4 md:mb-0 w-full md:w-auto">
                         <div className="flex items-start justify-between mb-3">
-                          <h3 className="text-xl font-bold text-gray-900">
+                          <h3 className="text-xl font-bold text-foreground">
                             {item.name}
                           </h3>
                           <Badge
@@ -207,15 +207,15 @@ export default function CartPage() {
                         </div>
 
                         {item.isBundle && item.courseNames && (
-                          <div className="mt-3 p-4 bg-gray-50 rounded-lg">
-                            <p className="text-sm font-medium text-gray-700 mb-2">
+                          <div className="mt-3 p-4 bg-secondary rounded-lg">
+                            <p className="text-sm font-medium text-muted-foreground mb-2">
                               {t("includesCourses", { count: item.courseNames.length })}
                             </p>
                             <ul className="space-y-1">
                               {item.courseNames.map((name, index) => (
                                 <li
                                   key={index}
-                                  className="flex items-start text-sm text-gray-600"
+                                  className="flex items-start text-sm text-muted-foreground"
                                 >
                                   <span className="text-[#156d95] mr-2 mt-1">
                                     •
@@ -229,20 +229,20 @@ export default function CartPage() {
 
                         <div className="mt-4 flex items-center justify-between">
                           <div>
-                            <p className="text-sm text-gray-500">{t("price")}</p>
+                            <p className="text-sm text-muted-foreground">{t("price")}</p>
                             <p className="text-lg font-bold text-[#156d95]">
                               {formatPrice(item.price)}
                             </p>
                           </div>
                           <div>
-                            {/* <p className="text-sm text-gray-500">Jumlah</p>
-                            <p className="text-lg font-bold text-gray-900">
+                            {/* <p className="text-sm text-muted-foreground">Jumlah</p>
+                            <p className="text-lg font-bold text-foreground">
                               {item.quantity}
                             </p> */}
                           </div>
                           <div>
-                            <p className="text-sm text-gray-500">{t("subtotal")}</p>
-                            <p className="text-lg font-bold text-gray-900">
+                            <p className="text-sm text-muted-foreground">{t("subtotal")}</p>
+                            <p className="text-lg font-bold text-foreground">
                               {formatPrice(item.price * item.quantity)}
                             </p>
                           </div>
@@ -328,10 +328,10 @@ export default function CartPage() {
                 </CardContent>
               </Card>
 
-              <Card className="mt-6 border border-gray-200">
+              <Card className="mt-6 border border-border">
                 <CardContent className="p-6">
-                  <h3 className="font-bold text-lg mb-4 text-gray-900">{t("paymentInfo")}</h3>
-                  <ul className="space-y-3 text-sm text-gray-600">
+                  <h3 className="font-bold text-lg mb-4 text-foreground">{t("paymentInfo")}</h3>
+                  <ul className="space-y-3 text-sm text-muted-foreground">
                     <li className="flex items-start">
                       <span className="text-[#156d95] mr-2 mt-1">•</span>
                       <span>

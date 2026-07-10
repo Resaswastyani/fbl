@@ -169,10 +169,10 @@ export default function CourseDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center">
           <Loader2 className="animate-spin h-12 w-12 text-[#156d95] mx-auto" />
-          <p className="mt-4 text-gray-600">{t("loadingCourse")}</p>
+          <p className="mt-4 text-muted-foreground">{t("loadingCourse")}</p>
         </div>
       </div>
     );
@@ -180,7 +180,7 @@ export default function CourseDetailPage() {
 
   if (error || !course) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center">
           <p className="text-red-500 text-lg mb-4">
             {error || t("courseNotFound")}
@@ -194,9 +194,9 @@ export default function CourseDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="bg-white border-b sticky top-0 z-10">
+      <header className="bg-background border-b sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center">
@@ -209,10 +209,10 @@ export default function CourseDetailPage() {
                 <ArrowLeft className="h-5 w-5" />
               </Button>
               <div>
-                <h1 className="text-xl font-bold text-gray-900">
+                <h1 className="text-xl font-bold text-foreground">
                   {course.title}
                 </h1>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-muted-foreground">
                   {course.lessons.length} Lessons
                 </p>
               </div>
@@ -270,7 +270,7 @@ export default function CourseDetailPage() {
 
                       {selectedLesson.type === "pdf" &&
                         selectedLesson.contentUrl && (
-                          <div className="aspect-video bg-gray-100 rounded-lg mb-4 flex items-center justify-center">
+                          <div className="aspect-video bg-secondary rounded-lg mb-4 flex items-center justify-center">
                             <a
                               href={selectedLesson.contentUrl}
                               target="_blank"
@@ -283,7 +283,7 @@ export default function CourseDetailPage() {
                         )}
 
                       {selectedLesson.duration && (
-                        <p className="text-sm text-gray-500 mb-4">
+                        <p className="text-sm text-muted-foreground mb-4">
                           {t("duration", { time: selectedLesson.duration })}
                         </p>
                       )}
@@ -309,7 +309,7 @@ export default function CourseDetailPage() {
                       )}
                     </div>
                   ) : (
-                    <p className="text-gray-500 text-center py-8">
+                    <p className="text-muted-foreground text-center py-8">
                       {t("selectLesson")}
                     </p>
                   )}
@@ -318,9 +318,9 @@ export default function CourseDetailPage() {
             ) : (
               <Card className="mb-6">
                 <CardContent className="p-12 text-center">
-                  <Lock className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+                  <Lock className="h-16 w-16 text-muted-foreground/40 mx-auto mb-4" />
                   <h2 className="text-xl font-bold mb-2">{t("courseLocked")}</h2>
-                  <p className="text-gray-500 mb-6">
+                  <p className="text-muted-foreground mb-6">
                     {isFree
                       ? t("enrollToAccessFree")
                       : t("buyToAccess")}
@@ -348,7 +348,7 @@ export default function CourseDetailPage() {
             <Card>
               <CardContent className="p-6">
                 <h3 className="text-lg font-bold mb-2">{t("description")}</h3>
-                <p className="text-gray-600">
+                <p className="text-muted-foreground">
                   {course.description || t("noDescription")}
                 </p>
               </CardContent>
@@ -374,8 +374,8 @@ export default function CourseDetailPage() {
                           selectedLesson?.id === lesson.id
                             ? "bg-[#156d95] text-white"
                             : isLocked
-                              ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                              : "bg-gray-50 hover:bg-gray-100"
+                              ? "bg-secondary text-muted-foreground cursor-not-allowed"
+                              : "bg-secondary hover:bg-muted"
                         }`}
                       >
                         <div className="flex-shrink-0 mr-3">
@@ -396,7 +396,7 @@ export default function CourseDetailPage() {
                               className={`text-xs ${
                                 selectedLesson?.id === lesson.id
                                   ? "text-white/70"
-                                  : "text-gray-500"
+                                  : "text-muted-foreground"
                               }`}
                             >
                               {t("minutes", { time: lesson.duration })}

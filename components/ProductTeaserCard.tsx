@@ -120,7 +120,7 @@ export const ProductTeaserCard = () => {
   const router = useRouter();
 
   return (
-    <section className="w-full pt-24 md:pt-32 pb-20 bg-white">
+    <section className="w-full pt-24 md:pt-32 pb-20 bg-background">
       <div className="max-w-7xl mx-auto grid grid-cols-12 gap-5 lg:gap-16 px-8 md:px-12">
         {/* LEFT TEXT */}
         <motion.div
@@ -141,7 +141,7 @@ export const ProductTeaserCard = () => {
 
           {/* Headline */}
           <h1
-            className="text-[40px] font-normal leading-tight tracking-tight text-[#111A4A] mb-6"
+            className="text-[40px] font-normal leading-tight tracking-tight text-foreground mb-6"
             style={{
               fontFamily: "var(--font-figtree), Figtree",
               fontSize: "50px",
@@ -153,15 +153,15 @@ export const ProductTeaserCard = () => {
 
           {/* Subheadline */}
           <p
-            className="text-lg leading-6 text-[#111A4A] opacity-60 mt-0 mb-6"
+            className="text-lg leading-6 text-muted-foreground mt-0 mb-6"
             style={{ fontFamily: "var(--font-figtree), Figtree" }}
           >
             {t("description")}
           </p>
           
           <div className="mb-8">
-            <p className="font-semibold text-[#111A4A] mb-3">{tFooter("companyName")}</p>
-            <div className="grid grid-cols-2 gap-y-4 gap-x-4 text-sm text-[#111A4A] opacity-80">
+            <p className="font-semibold text-foreground mb-3">{tFooter("companyName")}</p>
+            <div className="grid grid-cols-2 gap-y-4 gap-x-4 text-sm text-foreground/80">
               <div>
                 <p className="text-xs opacity-60 mb-0.5">{tFooter("nib")}</p>
                 <p className="font-medium text-xs">1411250044219</p>

@@ -127,9 +127,9 @@ export default function ForexCarousel() {
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
 
         <div className="fixed inset-0 flex items-center justify-center p-4">
-          <Dialog.Panel className="w-full max-w-xl bg-white rounded-2xl p-6 shadow-xl relative">
+          <Dialog.Panel className="w-full max-w-xl bg-background text-foreground rounded-2xl p-6 shadow-xl relative">
             <button
-              className="absolute top-4 right-4 text-gray-700 hover:text-black"
+              className="absolute top-4 right-4 text-muted-foreground hover:text-foreground"
               onClick={() => setOpen(false)}
             >
               <X size={22} />
@@ -145,7 +145,7 @@ export default function ForexCarousel() {
             </p>
 
             {/* CHART */}
-            <div className="w-full h-48 bg-gray-50 border rounded-xl p-2">
+            <div className="w-full h-48 bg-muted/30 border border-border rounded-xl p-2">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={history.map((v) => ({ v }))}>
                   <YAxis hide domain={["auto", "auto"]} />
@@ -161,7 +161,7 @@ export default function ForexCarousel() {
               </ResponsiveContainer>
             </div>
 
-            <p className="text-xs text-gray-500 mt-3">
+            <p className="text-xs text-muted-foreground mt-3">
               Updated every 7 seconds • Live FX snapshot
             </p>
           </Dialog.Panel>

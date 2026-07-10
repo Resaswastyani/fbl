@@ -115,19 +115,19 @@ export default function MyCoursesPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center">
           <Loader2 className="animate-spin h-12 w-12 text-[#156d95] mx-auto" />
-          <p className="mt-4 text-gray-600">{t("loadingMyCourses")}</p>
+          <p className="mt-4 text-muted-foreground">{t("loadingMyCourses")}</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="bg-white border-b sticky top-0 z-10">
+      <header className="bg-background border-b sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center">
             <Button
@@ -139,8 +139,8 @@ export default function MyCoursesPage() {
               <ArrowLeft className="h-5 w-5" />
             </Button>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">{t("myCourses")}</h1>
-              <p className="text-sm text-gray-500">
+              <h1 className="text-2xl font-bold text-foreground">{t("myCourses")}</h1>
+              <p className="text-sm text-muted-foreground">
                 {t("activeCourses", { count: courses.length })}
               </p>
             </div>
@@ -192,7 +192,7 @@ export default function MyCoursesPage() {
                 onClick={() => handleContinueLearning(course.id)}
               >
                 {/* Progress Bar Top */}
-                <div className="h-1 bg-gray-100 w-full">
+                <div className="h-1 bg-secondary w-full">
                   <div
                     className="h-full bg-[#156d95] transition-all duration-500"
                     style={{ width: `${course.progress}%` }}
@@ -209,30 +209,30 @@ export default function MyCoursesPage() {
                       <Badge className="bg-[#156d95]/10 text-[#156d95]">
                         <Clock className="h-3 w-3 mr-1" />{t("inProgress")}</Badge>
                     ) : (
-                      <Badge className="bg-gray-100 text-gray-600">{t("notStarted")}</Badge>
+                      <Badge className="bg-secondary text-muted-foreground">{t("notStarted")}</Badge>
                     )}
-                    <span className="text-xs text-gray-400">
+                    <span className="text-xs text-muted-foreground">
                       {formatLastAccessed(course.lastAccessed)}
                     </span>
                   </div>
 
                   {/* Course Info */}
-                  <h3 className="font-bold text-xl mb-2 line-clamp-2 text-gray-900">
+                  <h3 className="font-bold text-xl mb-2 line-clamp-2 text-foreground">
                     {course.title}
                   </h3>
-                  <p className="text-gray-600 text-sm mb-6 line-clamp-2">
+                  <p className="text-muted-foreground text-sm mb-6 line-clamp-2">
                     {course.description || t("noDescription")}
                   </p>
 
                   {/* Progress Info */}
                   <div className="mb-4">
                     <div className="flex justify-between text-sm mb-2">
-                      <span className="text-gray-500">{t("progress")}</span>
+                      <span className="text-muted-foreground">{t("progress")}</span>
                       <span className="font-bold text-[#156d95]">
                         {course.progress}%
                       </span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                    <div className="w-full bg-secondary rounded-full h-2 overflow-hidden">
                       <div
                         className="bg-[#156d95] h-2 rounded-full transition-all duration-500"
                         style={{ width: `${course.progress}%` }}
@@ -241,7 +241,7 @@ export default function MyCoursesPage() {
                   </div>
 
                   {/* Stats */}
-                  <div className="flex items-center justify-between text-sm text-gray-500 mb-6">
+                  <div className="flex items-center justify-between text-sm text-muted-foreground mb-6">
                     <div className="flex items-center">
                       <BookOpen className="h-4 w-4 mr-1" />
                       <span>
@@ -280,16 +280,16 @@ export default function MyCoursesPage() {
             ))}
           </div>
         ) : (
-          <div className="text-center py-16 bg-white rounded-xl shadow-sm">
+          <div className="text-center py-16 bg-card rounded-xl shadow-sm border border-border">
             {courses.length === 0 ? (
               <>
                 <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-[#156d95]/10 flex items-center justify-center">
                   <BookOpen className="h-10 w-10 text-[#156d95]" />
                 </div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                <h2 className="text-2xl font-bold text-foreground mb-2">
                   Belum Ada Kursus
                 </h2>
-                <p className="text-gray-500 mb-6 max-w-md mx-auto">
+                <p className="text-muted-foreground mb-6 max-w-md mx-auto">
                   {t("startLearningJourney")}
                 </p>
                 <Button
@@ -300,13 +300,13 @@ export default function MyCoursesPage() {
               </>
             ) : (
               <>
-                <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gray-100 flex items-center justify-center">
-                  <Search className="h-10 w-10 text-gray-400" />
+                <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-secondary flex items-center justify-center">
+                  <Search className="h-10 w-10 text-muted-foreground" />
                 </div>
-                <h2 className="text-xl font-bold text-gray-900 mb-2">
+                <h2 className="text-xl font-bold text-foreground mb-2">
                   Tidak Ditemukan
                 </h2>
-                <p className="text-gray-500 mb-4">
+                <p className="text-muted-foreground mb-4">
                   {t("noCoursesMatch")}
                 </p>
                 <Button

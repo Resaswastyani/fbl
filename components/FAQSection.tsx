@@ -114,7 +114,7 @@ const ParticleField = () => {
 
 const AnimatedLine = ({ delay }: { delay: number }) => (
   <motion.div
-    className="absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"
+    className="absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent"
     initial={{ scaleX: 0, opacity: 0 }}
     animate={{ scaleX: 1, opacity: 1 }}
     transition={{
@@ -206,7 +206,7 @@ export const FAQSection = () => {
   return (
     <section
       ref={sectionRef}
-      className="w-full py-24 px-8 bg-white relative overflow-hidden"
+      className="w-full py-24 px-8 bg-background relative overflow-hidden"
     >
       {/* Animated Background Elements */}
       <div className="absolute inset-0 pointer-events-none">
@@ -265,7 +265,7 @@ export const FAQSection = () => {
               </motion.div>
 
               <h2
-                className="text-[40px] leading-tight font-normal text-[#202020] tracking-tight mb-4"
+                className="text-[40px] leading-tight font-normal text-foreground tracking-tight mb-4"
                 style={{
                   fontFamily: "var(--font-figtree), Figtree",
                   fontWeight: "400",
@@ -285,7 +285,7 @@ export const FAQSection = () => {
 
               {/* Floating help text */}
               <motion.div
-                className="mt-6 flex items-center gap-2 text-sm text-gray-500"
+                className="mt-6 flex items-center gap-2 text-sm text-muted-foreground"
                 initial={{ opacity: 0, y: 10 }}
                 animate={
                   isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }
@@ -326,8 +326,8 @@ export const FAQSection = () => {
 
                   <div
                     className={`relative transition-all duration-300 ${
-                      hoveredIndex === index ? "bg-gray-50/50" : ""
-                    } ${openIndex === index ? "bg-blue-50/30" : ""}`}
+                      hoveredIndex === index ? "bg-muted/50" : ""
+                    } ${openIndex === index ? "bg-blue-500/10" : ""}`}
                   >
                     {/* Question */}
                     <button
@@ -338,8 +338,8 @@ export const FAQSection = () => {
                       <span
                         className={`text-lg leading-7 pr-8 transition-colors duration-300 ${
                           openIndex === index
-                            ? "text-blue-600"
-                            : "text-[#202020] group-hover:text-blue-500"
+                            ? "text-blue-500"
+                            : "text-foreground group-hover:text-blue-500"
                         }`}
                         style={{
                           fontFamily: "var(--font-figtree), Figtree",
@@ -362,7 +362,7 @@ export const FAQSection = () => {
                         className={`shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-colors duration-300 ${
                           openIndex === index
                             ? "bg-blue-500 text-white shadow-lg shadow-blue-500/30"
-                            : "bg-gray-100 text-[#202020] group-hover:bg-blue-100 group-hover:text-blue-600"
+                            : "bg-muted text-foreground group-hover:bg-blue-500/20 group-hover:text-blue-500"
                         }`}
                       >
                         <Plus className="w-5 h-5" strokeWidth={2} />
@@ -411,7 +411,7 @@ export const FAQSection = () => {
                             </motion.div>
 
                             <p
-                              className="text-lg leading-7 text-[#666666] relative"
+                              className="text-lg leading-7 text-muted-foreground relative"
                               style={{
                                 fontFamily: "var(--font-figtree), Figtree",
                               }}
@@ -447,7 +447,7 @@ export const FAQSection = () => {
 
               {/* Final line */}
               <motion.div
-                className="absolute left-0 right-0 bottom-0 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"
+                className="absolute left-0 right-0 bottom-0 h-px bg-gradient-to-r from-transparent via-border to-transparent"
                 initial={{ scaleX: 0 }}
                 animate={isInView ? { scaleX: 1 } : { scaleX: 0 }}
                 transition={{ duration: 0.8, delay: faqs.length * 0.1 }}

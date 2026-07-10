@@ -14,7 +14,7 @@ export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="w-full bg-white text-[#0a0a0f] border-t border-[#e5e5e5]">
+    <footer className="w-full bg-background text-foreground border-t border-border">
       {/* TOP SECTION: LOGO + SOCIAL ICONS */}
       <div
         className="
@@ -43,9 +43,9 @@ export default function Footer() {
                 absolute -top-1.5 -right-1.5
                 w-5 h-5
                 rounded-full
-                border border-[#0a0a0f]/20
-                bg-white
-                text-[#0a0a0f]
+                border border-border
+                bg-background
+                text-foreground
                 flex items-center justify-center
                 text-[9px] font-bold leading-none
                 select-none
@@ -66,8 +66,8 @@ export default function Footer() {
             target="_blank"
             rel="noopener noreferrer"
             className="
-              w-10 h-10 flex items-center justify-center rounded-full border border-black/20
-              hover:border-black hover:bg-black/5 hover:scale-105 transition-all cursor-pointer
+              w-10 h-10 flex items-center justify-center rounded-full border border-border
+              hover:border-foreground hover:bg-muted hover:scale-105 transition-all cursor-pointer
             "
           >
             <FaInstagram size={18} className="opacity-80" />
@@ -78,8 +78,8 @@ export default function Footer() {
             target="_blank"
             rel="noopener noreferrer"
             className="
-              w-10 h-10 flex items-center justify-center rounded-full border border-black/20
-              hover:border-black hover:bg-black/5 hover:scale-105 transition-all cursor-pointer
+              w-10 h-10 flex items-center justify-center rounded-full border border-border
+              hover:border-foreground hover:bg-muted hover:scale-105 transition-all cursor-pointer
             "
           >
             <FaTiktok size={18} className="opacity-80" />
@@ -90,8 +90,8 @@ export default function Footer() {
             target="_blank"
             rel="noopener noreferrer"
             className="
-              w-10 h-10 flex items-center justify-center rounded-full border border-black/20
-              hover:border-black hover:bg-black/5 hover:scale-105 transition-all cursor-pointer
+              w-10 h-10 flex items-center justify-center rounded-full border border-border
+              hover:border-foreground hover:bg-muted hover:scale-105 transition-all cursor-pointer
             "
           >
             <FaFacebookF size={18} className="opacity-80" />
@@ -102,8 +102,8 @@ export default function Footer() {
             target="_blank"
             rel="noopener noreferrer"
             className="
-              w-10 h-10 flex items-center justify-center rounded-full border border-black/20
-              hover:border-black hover:bg-black/5 hover:scale-105 transition-all cursor-pointer
+              w-10 h-10 flex items-center justify-center rounded-full border border-border
+              hover:border-foreground hover:bg-muted hover:scale-105 transition-all cursor-pointer
             "
           >
             <FaYoutube size={18} className="opacity-80" />
@@ -114,8 +114,8 @@ export default function Footer() {
             target="_blank"
             rel="noopener noreferrer"
             className="
-    w-10 h-10 flex items-center justify-center rounded-full border border-black/20
-    hover:border-black hover:bg-black/5 hover:scale-105 transition-all cursor-pointer
+    w-10 h-10 flex items-center justify-center rounded-full border border-border
+    hover:border-foreground hover:bg-muted hover:scale-105 transition-all cursor-pointer
   "
           >
             <FaWhatsapp size={18} className="opacity-80" />
@@ -124,7 +124,7 @@ export default function Footer() {
       </div>
 
       {/* LEGAL & COMPLIANCE SECTION */}
-      <div className="w-full border-t border-[#e5e5e5] pt-6 pb-6 px-6 md:px-11">
+      <div className="w-full border-t border-border pt-6 pb-6 px-6 md:px-11">
         <div className="max-w-5xl">
           <p className="text-xs font-semibold tracking-wider uppercase opacity-60 mb-3">
             {t("legalCompliance")}
@@ -161,19 +161,19 @@ export default function Footer() {
       </div>
 
       {/* DISCLAIMER */}
-      <div className="w-full border-t border-[#e5e5e5] pt-6 pb-10 px-6 md:px-11">
+      <div className="w-full border-t border-border pt-6 pb-10 px-6 md:px-11">
         <p className="max-w-5xl text-sm text-left leading-6 opacity-90">
           {t("disclaimer")}
         </p>
       </div>
-      <div className="w-full border-t border-[#e5e5e5] pt-6 pb-10 px-6 md:px-11">
+      <div className="w-full border-t border-border pt-6 pb-10 px-6 md:px-11">
         <p className="max-w-5xl text-sm text-left leading-6 opacity-90">
           {t("privacy")}
         </p>
       </div>
 
       {/* BOTTOM */}
-      <div className="w-full border-t border-[#e5e5e5]">
+      <div className="w-full border-t border-border">
         <div className="w-full px-6 md:px-12 py-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           {/* COPYRIGHT */}
           <p className="text-sm opacity-90">{t("copyright", { year })}</p>

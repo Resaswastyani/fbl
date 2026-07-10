@@ -79,9 +79,9 @@ export const VideoTradingPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-background">
       {/* HERO SECTION */}
-      <section className="w-full pt-24 md:pt-32 pb-16 bg-white">
+      <section className="w-full pt-24 md:pt-32 pb-16 bg-background">
         <div className="max-w-7xl mx-auto grid grid-cols-12 gap-5 lg:gap-16 px-8 md:px-12">
           {/* LEFT TEXT */}
           <motion.div
@@ -102,7 +102,7 @@ export const VideoTradingPage = () => {
 
             {/* Headline */}
             <h1
-              className="text-[40px] font-normal leading-tight tracking-tight text-[#111A4A] mb-6"
+              className="text-[40px] font-normal leading-tight tracking-tight text-foreground mb-6"
               style={{
                 fontFamily: "var(--font-figtree), Figtree",
                 fontSize: "50px",
@@ -114,12 +114,12 @@ export const VideoTradingPage = () => {
 
             {/* Subheadline */}
             <p
-              className="text-lg leading-6 text-[#111A4A] opacity-60 mt-0 mb-6"
+              className="text-lg leading-6 text-foreground opacity-60 mt-0 mb-6"
               style={{ fontFamily: "var(--font-figtree), Figtree" }}
             >
               {t("heroSubtitle")}
             </p>
-            <p className="mb-5 text-sm text-[#111A4A] opacity-40">
+            <p className="mb-5 text-sm text-foreground opacity-40">
               PT AKADEMI KEUANGAN NUSANTARA
             </p>
 
@@ -129,7 +129,7 @@ export const VideoTradingPage = () => {
                 <div className="text-3xl font-semibold text-[#156d95]">
                   {videos.length}+
                 </div>
-                <div className="text-sm text-[#6e6e6e]">{t("videosAvailable")}</div>
+                <div className="text-sm text-muted-foreground">{t("videosAvailable")}</div>
               </div>
               <div>
                 <div className="text-3xl font-semibold text-[#156d95]">
@@ -137,7 +137,7 @@ export const VideoTradingPage = () => {
                     videos.reduce((acc, v) => acc + v.viewCount, 0),
                   )}
                 </div>
-                <div className="text-sm text-[#6e6e6e]">{t("totalViews")}</div>
+                <div className="text-sm text-muted-foreground">{t("totalViews")}</div>
               </div>
             </div>
 
@@ -207,7 +207,7 @@ export const VideoTradingPage = () => {
       </section>
 
       {/* VIDEOS GRID SECTION */}
-      <section id="videos" className="w-full py-16 bg-gray-50">
+      <section id="videos" className="w-full py-16 bg-secondary">
         <div className="max-w-7xl mx-auto px-8 md:px-12">
           {/* Section Header */}
           <motion.div
@@ -218,11 +218,11 @@ export const VideoTradingPage = () => {
             className="flex items-end justify-between mb-10"
           >
             <div>
-              <span className="text-xs uppercase tracking-tight font-mono text-[#6e6e6e]">
+              <span className="text-xs uppercase tracking-tight font-mono text-muted-foreground">
                 {t("videoCollection")}
               </span>
               <h2
-                className="text-3xl font-semibold text-[#111A4A] mt-2"
+                className="text-3xl font-semibold text-foreground mt-2"
                 style={{ fontFamily: "var(--font-figtree), Figtree" }}
               >
                 {t("latestTradingVideos")}
@@ -242,19 +242,19 @@ export const VideoTradingPage = () => {
               {[1, 2, 3, 4, 5, 6].map((i) => (
                 <div
                   key={i}
-                  className="bg-white rounded-xl overflow-hidden shadow-sm animate-pulse"
+                  className="bg-card rounded-xl overflow-hidden shadow-sm animate-pulse"
                 >
-                  <div className="aspect-video bg-gray-200" />
+                  <div className="aspect-video bg-secondary" />
                   <div className="p-4 space-y-3">
-                    <div className="h-4 bg-gray-200 rounded w-3/4" />
-                    <div className="h-3 bg-gray-200 rounded w-1/2" />
+                    <div className="h-4 bg-secondary rounded w-3/4" />
+                    <div className="h-3 bg-secondary rounded w-1/2" />
                   </div>
                 </div>
               ))}
             </div>
           ) : videos.length === 0 ? (
             <div className="text-center py-20">
-              <p className="text-[#6e6e6e] text-lg">{t("noVideos")}</p>
+              <p className="text-muted-foreground text-lg">{t("noVideos")}</p>
               <button
                 onClick={() => router.push("/login")}
                 className="mt-4 inline-flex items-center justify-center bg-[#156d95] text-white rounded-lg px-5 py-3 text-sm font-medium"
@@ -271,7 +271,7 @@ export const VideoTradingPage = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer"
+                  className="group bg-card rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer"
                   onClick={() => setSelectedVideo(video)}
                 >
                   {/* Thumbnail */}
@@ -300,15 +300,15 @@ export const VideoTradingPage = () => {
                   {/* Content */}
                   <div className="p-5">
                     <h3
-                      className="font-semibold text-[#111A4A] line-clamp-2 mb-2 group-hover:text-[#156d95] transition-colors"
+                      className="font-semibold text-foreground line-clamp-2 mb-2 group-hover:text-[#156d95] transition-colors"
                       style={{ fontFamily: "var(--font-figtree), Figtree" }}
                     >
                       {locale === "en" && video.title_en ? video.title_en : video.title}
                     </h3>
-                    <p className="text-sm text-[#6e6e6e] line-clamp-2 mb-4">
+                    <p className="text-sm text-muted-foreground line-clamp-2 mb-4">
                       {locale === "en" && video.description_en ? video.description_en : video.description || t("noDescription")}
                     </p>
-                    <div className="flex items-center justify-between text-xs text-[#9ca3af]">
+                    <div className="flex items-center justify-between text-xs text-muted-foreground/60">
                       <span className="flex items-center gap-1">
                         <Eye size={14} />
                         {formatViewCount(video.viewCount)} views
@@ -404,17 +404,17 @@ export const VideoTradingPage = () => {
                 />
               )}
             </div>
-            <div className="p-6 bg-white">
+            <div className="p-6 bg-card">
               <h3
-                className="text-xl font-semibold text-[#111A4A] mb-2"
+                className="text-xl font-semibold text-foreground mb-2"
                 style={{ fontFamily: "var(--font-figtree), Figtree" }}
               >
                 {locale === "en" && selectedVideo.title_en ? selectedVideo.title_en : selectedVideo.title}
               </h3>
-              <p className="text-[#6e6e6e] mb-4">
+              <p className="text-muted-foreground mb-4">
                 {locale === "en" && selectedVideo.description_en ? selectedVideo.description_en : selectedVideo.description || t("noDescription")}
               </p>
-              <div className="flex items-center gap-4 text-sm text-[#9ca3af]">
+              <div className="flex items-center gap-4 text-sm text-muted-foreground/60">
                 <span className="flex items-center gap-1">
                   <Eye size={16} />
                   {formatViewCount(selectedVideo.viewCount)} views

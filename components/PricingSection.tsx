@@ -131,7 +131,7 @@ export function PricingSection() {
       {/* ===================== POPUP LOGIN PROMPT ===================== */}
       {loginPromptOpen && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl w-full max-w-md p-8 shadow-2xl text-center animate-fade-in">
+          <div className="bg-background border border-border rounded-2xl w-full max-w-md p-8 shadow-2xl text-center animate-fade-in">
             <div className="w-16 h-16 mx-auto mb-5 rounded-full bg-green-100 flex items-center justify-center">
               <CheckIcon className="w-10 h-10 text-green-600" />
             </div>
@@ -139,7 +139,7 @@ export function PricingSection() {
             <h2 className="text-2xl font-bold text-[#156d95] mb-3">
               Berhasil Ditambahkan!
             </h2>
-            <p className="text-gray-700 mb-8 leading-relaxed">
+            <p className="text-muted-foreground mb-8 leading-relaxed">
               {activePlan.name} sudah masuk ke keranjang.
               <br />
               Silakan <strong>login</strong> untuk melanjutkan ke pembayaran.
@@ -157,7 +157,7 @@ export function PricingSection() {
               </button>
               <button
                 onClick={() => setLoginPromptOpen(false)}
-                className="text-gray-600 hover:text-gray-800 underline"
+                className="text-muted-foreground hover:text-foreground underline"
               >
                 Nanti saja
               </button>
@@ -169,12 +169,12 @@ export function PricingSection() {
       {/* ===================== POPUP KONFIRMASI ===================== */}
       {confirmOpen && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl w-full max-w-md p-6 shadow-xl animate-fade-in">
-            <h2 className="text-xl font-semibold mb-4 text-[#0a0a0f]">
+          <div className="bg-background border border-border rounded-2xl w-full max-w-md p-6 shadow-xl animate-fade-in">
+            <h2 className="text-xl font-semibold mb-4 text-foreground">
               Tambahkan ke Keranjang?
             </h2>
 
-            <p className="text-gray-700 mb-6">
+            <p className="text-muted-foreground mb-6">
               Kamu akan menambahkan <b>{activePlan.name}</b> ke keranjang dengan
               harga <b>Rp{activePlan.price.toLocaleString()}</b>.
             </p>
@@ -182,14 +182,14 @@ export function PricingSection() {
             <div className="flex justify-end gap-3">
               <button
                 onClick={() => setConfirmOpen(false)}
-                className="px-5 py-2 rounded-xl border border-gray-300 hover:bg-gray-100 transition"
+                className="px-5 py-2 rounded-xl border border-border hover:bg-muted transition"
               >
                 Batal
               </button>
 
               <button
                 onClick={handleAddToCart}
-                className="px-5 py-2 bg-[#156d95] text-white rounded-xl hover:bg-[#0a0a0f] transition-all"
+                className="px-5 py-2 bg-[#156d95] text-white rounded-xl hover:opacity-90 transition-all"
               >
                 Tambah ke Cart
               </button>

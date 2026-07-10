@@ -13,7 +13,7 @@ interface Pair {
   symbol: string; pip: number; bullColor: string; bearColor: string; volatility: number;
 }
 
-const PAIR: Pair = { symbol: "ETH/USDC", pip: 2, bullColor: "#26a69a", bearColor: "#2196f3", volatility: 45 };
+const PAIR: Pair = { symbol: "XAU/USD", pip: 2, bullColor: "#26a69a", bearColor: "#ef5350", volatility: 8 };
 const CANDLE_COUNT = 60;
 const CHART_W = 450;
 const CHART_H = 220;
@@ -52,7 +52,7 @@ const COINS = [
 // ─────────────────────────────────────────────────────────────────────────────
 function generateCandles(count: number): Candle[] {
   const candles: Candle[] = [];
-  let price = 41400.00;
+  let price = 2350.00;
   const now = Date.now();
   for (let i = 0; i < count; i++) {
     const body = (Math.random() - 0.48) * 80;
@@ -275,10 +275,10 @@ function IMacContent({ candles, livePrice, crosshairX, setCrosshairX }: any) {
         <div className="flex-1 flex flex-col min-w-0 bg-[#15161c] relative">
           <div className="p-3 md:p-4 flex items-center justify-between border-b border-white/5">
             <div className="flex items-center gap-2 md:gap-3">
-              <div className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-gradient-to-tr from-blue-500 to-cyan-400 flex items-center justify-center shadow-lg">
-                <span className="text-white text-[8px] md:text-[10px] font-bold">ETH</span>
+              <div className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-gradient-to-tr from-yellow-500 to-amber-600 flex items-center justify-center shadow-lg">
+                <span className="text-white text-[8px] md:text-[10px] font-bold">XAU</span>
               </div>
-              <span className="text-[12px] md:text-[14px] font-bold text-white tracking-wide">ETH/USDC</span>
+              <span className="text-[12px] md:text-[14px] font-bold text-white tracking-wide">XAU/USD</span>
               <span className="text-[12px] md:text-[14px] font-mono font-bold text-[#2196f3] drop-shadow-[0_0_8px_rgba(33,150,243,0.4)]">
                 ${livePrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </span>
@@ -317,8 +317,8 @@ function IMacContent({ candles, livePrice, crosshairX, setCrosshairX }: any) {
           </h3>
           <div className="flex items-center justify-between text-[11px] bg-[#1a1b20] p-1.5 rounded-lg border border-white/5">
             <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded-full bg-gradient-to-tr from-blue-500 to-cyan-400"></div>
-              <span className="font-medium text-white/80">ETH/USDC</span>
+              <div className="w-4 h-4 rounded-full bg-gradient-to-tr from-yellow-500 to-amber-600"></div>
+              <span className="font-medium text-white/80">XAU/USD</span>
             </div>
             <span className="text-[9px] text-white/40">All Market ▼</span>
           </div>
@@ -568,20 +568,22 @@ export default function RightAnimationCard() {
            initial={{ opacity: 0, y: 30 }}
            animate={{ opacity: 1, y: 0 }}
            transition={{ duration: 0.8, type: "spring" }}
-           className="absolute top-[30px] left-[20px]"
+           className="absolute top-[20px] left-[65px] z-0"
         >
-          <div className="flex flex-col items-center">
-            <div className="w-[740px] h-[480px] bg-[#1a1b20] rounded-t-2xl rounded-b-lg shadow-2xl overflow-hidden flex flex-col border border-gray-800">
-              <div className="flex-1 overflow-hidden bg-[#131418] relative">
-                <IMacContent candles={candles} livePrice={livePrice} crosshairX={crosshairX} setCrosshairX={setCrosshairX} />
+          <motion.div animate={{ y: [0, -5, 0] }} transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}>
+            <div className="flex flex-col items-center">
+              <div className="w-[740px] h-[480px] bg-[#1a1b20] rounded-t-2xl rounded-b-lg shadow-2xl overflow-hidden flex flex-col border border-gray-800">
+                <div className="flex-1 overflow-hidden bg-[#131418] relative">
+                  <IMacContent candles={candles} livePrice={livePrice} crosshairX={crosshairX} setCrosshairX={setCrosshairX} />
+                </div>
+                <div className="h-10 bg-[#24252a] flex items-center justify-center border-t border-gray-800">
+                  <div className="w-2.5 h-2.5 rounded-full bg-black/60"></div>
+                </div>
               </div>
-              <div className="h-10 bg-[#24252a] flex items-center justify-center border-t border-gray-800">
-                <div className="w-2.5 h-2.5 rounded-full bg-black/60"></div>
-              </div>
+              <div className="w-32 h-14 bg-gradient-to-b from-[#24252a] to-[#141518] rounded-b-lg shadow-inner z-[-1]"></div>
+              <div className="w-48 h-1.5 bg-[#141518] rounded-full shadow-2xl mt-[-2px] z-[-1]"></div>
             </div>
-            <div className="w-32 h-14 bg-gradient-to-b from-[#24252a] to-[#141518] rounded-b-lg shadow-inner z-[-1]"></div>
-            <div className="w-48 h-1.5 bg-[#141518] rounded-full shadow-2xl mt-[-2px] z-[-1]"></div>
-          </div>
+          </motion.div>
         </motion.div>
 
         {/* FLOAT CARD */}
@@ -589,9 +591,11 @@ export default function RightAnimationCard() {
            initial={{ opacity: 0, x: 30 }}
            animate={{ opacity: 1, x: 0 }}
            transition={{ duration: 0.8, delay: 0.2, type: "spring" }}
-           className="absolute top-[45px] right-[40px] z-10"
+           className="absolute top-[-10px] right-[10px] z-10"
         >
-          <TopRightCard />
+          <motion.div animate={{ y: [0, -8, 0] }} transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 0.5 }} className="rotate-3 origin-bottom-left">
+            <TopRightCard />
+          </motion.div>
         </motion.div>
 
         {/* TABLET */}
@@ -599,16 +603,18 @@ export default function RightAnimationCard() {
            initial={{ opacity: 0, y: 40 }}
            animate={{ opacity: 1, y: 0 }}
            transition={{ duration: 0.8, delay: 0.4, type: "spring" }}
-           className="absolute bottom-[20px] right-[150px] z-20"
+           className="absolute bottom-[-10px] left-[5px] z-20"
         >
-          <div className="w-[280px] h-[380px] bg-[#131418] rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)] border-[12px] border-[#0a0a0c] relative overflow-hidden flex flex-col">
-            <div className="absolute top-0 w-full h-4 flex justify-center items-center z-10">
-              <div className="w-1.5 h-1.5 rounded-full bg-[#2a2a30]"></div>
+          <motion.div animate={{ y: [0, -12, 0] }} transition={{ repeat: Infinity, duration: 4.5, ease: "easeInOut", delay: 1 }} className="-rotate-6 origin-bottom-right">
+            <div className="w-[280px] h-[380px] bg-[#131418] rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)] border-[12px] border-[#0a0a0c] relative overflow-hidden flex flex-col">
+              <div className="absolute top-0 w-full h-4 flex justify-center items-center z-10">
+                <div className="w-1.5 h-1.5 rounded-full bg-[#2a2a30]"></div>
+              </div>
+              <div className="flex-1 px-3 pt-6 pb-3 overflow-hidden bg-[#181920]">
+                <TabletContent />
+              </div>
             </div>
-            <div className="flex-1 px-3 pt-6 pb-3 overflow-hidden bg-[#181920]">
-              <TabletContent />
-            </div>
-          </div>
+          </motion.div>
         </motion.div>
 
         {/* PHONE */}
@@ -616,16 +622,18 @@ export default function RightAnimationCard() {
            initial={{ opacity: 0, x: 40, y: 40 }}
            animate={{ opacity: 1, x: 0, y: 0 }}
            transition={{ duration: 0.8, delay: 0.6, type: "spring" }}
-           className="absolute bottom-[0px] right-[40px] z-30"
+           className="absolute bottom-[-30px] right-[25px] z-30"
         >
-          <div className="w-[150px] h-[320px] bg-[#131418] rounded-[2rem] shadow-[0_30px_60px_rgba(0,0,0,0.6)] border-[8px] border-[#0a0a0c] relative overflow-hidden flex flex-col">
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-4 bg-[#0a0a0c] rounded-b-xl z-10 flex justify-center items-end pb-1">
-               <div className="w-5 h-1 bg-white/10 rounded-full"></div>
+          <motion.div animate={{ y: [0, -15, 0] }} transition={{ repeat: Infinity, duration: 4, ease: "easeInOut", delay: 1.5 }} className="rotate-[8deg] origin-bottom-left">
+            <div className="w-[150px] h-[320px] bg-[#131418] rounded-[2rem] shadow-[0_30px_60px_rgba(0,0,0,0.6)] border-[8px] border-[#0a0a0c] relative overflow-hidden flex flex-col">
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-4 bg-[#0a0a0c] rounded-b-xl z-10 flex justify-center items-end pb-1">
+                 <div className="w-5 h-1 bg-white/10 rounded-full"></div>
+              </div>
+              <div className="flex-1 px-3 pt-8 pb-3 bg-[#181920]">
+                <PhoneContent />
+              </div>
             </div>
-            <div className="flex-1 px-3 pt-8 pb-3 bg-[#181920]">
-              <PhoneContent />
-            </div>
-          </div>
+          </motion.div>
         </motion.div>
       </div>
 
@@ -651,7 +659,9 @@ export default function RightAnimationCard() {
            transition={{ duration: 0.6, delay: 0.1 }}
            className="w-full max-w-[300px]"
          >
-            <TopRightCard />
+            <motion.div animate={{ y: [0, -6, 0] }} transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}>
+               <TopRightCard />
+            </motion.div>
          </motion.div>
 
          <motion.div
@@ -661,14 +671,16 @@ export default function RightAnimationCard() {
            transition={{ duration: 0.6, delay: 0.2 }}
            className="w-full max-w-[320px]"
          >
-            <div className="w-full h-[380px] bg-[#131418] rounded-[2rem] shadow-xl border-[12px] border-[#0a0a0c] relative overflow-hidden flex flex-col">
-               <div className="absolute top-0 w-full h-4 flex justify-center items-center z-10">
-                 <div className="w-1.5 h-1.5 rounded-full bg-[#2a2a30]"></div>
+            <motion.div animate={{ y: [0, -8, 0] }} transition={{ repeat: Infinity, duration: 4.5, ease: "easeInOut", delay: 0.5 }}>
+               <div className="w-full h-[380px] bg-[#131418] rounded-[2rem] shadow-xl border-[12px] border-[#0a0a0c] relative overflow-hidden flex flex-col">
+                  <div className="absolute top-0 w-full h-4 flex justify-center items-center z-10">
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#2a2a30]"></div>
+                  </div>
+                  <div className="flex-1 px-3 pt-6 pb-3 overflow-hidden bg-[#181920]">
+                    <TabletContent />
+                  </div>
                </div>
-               <div className="flex-1 px-3 pt-6 pb-3 overflow-hidden bg-[#181920]">
-                 <TabletContent />
-               </div>
-            </div>
+            </motion.div>
          </motion.div>
 
          <motion.div
@@ -678,14 +690,16 @@ export default function RightAnimationCard() {
            transition={{ duration: 0.6, delay: 0.3 }}
            className="w-[200px]"
          >
-            <div className="w-full h-[340px] bg-[#131418] rounded-[2rem] shadow-xl border-[8px] border-[#0a0a0c] relative overflow-hidden flex flex-col">
-               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-4 bg-[#0a0a0c] rounded-b-xl z-10 flex justify-center items-end pb-1">
-                 <div className="w-5 h-1 bg-white/10 rounded-full"></div>
+            <motion.div animate={{ y: [0, -10, 0] }} transition={{ repeat: Infinity, duration: 4, ease: "easeInOut", delay: 1 }}>
+               <div className="w-full h-[340px] bg-[#131418] rounded-[2rem] shadow-xl border-[8px] border-[#0a0a0c] relative overflow-hidden flex flex-col">
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-4 bg-[#0a0a0c] rounded-b-xl z-10 flex justify-center items-end pb-1">
+                    <div className="w-5 h-1 bg-white/10 rounded-full"></div>
+                  </div>
+                  <div className="flex-1 px-3 pt-8 pb-3 bg-[#181920]">
+                    <PhoneContent />
+                  </div>
                </div>
-               <div className="flex-1 px-3 pt-8 pb-3 bg-[#181920]">
-                 <PhoneContent />
-               </div>
-            </div>
+            </motion.div>
          </motion.div>
       </div>
 

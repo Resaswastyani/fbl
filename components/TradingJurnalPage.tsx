@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, Variants, TargetAndTransition } from "framer-motion";
 import {
   ArrowUpRight,
   TrendingUp,
@@ -45,6 +45,7 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 const RightAnimationCard = dynamic(() => import("./RightAnimationCard"), {
   ssr: false,
@@ -416,7 +417,7 @@ const setupPerformance = [
 ];
 
 // ─── Animation Variants ───────────────────────────────
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -424,7 +425,7 @@ const containerVariants = {
   },
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
@@ -433,12 +434,12 @@ const itemVariants = {
   },
 };
 
-const floatAnimation = {
+const floatAnimation: TargetAndTransition = {
   y: [0, -10, 0],
   transition: { duration: 4, repeat: Infinity, ease: "easeInOut" },
 };
 
-const pulseAnimation = {
+const pulseAnimation: TargetAndTransition = {
   scale: [1, 1.05, 1],
   transition: { duration: 2, repeat: Infinity, ease: "easeInOut" },
 };
@@ -568,6 +569,7 @@ const TableCell = ({
 );
 
 export const TradingJournalPage = () => {
+  const t = useTranslations("TradingJournal");
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<
     | "dashboard"
@@ -887,7 +889,7 @@ export const TradingJournalPage = () => {
           />
           <input
             type="text"
-            placeholder="Cari symbol atau setup..."
+            placeholder={`${t("date")} / ${t("instrument")}...`}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full pl-9 pr-4 py-2.5 border border-[#e5e7eb] rounded-lg text-sm focus:outline-none focus:border-[#156d95] text-[#111A4A]"
@@ -1508,9 +1510,7 @@ export const TradingJournalPage = () => {
               className="text-lg leading-6 text-[#111A4A] opacity-60 mt-0 mb-6"
               style={{ fontFamily: "var(--font-figtree), Figtree" }}
             >
-              Sistem jurnal trading profesional dengan analisis lengkap:
-              Dashboard, Trade Log, Monthly Report, Statistics, Analytics,
-              Calendar, dan Settings.
+              {t("title")}
             </p>
 
             {/* Buy Card */}
@@ -1541,7 +1541,7 @@ export const TradingJournalPage = () => {
                           className="text-yellow-400 fill-yellow-400"
                         />
                         <span className="text-sm font-medium text-white/80">
-                          Produk Unggulan
+                          {t("featuredProduct")}
                         </span>
                       </div>
                       <button
@@ -1563,8 +1563,7 @@ export const TradingJournalPage = () => {
                       </span>
                     </div>
                     <p className="text-sm text-white/70 mb-5">
-                      File Excel lengkap dengan Dashboard, Trade Log, Monthly
-                      Report, Analytics, Calendar & Settings.
+                      {t("buyDesc")}
                     </p>
                     <motion.button
                       whileHover={{ scale: 1.02 }}
@@ -1574,7 +1573,7 @@ export const TradingJournalPage = () => {
                       className="w-full sm:w-auto inline-flex items-center justify-center bg-white text-[#111A4A] rounded-xl px-8 py-4 text-base font-semibold shadow-lg hover:shadow-xl transition-shadow"
                     >
                       <ShoppingCart size={20} className="mr-2" />
-                      Beli Sekarang via WhatsApp
+                      {t("buyNow")}
                       <MessageCircle
                         size={20}
                         className="ml-2 text-green-600"
@@ -1795,8 +1794,7 @@ export const TradingJournalPage = () => {
               Dapatkan Template Lengkap
             </h3>
             <p className="text-sm text-white/70 mb-4">
-              File Excel dengan semua fitur: Dashboard, Trade Log, Monthly
-              Report, Analytics, Calendar & Settings.
+              {t("buyDesc")}
             </p>
             <div className="flex items-baseline gap-2 mb-4">
               <span
@@ -1816,7 +1814,7 @@ export const TradingJournalPage = () => {
               className="w-full inline-flex items-center justify-center bg-white text-[#111A4A] rounded-lg px-4 py-3 text-sm font-semibold"
             >
               <MessageCircle size={18} className="mr-2 text-green-600" />
-              Beli via WhatsApp
+              {t("buyNow")}
             </motion.button>
           </motion.div>
 

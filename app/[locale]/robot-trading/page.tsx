@@ -33,89 +33,11 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { useTranslations } from "next-intl";
 
-// --- Data ---
-const usageSteps = [
-  {
-    icon: ShieldCheck,
-    title: "1. Buka Akun Broker",
-    description: "Daftar dan verifikasi akun di broker rekomendasi kami (Exness) yang sudah teruji kompatibel.",
-  },
-  {
-    icon: Download,
-    title: "2. Unduh & Install EA",
-    description: "Dapatkan file robot FBL_AO_XAUUSD_M1.Ex5 dan panduan instalasi lengkap ke MetaTrader.",
-  },
-  {
-    icon: Settings,
-    title: "3. Konfigurasi Sistem",
-    description: "Pilih mode portofolio (Konservatif / Moderat / Agresif) sesuai profil risiko Anda.",
-  },
-  {
-    icon: Zap,
-    title: "4. Auto-Trading Aktif",
-    description: "Biarkan robot bekerja menganalisa pasar dan mengeksekusi trading secara otomatis.",
-  },
-];
+// Data arrays are built inside the component using t() for i18n
 
-const pricingPackages = [
-  {
-    id: "monthly",
-    name: "Paket Bulanan",
-    price: "Rp 1.500.000",
-    period: "/ bulan",
-    description: "Sempurna untuk menguji performa robot dalam jangka pendek.",
-    features: [
-      "Lisensi 1 Akun MT5",
-      "Mode Konservatif & Moderat",
-      "Support Telegram 24/7",
-      "Maksimal Balance $5,000",
-      "Tanpa Sharing Profit (100% Milik Anda)"
-    ],
-    isPopular: false,
-    icon: Star,
-    color: "from-[#00AADF] to-[#0082C8]",
-    shadow: "shadow-[#00AADF]/30"
-  },
-  {
-    id: "yearly",
-    name: "Paket Tahunan",
-    price: "Rp 12.000.000",
-    period: "/ tahun",
-    description: "Lebih hemat untuk investasi jangka panjang dengan fitur penuh.",
-    features: [
-      "Lisensi 2 Akun MT5",
-      "Semua Mode (Termasuk Agresif)",
-      "Prioritas Support 24/7",
-      "Gratis VPS 1 Tahun",
-      "Tanpa Batas Balance",
-      "Tanpa Sharing Profit (100% Milik Anda)"
-    ],
-    isPopular: true,
-    icon: Crown,
-    color: "from-[#5BAD34] to-[#3D8A1E]",
-    shadow: "shadow-[#5BAD34]/30"
-  },
-  {
-    id: "lifetime",
-    name: "Lifetime + Sharing",
-    price: "Gratis Biaya Awal",
-    period: "selamanya",
-    description: "Sistem bagi hasil yang adil (Sharing Profit). Win-win solution.",
-    features: [
-      "Lisensi Unlimited Akun MT5",
-      "Semua Mode Premium Tersedia",
-      "Konsultasi Private 1-on-1",
-      "Gratis VPS Premium",
-      "Tanpa Batas Balance",
-      "Sharing Profit 70:30 (Trader:Developer)"
-    ],
-    isPopular: false,
-    icon: Zap,
-    color: "from-[#F5961D] to-[#D4730A]",
-    shadow: "shadow-[#F5961D]/30"
-  }
-];
+// pricingPackages built inside component using t()
 
 const backtestData = [
   // 2025
@@ -329,8 +251,55 @@ const AnimatedCounter = ({ target, suffix = "", prefix = "", duration = 2, decim
 
 // --- Page Layout ---
 export default function RobotTradingCenter() {
+  const t = useTranslations("RobotTrading");
   const [mounted, setMounted] = useState(false);
   const [backtestView, setBacktestView] = useState<"mingguan" | "bulanan">("mingguan");
+
+  const usageSteps = [
+    { icon: ShieldCheck, title: t("step1Title"), description: t("step1Desc") },
+    { icon: Download,    title: t("step2Title"), description: t("step2Desc") },
+    { icon: Settings,   title: t("step3Title"), description: t("step3Desc") },
+    { icon: Zap,        title: t("step4Title"), description: t("step4Desc") },
+  ];
+
+  const pricingPackages = [
+    {
+      id: "monthly",
+      name: t("packMonthly"),
+      price: "Rp 1.500.000",
+      period: t("perMonth"),
+      description: t("packMonthlyDesc"),
+      features: [ t("feat1Account"), t("featConsMod"), t("featSupport"), t("featMaxBalance"), t("featNoSharing") ],
+      isPopular: false,
+      icon: Star,
+      color: "from-[#00AADF] to-[#0082C8]",
+      shadow: "shadow-[#00AADF]/30"
+    },
+    {
+      id: "yearly",
+      name: t("packYearly"),
+      price: "Rp 12.000.000",
+      period: t("perYear"),
+      description: t("packYearlyDesc"),
+      features: [ t("feat2Account"), t("featAllModes"), t("featPrioSupport"), t("featFreeVPS"), t("featUnlimBalance"), t("featNoSharing") ],
+      isPopular: true,
+      icon: Crown,
+      color: "from-[#5BAD34] to-[#3D8A1E]",
+      shadow: "shadow-[#5BAD34]/30"
+    },
+    {
+      id: "lifetime",
+      name: t("packLifetime"),
+      price: t("freeInitial"),
+      period: t("forever"),
+      description: t("packLifetimeDesc"),
+      features: [ t("featUnlimAccount"), t("featPremiumModes"), t("featConsult"), t("featFreePremiumVPS"), t("featUnlimBalance"), t("featSharing") ],
+      isPopular: false,
+      icon: Zap,
+      color: "from-[#F5961D] to-[#D4730A]",
+      shadow: "shadow-[#F5961D]/30"
+    }
+  ];
 
   const heroRef = useRef<HTMLDivElement>(null);
 
@@ -432,8 +401,7 @@ export default function RobotTradingCenter() {
             </h1>
 
             <p className="text-lg text-slate-600 max-w-xl leading-relaxed">
-              Maksimalkan potensi profit Anda dengan algoritma cerdas yang beradaptasi dengan market.
-              Tanpa emosi, presisi tinggi, dan strategi yang telah teruji melalui ribuan backtest.
+              {t("heroDesc")}
             </p>
 
             <div className="flex flex-wrap items-center gap-4 mt-4">
@@ -443,7 +411,7 @@ export default function RobotTradingCenter() {
                 onClick={handleWhatsAppGeneral}
                 className="px-8 py-4 bg-[#111A4A] text-white rounded-xl font-semibold shadow-lg hover:bg-[#156d95] transition-all flex items-center gap-2 group"
               >
-                Mulai Gunakan EA
+                {t("viewPricingBtn")}
                 <motion.span
                   animate={{ x: [0, 4, 0] }}
                   transition={{ duration: 1.5, repeat: Infinity }}
@@ -457,7 +425,7 @@ export default function RobotTradingCenter() {
                 whileTap={{ scale: 0.97 }}
                 className="px-8 py-4 bg-white border border-slate-200 text-[#111A4A] rounded-xl font-semibold hover:bg-slate-50 hover:border-slate-300 transition-all shadow-sm"
               >
-                Lihat Performa
+                {t("freeConsultBtn")}
               </motion.a>
             </div>
 
@@ -648,12 +616,12 @@ export default function RobotTradingCenter() {
           <div className="text-center mb-16">
             <RevealOnScroll direction="up">
               <h2 className="text-3xl md:text-5xl font-bold mb-4 text-[#111A4A]">
-                Pilih <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#156d95] to-cyan-500">Paket Investasi</span> Anda
+                {t("pricingTitle")}
               </h2>
             </RevealOnScroll>
             <RevealOnScroll direction="up" delay={0.1}>
               <p className="text-slate-600 max-w-2xl mx-auto text-lg">
-                Dapatkan akses penuh ke algoritma trading canggih kami dengan opsi berlangganan tetap atau sistem bagi hasil (sharing profit).
+                {t("pricingDesc")}
               </p>
             </RevealOnScroll>
           </div>
@@ -738,7 +706,7 @@ export default function RobotTradingCenter() {
                     onClick={handleWhatsAppGeneral}
                     className={`relative z-10 w-full py-4 rounded-xl font-bold transition-all duration-300 ${pkg.isPopular ? 'bg-white text-[#111A4A] shadow-xl hover:shadow-2xl' : 'bg-white/10 backdrop-blur-sm text-white border border-white/30 hover:bg-white hover:text-[#111A4A]'}`}
                   >
-                    Pilih {pkg.name}
+                    {t("choosePackageBtn")} {pkg.name}
                   </motion.button>
                 </motion.div>
               </RevealOnScroll>
@@ -755,12 +723,12 @@ export default function RobotTradingCenter() {
           <div className="text-center mb-16">
             <RevealOnScroll direction="up">
               <h2 className="text-3xl md:text-5xl font-bold mb-4 text-[#111A4A]">
-                Langkah Penggunaan <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#156d95] to-cyan-500">Robot</span>
+                {t("howToStartTitle")}
               </h2>
             </RevealOnScroll>
             <RevealOnScroll direction="up" delay={0.1}>
               <p className="text-slate-600 max-w-2xl mx-auto text-lg">
-                Mulai otomatisasi trading Anda hanya dalam 4 langkah mudah. Tonton panduan video di bawah ini.
+                {t("howToStartDesc")}
               </p>
             </RevealOnScroll>
           </div>
@@ -1034,7 +1002,7 @@ export default function RobotTradingCenter() {
                             >
                               <td className="py-4 px-4">
                                 <p className="font-bold text-[#111A4A]">{row.month} {row.year}</p>
-                                <p className="text-xs text-slate-500">Agregasi Bulanan</p>
+                                <p className="text-xs text-slate-500">Monthly Aggregation</p>
                               </td>
                               <td className="py-4 px-4">
                                 <p className={`font-bold ${row.profit > 0 ? 'text-green-600' : 'text-red-500'}`}>
@@ -1094,12 +1062,12 @@ export default function RobotTradingCenter() {
         <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
           <RevealOnScroll direction="scale">
             <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">
-              Siap untuk Mengotomatiskan Trading Anda?
+              {t("howToStartTitle")}
             </h2>
           </RevealOnScroll>
           <RevealOnScroll direction="up" delay={0.1}>
             <p className="text-blue-100/80 mb-10 text-lg max-w-2xl mx-auto">
-              Pilih portofolio yang paling sesuai dengan gaya trading Anda, hubungkan akun Exness Anda, dan biarkan algoritma bekerja.
+              {t("pricingDesc")}
             </p>
           </RevealOnScroll>
           <RevealOnScroll direction="up" delay={0.2}>
@@ -1111,7 +1079,7 @@ export default function RobotTradingCenter() {
             >
               {/* shimmer sweep on hover */}
               <span className="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 bg-gradient-to-r from-transparent via-white/50 to-transparent skew-x-12 pointer-events-none" />
-              Konsultasi Setup EA Sekarang
+              {t("subscribeBtn")}
             </motion.button>
           </RevealOnScroll>
         </div>

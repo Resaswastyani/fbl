@@ -138,7 +138,7 @@ function CandlestickChart({ candles, pair, livePrice, crosshairX, onMouseMove, o
         <defs>
           <clipPath id="chartClip"><rect x={0} y={0} width={W} height={CHART_H + VOL_H + 4} /></clipPath>
         </defs>
-        
+
         {/* Grids */}
         {yLabels.map((l, i) => (
           <line key={i} x1={0} y1={l.y} x2={W} y2={l.y} stroke="rgba(255,255,255,0.05)" strokeWidth={1} />
@@ -175,7 +175,7 @@ function CandlestickChart({ candles, pair, livePrice, crosshairX, onMouseMove, o
             </>
           )}
         </g>
-        
+
         {/* Volumes */}
         <g>
           {candles.map((c: Candle, i: number) => {
@@ -193,7 +193,7 @@ function CandlestickChart({ candles, pair, livePrice, crosshairX, onMouseMove, o
         {yLabels.map((l, i) => (
           <text key={i} x={W + 6} y={l.y + 3} fill="rgba(255,255,255,0.4)" fontSize={8} fontFamily="monospace">{l.label}</text>
         ))}
-        
+
         {/* Live Badge */}
         <rect x={W} y={livePriceY - 8} width={Y_AXIS_W} height={16} fill={liveUp ? pair.bullColor : pair.bearColor} rx={2} />
         <text x={W + Y_AXIS_W / 2} y={livePriceY + 3} textAnchor="middle" fill="#fff" fontSize={9} fontWeight="bold" fontFamily="monospace">{fmtPrice(livePrice, pair.pip)}</text>
@@ -242,7 +242,7 @@ function IMacContent({ candles, livePrice, crosshairX, setCrosshairX }: any) {
 
       {/* 3 Columns */}
       <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
-        
+
         {/* Left Sidebar - Hidden on Mobile */}
         <div className="hidden md:flex w-[150px] border-r border-white/5 p-3 flex-col bg-[#131418]">
           <h3 className="text-[10px] text-white/70 mb-3 font-semibold">Others Trade Activity</h3>
@@ -261,12 +261,12 @@ function IMacContent({ candles, livePrice, crosshairX, setCrosshairX }: any) {
             ))}
           </div>
           <div className="mt-3 flex gap-1 h-1.5 rounded-full overflow-hidden">
-             <div className="h-full bg-[#2196f3] w-[54%]"></div>
-             <div className="h-full bg-[#26a69a] w-[46%]"></div>
+            <div className="h-full bg-[#2196f3] w-[54%]"></div>
+            <div className="h-full bg-[#26a69a] w-[46%]"></div>
           </div>
           <div className="flex justify-between text-[8px] mt-1 text-white/40 font-mono">
-             <span>54%</span>
-             <span>46%</span>
+            <span>54%</span>
+            <span>46%</span>
           </div>
           <h3 className="text-[9px] text-white/70 mt-3 font-semibold border-t border-white/5 pt-3">Positions</h3>
         </div>
@@ -278,27 +278,27 @@ function IMacContent({ candles, livePrice, crosshairX, setCrosshairX }: any) {
               <div className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-gradient-to-tr from-yellow-500 to-amber-600 flex items-center justify-center shadow-lg">
                 <span className="text-white text-[8px] md:text-[10px] font-bold">XAU</span>
               </div>
-              <span className="text-[12px] md:text-[14px] font-bold text-white tracking-wide">XAU/USD</span>
+              <span className="text-[12px] md:text-[14px] font-bold text-white tracking-wide">XAUUSD</span>
               <span className="text-[12px] md:text-[14px] font-mono font-bold text-[#2196f3] drop-shadow-[0_0_8px_rgba(33,150,243,0.4)]">
                 ${livePrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </span>
             </div>
             <div className="flex gap-1 md:gap-2">
               {['Daily', 'Weekly', 'Monthly'].map((btn, i) => (
-                <button key={btn} className={`text-[8px] md:text-[9px] px-2 md:px-3 py-1 md:py-1.5 rounded-md font-medium transition-colors ${i===0 ? 'bg-[#2196f3] text-white shadow-[0_0_10px_rgba(33,150,243,0.3)]' : 'hidden sm:inline-block bg-[#1e2028] text-white/50 hover:text-white/80'}`}>
+                <button key={btn} className={`text-[8px] md:text-[9px] px-2 md:px-3 py-1 md:py-1.5 rounded-md font-medium transition-colors ${i === 0 ? 'bg-[#2196f3] text-white shadow-[0_0_10px_rgba(33,150,243,0.3)]' : 'hidden sm:inline-block bg-[#1e2028] text-white/50 hover:text-white/80'}`}>
                   {btn}
                 </button>
               ))}
               <div className="w-5 h-5 md:w-6 md:h-6 rounded-md bg-[#1e2028] flex items-center justify-center text-[10px]">🗓</div>
             </div>
           </div>
-          
+
           {hoverCandle && (
             <div className="absolute top-[60px] md:top-[70px] left-[16px] z-10 flex gap-2 md:gap-3 text-[8px] md:text-[9px] font-mono text-white/40">
-               <span>O <span className={hoverCandle.close >= hoverCandle.open ? 'text-[#26a69a]' : 'text-[#ef5350]'}>{hoverCandle.open.toFixed(2)}</span></span>
-               <span>H <span className={hoverCandle.close >= hoverCandle.open ? 'text-[#26a69a]' : 'text-[#ef5350]'}>{hoverCandle.high.toFixed(2)}</span></span>
-               <span>L <span className={hoverCandle.close >= hoverCandle.open ? 'text-[#26a69a]' : 'text-[#ef5350]'}>{hoverCandle.low.toFixed(2)}</span></span>
-               <span>C <span className={hoverCandle.close >= hoverCandle.open ? 'text-[#26a69a]' : 'text-[#ef5350]'}>{hoverCandle.close.toFixed(2)}</span></span>
+              <span>O <span className={hoverCandle.close >= hoverCandle.open ? 'text-[#26a69a]' : 'text-[#ef5350]'}>{hoverCandle.open.toFixed(2)}</span></span>
+              <span>H <span className={hoverCandle.close >= hoverCandle.open ? 'text-[#26a69a]' : 'text-[#ef5350]'}>{hoverCandle.high.toFixed(2)}</span></span>
+              <span>L <span className={hoverCandle.close >= hoverCandle.open ? 'text-[#26a69a]' : 'text-[#ef5350]'}>{hoverCandle.low.toFixed(2)}</span></span>
+              <span>C <span className={hoverCandle.close >= hoverCandle.open ? 'text-[#26a69a]' : 'text-[#ef5350]'}>{hoverCandle.close.toFixed(2)}</span></span>
             </div>
           )}
 
@@ -329,30 +329,30 @@ function IMacContent({ candles, livePrice, crosshairX, setCrosshairX }: any) {
           <div>
             <p className="text-[9px] text-white/50 mb-1.5">Price</p>
             <div className="bg-[#1a1b20] p-2 rounded-lg text-[11px] flex justify-between border border-white/5">
-               <span className="font-mono text-white/90">$183.00</span>
-               <span className="text-[9px] text-white/30">Max</span>
+              <span className="font-mono text-white/90">$183.00</span>
+              <span className="text-[9px] text-white/30">Max</span>
             </div>
           </div>
           <div className="flex justify-between gap-1.5">
-             {['5x','10x','15x','50x'].map((x, i) => (
-                <button key={x} className={`flex-1 text-[9px] py-1.5 rounded-md font-medium transition-colors border ${i===1 ? 'bg-[#2196f3]/10 text-[#2196f3] border-[#2196f3]/30' : 'bg-[#1a1b20] text-white/40 border-transparent hover:bg-white/5'}`}>{x}</button>
-             ))}
+            {['5x', '10x', '15x', '50x'].map((x, i) => (
+              <button key={x} className={`flex-1 text-[9px] py-1.5 rounded-md font-medium transition-colors border ${i === 1 ? 'bg-[#2196f3]/10 text-[#2196f3] border-[#2196f3]/30' : 'bg-[#1a1b20] text-white/40 border-transparent hover:bg-white/5'}`}>{x}</button>
+            ))}
           </div>
           <div className="flex justify-between items-center pt-2">
-             <div>
-               <p className="text-[9px] text-white/70">Auto Close</p>
-               <p className="text-[9px] font-mono text-white/40 mt-0.5">$380.00</p>
-             </div>
-             <div className="w-7 h-4 bg-[#2196f3] rounded-full flex items-center justify-end px-0.5 cursor-pointer shadow-[0_0_8px_rgba(33,150,243,0.4)]">
-               <div className="w-3 h-3 bg-white rounded-full"></div>
-             </div>
+            <div>
+              <p className="text-[9px] text-white/70">Auto Close</p>
+              <p className="text-[9px] font-mono text-white/40 mt-0.5">$380.00</p>
+            </div>
+            <div className="w-7 h-4 bg-[#2196f3] rounded-full flex items-center justify-end px-0.5 cursor-pointer shadow-[0_0_8px_rgba(33,150,243,0.4)]">
+              <div className="w-3 h-3 bg-white rounded-full"></div>
+            </div>
           </div>
           <div className="mt-auto">
-             <div className="bg-[#1a1b20] p-1 rounded-lg flex border border-white/5">
-                <button className="flex-1 text-[9px] py-1.5 bg-[#2196f3] rounded-md text-white shadow-[0_0_8px_rgba(33,150,243,0.3)]">Open</button>
-                <button className="flex-1 text-[9px] py-1.5 text-white/50 hover:text-white/80 transition-colors">Closed</button>
-                <button className="flex-1 text-[9px] py-1.5 text-white/50 hover:text-white/80 transition-colors">History</button>
-             </div>
+            <div className="bg-[#1a1b20] p-1 rounded-lg flex border border-white/5">
+              <button className="flex-1 text-[9px] py-1.5 bg-[#2196f3] rounded-md text-white shadow-[0_0_8px_rgba(33,150,243,0.3)]">Open</button>
+              <button className="flex-1 text-[9px] py-1.5 text-white/50 hover:text-white/80 transition-colors">Closed</button>
+              <button className="flex-1 text-[9px] py-1.5 text-white/50 hover:text-white/80 transition-colors">History</button>
+            </div>
           </div>
         </div>
       </div>
@@ -369,17 +369,17 @@ function TopRightCard() {
       </div>
       <div className="flex gap-1.5 items-end h-20 mb-3 px-1 relative border-b border-white/5 pb-2">
         <div className="absolute right-[-10px] top-0 bottom-2 flex flex-col justify-between text-[7px] font-mono text-white/30 text-right">
-           <span>$300000</span>
-           <span>$250000</span>
-           <span>$200000</span>
-           <span>$150000</span>
-           <span>$0</span>
+          <span>$300000</span>
+          <span>$250000</span>
+          <span>$200000</span>
+          <span>$150000</span>
+          <span>$0</span>
         </div>
         {[30, 45, 40, 65, 55, 85, 75].map((val, i) => (
-           <div key={i} className="flex-1 flex flex-col justify-end items-center gap-1.5 relative group">
-             <div className="w-full rounded-sm transition-all group-hover:opacity-80" style={{ height: `${val}%`, backgroundColor: i % 2 === 0 ? '#2196f3' : '#26a69a' }}></div>
-             <span className="text-[7px] font-mono text-white/50 bg-[#1a1b20] px-1 py-0.5 rounded">201{5+i}</span>
-           </div>
+          <div key={i} className="flex-1 flex flex-col justify-end items-center gap-1.5 relative group">
+            <div className="w-full rounded-sm transition-all group-hover:opacity-80" style={{ height: `${val}%`, backgroundColor: i % 2 === 0 ? '#2196f3' : '#26a69a' }}></div>
+            <span className="text-[7px] font-mono text-white/50 bg-[#1a1b20] px-1 py-0.5 rounded">201{5 + i}</span>
+          </div>
         ))}
       </div>
     </div>
@@ -421,9 +421,9 @@ function TabletContent() {
               {c.change > 0 ? '+' : ''}{c.change}%
             </span>
             <div className="flex-1 flex items-center justify-end pl-2">
-               <svg width="28" height="12" viewBox="0 0 28 12" className="drop-shadow-md">
-                 <polyline points="0,8 6,10 12,3 18,7 24,2 28,5" fill="none" stroke={c.change >= 0 ? '#26a69a' : '#ef5350'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-               </svg>
+              <svg width="28" height="12" viewBox="0 0 28 12" className="drop-shadow-md">
+                <polyline points="0,8 6,10 12,3 18,7 24,2 28,5" fill="none" stroke={c.change >= 0 ? '#26a69a' : '#ef5350'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
             </div>
           </div>
         ))}
@@ -459,19 +459,19 @@ function PhoneContent() {
       </div>
       <div className="flex flex-col gap-2.5">
         <div className="flex text-[9px] items-center px-1">
-           <span className="w-2.5 h-2.5 rounded-full bg-[#2196f3] mr-2 shadow-[0_0_5px_rgba(33,150,243,0.5)]"></span>
-           <span className="flex-1 font-medium text-white/90">BTC</span>
-           <span className="font-mono text-white/70">$1,452.50</span>
+          <span className="w-2.5 h-2.5 rounded-full bg-[#2196f3] mr-2 shadow-[0_0_5px_rgba(33,150,243,0.5)]"></span>
+          <span className="flex-1 font-medium text-white/90">BTC</span>
+          <span className="font-mono text-white/70">$1,452.50</span>
         </div>
         <div className="flex text-[9px] items-center px-1">
-           <span className="w-2.5 h-2.5 rounded-full bg-[#26a69a] mr-2 shadow-[0_0_5px_rgba(38,166,154,0.5)]"></span>
-           <span className="flex-1 font-medium text-white/90">ETH</span>
-           <span className="font-mono text-white/70">$845.20</span>
+          <span className="w-2.5 h-2.5 rounded-full bg-[#26a69a] mr-2 shadow-[0_0_5px_rgba(38,166,154,0.5)]"></span>
+          <span className="flex-1 font-medium text-white/90">ETH</span>
+          <span className="font-mono text-white/70">$845.20</span>
         </div>
         <div className="flex text-[9px] items-center px-1">
-           <span className="w-2.5 h-2.5 rounded-full bg-[#1a1b20] border border-white/20 mr-2"></span>
-           <span className="flex-1 font-medium text-white/90">USDT</span>
-           <span className="font-mono text-white/70">$3,596.20</span>
+          <span className="w-2.5 h-2.5 rounded-full bg-[#1a1b20] border border-white/20 mr-2"></span>
+          <span className="flex-1 font-medium text-white/90">USDT</span>
+          <span className="font-mono text-white/70">$3,596.20</span>
         </div>
       </div>
     </div>
@@ -494,7 +494,7 @@ export default function RightAnimationCard() {
       if (containerRef.current) {
         const parentW = containerRef.current.parentElement?.clientWidth || window.innerWidth;
         if (window.innerWidth >= 768) {
-          setScale(Math.min(1, parentW / 950)); 
+          setScale(Math.min(1, parentW / 950));
         }
       }
     };
@@ -546,7 +546,7 @@ export default function RightAnimationCard() {
 
   return (
     <div className="w-full flex items-center justify-center relative overflow-visible" ref={containerRef}>
-      
+
       {/* ─────────────────────────────────────────────────────────────────
           DESKTOP COLLAGE CONTAINER (Hidden on mobile) 
           ───────────────────────────────────────────────────────────────── */}
@@ -565,10 +565,10 @@ export default function RightAnimationCard() {
 
         {/* IMAC */}
         <motion.div
-           initial={{ opacity: 0, y: 30 }}
-           animate={{ opacity: 1, y: 0 }}
-           transition={{ duration: 0.8, type: "spring" }}
-           className="absolute top-[20px] left-[65px] z-0"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, type: "spring" }}
+          className="absolute top-[20px] left-[65px] z-0"
         >
           <motion.div animate={{ y: [0, -5, 0] }} transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}>
             <div className="flex flex-col items-center">
@@ -588,10 +588,10 @@ export default function RightAnimationCard() {
 
         {/* FLOAT CARD */}
         <motion.div
-           initial={{ opacity: 0, x: 30 }}
-           animate={{ opacity: 1, x: 0 }}
-           transition={{ duration: 0.8, delay: 0.2, type: "spring" }}
-           className="absolute top-[-10px] right-[10px] z-10"
+          initial={{ opacity: 0, x: 30 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8, delay: 0.2, type: "spring" }}
+          className="absolute top-[-10px] right-[10px] z-10"
         >
           <motion.div animate={{ y: [0, -8, 0] }} transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 0.5 }} className="rotate-3 origin-bottom-left">
             <TopRightCard />
@@ -600,10 +600,10 @@ export default function RightAnimationCard() {
 
         {/* TABLET */}
         <motion.div
-           initial={{ opacity: 0, y: 40 }}
-           animate={{ opacity: 1, y: 0 }}
-           transition={{ duration: 0.8, delay: 0.4, type: "spring" }}
-           className="absolute bottom-[-10px] left-[5px] z-20"
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4, type: "spring" }}
+          className="absolute bottom-[-10px] left-[5px] z-20"
         >
           <motion.div animate={{ y: [0, -12, 0] }} transition={{ repeat: Infinity, duration: 4.5, ease: "easeInOut", delay: 1 }} className="-rotate-6 origin-bottom-right">
             <div className="w-[280px] h-[380px] bg-[#131418] rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)] border-[12px] border-[#0a0a0c] relative overflow-hidden flex flex-col">
@@ -619,15 +619,15 @@ export default function RightAnimationCard() {
 
         {/* PHONE */}
         <motion.div
-           initial={{ opacity: 0, x: 40, y: 40 }}
-           animate={{ opacity: 1, x: 0, y: 0 }}
-           transition={{ duration: 0.8, delay: 0.6, type: "spring" }}
-           className="absolute bottom-[-30px] right-[25px] z-30"
+          initial={{ opacity: 0, x: 40, y: 40 }}
+          animate={{ opacity: 1, x: 0, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.6, type: "spring" }}
+          className="absolute bottom-[-30px] right-[25px] z-30"
         >
           <motion.div animate={{ y: [0, -15, 0] }} transition={{ repeat: Infinity, duration: 4, ease: "easeInOut", delay: 1.5 }} className="rotate-[8deg] origin-bottom-left">
             <div className="w-[150px] h-[320px] bg-[#131418] rounded-[2rem] shadow-[0_30px_60px_rgba(0,0,0,0.6)] border-[8px] border-[#0a0a0c] relative overflow-hidden flex flex-col">
               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-4 bg-[#0a0a0c] rounded-b-xl z-10 flex justify-center items-end pb-1">
-                 <div className="w-5 h-1 bg-white/10 rounded-full"></div>
+                <div className="w-5 h-1 bg-white/10 rounded-full"></div>
               </div>
               <div className="flex-1 px-3 pt-8 pb-3 bg-[#181920]">
                 <PhoneContent />
@@ -641,66 +641,66 @@ export default function RightAnimationCard() {
           MOBILE STACK CONTAINER (Hidden on desktop) 
           ───────────────────────────────────────────────────────────────── */}
       <div className="w-full flex flex-col md:hidden items-center gap-8 pb-10">
-         
-         <motion.div
-           initial={{ opacity: 0, y: 20 }}
-           whileInView={{ opacity: 1, y: 0 }}
-           viewport={{ once: true }}
-           transition={{ duration: 0.6 }}
-           className="w-full bg-[#1a1b20] rounded-2xl shadow-xl overflow-hidden flex flex-col border border-gray-800"
-         >
-            <IMacContent candles={candles} livePrice={livePrice} crosshairX={crosshairX} setCrosshairX={setCrosshairX} />
-         </motion.div>
 
-         <motion.div
-           initial={{ opacity: 0, y: 20 }}
-           whileInView={{ opacity: 1, y: 0 }}
-           viewport={{ once: true }}
-           transition={{ duration: 0.6, delay: 0.1 }}
-           className="w-full max-w-[300px]"
-         >
-            <motion.div animate={{ y: [0, -6, 0] }} transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}>
-               <TopRightCard />
-            </motion.div>
-         </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="w-full bg-[#1a1b20] rounded-2xl shadow-xl overflow-hidden flex flex-col border border-gray-800"
+        >
+          <IMacContent candles={candles} livePrice={livePrice} crosshairX={crosshairX} setCrosshairX={setCrosshairX} />
+        </motion.div>
 
-         <motion.div
-           initial={{ opacity: 0, y: 20 }}
-           whileInView={{ opacity: 1, y: 0 }}
-           viewport={{ once: true }}
-           transition={{ duration: 0.6, delay: 0.2 }}
-           className="w-full max-w-[320px]"
-         >
-            <motion.div animate={{ y: [0, -8, 0] }} transition={{ repeat: Infinity, duration: 4.5, ease: "easeInOut", delay: 0.5 }}>
-               <div className="w-full h-[380px] bg-[#131418] rounded-[2rem] shadow-xl border-[12px] border-[#0a0a0c] relative overflow-hidden flex flex-col">
-                  <div className="absolute top-0 w-full h-4 flex justify-center items-center z-10">
-                    <div className="w-1.5 h-1.5 rounded-full bg-[#2a2a30]"></div>
-                  </div>
-                  <div className="flex-1 px-3 pt-6 pb-3 overflow-hidden bg-[#181920]">
-                    <TabletContent />
-                  </div>
-               </div>
-            </motion.div>
-         </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="w-full max-w-[300px]"
+        >
+          <motion.div animate={{ y: [0, -6, 0] }} transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}>
+            <TopRightCard />
+          </motion.div>
+        </motion.div>
 
-         <motion.div
-           initial={{ opacity: 0, y: 20 }}
-           whileInView={{ opacity: 1, y: 0 }}
-           viewport={{ once: true }}
-           transition={{ duration: 0.6, delay: 0.3 }}
-           className="w-[200px]"
-         >
-            <motion.div animate={{ y: [0, -10, 0] }} transition={{ repeat: Infinity, duration: 4, ease: "easeInOut", delay: 1 }}>
-               <div className="w-full h-[340px] bg-[#131418] rounded-[2rem] shadow-xl border-[8px] border-[#0a0a0c] relative overflow-hidden flex flex-col">
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-4 bg-[#0a0a0c] rounded-b-xl z-10 flex justify-center items-end pb-1">
-                    <div className="w-5 h-1 bg-white/10 rounded-full"></div>
-                  </div>
-                  <div className="flex-1 px-3 pt-8 pb-3 bg-[#181920]">
-                    <PhoneContent />
-                  </div>
-               </div>
-            </motion.div>
-         </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="w-full max-w-[320px]"
+        >
+          <motion.div animate={{ y: [0, -8, 0] }} transition={{ repeat: Infinity, duration: 4.5, ease: "easeInOut", delay: 0.5 }}>
+            <div className="w-full h-[380px] bg-[#131418] rounded-[2rem] shadow-xl border-[12px] border-[#0a0a0c] relative overflow-hidden flex flex-col">
+              <div className="absolute top-0 w-full h-4 flex justify-center items-center z-10">
+                <div className="w-1.5 h-1.5 rounded-full bg-[#2a2a30]"></div>
+              </div>
+              <div className="flex-1 px-3 pt-6 pb-3 overflow-hidden bg-[#181920]">
+                <TabletContent />
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="w-[200px]"
+        >
+          <motion.div animate={{ y: [0, -10, 0] }} transition={{ repeat: Infinity, duration: 4, ease: "easeInOut", delay: 1 }}>
+            <div className="w-full h-[340px] bg-[#131418] rounded-[2rem] shadow-xl border-[8px] border-[#0a0a0c] relative overflow-hidden flex flex-col">
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-4 bg-[#0a0a0c] rounded-b-xl z-10 flex justify-center items-end pb-1">
+                <div className="w-5 h-1 bg-white/10 rounded-full"></div>
+              </div>
+              <div className="flex-1 px-3 pt-8 pb-3 bg-[#181920]">
+                <PhoneContent />
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
       </div>
 
     </div>

@@ -4,8 +4,10 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Calendar, Clock, MapPin, ArrowRight, CheckCircle2, Sparkles } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export default function WebinarPopup() {
+  const t = useTranslations("WebinarPopup");
   const [isOpen, setIsOpen] = useState(false);
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [isMounted, setIsMounted] = useState(false);
@@ -95,30 +97,30 @@ export default function WebinarPopup() {
                   transition={{ delay: 0.2 }}
                 >
                   <span className="inline-flex items-center rounded-full bg-[#C9A84C]/20 px-3 py-1 text-[10px] sm:text-xs font-bold text-[#C9A84C] tracking-wider uppercase mb-3 border border-[#C9A84C]/30 shadow-sm">
-                    <Sparkles className="w-3 h-3 mr-1" /> Webinar Eksklusif • 100% Gratis
+                    <Sparkles className="w-3 h-3 mr-1" /> {t("exclusive")}
                   </span>
                 </motion.div>
 
                 <h2 className="text-2xl sm:text-4xl font-bold mb-2 leading-tight">
-                  <span className="text-[#00C9A7]">ROBOT TRADING</span> FOREX
+                  <span className="text-[#00C9A7]">{t("title1")}</span> {t("title2")}
                 </h2>
 
                 <p className="text-lg sm:text-xl text-gray-300 font-medium mb-5">
-                  Peluang, Risiko & Cara Kerja Sebenarnya
+                  {t("subtitle")}
                 </p>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6 text-gray-300 text-sm">
                   <div className="flex items-center">
                     <Calendar className="w-4 h-4 mr-2 text-[#C9A84C]" />
-                    <span className="font-medium">20 Juli 2026</span>
+                    <span className="font-medium">{t("date")}</span>
                   </div>
                   <div className="flex items-center">
                     <Clock className="w-4 h-4 mr-2 text-[#C9A84C]" />
-                    <span className="font-medium">19.00 - 21.00 WIB</span>
+                    <span className="font-medium">{t("time")}</span>
                   </div>
                   <div className="flex items-center sm:col-span-2">
                     <MapPin className="w-4 h-4 mr-2 text-[#C9A84C]" />
-                    <span className="font-medium">Google Meet (Link via WA Group)</span>
+                    <span className="font-medium">{t("location")}</span>
                   </div>
                 </div>
 
@@ -126,10 +128,10 @@ export default function WebinarPopup() {
                 <div className="mb-6">
                   <div className="flex space-x-2 sm:space-x-3">
                     {[
-                      { label: "HARI", value: timeLeft.days },
-                      { label: "JAM", value: timeLeft.hours },
-                      { label: "MENIT", value: timeLeft.minutes },
-                      { label: "DETIK", value: timeLeft.seconds },
+                      { label: t("days"), value: timeLeft.days },
+                      { label: t("hours"), value: timeLeft.hours },
+                      { label: t("minutes"), value: timeLeft.minutes },
+                      { label: t("seconds"), value: timeLeft.seconds },
                     ].map((item, i) => (
                       <div key={i} className="flex flex-col items-center">
                         <div className="flex h-12 w-12 sm:h-16 sm:w-16 items-center justify-center rounded-xl bg-gray-900 border border-[#00C9A7]/30 shadow-inner relative overflow-hidden group">
@@ -156,12 +158,12 @@ export default function WebinarPopup() {
                     <Sparkles className="w-12 h-12 text-[#00C9A7]" />
                   </div>
                   <h4 className="font-bold text-[#00C9A7] mb-2 text-base flex items-center">
-                    Benefit Eksklusif (GRATIS):
+                    {t("benefitTitle")}
                   </h4>
                   <ul className="text-xs sm:text-sm text-white space-y-1.5 font-medium relative z-10">
-                    <li className="flex items-center"><CheckCircle2 className="w-4 h-4 text-[#C9A84C] mr-2 flex-shrink-0" /> Materi Profesional Trading Forex</li>
-                    <li className="flex items-center"><CheckCircle2 className="w-4 h-4 text-[#C9A84C] mr-2 flex-shrink-0" /> Position Size Calculator .ex4 & .ex5</li>
-                    <li className="flex items-center"><CheckCircle2 className="w-4 h-4 text-[#C9A84C] mr-2 flex-shrink-0" /> Free Trial Robot Trading 30 Hari</li>
+                    <li className="flex items-center"><CheckCircle2 className="w-4 h-4 text-[#C9A84C] mr-2 flex-shrink-0" /> {t("benefit1")}</li>
+                    <li className="flex items-center"><CheckCircle2 className="w-4 h-4 text-[#C9A84C] mr-2 flex-shrink-0" /> {t("benefit2")}</li>
+                    <li className="flex items-center"><CheckCircle2 className="w-4 h-4 text-[#C9A84C] mr-2 flex-shrink-0" /> {t("benefit3")}</li>
                   </ul>
                 </motion.div>
               </div>
@@ -172,7 +174,7 @@ export default function WebinarPopup() {
 
               <div>
                 <h3 className="text-base font-bold text-white mb-4 border-b border-gray-800 pb-2 flex items-center justify-between">
-                  <span>Pembicara & Host</span>
+                  <span>{t("speakersHost")}</span>
                 </h3>
 
                 <div className="space-y-4">
@@ -186,7 +188,7 @@ export default function WebinarPopup() {
                     </div>
                     <div>
                       <p className="font-bold text-white text-sm leading-tight">Sindhurahardjo W.</p>
-                      <p className="text-[10px] font-medium text-[#C9A84C] mt-0.5 uppercase tracking-wider">Pemateri</p>
+                      <p className="text-[10px] font-medium text-[#C9A84C] mt-0.5 uppercase tracking-wider">{t("speakerRole")}</p>
                     </div>
                   </motion.div>
 
@@ -205,7 +207,7 @@ export default function WebinarPopup() {
                     </div>
                     <div>
                       <p className="font-bold text-white text-sm leading-tight">Eka Pramudhita</p>
-                      <p className="text-[10px] font-medium text-[#C9A84C] mt-0.5 uppercase tracking-wider">Pemateri</p>
+                      <p className="text-[10px] font-medium text-[#C9A84C] mt-0.5 uppercase tracking-wider">{t("speakerRole")}</p>
                     </div>
                   </motion.div>
 
@@ -224,7 +226,7 @@ export default function WebinarPopup() {
                     </div>
                     <div>
                       <p className="font-bold text-white text-sm leading-tight">Desi Oktasari</p>
-                      <p className="text-[10px] font-medium text-[#00C9A7] mt-0.5 uppercase tracking-wider">Host</p>
+                      <p className="text-[10px] font-medium text-[#00C9A7] mt-0.5 uppercase tracking-wider">{t("hostRole")}</p>
                     </div>
                   </motion.div>
                 </div>
@@ -240,7 +242,7 @@ export default function WebinarPopup() {
                   <div className="relative w-24 h-24">
                     <Image
                       src="/webinar/tiny_cc_PendaftaranWebinarFBL.png"
-                      alt="QR Code Pendaftaran"
+                      alt={t("qrAlt")}
                       fill
                       className="object-contain"
                     />
@@ -254,12 +256,12 @@ export default function WebinarPopup() {
                   className="w-full relative overflow-hidden group rounded-lg bg-[#00C9A7] px-4 py-3 font-bold text-[#0A0E1A] shadow-lg transition-all hover:shadow-[0_0_20px_rgba(0,201,167,0.5)] hover:-translate-y-1 active:translate-y-0"
                 >
                   <span className="relative z-10 flex items-center justify-center gap-2 text-xs sm:text-sm uppercase tracking-wider">
-                    Daftar Sekarang
+                    {t("registerNow")}
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
                   </span>
                   <div className="absolute inset-0 z-0 h-full w-full bg-gradient-to-r from-teal-400 to-[#00C9A7] opacity-0 transition-opacity group-hover:opacity-100" />
                 </a>
-                <p className="text-[10px] text-gray-400 mt-3 font-medium">Slot terbatas! Daftar sebelum kehabisan.</p>
+                <p className="text-[10px] text-gray-400 mt-3 font-medium">{t("limitedSlot")}</p>
               </div>
 
             </div>

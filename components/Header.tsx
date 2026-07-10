@@ -448,22 +448,14 @@ export const Header = () => {
             `}
           >
 
-            <Dropdown
-              title={t("robotTrading")}
-              items={[
-
-                {
-                  name: t("giveawayMenu"),
-                  href: "/robot-trading/giveaway",
-                  icon: Gift,
-                },
-                {
-                  name: t("backtestPerformance"),
-                  href: "/robot-trading/backtest",
-                  icon: BarChart2,
-                },
-              ]}
-            />
+            <button
+              onClick={() => handleLinkClick("/robot-trading")}
+              className={`font-medium hover:text-primary transition 
+                ${isScrolled ? "text-sm" : "text-base"} ${textColorClass}
+              `}
+            >
+              {t("robotTrading")}
+            </button>
             <Dropdown
               title={t("tradingLesson")}
               items={[
@@ -617,24 +609,12 @@ export const Header = () => {
                 )}
 
                 <div>
-                  <p className="text-gray-900 font-semibold mb-2">
+                  <button
+                    onClick={() => handleLinkClick("/robot-trading")}
+                    className="text-gray-900 font-semibold mb-2 w-full text-left"
+                  >
                     {t("robotTrading")}
-                  </p>
-                  <div className="space-y-2 pl-3">
-
-                    <button
-                      onClick={() => handleLinkClick("/robot-trading/giveaway")}
-                      className="flex gap-2 items-center text-gray-700 w-full"
-                    >
-                      <Gift size={16} /> {t("giveawayMenu")}
-                    </button>
-                    <button
-                      onClick={() => handleLinkClick("/robot-trading/backtest")}
-                      className="flex gap-2 items-center text-gray-700 w-full"
-                    >
-                      <BarChart2 size={16} /> {t("backtestPerformance")}
-                    </button>
-                  </div>
+                  </button>
                 </div>
                 <div>
                   <p className="text-gray-900 font-semibold mb-2">

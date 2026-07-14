@@ -253,7 +253,36 @@ const AnimatedCounter = ({ target, suffix = "", prefix = "", duration = 2, decim
 export default function RobotTradingCenter() {
   const t = useTranslations("RobotTrading");
   const [mounted, setMounted] = useState(false);
-  const [backtestView, setBacktestView] = useState<"mingguan" | "bulanan">("mingguan");
+  const [backtestView, setBacktestView] = useState<"mingguan" | "bulanan">("bulanan");
+  const [selectedRobot, setSelectedRobot] = useState("fbl_ao_m1");
+  const [selectedYear, setSelectedYear] = useState("2026");
+
+  const robotList = [
+    {
+      id: "fbl_ao_m1",
+      name: "FBL_AO_XAUUSD_M1",
+      desc: "Mode Agresif 2 | XAUUSD M1",
+      status: "active",
+      badge: "Live Data",
+      color: "from-[#156d95] to-cyan-500",
+    },
+    {
+      id: "fbl_ao_m5",
+      name: "FBL_AO_XAUUSD_M5",
+      desc: "Mode Moderate | XAUUSD M5",
+      status: "coming_soon",
+      badge: "Coming Soon",
+      color: "from-slate-400 to-slate-500",
+    },
+    {
+      id: "fbl_ao_eurusd",
+      name: "FBL_AO_EURUSD_M1",
+      desc: "Mode Conservative | EURUSD M1",
+      status: "coming_soon",
+      badge: "Coming Soon",
+      color: "from-slate-400 to-slate-500",
+    },
+  ];
 
   const usageSteps = [
     { icon: ShieldCheck, title: t("step1Title"), description: t("step1Desc") },
@@ -344,6 +373,16 @@ export default function RobotTradingCenter() {
       maxDdPct: ((item.maxDd / 100000) * 100).toFixed(2) + "%"
     }));
   }, []);
+
+  const filteredWeekly = useMemo(
+    () => backtestData.filter(d => d.year === selectedYear),
+    [selectedYear]
+  );
+
+  const filteredMonthly = useMemo(
+    () => monthlyData.filter(d => d.year === selectedYear),
+    [selectedYear, monthlyData]
+  );
 
   if (!mounted) return <div className="min-h-screen bg-slate-50" />;
 
@@ -861,16 +900,153 @@ export default function RobotTradingCenter() {
             </RevealOnScroll>
           </div>
 
+          {/* ── 3-STEP BACKTEST SELECTOR ── */}
+          <RevealOnScroll direction="up" delay={0.1}>
+
+            {/* STEP 1: Pilih Robot */}
+            <div className="mb-8">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="flex items-center justify-center w-7 h-7 rounded-full bg-[#156d95] text-white text-xs font-bold shrink-0">1</div>
+                <h3 className="text-base font-bold text-[#111A4A]">Pilih Robot EA</h3>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {robotList.map((robot) => {
+                  const isActive = robot.status === "active";
+                  const isSelected = selectedRobot === robot.id;
+                  return (
+                    <motion.button
+                      key={robot.id}
+                      whileHover={isActive ? { y: -4, boxShadow: "0 16px 40px rgba(21,109,149,0.18)" } : {}}
+                      whileTap={isActive ? { scale: 0.97 } : {}}
+                      onClick={() => isActive && setSelectedRobot(robot.id)}
+                      className={`relative flex flex-col items-start gap-2 p-5 rounded-2xl border-2 text-left transition-all duration-300 overflow-hidden
+                        ${
+                          !isActive
+                            ? "border-slate-200 bg-slate-50 cursor-not-allowed opacity-60"
+                            : isSelected
+                            ? "border-[#156d95] bg-gradient-to-br from-[#156d95]/10 to-cyan-50 shadow-[0_0_0_3px_rgba(21,109,149,0.15)]"
+                            : "border-slate-200 bg-white hover:border-[#156d95]/40 cursor-pointer"
+                        }`}
+                    >
+                      {/* Glow on selected */}
+                      {isSelected && (
+                        <motion.div
+                          layoutId="robot-glow"
+                          className="absolute inset-0 bg-gradient-to-br from-[#156d95]/10 to-cyan-100/30 pointer-events-none"
+                          transition={{ type: "spring", duration: 0.5 }}
+                        />
+                      )}
+                      <div className="flex items-center justify-between w-full relative z-10">
+                        <div className={`p-2 rounded-xl bg-gradient-to-br ${robot.color} bg-opacity-10`}>
+                          <Bot className={`w-5 h-5 ${isActive ? 'text-[#156d95]' : 'text-slate-400'}`} />
+                        </div>
+                        <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full ${
+                          isActive
+                            ? "bg-green-100 text-green-700"
+                            : "bg-slate-200 text-slate-500"
+                        }`}>
+                          {robot.badge}
+                        </span>
+                      </div>
+                      <div className="relative z-10">
+                        <p className={`font-bold text-sm leading-tight ${ isActive ? 'text-[#111A4A]' : 'text-slate-400'}`}>{robot.name}</p>
+                        <p className="text-xs text-slate-500 mt-0.5">{robot.desc}</p>
+                      </div>
+                      {isSelected && (
+                        <div className="absolute top-3 right-3 w-4 h-4 rounded-full bg-[#156d95] flex items-center justify-center z-10">
+                          <Check className="w-2.5 h-2.5 text-white" strokeWidth={3} />
+                        </div>
+                      )}
+                    </motion.button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* STEP 2 & 3 combined row */}
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-8">
+
+              {/* STEP 2: Pilih Tahun */}
+              <div className="flex items-center gap-3">
+                <div className="flex items-center justify-center w-7 h-7 rounded-full bg-[#156d95] text-white text-xs font-bold shrink-0">2</div>
+                <span className="text-base font-bold text-[#111A4A] mr-2">Pilih Tahun</span>
+                <div className="flex items-center gap-1.5 bg-slate-100 p-1 rounded-xl">
+                  {["2026", "2025"].map((yr) => (
+                    <motion.button
+                      key={yr}
+                      whileTap={{ scale: 0.94 }}
+                      onClick={() => setSelectedYear(yr)}
+                      className={`relative px-5 py-2 rounded-lg text-sm font-bold transition-all duration-200 ${
+                        selectedYear === yr
+                          ? "bg-[#156d95] text-white shadow-md shadow-[#156d95]/30"
+                          : "text-slate-500 hover:text-slate-800"
+                      }`}
+                    >
+                      {yr}
+                      {yr === "2026" && selectedYear === yr && (
+                        <span className="absolute -top-2 -right-1 text-[9px] bg-green-500 text-white px-1.5 py-0.5 rounded-full font-bold leading-none">LIVE</span>
+                      )}
+                    </motion.button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="hidden sm:block w-px h-8 bg-slate-200 mx-2" />
+
+              {/* STEP 3: Pilih Tampilan */}
+              <div className="flex items-center gap-3">
+                <div className="flex items-center justify-center w-7 h-7 rounded-full bg-[#156d95] text-white text-xs font-bold shrink-0">3</div>
+                <span className="text-base font-bold text-[#111A4A] mr-2">Tampilan</span>
+                <div className="flex items-center gap-1.5 bg-slate-100 p-1 rounded-xl">
+                  <button
+                    onClick={() => setBacktestView("bulanan")}
+                    className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
+                      backtestView === 'bulanan' ? 'bg-white text-[#111A4A] shadow' : 'text-slate-500 hover:text-slate-700'
+                    }`}
+                  >
+                    Per Bulan
+                  </button>
+                  <button
+                    onClick={() => setBacktestView("mingguan")}
+                    className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
+                      backtestView === 'mingguan' ? 'bg-white text-[#111A4A] shadow' : 'text-slate-500 hover:text-slate-700'
+                    }`}
+                  >
+                    Per Minggu
+                  </button>
+                </div>
+              </div>
+
+              {/* Result count badge */}
+              <div className="sm:ml-auto">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#156d95]/10 text-[#156d95] text-xs font-bold">
+                  <Activity className="w-3.5 h-3.5" />
+                  {backtestView === 'bulanan' ? filteredMonthly.length : filteredWeekly.length} periode
+                </span>
+              </div>
+            </div>
+
+          </RevealOnScroll>
+
+          {/* ── TABLE AREA ── */}
           <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">
 
             {/* EA Profile Summary Card */}
             <RevealOnScroll direction="left" className="xl:col-span-1">
-              <div
-                className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm flex flex-col gap-4 h-full"
-              >
+              <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm flex flex-col gap-4 h-full">
                 <div className="pb-4 border-b border-slate-100">
                   <h3 className="text-xl font-bold text-[#111A4A] mb-1">EA Spesifikasi</h3>
-                  <p className="text-sm text-cyan-600 font-semibold bg-cyan-50 w-fit px-2 py-0.5 rounded">FBL_AO_XAUUSD_M1.Ex5</p>
+                  <AnimatePresence mode="wait">
+                    <motion.p
+                      key={selectedRobot}
+                      initial={{ opacity: 0, y: -6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 6 }}
+                      className="text-sm text-cyan-600 font-semibold bg-cyan-50 w-fit px-2 py-0.5 rounded"
+                    >
+                      {robotList.find(r => r.id === selectedRobot)?.name}.Ex5
+                    </motion.p>
+                  </AnimatePresence>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4 text-sm">
@@ -903,11 +1079,19 @@ export default function RobotTradingCenter() {
                 <div className="mt-4 pt-4 border-t border-slate-100 bg-slate-50 p-4 rounded-xl">
                   <div className="flex items-center gap-2 mb-2">
                     <Activity className="w-4 h-4 text-[#156d95]" />
-                    <p className="text-xs font-bold text-[#111A4A]">Statistik Total</p>
+                    <p className="text-xs font-bold text-[#111A4A]">Statistik {selectedYear}</p>
                   </div>
                   <div className="flex justify-between items-center mb-1">
-                    <span className="text-xs text-slate-600">Total Profit (2025-2026)</span>
-                    <span className="text-xs font-bold text-green-600">+16.8M USD</span>
+                    <span className="text-xs text-slate-600">Total Periode</span>
+                    <span className="text-xs font-bold text-[#111A4A]">{filteredWeekly.length} minggu</span>
+                  </div>
+                  <div className="flex justify-between items-center mb-1">
+                    <span className="text-xs text-slate-600">Total Profit</span>
+                    <span className={`text-xs font-bold ${
+                      filteredWeekly.reduce((s, d) => s + d.profit, 0) > 0 ? 'text-green-600' : 'text-red-500'
+                    }`}>
+                      {filteredWeekly.reduce((s, d) => s + d.profit, 0).toLocaleString('id-ID')}
+                    </span>
                   </div>
                   <div className="flex justify-between items-center mb-1">
                     <span className="text-xs text-slate-600">History Quality</span>
@@ -919,121 +1103,115 @@ export default function RobotTradingCenter() {
 
             {/* Table */}
             <RevealOnScroll direction="right" delay={0.15} className="xl:col-span-3">
-              <div
-                className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm overflow-hidden flex flex-col h-full"
-              >
+              <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm overflow-hidden flex flex-col h-full">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
                   <div>
-                    <h3 className="text-xl font-bold text-[#111A4A]">History Trade Lengkap</h3>
-                    <p className="text-sm text-slate-500">Mode Agresif 2 | Start Capital $100k</p>
+                    <h3 className="text-xl font-bold text-[#111A4A]">History Trade {selectedYear}</h3>
+                    <p className="text-sm text-slate-500">
+                      {robotList.find(r => r.id === selectedRobot)?.desc} | Start Capital $100k
+                    </p>
                   </div>
-                  <div className="flex items-center gap-2 bg-slate-100 p-1 rounded-xl">
-                    <button
-                      onClick={() => setBacktestView("mingguan")}
-                      className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${backtestView === 'mingguan' ? 'bg-white text-[#111A4A] shadow' : 'text-slate-500 hover:text-slate-700'}`}
-                    >
-                      Per Minggu
-                    </button>
-                    <button
-                      onClick={() => setBacktestView("bulanan")}
-                      className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${backtestView === 'bulanan' ? 'bg-white text-[#111A4A] shadow' : 'text-slate-500 hover:text-slate-700'}`}
-                    >
-                      Per Bulan
-                    </button>
+                  <div className="flex items-center gap-2">
+                    <span className={`text-xs font-bold px-3 py-1.5 rounded-full ${
+                      selectedYear === '2026' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'
+                    }`}>
+                      {selectedYear}
+                    </span>
                   </div>
                 </div>
 
                 <div className="w-full overflow-x-auto pb-4 custom-scrollbar max-h-[500px]">
-                  <table className="w-full text-left border-collapse min-w-[800px]">
-                    <thead className="sticky top-0 z-10 bg-white">
-                      <tr className="border-b border-slate-200">
-                        <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider bg-slate-50 rounded-tl-xl">Periode</th>
-                        <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider bg-slate-50">Nett Profit</th>
-                        <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider bg-slate-50">Peak Balance</th>
-                        <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider bg-slate-50">Max DD</th>
-                        <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider bg-slate-50 rounded-tr-xl">Total Trades</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <AnimatePresence mode="wait">
-                        {backtestView === 'mingguan' ?
-                          backtestData.map((row, i) => (
-                            <motion.tr
-                              key={`mingguan-${i}`}
-                              initial={{ opacity: 0, y: 8 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              exit={{ opacity: 0, y: -8 }}
-                              transition={{ delay: i * 0.012, duration: 0.2 }}
-                              className="border-b border-slate-100 hover:bg-slate-50/70 transition-colors"
-                            >
-                              <td className="py-4 px-4">
-                                <p className="font-bold text-[#111A4A]">{row.week} {row.month}</p>
-                                <p className="text-xs text-slate-500">{row.year}</p>
-                              </td>
-                              <td className="py-4 px-4">
-                                <p className={`font-semibold ${row.profit > 0 ? 'text-green-600' : 'text-red-500'}`}>
-                                  {row.profit > 0 ? '+' : ''}{row.profit.toLocaleString('id-ID')}
-                                </p>
-                                <p className={`text-xs ${row.profit > 0 ? 'text-green-500' : 'text-red-400'}`}>
-                                  {row.pct}
-                                </p>
-                              </td>
-                              <td className="py-4 px-4">
-                                <p className="font-semibold text-[#111A4A]">{row.peak.toLocaleString('id-ID')}</p>
-                              </td>
-                              <td className="py-4 px-4">
-                                <p className="font-semibold text-amber-600">{row.maxDd.toLocaleString('id-ID')}</p>
-                                <p className="text-xs text-amber-500">{row.maxDdPct}</p>
-                              </td>
-                              <td className="py-4 px-4">
-                                <p className="font-semibold text-[#111A4A]">{row.trades > 0 ? row.trades.toLocaleString('id-ID') : '-'}</p>
-                              </td>
-                            </motion.tr>
-                          ))
-                          :
-                          monthlyData.map((row, i) => (
-                            <motion.tr
-                              key={`bulanan-${i}`}
-                              initial={{ opacity: 0, y: 8 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              exit={{ opacity: 0, y: -8 }}
-                              transition={{ delay: i * 0.02, duration: 0.2 }}
-                              className="border-b border-slate-100 hover:bg-slate-50/70 transition-colors bg-cyan-50/10"
-                            >
-                              <td className="py-4 px-4">
-                                <p className="font-bold text-[#111A4A]">{row.month} {row.year}</p>
-                                <p className="text-xs text-slate-500">Monthly Aggregation</p>
-                              </td>
-                              <td className="py-4 px-4">
-                                <p className={`font-bold ${row.profit > 0 ? 'text-green-600' : 'text-red-500'}`}>
-                                  {row.profit > 0 ? '+' : ''}{row.profit.toLocaleString('id-ID')}
-                                </p>
-                                <p className={`text-xs font-semibold ${row.profit > 0 ? 'text-green-500' : 'text-red-400'}`}>
-                                  {row.pct}
-                                </p>
-                              </td>
-                              <td className="py-4 px-4">
-                                <p className="font-semibold text-[#111A4A]">{row.peak.toLocaleString('id-ID')}</p>
-                              </td>
-                              <td className="py-4 px-4">
-                                <p className="font-semibold text-amber-600">{row.maxDd.toLocaleString('id-ID')}</p>
-                                <p className="text-xs text-amber-500">{row.maxDdPct}</p>
-                              </td>
-                              <td className="py-4 px-4">
-                                <p className="font-semibold text-[#111A4A]">{row.trades > 0 ? row.trades.toLocaleString('id-ID') : '-'}</p>
-                              </td>
-                            </motion.tr>
-                          ))
+                  <AnimatePresence mode="wait">
+                    <motion.table
+                      key={`${selectedYear}-${backtestView}`}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.3 }}
+                      className="w-full text-left border-collapse min-w-[800px]"
+                    >
+                      <thead className="sticky top-0 z-10 bg-white">
+                        <tr className="border-b border-slate-200">
+                          <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider bg-slate-50 rounded-tl-xl">Periode</th>
+                          <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider bg-slate-50">Nett Profit</th>
+                          <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider bg-slate-50">Peak Balance</th>
+                          <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider bg-slate-50">Max DD</th>
+                          <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider bg-slate-50 rounded-tr-xl">Total Trades</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {backtestView === 'mingguan'
+                          ? filteredWeekly.map((row, i) => (
+                              <motion.tr
+                                key={`w-${i}`}
+                                initial={{ opacity: 0, y: 8 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: i * 0.012, duration: 0.2 }}
+                                className="border-b border-slate-100 hover:bg-slate-50/70 transition-colors"
+                              >
+                                <td className="py-4 px-4">
+                                  <p className="font-bold text-[#111A4A]">{row.week} {row.month}</p>
+                                  <p className="text-xs text-slate-500">{row.year}</p>
+                                </td>
+                                <td className="py-4 px-4">
+                                  <p className={`font-semibold ${row.profit > 0 ? 'text-green-600' : 'text-red-500'}`}>
+                                    {row.profit > 0 ? '+' : ''}{row.profit.toLocaleString('id-ID')}
+                                  </p>
+                                  <p className={`text-xs ${row.profit > 0 ? 'text-green-500' : 'text-red-400'}`}>{row.pct}</p>
+                                </td>
+                                <td className="py-4 px-4">
+                                  <p className="font-semibold text-[#111A4A]">{row.peak.toLocaleString('id-ID')}</p>
+                                </td>
+                                <td className="py-4 px-4">
+                                  <p className="font-semibold text-amber-600">{row.maxDd.toLocaleString('id-ID')}</p>
+                                  <p className="text-xs text-amber-500">{row.maxDdPct}</p>
+                                </td>
+                                <td className="py-4 px-4">
+                                  <p className="font-semibold text-[#111A4A]">{row.trades > 0 ? row.trades.toLocaleString('id-ID') : '-'}</p>
+                                </td>
+                              </motion.tr>
+                            ))
+                          : filteredMonthly.map((row, i) => (
+                              <motion.tr
+                                key={`m-${i}`}
+                                initial={{ opacity: 0, y: 8 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: i * 0.03, duration: 0.2 }}
+                                className="border-b border-slate-100 hover:bg-slate-50/70 transition-colors"
+                              >
+                                <td className="py-4 px-4">
+                                  <p className="font-bold text-[#111A4A]">{row.month} {row.year}</p>
+                                  <p className="text-xs text-slate-500">Monthly Aggregation</p>
+                                </td>
+                                <td className="py-4 px-4">
+                                  <p className={`font-bold ${row.profit > 0 ? 'text-green-600' : 'text-red-500'}`}>
+                                    {row.profit > 0 ? '+' : ''}{row.profit.toLocaleString('id-ID')}
+                                  </p>
+                                  <p className={`text-xs font-semibold ${row.profit > 0 ? 'text-green-500' : 'text-red-400'}`}>{row.pct}</p>
+                                </td>
+                                <td className="py-4 px-4">
+                                  <p className="font-semibold text-[#111A4A]">{row.peak.toLocaleString('id-ID')}</p>
+                                </td>
+                                <td className="py-4 px-4">
+                                  <p className="font-semibold text-amber-600">{row.maxDd.toLocaleString('id-ID')}</p>
+                                  <p className="text-xs text-amber-500">{row.maxDdPct}</p>
+                                </td>
+                                <td className="py-4 px-4">
+                                  <p className="font-semibold text-[#111A4A]">{row.trades > 0 ? row.trades.toLocaleString('id-ID') : '-'}</p>
+                                </td>
+                              </motion.tr>
+                            ))
                         }
-                      </AnimatePresence>
-                    </tbody>
-                  </table>
+                      </tbody>
+                    </motion.table>
+                  </AnimatePresence>
                 </div>
 
                 <div className="mt-4 p-4 bg-cyan-50/50 rounded-xl border border-cyan-100 flex items-start gap-3">
                   <BarChart3 className="w-5 h-5 text-cyan-600 shrink-0 mt-0.5" />
                   <p className="text-sm text-slate-600">
-                    Data di atas adalah ringkasan performa backtest per minggu dan bulan. Nilai tertera menggambarkan jumlah poin/profit kotor dalam kondisi market pada periode tersebut.
+                    Menampilkan <strong>{backtestView === 'bulanan' ? filteredMonthly.length : filteredWeekly.length} periode</strong> pada tahun <strong>{selectedYear}</strong>.
+                    Data adalah ringkasan performa backtest {backtestView === 'bulanan' ? 'per bulan' : 'per minggu'} — nilai profit kotor dalam kondisi market aktual.
                   </p>
                 </div>
               </div>

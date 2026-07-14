@@ -356,7 +356,9 @@ export default function RobotTradingCenter() {
           trades: 0,
           maxDd: 0,
           lowestMargin: curr.lowestMargin,
-          highLow: 0
+          highLow: 0,
+          pfWeightedSum: 0,
+          pfWeightTotal: 0
         };
       }
       acc[key].profit += curr.profit;
@@ -365,6 +367,12 @@ export default function RobotTradingCenter() {
       acc[key].maxDd = Math.max(acc[key].maxDd, curr.maxDd);
       acc[key].lowestMargin = Math.min(acc[key].lowestMargin || 999999, curr.lowestMargin || 999999);
       acc[key].highLow += (curr.highLow || 0);
+      // weighted average PF by trade count
+      const pfNum = parseFloat(curr.pf || '0');
+      if (!isNaN(pfNum) && curr.trades > 0) {
+        acc[key].pfWeightedSum += pfNum * curr.trades;
+        acc[key].pfWeightTotal += curr.trades;
+      }
       return acc;
     }, {} as Record<string, any>);
 
@@ -372,7 +380,7 @@ export default function RobotTradingCenter() {
       ...item,
       pct: ((item.profit / 100000) * 100).toFixed(2) + "%",
       maxDdPct: ((item.maxDd / 100000) * 100).toFixed(2) + "%",
-      pf: "-",
+      pf: item.pfWeightTotal > 0 ? (item.pfWeightedSum / item.pfWeightTotal).toFixed(2) : "-",
       historyQuality: "100%",
       tglCandle: "-",
       lowestMargin: item.lowestMargin === 999999 ? 0 : item.lowestMargin
@@ -1176,7 +1184,10 @@ export default function RobotTradingCenter() {
                                   <p className="text-xs text-amber-500">{row.maxDdPct}</p>
                                 </td>
                                 <td className="py-4 px-4 whitespace-nowrap">
-                                  <p className="font-semibold text-[#111A4A]">{row.pf || "-"}</p>
+                                  <p className={`font-bold ${
+                                    !row.pf || row.pf === '-' ? 'text-slate-400'
+                                    : parseFloat(row.pf) >= 1 ? 'text-blue-600' : 'text-red-500'
+                                  }`}>{row.pf || "-"}</p>
                                 </td>
                                 <td className="py-4 px-4 whitespace-nowrap">
                                   <p className="font-semibold text-[#111A4A]">{row.trades > 0 ? row.trades.toLocaleString('id-ID') : '-'}</p>
@@ -1218,7 +1229,10 @@ export default function RobotTradingCenter() {
                                   <p className="text-xs text-amber-500">{row.maxDdPct}</p>
                                 </td>
                                 <td className="py-4 px-4 whitespace-nowrap">
-                                  <p className="font-semibold text-slate-400">-</p>
+                                  <p className={`font-bold ${
+                                    !row.pf || row.pf === '-' ? 'text-slate-400'
+                                    : parseFloat(row.pf) >= 1 ? 'text-blue-600' : 'text-red-500'
+                                  }`}>{row.pf || "-"}</p>
                                 </td>
                                 <td className="py-4 px-4 whitespace-nowrap">
                                   <p className="font-semibold text-[#111A4A]">{row.trades > 0 ? row.trades.toLocaleString('id-ID') : '-'}</p>

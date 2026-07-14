@@ -40,84 +40,81 @@ import { useTranslations } from "next-intl";
 // pricingPackages built inside component using t()
 
 const backtestData = [
-  // 2025
-  { year: "2025", month: "Jan", week: "5-11", profit: -281, pct: "-0.28%", peak: 100000, maxDd: 281, maxDdPct: "0.28%", trades: 84 },
-  { year: "2025", month: "Jan", week: "13-18", profit: -209, pct: "-0.21%", peak: 100034, maxDd: 209, maxDdPct: "0.21%", trades: 68 },
-  { year: "2025", month: "Jan", week: "20-25", profit: -183, pct: "-0.18%", peak: 100000, maxDd: 183, maxDdPct: "0.18%", trades: 97 },
-  { year: "2025", month: "Jan", week: "27-31", profit: -281, pct: "-0.28%", peak: 100000, maxDd: 281, maxDdPct: "0.28%", trades: 87 },
-  { year: "2025", month: "Feb", week: "3-8", profit: -1197, pct: "-1.20%", peak: 100031, maxDd: 1430, maxDdPct: "1.43%", trades: 114 },
-  { year: "2025", month: "Feb", week: "10-15", profit: 5810, pct: "5.81%", peak: 106826, maxDd: 0, maxDdPct: "0.00%", trades: 82 },
-  { year: "2025", month: "Feb", week: "17-22", profit: 77, pct: "0.08%", peak: 100509, maxDd: 184, maxDdPct: "0.18%", trades: 76 },
-  { year: "2025", month: "Feb", week: "24-28", profit: -100, pct: "-0.10%", peak: 100070, maxDd: 452, maxDdPct: "0.45%", trades: 124 },
-  { year: "2025", month: "Mar", week: "3-8", profit: -352, pct: "-0.35%", peak: 100000, maxDd: 452, maxDdPct: "0.45%", trades: 72 },
-  { year: "2025", month: "Mar", week: "10-15", profit: -349, pct: "-0.35%", peak: 100000, maxDd: 449, maxDdPct: "0.45%", trades: 124 },
-  { year: "2025", month: "Mar", week: "17-22", profit: 1953, pct: "1.95%", peak: 101953, maxDd: 0, maxDdPct: "0.00%", trades: 65 },
-  { year: "2025", month: "Mar", week: "24-29", profit: -118, pct: "-0.12%", peak: 100000, maxDd: 169, maxDdPct: "0.17%", trades: 84 },
-  { year: "2025", month: "Apr", week: "1-5", profit: -533, pct: "-0.53%", peak: 100160, maxDd: 841, maxDdPct: "0.84%", trades: 152 },
-  { year: "2025", month: "Apr", week: "7-12", profit: -1515, pct: "-1.52%", peak: 100000, maxDd: 1711, maxDdPct: "1.71%", trades: 288 },
-  { year: "2025", month: "Apr", week: "14-19", profit: -302, pct: "-0.30%", peak: 100011, maxDd: 1000, maxDdPct: "1.00%", trades: 164 },
-  { year: "2025", month: "Apr", week: "21-26", profit: 1600, pct: "1.60%", peak: 103995, maxDd: 1378, maxDdPct: "1.38%", trades: 240 },
-  { year: "2025", month: "Apr", week: "28-30", profit: -312, pct: "-0.31%", peak: 100890, maxDd: 355, maxDdPct: "0.36%", trades: 152 },
-  { year: "2025", month: "Mei", week: "1-3", profit: 9587, pct: "9.59%", peak: 109690, maxDd: 0, maxDdPct: "0.00%", trades: 198 },
-  { year: "2025", month: "Mei", week: "5-10", profit: 13174, pct: "13.17%", peak: 122325, maxDd: 167, maxDdPct: "0.17%", trades: 172 },
-  { year: "2025", month: "Mei", week: "12-17", profit: -726, pct: "-0.73%", peak: 101227, maxDd: 1017, maxDdPct: "1.02%", trades: 161 },
-  { year: "2025", month: "Mei", week: "19-24", profit: -498, pct: "-0.50%", peak: 100040, maxDd: 628, maxDdPct: "0.63%", trades: 151 },
-  { year: "2025", month: "Mei", week: "26-31", profit: -170, pct: "-0.17%", peak: 100074, maxDd: 340, maxDdPct: "0.34%", trades: 101 },
-  { year: "2025", month: "Jun", week: "2-7", profit: 2675, pct: "2.68%", peak: 103000, maxDd: 353, maxDdPct: "0.35%", trades: 104 },
-  { year: "2025", month: "Jun", week: "9-14", profit: -177, pct: "-0.18%", peak: 100036, maxDd: 841, maxDdPct: "0.84%", trades: 163 },
-  { year: "2025", month: "Jun", week: "16-21", profit: 4383, pct: "4.38%", peak: 105893, maxDd: 202, maxDdPct: "0.20%", trades: 138 },
-  { year: "2025", month: "Jun", week: "23-28", profit: 1724, pct: "1.72%", peak: 101666, maxDd: 213, maxDdPct: "0.21%", trades: 108 },
-  { year: "2025", month: "Jul", week: "29-5", profit: -251, pct: "-0.25%", peak: 100752, maxDd: 251, maxDdPct: "0.25%", trades: 118 },
-  { year: "2025", month: "Jul", week: "6-12", profit: -393, pct: "-0.39%", peak: 100000, maxDd: 396, maxDdPct: "0.40%", trades: 86 },
-  { year: "2025", month: "Jul", week: "13-19", profit: -1468, pct: "-1.47%", peak: 100034, maxDd: 1468, maxDdPct: "1.47%", trades: 67 },
-  { year: "2025", month: "Jul", week: "20-26", profit: -247, pct: "-0.25%", peak: 100000, maxDd: 876, maxDdPct: "0.88%", trades: 114 },
-  { year: "2025", month: "Jul", week: "27-2", profit: -729, pct: "-0.73%", peak: 100735, maxDd: 1028, maxDdPct: "1.03%", trades: 96 },
-  { year: "2025", month: "Aug", week: "3-9", profit: -202, pct: "-0.20%", peak: 100062, maxDd: 163, maxDdPct: "0.16%", trades: 64 },
-  { year: "2025", month: "Aug", week: "10-16", profit: 4458, pct: "4.46%", peak: 104976, maxDd: 176, maxDdPct: "0.18%", trades: 72 },
-  { year: "2025", month: "Aug", week: "17-23", profit: -276, pct: "-0.28%", peak: 100000, maxDd: 276, maxDdPct: "0.28%", trades: 67 },
-  { year: "2025", month: "Aug", week: "24-30", profit: 2597, pct: "2.60%", peak: 102597, maxDd: 0, maxDdPct: "0.00%", trades: 103 },
-  { year: "2025", month: "Sep", week: "31-6", profit: 7312, pct: "7.31%", peak: 108847, maxDd: 0, maxDdPct: "0.00%", trades: 163 },
-  { year: "2025", month: "Sep", week: "7-13", profit: -135, pct: "-0.13%", peak: 101411, maxDd: 169, maxDdPct: "0.17%", trades: 95 },
-  { year: "2025", month: "Sep", week: "14-20", profit: 2959, pct: "2.96%", peak: 105070, maxDd: 275, maxDdPct: "0.28%", trades: 81 },
-  { year: "2025", month: "Sep", week: "21-27", profit: -123, pct: "-0.12%", peak: 100451, maxDd: 719, maxDdPct: "0.72%", trades: 107 },
-  { year: "2025", month: "Sep", week: "28-4", profit: -144, pct: "-0.14%", peak: 101751, maxDd: 648, maxDdPct: "0.65%", trades: 134 },
-  { year: "2025", month: "Okt", week: "5-11", profit: 14157, pct: "14.16%", peak: 116597, maxDd: 316, maxDdPct: "0.32%", trades: 175 },
-  { year: "2025", month: "Okt", week: "12-18", profit: 125203, pct: "125.20%", peak: 231534, maxDd: 353, maxDdPct: "0.35%", trades: 371 },
-  { year: "2025", month: "Okt", week: "19-25", profit: 315334, pct: "315.33%", peak: 423043, maxDd: 209, maxDdPct: "0.21%", trades: 377 },
-  { year: "2025", month: "Okt", week: "26-1", profit: 67359, pct: "67.36%", peak: 168951, maxDd: 289, maxDdPct: "0.29%", trades: 223 },
-  { year: "2025", month: "Nov", week: "2-8", profit: 3029, pct: "3.03%", peak: 104373, maxDd: 954, maxDdPct: "0.95%", trades: 102 },
-  { year: "2025", month: "Nov", week: "9-15", profit: -511, pct: "-0.51%", peak: 101410, maxDd: 1148, maxDdPct: "1.15%", trades: 241 },
-  { year: "2025", month: "Nov", week: "16-22", profit: -463, pct: "-0.46%", peak: 102377, maxDd: 1448, maxDdPct: "1.45%", trades: 135 },
-  { year: "2025", month: "Nov", week: "26-29", profit: -153, pct: "-0.15%", peak: 100000, maxDd: 585, maxDdPct: "0.58%", trades: 187 },
-  { year: "2025", month: "Des", week: "30-6", profit: -426, pct: "-0.43%", peak: 101073, maxDd: 1565, maxDdPct: "1.57%", trades: 101 },
-  { year: "2025", month: "Des", week: "7-13", profit: -10, pct: "-0.01%", peak: 103070, maxDd: 48, maxDdPct: "0.05%", trades: 183 },
-  { year: "2025", month: "Des", week: "14-20", profit: -1158, pct: "-1.16%", peak: 100158, maxDd: 1158, maxDdPct: "1.16%", trades: 103 },
-  { year: "2025", month: "Des", week: "21-27", profit: -997, pct: "-1.00%", peak: 100189, maxDd: 1309, maxDdPct: "1.31%", trades: 210 },
-
-  // 2026
-  { year: "2026", month: "Jan", week: "5-10", profit: -251, pct: "-0.25%", peak: 104696, maxDd: 707, maxDdPct: "0.71%", trades: 167 },
-  { year: "2026", month: "Jan", week: "12-17", profit: 17623, pct: "17.62%", peak: 117037, maxDd: 390, maxDdPct: "0.39%", trades: 125 },
-  { year: "2026", month: "Jan", week: "19-24", profit: 45488, pct: "45.49%", peak: 147602, maxDd: 156, maxDdPct: "0.16%", trades: 337 },
-  { year: "2026", month: "Jan", week: "26-31", profit: 6036038, pct: "6036.04%", peak: 6049443, maxDd: 0, maxDdPct: "0.00%", trades: 913 },
-  { year: "2026", month: "Feb", week: "2-7", profit: 8437838, pct: "8437.84%", peak: 8672134, maxDd: 0, maxDdPct: "0.00%", trades: 690 },
-  { year: "2026", month: "Feb", week: "9-14", profit: 184971, pct: "184.97%", peak: 286018, maxDd: 277, maxDdPct: "0.28%", trades: 241 },
-  { year: "2026", month: "Feb", week: "16-21", profit: 28015, pct: "28.01%", peak: 131155, maxDd: 1576, maxDdPct: "1.58%", trades: 267 },
-  { year: "2026", month: "Feb", week: "23-28", profit: -443, pct: "-0.44%", peak: 106408, maxDd: 655, maxDdPct: "0.66%", trades: 188 },
-  { year: "2026", month: "Mar", week: "2-7", profit: 40398, pct: "40.40%", peak: 150692, maxDd: 20, maxDdPct: "0.02%", trades: 423 },
-  { year: "2026", month: "Mar", week: "9-14", profit: -176, pct: "-0.18%", peak: 100037, maxDd: 889, maxDdPct: "0.89%", trades: 229 },
-  { year: "2026", month: "Mar", week: "16-21", profit: 279634, pct: "279.63%", peak: 378592, maxDd: 568, maxDdPct: "0.57%", trades: 567 },
-  { year: "2026", month: "Mar", week: "23-28", profit: 1030224, pct: "1030.22%", peak: 1133472, maxDd: 633, maxDdPct: "0.63%", trades: 504 },
-  { year: "2026", month: "Mar", week: "30-4", profit: 87492, pct: "87.49%", peak: 186168, maxDd: 504, maxDdPct: "0.50%", trades: 382 },
-  { year: "2026", month: "Apr", week: "6-11", profit: 43260, pct: "43.26%", peak: 145438, maxDd: 0, maxDdPct: "0.00%", trades: 257 },
-  { year: "2026", month: "Apr", week: "13-18", profit: -950, pct: "-0.95%", peak: 100053, maxDd: 981, maxDdPct: "0.98%", trades: 246 },
-  { year: "2026", month: "Apr", week: "20-25", profit: 15822, pct: "15.82%", peak: 117741, maxDd: 333, maxDdPct: "0.33%", trades: 176 },
-  { year: "2026", month: "Apr", week: "27-2", profit: 4222, pct: "4.22%", peak: 105053, maxDd: 1120, maxDdPct: "1.12%", trades: 220 },
-  { year: "2026", month: "Mei", week: "4-9", profit: -853, pct: "-0.85%", peak: 103178, maxDd: 1707, maxDdPct: "1.71%", trades: 262 },
-  { year: "2026", month: "Mei", week: "11-16", profit: -1012, pct: "-1.01%", peak: 102529, maxDd: 1274, maxDdPct: "1.27%", trades: 56 },
-  { year: "2026", month: "Mei", week: "18-23", profit: 29319, pct: "29.32%", peak: 135588, maxDd: 517, maxDdPct: "0.52%", trades: 229 },
-  { year: "2026", month: "Mei", week: "25-30", profit: 14427, pct: "14.43%", peak: 117031, maxDd: 916, maxDdPct: "0.92%", trades: 235 },
-  { year: "2026", month: "Jun", week: "1-6", profit: 7427, pct: "7.43%", peak: 109425, maxDd: 538, maxDdPct: "0.54%", trades: 0 },
-  { year: "2026", month: "Jun", week: "8-13", profit: 18654, pct: "18.65%", peak: 124092, maxDd: 880, maxDdPct: "0.88%", trades: 0 },
+  { year: "2026", month: "Jan", week: "5-10", profit: -251, pct: "-0.25%", peak: 104696, maxDd: 707, maxDdPct: "0.71%", pf: "0.99", trades: 638, lowestMargin: 638, historyQuality: "100%", highLow: 167, tglCandle: "4/1" },
+  { year: "2026", month: "Jan", week: "12-17", profit: 17623, pct: "17.62%", peak: 117037, maxDd: 389.81, maxDdPct: "0.39%", pf: "1.56", trades: 814, lowestMargin: 502, historyQuality: "100%", highLow: 125, tglCandle: "11/1" },
+  { year: "2026", month: "Jan", week: "19-24", profit: 45488, pct: "45.49%", peak: 147602, maxDd: 155.73, maxDdPct: "0.16%", pf: "1.73", trades: 1068, lowestMargin: 463, historyQuality: "100%", highLow: 337, tglCandle: "18/1" },
+  { year: "2026", month: "Jan", week: "26-31", profit: 6036038, pct: "6036.04%", peak: 6049443, maxDd: 0, maxDdPct: "0.00%", pf: "6.85", trades: 3394, lowestMargin: 465, historyQuality: "100%", highLow: 913, tglCandle: "25/1" },
+  { year: "2026", month: "Feb", week: "2-7", profit: 8437838, pct: "8437.84%", peak: 8672134, maxDd: 0, maxDdPct: "0.00%", pf: "4.17", trades: 2757, lowestMargin: 481, historyQuality: "100%", highLow: 690, tglCandle: "1/2" },
+  { year: "2026", month: "Feb", week: "9-14", profit: 184971, pct: "184.97%", peak: 286018, maxDd: 276.61, maxDdPct: "0.28%", pf: "1.99", trades: 1939, lowestMargin: 464, historyQuality: "100%", highLow: 241, tglCandle: "8/2" },
+  { year: "2026", month: "Feb", week: "16-21", profit: 28015, pct: "28.01%", peak: 131155, maxDd: 1576.1, maxDdPct: "1.58%", pf: "1.42", trades: 1237, lowestMargin: 466, historyQuality: "100%", highLow: 267, tglCandle: "15/2" },
+  { year: "2026", month: "Feb", week: "23-28", profit: -443, pct: "-0.44%", peak: 106408, maxDd: 655.2, maxDdPct: "0.66%", pf: "0.99", trades: 966, lowestMargin: 491, historyQuality: "100%", highLow: 188, tglCandle: "22/2" },
+  { year: "2026", month: "Mar", week: "2-7", profit: 40398, pct: "40.40%", peak: 150692, maxDd: 20.32, maxDdPct: "0.02%", pf: "1.46", trades: 1079, lowestMargin: 479, historyQuality: "100%", highLow: 423, tglCandle: "1/3" },
+  { year: "2026", month: "Mar", week: "9-14", profit: -176, pct: "-0.18%", peak: 100037, maxDd: 889, maxDdPct: "0.89%", pf: "0.9", trades: 242, lowestMargin: 742, historyQuality: "100%", highLow: 229, tglCandle: "8/3" },
+  { year: "2026", month: "Mar", week: "16-21", profit: 279634, pct: "279.63%", peak: 378592, maxDd: 567.58, maxDdPct: "0.57%", pf: "2.08", trades: 2462, lowestMargin: 469, historyQuality: "100%", highLow: 567, tglCandle: "15/3" },
+  { year: "2026", month: "Mar", week: "23-28", profit: 1030224, pct: "1030.22%", peak: 1133472, maxDd: 632.57, maxDdPct: "0.63%", pf: "3.33", trades: 2058, lowestMargin: 476, historyQuality: "100%", highLow: 504, tglCandle: "22/3" },
+  { year: "2026", month: "Mar", week: "30-4", profit: 87492, pct: "87.49%", peak: 186168, maxDd: 504.03, maxDdPct: "0.50%", pf: "1.63", trades: 2008, lowestMargin: 468, historyQuality: "100%", highLow: 382, tglCandle: "25/3" },
+  { year: "2026", month: "April", week: "6-11", profit: 43260, pct: "43.26%", peak: 145438, maxDd: 0, maxDdPct: "0.00%", pf: "1.32", trades: 1703, lowestMargin: 473, historyQuality: "100%", highLow: 257, tglCandle: "5/4" },
+  { year: "2026", month: "April", week: "13-18", profit: -950, pct: "-0.95%", peak: 100053, maxDd: 981, maxDdPct: "0.98%", pf: "0.86", trades: 952, lowestMargin: 2130, historyQuality: "100%", highLow: 246, tglCandle: "12/4" },
+  { year: "2026", month: "April", week: "20-25", profit: 15822, pct: "15.82%", peak: 117741, maxDd: 333, maxDdPct: "0.33%", pf: "1.29", trades: 998, lowestMargin: 500, historyQuality: "100%", highLow: 176, tglCandle: "19/4" },
+  { year: "2026", month: "April", week: "27-2", profit: 4222, pct: "4.22%", peak: 105053, maxDd: 1120, maxDdPct: "1.12%", pf: "1.3", trades: 962, lowestMargin: 476, historyQuality: "100%", highLow: 220, tglCandle: "26/4" },
+  { year: "2026", month: "Mei", week: "4-9", profit: -853, pct: "-0.85%", peak: 103178, maxDd: 1707, maxDdPct: "1.71%", pf: "0.95", trades: 1017, lowestMargin: 807, historyQuality: "100%", highLow: 262, tglCandle: "10/5" },
+  { year: "2026", month: "Mei", week: "11-16", profit: -1012, pct: "-1.01%", peak: 102529, maxDd: 1274, maxDdPct: "1.27%", pf: "0.92", trades: 1064, lowestMargin: 584, historyQuality: "100%", highLow: 56, tglCandle: "17/5" },
+  { year: "2026", month: "Mei", week: "18-23", profit: 29319, pct: "29.32%", peak: 135588, maxDd: 517, maxDdPct: "0.52%", pf: "1.59", trades: 1054, lowestMargin: 506, historyQuality: "100%", highLow: 229, tglCandle: "24/5" },
+  { year: "2026", month: "Mei", week: "25-30", profit: 14427, pct: "14.43%", peak: 117031, maxDd: 916, maxDdPct: "0.92%", pf: "1.7", trades: 752, lowestMargin: 457, historyQuality: "100%", highLow: 235, tglCandle: "31/5" },
+  { year: "2026", month: "Juni", week: "1-6", profit: 7427, pct: "7.43%", peak: 109425, maxDd: 538, maxDdPct: "0.54%", pf: "1.61", trades: 783, lowestMargin: 477, historyQuality: "100%", highLow: 0, tglCandle: "" },
+  { year: "2026", month: "Juni", week: "8-13", profit: 18654, pct: "18.65%", peak: 124092, maxDd: 879.61, maxDdPct: "0.88%", pf: "1.27", trades: 1399, lowestMargin: 477, historyQuality: "100%", highLow: 0, tglCandle: "" },
+  { year: "2025", month: "Jan", week: "5-11", profit: -281, pct: "-0.28%", peak: 100000, maxDd: 281, maxDdPct: "0.28%", pf: "0.47", trades: 52, lowestMargin: 3838, historyQuality: "100%", highLow: 84, tglCandle: "" },
+  { year: "2025", month: "Jan", week: "13-18", profit: -209, pct: "-0.21%", peak: 100034, maxDd: 209, maxDdPct: "0.21%", pf: "0.46", trades: 17, lowestMargin: 1423, historyQuality: "100%", highLow: 68, tglCandle: "" },
+  { year: "2025", month: "Jan", week: "20-25", profit: -183, pct: "-0.18%", peak: 100000, maxDd: 183, maxDdPct: "0.18%", pf: "0.08", trades: 7, lowestMargin: 3729, historyQuality: "100%", highLow: 97, tglCandle: "" },
+  { year: "2025", month: "Jan", week: "27-31", profit: -281, pct: "-0.28%", peak: 100000, maxDd: 281, maxDdPct: "0.28%", pf: "0.01", trades: 12, lowestMargin: 3581, historyQuality: "100%", highLow: 87, tglCandle: "" },
+  { year: "2025", month: "Feb", week: "3-8", profit: -1197, pct: "-1.20%", peak: 100031, maxDd: 1430, maxDdPct: "1.43%", pf: "0.32", trades: 69, lowestMargin: 1813, historyQuality: "100%", highLow: 114, tglCandle: "" },
+  { year: "2025", month: "Feb", week: "10-15", profit: 5810, pct: "5.81%", peak: 106826, maxDd: 0, maxDdPct: "0.00%", pf: "1.88", trades: 97, lowestMargin: 587.66, historyQuality: "100%", highLow: 82, tglCandle: "" },
+  { year: "2025", month: "Feb", week: "17-22", profit: 77, pct: "0.08%", peak: 100509, maxDd: 184, maxDdPct: "0.18%", pf: "1.08", trades: 21, lowestMargin: 1264, historyQuality: "100%", highLow: 76, tglCandle: "" },
+  { year: "2025", month: "Feb", week: "24-28", profit: -100, pct: "-0.10%", peak: 100070, maxDd: 452, maxDdPct: "0.45%", pf: "0.9", trades: 87, lowestMargin: 1290, historyQuality: "100%", highLow: 124, tglCandle: "" },
+  { year: "2025", month: "Mar", week: "3-8", profit: -352, pct: "-0.35%", peak: 100000, maxDd: 452, maxDdPct: "0.45%", pf: "0.42", trades: 80, lowestMargin: 3465, historyQuality: "100%", highLow: 72, tglCandle: "" },
+  { year: "2025", month: "Mar", week: "10-15", profit: -349, pct: "-0.35%", peak: 100000, maxDd: 449, maxDdPct: "0.45%", pf: "0.24", trades: 51, lowestMargin: 3410, historyQuality: "100%", highLow: 124, tglCandle: "" },
+  { year: "2025", month: "Mar", week: "17-22", profit: 1953, pct: "1.95%", peak: 101953, maxDd: 0, maxDdPct: "0.00%", pf: "2.61", trades: 27, lowestMargin: 6539, historyQuality: "100%", highLow: 65, tglCandle: "" },
+  { year: "2025", month: "Mar", week: "24-29", profit: -118, pct: "-0.12%", peak: 100000, maxDd: 169, maxDdPct: "0.17%", pf: "0.78", trades: 47, lowestMargin: 1951, historyQuality: "100%", highLow: 84, tglCandle: "" },
+  { year: "2025", month: "April", week: "1-5", profit: -533, pct: "-0.53%", peak: 100160, maxDd: 841, maxDdPct: "0.84%", pf: "0.89", trades: 467, lowestMargin: 1681, historyQuality: "100%", highLow: 152, tglCandle: "" },
+  { year: "2025", month: "April", week: "7-12", profit: -1515, pct: "-1.52%", peak: 100000, maxDd: 1711, maxDdPct: "1.71%", pf: "0.73", trades: 853, lowestMargin: 1724, historyQuality: "100%", highLow: 288, tglCandle: "" },
+  { year: "2025", month: "April", week: "14-19", profit: -302, pct: "-0.30%", peak: 100011, maxDd: 1000, maxDdPct: "1.00%", pf: "0.85", trades: 216, lowestMargin: 1891, historyQuality: "100%", highLow: 164, tglCandle: "" },
+  { year: "2025", month: "April", week: "21-26", profit: 1600, pct: "1.60%", peak: 103995, maxDd: 1378, maxDdPct: "1.38%", pf: "1.08", trades: 797, lowestMargin: 519, historyQuality: "100%", highLow: 240, tglCandle: "" },
+  { year: "2025", month: "April", week: "28-30", profit: -312, pct: "-0.31%", peak: 100890, maxDd: 355, maxDdPct: "0.36%", pf: "0.91", trades: 147, lowestMargin: 607, historyQuality: "100%", highLow: 152, tglCandle: "" },
+  { year: "2025", month: "Mei", week: "1-3", profit: 9587, pct: "9.59%", peak: 109690, maxDd: 0, maxDdPct: "0.00%", pf: "1.76", trades: 255, lowestMargin: 611, historyQuality: "100%", highLow: 198, tglCandle: "" },
+  { year: "2025", month: "Mei", week: "5-10", profit: 13174, pct: "13.17%", peak: 122325, maxDd: 167, maxDdPct: "0.17%", pf: "1.44", trades: 454, lowestMargin: 475, historyQuality: "100%", highLow: 172, tglCandle: "" },
+  { year: "2025", month: "Mei", week: "12-17", profit: -726, pct: "-0.73%", peak: 101227, maxDd: 1017, maxDdPct: "1.02%", pf: "0.87", trades: 452, lowestMargin: 614, historyQuality: "100%", highLow: 161, tglCandle: "" },
+  { year: "2025", month: "Mei", week: "19-24", profit: -498, pct: "-0.50%", peak: 100040, maxDd: 628, maxDdPct: "0.63%", pf: "0.83", trades: 317, lowestMargin: 1147, historyQuality: "100%", highLow: 151, tglCandle: "" },
+  { year: "2025", month: "Mei", week: "26-31", profit: -170, pct: "-0.17%", peak: 100074, maxDd: 340, maxDdPct: "0.34%", pf: "0.88", trades: 218, lowestMargin: 3033, historyQuality: "100%", highLow: 101, tglCandle: "" },
+  { year: "2025", month: "Jun", week: "2-7", profit: 2675, pct: "2.68%", peak: 103000, maxDd: 353, maxDdPct: "0.35%", pf: "1.61", trades: 267, lowestMargin: 588, historyQuality: "100%", highLow: 104, tglCandle: "" },
+  { year: "2025", month: "Jun", week: "9-14", profit: -177, pct: "-0.18%", peak: 100036, maxDd: 841, maxDdPct: "0.84%", pf: "0.93", trades: 257, lowestMargin: 698, historyQuality: "100%", highLow: 163, tglCandle: "" },
+  { year: "2025", month: "Jun", week: "16-21", profit: 4383, pct: "4.38%", peak: 105893, maxDd: 202, maxDdPct: "0.20%", pf: "1.55", trades: 161, lowestMargin: 588, historyQuality: "100%", highLow: 138, tglCandle: "" },
+  { year: "2025", month: "Jun", week: "23-28", profit: 1724, pct: "1.72%", peak: 101666, maxDd: 213, maxDdPct: "0.21%", pf: "1.54", trades: 127, lowestMargin: 600, historyQuality: "100%", highLow: 108, tglCandle: "" },
+  { year: "2025", month: "Jul", week: "29-5", profit: -251, pct: "-0.25%", peak: 100752, maxDd: 251, maxDdPct: "0.25%", pf: "0.81", trades: 43, lowestMargin: 601, historyQuality: "100%", highLow: 118, tglCandle: "" },
+  { year: "2025", month: "Jul", week: "6-12", profit: -393, pct: "-0.39%", peak: 100000, maxDd: 396, maxDdPct: "0.40%", pf: "0.25", trades: 58, lowestMargin: 2993, historyQuality: "100%", highLow: 86, tglCandle: "" },
+  { year: "2025", month: "Jul", week: "13-19", profit: -1468, pct: "-1.47%", peak: 100034, maxDd: 1468, maxDdPct: "1.47%", pf: "0.35", trades: 106, lowestMargin: 2495, historyQuality: "100%", highLow: 67, tglCandle: "" },
+  { year: "2025", month: "Jul", week: "20-26", profit: -247, pct: "-0.25%", peak: 100000, maxDd: 876, maxDdPct: "0.88%", pf: "0.83", trades: 92, lowestMargin: 1441, historyQuality: "100%", highLow: 114, tglCandle: "" },
+  { year: "2025", month: "Jul", week: "27-2", profit: -729, pct: "-0.73%", peak: 100735, maxDd: 1028, maxDdPct: "1.03%", pf: "0.71", trades: 127, lowestMargin: 601, historyQuality: "100%", highLow: 96, tglCandle: "" },
+  { year: "2025", month: "Aug", week: "3-9", profit: -202, pct: "-0.20%", peak: 100062, maxDd: 163, maxDdPct: "0.16%", pf: "0.81", trades: 75, lowestMargin: 573, historyQuality: "100%", highLow: 64, tglCandle: "" },
+  { year: "2025", month: "Aug", week: "10-16", profit: 4458, pct: "4.46%", peak: 104976, maxDd: 176, maxDdPct: "0.18%", pf: "1.59", trades: 134, lowestMargin: 586, historyQuality: "100%", highLow: 72, tglCandle: "" },
+  { year: "2025", month: "Aug", week: "17-23", profit: -276, pct: "-0.28%", peak: 100000, maxDd: 276, maxDdPct: "0.28%", pf: "0.25", trades: 31, lowestMargin: 2961, historyQuality: "100%", highLow: 67, tglCandle: "" },
+  { year: "2025", month: "Aug", week: "24-30", profit: 2597, pct: "2.60%", peak: 102597, maxDd: 0, maxDdPct: "0.00%", pf: "5.09", trades: 19, lowestMargin: 579, historyQuality: "100%", highLow: 103, tglCandle: "" },
+  { year: "2025", month: "Sep", week: "31-6", profit: 7312, pct: "7.31%", peak: 108847, maxDd: 0, maxDdPct: "0.00%", pf: "1.49", trades: 248, lowestMargin: 480, historyQuality: "100%", highLow: 163, tglCandle: "" },
+  { year: "2025", month: "Sep", week: "7-13", profit: -135, pct: "-0.13%", peak: 101411, maxDd: 169, maxDdPct: "0.17%", pf: "0.97", trades: 137, lowestMargin: 534, historyQuality: "100%", highLow: 95, tglCandle: "" },
+  { year: "2025", month: "Sep", week: "14-20", profit: 2959, pct: "2.96%", peak: 105070, maxDd: 275, maxDdPct: "0.28%", pf: "1.34", trades: 123, lowestMargin: 538, historyQuality: "100%", highLow: 81, tglCandle: "" },
+  { year: "2025", month: "Sep", week: "21-27", profit: -123, pct: "-0.12%", peak: 100451, maxDd: 719, maxDdPct: "0.72%", pf: "0.95", trades: 211, lowestMargin: 626, historyQuality: "100%", highLow: 107, tglCandle: "" },
+  { year: "2025", month: "Sep", week: "28-4", profit: -144, pct: "-0.14%", peak: 101751, maxDd: 648, maxDdPct: "0.65%", pf: "0.97", trades: 350, lowestMargin: 514, historyQuality: "100%", highLow: 134, tglCandle: "" },
+  { year: "2025", month: "Okt", week: "5-11", profit: 14157, pct: "14.16%", peak: 116597, maxDd: 316, maxDdPct: "0.32%", pf: "1.61", trades: 658, lowestMargin: 466, historyQuality: "100%", highLow: 175, tglCandle: "" },
+  { year: "2025", month: "Okt", week: "12-18", profit: 125203, pct: "125.20%", peak: 231534, maxDd: 353, maxDdPct: "0.35%", pf: "2.6", trades: 1203, lowestMargin: 460, historyQuality: "100%", highLow: 371, tglCandle: "" },
+  { year: "2025", month: "Okt", week: "19-25", profit: 315334, pct: "315.33%", peak: 423043, maxDd: 209, maxDdPct: "0.21%", pf: "1.88", trades: 1607, lowestMargin: 476, historyQuality: "100%", highLow: 377, tglCandle: "" },
+  { year: "2025", month: "Okt", week: "26-1", profit: 67359, pct: "67.36%", peak: 168951, maxDd: 289, maxDdPct: "0.29%", pf: "2.08", trades: 1055, lowestMargin: 468, historyQuality: "100%", highLow: 223, tglCandle: "" },
+  { year: "2025", month: "Nov", week: "2-8", profit: 3029, pct: "3.03%", peak: 104373, maxDd: 954, maxDdPct: "0.95%", pf: "1.34", trades: 562, lowestMargin: 486, historyQuality: "100%", highLow: 102, tglCandle: "" },
+  { year: "2025", month: "Nov", week: "9-15", profit: -511, pct: "-0.51%", peak: 101410, maxDd: 1148, maxDdPct: "1.15%", pf: "0.94", trades: 772, lowestMargin: 910, historyQuality: "100%", highLow: 241, tglCandle: "" },
+  { year: "2025", month: "Nov", week: "16-22", profit: -463, pct: "-0.46%", peak: 102377, maxDd: 1448, maxDdPct: "1.45%", pf: "0.98", trades: 1111, lowestMargin: 476, historyQuality: "100%", highLow: 135, tglCandle: "" },
+  { year: "2025", month: "Nov", week: "26-29", profit: -153, pct: "-0.15%", peak: 100000, maxDd: 585, maxDdPct: "0.58%", pf: "0.93", trades: 378, lowestMargin: 2495, historyQuality: "100%", highLow: 187, tglCandle: "" },
+  { year: "2025", month: "Des", week: "30-6", profit: -426, pct: "-0.43%", peak: 101073, maxDd: 1565, maxDdPct: "1.57%", pf: "0.95", trades: 493, lowestMargin: 542, historyQuality: "100%", highLow: 101, tglCandle: "" },
+  { year: "2025", month: "Des", week: "7-13", profit: -10, pct: "-0.01%", peak: 103070, maxDd: 48, maxDdPct: "0.05%", pf: "1", trades: 517, lowestMargin: 639, historyQuality: "100%", highLow: 183, tglCandle: "" },
+  { year: "2025", month: "Des", week: "14-20", profit: -1158, pct: "-1.16%", peak: 100158, maxDd: 1158, maxDdPct: "1.16%", pf: "0.74", trades: 448, lowestMargin: 856, historyQuality: "100%", highLow: 103, tglCandle: "" },
+  { year: "2025", month: "Des", week: "21-27", profit: -997, pct: "-1.00%", peak: 100189, maxDd: 1309, maxDdPct: "1.31%", pf: "0.76", trades: 419, lowestMargin: 847, historyQuality: "83%", highLow: 210, tglCandle: "" },
 ];
 
 const formatCurrency = (val: number) => {
@@ -357,20 +354,28 @@ export default function RobotTradingCenter() {
           profit: 0,
           peak: 0,
           trades: 0,
-          maxDd: 0
+          maxDd: 0,
+          lowestMargin: curr.lowestMargin,
+          highLow: 0
         };
       }
       acc[key].profit += curr.profit;
       acc[key].peak = Math.max(acc[key].peak, curr.peak);
       acc[key].trades += curr.trades;
       acc[key].maxDd = Math.max(acc[key].maxDd, curr.maxDd);
+      acc[key].lowestMargin = Math.min(acc[key].lowestMargin || 999999, curr.lowestMargin || 999999);
+      acc[key].highLow += (curr.highLow || 0);
       return acc;
     }, {} as Record<string, any>);
 
     return Object.values(grouped).map(item => ({
       ...item,
       pct: ((item.profit / 100000) * 100).toFixed(2) + "%",
-      maxDdPct: ((item.maxDd / 100000) * 100).toFixed(2) + "%"
+      maxDdPct: ((item.maxDd / 100000) * 100).toFixed(2) + "%",
+      pf: "-",
+      historyQuality: "100%",
+      tglCandle: "-",
+      lowestMargin: item.lowestMargin === 999999 ? 0 : item.lowestMargin
     }));
   }, []);
 
@@ -1132,11 +1137,15 @@ export default function RobotTradingCenter() {
                     >
                       <thead className="sticky top-0 z-10 bg-white">
                         <tr className="border-b border-slate-200">
-                          <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider bg-slate-50 rounded-tl-xl">Periode</th>
-                          <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider bg-slate-50">Nett Profit</th>
-                          <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider bg-slate-50">Peak Balance</th>
-                          <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider bg-slate-50">Max DD</th>
-                          <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider bg-slate-50 rounded-tr-xl">Total Trades</th>
+                          <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider bg-slate-50 rounded-tl-xl whitespace-nowrap">Periode</th>
+                          <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider bg-slate-50 whitespace-nowrap">Nett Profit</th>
+                          <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider bg-slate-50 whitespace-nowrap">Peak Balance</th>
+                          <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider bg-slate-50 whitespace-nowrap">Max DD</th>
+                          <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider bg-slate-50 whitespace-nowrap">PF</th>
+                          <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider bg-slate-50 whitespace-nowrap">Total Trades</th>
+                          <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider bg-slate-50 whitespace-nowrap">Lowest Margin</th>
+                          <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider bg-slate-50 whitespace-nowrap">History Quality</th>
+                          <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider bg-slate-50 rounded-tr-xl whitespace-nowrap">High-Low</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -1149,25 +1158,37 @@ export default function RobotTradingCenter() {
                                 transition={{ delay: i * 0.012, duration: 0.2 }}
                                 className="border-b border-slate-100 hover:bg-slate-50/70 transition-colors"
                               >
-                                <td className="py-4 px-4">
+                                <td className="py-4 px-4 whitespace-nowrap">
                                   <p className="font-bold text-[#111A4A]">{row.week} {row.month}</p>
-                                  <p className="text-xs text-slate-500">{row.year}</p>
+                                  <p className="text-xs text-slate-500">{row.year} {row.tglCandle && row.tglCandle !== "-" ? `(Tgl: ${row.tglCandle})` : ''}</p>
                                 </td>
-                                <td className="py-4 px-4">
+                                <td className="py-4 px-4 whitespace-nowrap">
                                   <p className={`font-semibold ${row.profit > 0 ? 'text-green-600' : 'text-red-500'}`}>
                                     {row.profit > 0 ? '+' : ''}{row.profit.toLocaleString('id-ID')}
                                   </p>
                                   <p className={`text-xs ${row.profit > 0 ? 'text-green-500' : 'text-red-400'}`}>{row.pct}</p>
                                 </td>
-                                <td className="py-4 px-4">
+                                <td className="py-4 px-4 whitespace-nowrap">
                                   <p className="font-semibold text-[#111A4A]">{row.peak.toLocaleString('id-ID')}</p>
                                 </td>
-                                <td className="py-4 px-4">
+                                <td className="py-4 px-4 whitespace-nowrap">
                                   <p className="font-semibold text-amber-600">{row.maxDd.toLocaleString('id-ID')}</p>
                                   <p className="text-xs text-amber-500">{row.maxDdPct}</p>
                                 </td>
-                                <td className="py-4 px-4">
+                                <td className="py-4 px-4 whitespace-nowrap">
+                                  <p className="font-semibold text-[#111A4A]">{row.pf || "-"}</p>
+                                </td>
+                                <td className="py-4 px-4 whitespace-nowrap">
                                   <p className="font-semibold text-[#111A4A]">{row.trades > 0 ? row.trades.toLocaleString('id-ID') : '-'}</p>
+                                </td>
+                                <td className="py-4 px-4 whitespace-nowrap">
+                                  <p className="font-semibold text-[#111A4A]">{row.lowestMargin > 0 ? row.lowestMargin.toLocaleString('id-ID') : '-'}</p>
+                                </td>
+                                <td className="py-4 px-4 whitespace-nowrap">
+                                  <p className="font-semibold text-[#111A4A]">{row.historyQuality || "-"}</p>
+                                </td>
+                                <td className="py-4 px-4 whitespace-nowrap">
+                                  <p className="font-semibold text-[#111A4A]">{row.highLow > 0 ? row.highLow.toLocaleString('id-ID') : '-'}</p>
                                 </td>
                               </motion.tr>
                             ))
@@ -1179,25 +1200,37 @@ export default function RobotTradingCenter() {
                                 transition={{ delay: i * 0.03, duration: 0.2 }}
                                 className="border-b border-slate-100 hover:bg-slate-50/70 transition-colors"
                               >
-                                <td className="py-4 px-4">
+                                <td className="py-4 px-4 whitespace-nowrap">
                                   <p className="font-bold text-[#111A4A]">{row.month} {row.year}</p>
                                   <p className="text-xs text-slate-500">Monthly Aggregation</p>
                                 </td>
-                                <td className="py-4 px-4">
+                                <td className="py-4 px-4 whitespace-nowrap">
                                   <p className={`font-bold ${row.profit > 0 ? 'text-green-600' : 'text-red-500'}`}>
                                     {row.profit > 0 ? '+' : ''}{row.profit.toLocaleString('id-ID')}
                                   </p>
                                   <p className={`text-xs font-semibold ${row.profit > 0 ? 'text-green-500' : 'text-red-400'}`}>{row.pct}</p>
                                 </td>
-                                <td className="py-4 px-4">
+                                <td className="py-4 px-4 whitespace-nowrap">
                                   <p className="font-semibold text-[#111A4A]">{row.peak.toLocaleString('id-ID')}</p>
                                 </td>
-                                <td className="py-4 px-4">
+                                <td className="py-4 px-4 whitespace-nowrap">
                                   <p className="font-semibold text-amber-600">{row.maxDd.toLocaleString('id-ID')}</p>
                                   <p className="text-xs text-amber-500">{row.maxDdPct}</p>
                                 </td>
-                                <td className="py-4 px-4">
+                                <td className="py-4 px-4 whitespace-nowrap">
+                                  <p className="font-semibold text-slate-400">-</p>
+                                </td>
+                                <td className="py-4 px-4 whitespace-nowrap">
                                   <p className="font-semibold text-[#111A4A]">{row.trades > 0 ? row.trades.toLocaleString('id-ID') : '-'}</p>
+                                </td>
+                                <td className="py-4 px-4 whitespace-nowrap">
+                                  <p className="font-semibold text-[#111A4A]">{row.lowestMargin > 0 ? row.lowestMargin.toLocaleString('id-ID') : '-'}</p>
+                                </td>
+                                <td className="py-4 px-4 whitespace-nowrap">
+                                  <p className="font-semibold text-[#111A4A]">100%</p>
+                                </td>
+                                <td className="py-4 px-4 whitespace-nowrap">
+                                  <p className="font-semibold text-[#111A4A]">{row.highLow > 0 ? row.highLow.toLocaleString('id-ID') : '-'}</p>
                                 </td>
                               </motion.tr>
                             ))

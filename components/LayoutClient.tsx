@@ -6,7 +6,7 @@ import DisclaimerPreview from "./DisclaimerPreview";
 import { Header } from "./Header";
 import Footer from "./Footer";
 import WhatsAppFloat from "@/components/whatsappFloat";
-import WebinarPopup from "@/components/WebinarPopup";
+// import WebinarPopup from "@/components/WebinarPopup";
 
 export default function LayoutClient({
   children,
@@ -21,7 +21,7 @@ export default function LayoutClient({
     pathname === "/dashboard" ||
     pathname === "/forgot-password" ||
     pathname === "/reset-password" ||
-    pathname === "/webinar" ||
+    // pathname === "/webinar" ||
     pathname.startsWith("/auth") ||
     pathname.startsWith("/student/") ||
     pathname.startsWith("/course/");
@@ -33,7 +33,7 @@ export default function LayoutClient({
     pathname !== "/signup" &&
     pathname !== "/forgot-password" &&
     pathname !== "/reset-password" &&
-    pathname !== "/webinar" &&
+    // pathname !== "/webinar" &&
     !pathname.startsWith("/auth") &&
     !pathname.startsWith("/student/") &&
     !pathname.startsWith("/dashboard");
@@ -44,7 +44,7 @@ export default function LayoutClient({
     pathname === "/signup" ||
     pathname === "/forgot-password" ||
     pathname === "/reset-password" ||
-    pathname === "/webinar" ||
+    // pathname === "/webinar" ||
     pathname.startsWith("/course/") ||
     pathname.startsWith("/student/") ||
     pathname.startsWith("/dashboard");
@@ -53,8 +53,7 @@ export default function LayoutClient({
     pathname === "/login" ||
     pathname === "/signup" ||
     pathname === "/forgot-password" ||
-    pathname === "/reset-password" ||
-    pathname === "/webinar";
+    pathname === "/reset-password";
 
   const hideFooter =
     pathname.startsWith("/dashboard") || pathname.startsWith("/student/") || pathname === "/webinar";
@@ -89,7 +88,7 @@ export default function LayoutClient({
       {!hideFooter && <Footer />}
 
       {!hideWhatsApp && <WhatsAppFloat />}
-      {!hideWebinarPopup && <WebinarPopup />}
+      {/* {!hideWebinarPopup && <WebinarPopup />} */}
     </div>
   );
 }

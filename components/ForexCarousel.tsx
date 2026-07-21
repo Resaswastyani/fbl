@@ -6,8 +6,12 @@ function ForexCarousel() {
   const container = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Prevent duplicate scripts in React Strict Mode
-    if (!container.current || container.current.querySelector("script")) return;
+    // Prevent duplicate injections in React Strict Mode
+    if (container.current && container.current.querySelector("iframe")) return;
+    if (container.current && container.current.querySelector("script")) {
+      // If script is there but no iframe, maybe it failed. Let's clear and retry.
+      container.current.innerHTML = '<div class="tradingview-widget-container__widget"></div>';
+    }
     
     const script = document.createElement("script");
     script.src = "https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js";
@@ -43,11 +47,13 @@ function ForexCarousel() {
       locale: "id"
     });
     
-    container.current.appendChild(script);
+    if (container.current) {
+      container.current.appendChild(script);
+    }
   }, []);
 
   return (
-    <div className="w-full bg-[#0B0F19] border-y border-white/10 overflow-hidden py-1">
+    <div className="w-full bg-[#0B0F19] border-y border-white/10 overflow-hidden" style={{ minHeight: "46px" }}>
       <div className="tradingview-widget-container" ref={container}>
         <div className="tradingview-widget-container__widget"></div>
       </div>

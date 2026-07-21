@@ -7,7 +7,7 @@ function ForexCarousel() {
 
   useEffect(() => {
     // Prevent duplicate scripts in React Strict Mode
-    if (!container.current || container.current.innerHTML !== "") return;
+    if (!container.current || container.current.querySelector("script")) return;
     
     const script = document.createElement("script");
     script.src = "https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js";

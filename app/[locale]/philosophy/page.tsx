@@ -148,6 +148,51 @@ const AnimatedForexChart3D = () => {
   );
 };
 
+const BadTrading3D = () => {
+  const groupRef = useRef<THREE.Group>(null);
+  
+  useFrame((state) => {
+    if (groupRef.current) {
+      groupRef.current.rotation.y = state.clock.getElapsedTime() * 0.3;
+      groupRef.current.position.y = Math.sin(state.clock.getElapsedTime() * 2) * 0.1;
+    }
+  });
+
+  return (
+    <group ref={groupRef} scale={1.2}>
+       {/* A red trendline going down, detached and chaotic */}
+       <Float speed={5} rotationIntensity={1} floatIntensity={1} position={[-0.5, 0.5, 0]}>
+         <mesh rotation={[0, 0, -0.4]}>
+           <cylinderGeometry args={[0.02, 0.02, 2.5, 8]} />
+           <meshStandardMaterial color="#ef4444" emissive="#ef4444" emissiveIntensity={1} />
+         </mesh>
+       </Float>
+
+       {/* Falling, volatile candlesticks */}
+       <Float speed={4} rotationIntensity={2} floatIntensity={2}>
+         <mesh position={[-1, 1, 0]}>
+           <boxGeometry args={[0.3, 1, 0.3]} />
+           <meshPhysicalMaterial color="#ef4444" clearcoat={1} metalness={0.5} roughness={0.2} transparent opacity={0.7} />
+         </mesh>
+       </Float>
+
+       <Float speed={6} rotationIntensity={4} floatIntensity={3}>
+         <mesh position={[0, -0.5, 0.5]}>
+           <boxGeometry args={[0.3, 1.5, 0.3]} />
+           <meshPhysicalMaterial color="#ef4444" clearcoat={1} metalness={0.5} roughness={0.2} transparent opacity={0.7} />
+         </mesh>
+       </Float>
+
+       <Float speed={3} rotationIntensity={2} floatIntensity={1.5}>
+         <mesh position={[1, -1.5, -0.5]}>
+           <boxGeometry args={[0.3, 0.8, 0.3]} />
+           <meshPhysicalMaterial color="#ef4444" clearcoat={1} metalness={0.5} roughness={0.2} transparent opacity={0.7} />
+         </mesh>
+       </Float>
+    </group>
+  );
+};
+
 export default function PhilosophyPage() {
   const t = useTranslations("Philosophy");
   const containerRef = useRef(null);
@@ -315,6 +360,16 @@ export default function PhilosophyPage() {
                 strong: (chunks: React.ReactNode) => <strong className="text-white">{chunks}</strong>
               })}
             </p>
+            
+            <div className="h-64 md:h-80 w-full relative mt-8">
+              <Canvas camera={{ position: [0, 0, 5] }} gl={{ antialias: true, alpha: true }}>
+                <ambientLight intensity={1.5} />
+                <directionalLight position={[2, 5, 2]} intensity={2} color="#ffffff" />
+                <directionalLight position={[-2, -5, -2]} intensity={1} color="#ef4444" />
+                <Environment preset="city" />
+                <BadTrading3D />
+              </Canvas>
+            </div>
           </motion.div>
           
           <motion.div

@@ -148,47 +148,77 @@ const AnimatedForexChart3D = () => {
   );
 };
 
-const BadTrading3D = () => {
+const PhoneChart3D = () => {
   const groupRef = useRef<THREE.Group>(null);
   
   useFrame((state) => {
     if (groupRef.current) {
-      groupRef.current.rotation.y = state.clock.getElapsedTime() * 0.3;
-      groupRef.current.position.y = Math.sin(state.clock.getElapsedTime() * 2) * 0.1;
+      groupRef.current.position.y = Math.sin(state.clock.getElapsedTime() * 1.5) * 0.1;
+      groupRef.current.rotation.y = Math.sin(state.clock.getElapsedTime() * 0.5) * 0.15;
+      groupRef.current.rotation.z = Math.sin(state.clock.getElapsedTime() * 0.8) * 0.05;
+      // Tilt the phone to face the user a bit
+      groupRef.current.rotation.x = 0.4 + Math.sin(state.clock.getElapsedTime() * 1) * 0.05; 
     }
   });
 
+  const chartData = [
+    { type: 'bull', height: 1.0, y: 1.2 },
+    { type: 'bear', height: 0.8, y: 0.7 },
+    { type: 'bull', height: 0.5, y: 0.4 },
+    { type: 'bear', height: 1.2, y: 0.0 },
+    { type: 'bear', height: 0.9, y: -0.6 },
+    { type: 'bear', height: 1.4, y: -1.2 },
+    { type: 'bull', height: 0.6, y: -0.9 },
+    { type: 'bear', height: 0.8, y: -1.4 },
+    { type: 'bull', height: 1.2, y: -0.7 },
+    { type: 'bull', height: 1.8, y: 0.2 },
+    { type: 'bull', height: 1.4, y: 1.1 },
+  ];
+
   return (
-    <group ref={groupRef} scale={1.2}>
-       {/* A red trendline going down, detached and chaotic */}
-       <Float speed={5} rotationIntensity={1} floatIntensity={1} position={[-0.5, 0.5, 0]}>
-         <mesh rotation={[0, 0, -0.4]}>
-           <cylinderGeometry args={[0.02, 0.02, 2.5, 8]} />
-           <meshStandardMaterial color="#ef4444" emissive="#ef4444" emissiveIntensity={1} />
-         </mesh>
-       </Float>
+    <group ref={groupRef} scale={0.9} position={[0, -0.5, 0]}>
+       {/* Phone Body */}
+       <mesh position={[0, -0.5, 0]}>
+         <boxGeometry args={[5.2, 0.2, 2.6]} />
+         <meshStandardMaterial color="#1f1f1f" roughness={0.2} metalness={0.8} />
+       </mesh>
+       {/* Phone Screen */}
+       <mesh position={[0, -0.39, 0]}>
+         <boxGeometry args={[5.0, 0.02, 2.4]} />
+         <meshStandardMaterial color="#050505" roughness={0.1} metalness={0.9} />
+       </mesh>
 
-       {/* Falling, volatile candlesticks */}
-       <Float speed={4} rotationIntensity={2} floatIntensity={2}>
-         <mesh position={[-1, 1, 0]}>
-           <boxGeometry args={[0.3, 1, 0.3]} />
-           <meshPhysicalMaterial color="#ef4444" clearcoat={1} metalness={0.5} roughness={0.2} transparent opacity={0.7} />
-         </mesh>
-       </Float>
-
-       <Float speed={6} rotationIntensity={4} floatIntensity={3}>
-         <mesh position={[0, -0.5, 0.5]}>
-           <boxGeometry args={[0.3, 1.5, 0.3]} />
-           <meshPhysicalMaterial color="#ef4444" clearcoat={1} metalness={0.5} roughness={0.2} transparent opacity={0.7} />
-         </mesh>
-       </Float>
-
-       <Float speed={3} rotationIntensity={2} floatIntensity={1.5}>
-         <mesh position={[1, -1.5, -0.5]}>
-           <boxGeometry args={[0.3, 0.8, 0.3]} />
-           <meshPhysicalMaterial color="#ef4444" clearcoat={1} metalness={0.5} roughness={0.2} transparent opacity={0.7} />
-         </mesh>
-       </Float>
+       {/* Chart Group */}
+       <group position={[-2.0, -0.38, 0]}>
+         {chartData.map((d, i) => {
+           const x = i * 0.4;
+           const isBull = d.type === 'bull';
+           const color = isBull ? "#22d3a8" : "#ef4444";
+           return (
+             <group key={i} position={[x, 0, 0]}>
+               {/* Volume Bar (Background) */}
+               <mesh position={[0, d.height * 0.4 / 2, -0.5]}>
+                 <boxGeometry args={[0.25, d.height * 0.4, 0.1]} />
+                 <meshStandardMaterial color="#333333" roughness={0.8} metalness={0.1} />
+               </mesh>
+               
+               {/* Candlestick */}
+               <group position={[0, d.y + 1.5, 0.2]}>
+                  {/* Wick */}
+                  <mesh position={[0, 0, 0]}>
+                    <cylinderGeometry args={[0.02, 0.02, d.height + 0.6, 8]} />
+                    <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.3} />
+                  </mesh>
+                  {/* Body */}
+                  <mesh position={[0, 0, 0]}>
+                    <boxGeometry args={[0.25, d.height, 0.25]} />
+                    <meshPhysicalMaterial color={color} emissive={color} emissiveIntensity={0.6} roughness={0.1} metalness={0.5} clearcoat={1} />
+                  </mesh>
+               </group>
+             </group>
+           )
+         })}
+       </group>
     </group>
   );
 };
@@ -367,7 +397,7 @@ export default function PhilosophyPage() {
                 <directionalLight position={[2, 5, 2]} intensity={2} color="#ffffff" />
                 <directionalLight position={[-2, -5, -2]} intensity={1} color="#ef4444" />
                 <Environment preset="city" />
-                <BadTrading3D />
+                <PhoneChart3D />
               </Canvas>
             </div>
           </motion.div>

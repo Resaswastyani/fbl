@@ -3,39 +3,62 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Float, MeshDistortMaterial, Sphere, Environment } from "@react-three/drei";
+import { Float, Box, Cylinder, Environment } from "@react-three/drei";
 import { ArrowRight } from "lucide-react";
 import * as THREE from "three";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 
-const AnimatedBlob = () => {
-  const meshRef = useRef<THREE.Mesh>(null);
-
+const Candlestick = ({ position, color, height, wickHeight, delay = 0 }: { position: [number, number, number], color: string, height: number, wickHeight: number, delay?: number }) => {
+  const groupRef = useRef<THREE.Group>(null);
+  
   useFrame((state) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.x = state.clock.getElapsedTime() * 0.1;
-      meshRef.current.rotation.y = state.clock.getElapsedTime() * 0.15;
+    if (groupRef.current) {
+      groupRef.current.position.y = position[1] + Math.sin(state.clock.getElapsedTime() * 2 + delay) * 0.1;
     }
   });
 
   return (
-    <Float speed={2.5} rotationIntensity={0.6} floatIntensity={2.5}>
-      <Sphere ref={meshRef} args={[1, 128, 128]} scale={2.4}>
-        <MeshDistortMaterial
-          color="#22d3a8"
-          attach="material"
-          distort={0.5}
-          speed={1.5}
+    <group ref={groupRef} position={position}>
+      {/* Wick */}
+      <Cylinder args={[0.02, 0.02, wickHeight, 8]} position={[0, 0, 0]}>
+        <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.8} />
+      </Cylinder>
+      {/* Body */}
+      <Box args={[0.25, height, 0.25]} position={[0, 0, 0]}>
+        <meshPhysicalMaterial 
+          color={color} 
+          emissive={color} 
+          emissiveIntensity={0.4}
+          transparent
+          opacity={0.8}
           roughness={0.1}
-          metalness={0.2}
-          transmission={0.9}
-          ior={1.5}
-          thickness={0.5}
+          metalness={0.5}
           clearcoat={1}
-          clearcoatRoughness={0.1}
         />
-      </Sphere>
+      </Box>
+    </group>
+  );
+};
+
+const AnimatedForexChart3D = () => {
+  const groupRef = useRef<THREE.Group>(null);
+
+  useFrame((state) => {
+    if (groupRef.current) {
+      groupRef.current.rotation.y = state.clock.getElapsedTime() * 0.15;
+      groupRef.current.rotation.x = Math.sin(state.clock.getElapsedTime() * 0.5) * 0.1;
+    }
+  });
+
+  return (
+    <Float speed={2} rotationIntensity={0.5} floatIntensity={1.5}>
+      <group ref={groupRef} scale={1.8} position={[0, -0.5, 0]}>
+        <Candlestick position={[-1.2, -0.2, 0.2]} color="#ef4444" height={0.8} wickHeight={1.5} delay={0} />
+        <Candlestick position={[-0.4, 0.4, -0.2]} color="#22d3a8" height={1.2} wickHeight={2.0} delay={1} />
+        <Candlestick position={[0.4, 1.0, 0.3]} color="#22d3a8" height={1.6} wickHeight={2.5} delay={2} />
+        <Candlestick position={[1.2, 0.6, -0.1]} color="#ef4444" height={0.5} wickHeight={1.2} delay={3} />
+      </group>
     </Float>
   );
 };
@@ -55,7 +78,7 @@ export const ForexPhilosophyHero = () => {
           <directionalLight position={[-5, -5, -5]} intensity={1} color="#167E6C" />
           <spotLight position={[0, 10, 0]} intensity={2.5} color="#22d3a8" />
           <Environment preset="city" />
-          <AnimatedBlob />
+          <AnimatedForexChart3D />
         </Canvas>
       </motion.div>
 
@@ -107,8 +130,8 @@ export const ForexPhilosophyHero = () => {
             </span>
           </h2>
           
-          <p className="text-lg md:text-2xl text-[#111A4A]/70 mb-12 max-w-3xl mx-auto leading-relaxed font-medium">
-            {t("description")}
+          <p className="text-xl md:text-3xl text-[#111A4A] mb-12 max-w-4xl mx-auto leading-relaxed font-bold italic tracking-tight">
+            "{t("description")}"
           </p>
 
           <Link href="/philosophy">

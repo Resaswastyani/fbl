@@ -5,6 +5,63 @@ import { ShieldCheck, Target, Clock, HeartPulse, XCircle, ArrowRight } from "luc
 import Link from "next/link";
 import { useRef } from "react";
 import { useTranslations } from "next-intl";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { Float, Box, Cylinder, Environment } from "@react-three/drei";
+import * as THREE from "three";
+
+const Candlestick = ({ position, color, height, wickHeight, delay = 0 }: { position: [number, number, number], color: string, height: number, wickHeight: number, delay?: number }) => {
+  const groupRef = useRef<THREE.Group>(null);
+  
+  useFrame((state) => {
+    if (groupRef.current) {
+      groupRef.current.position.y = position[1] + Math.sin(state.clock.getElapsedTime() * 2 + delay) * 0.1;
+    }
+  });
+
+  return (
+    <group ref={groupRef} position={position}>
+      {/* Wick */}
+      <Cylinder args={[0.02, 0.02, wickHeight, 8]} position={[0, 0, 0]}>
+        <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.8} />
+      </Cylinder>
+      {/* Body */}
+      <Box args={[0.25, height, 0.25]} position={[0, 0, 0]}>
+        <meshPhysicalMaterial 
+          color={color} 
+          emissive={color} 
+          emissiveIntensity={0.4}
+          transparent
+          opacity={0.8}
+          roughness={0.1}
+          metalness={0.5}
+          clearcoat={1}
+        />
+      </Box>
+    </group>
+  );
+};
+
+const AnimatedForexChart3D = () => {
+  const groupRef = useRef<THREE.Group>(null);
+
+  useFrame((state) => {
+    if (groupRef.current) {
+      groupRef.current.rotation.y = state.clock.getElapsedTime() * 0.15;
+      groupRef.current.rotation.x = Math.sin(state.clock.getElapsedTime() * 0.5) * 0.1;
+    }
+  });
+
+  return (
+    <Float speed={2} rotationIntensity={0.5} floatIntensity={1.5}>
+      <group ref={groupRef} scale={1.8} position={[0, -0.5, 0]}>
+        <Candlestick position={[-1.2, -0.2, 0.2]} color="#ef4444" height={0.8} wickHeight={1.5} delay={0} />
+        <Candlestick position={[-0.4, 0.4, -0.2]} color="#22d3a8" height={1.2} wickHeight={2.0} delay={1} />
+        <Candlestick position={[0.4, 1.0, 0.3]} color="#22d3a8" height={1.6} wickHeight={2.5} delay={2} />
+        <Candlestick position={[1.2, 0.6, -0.1]} color="#ef4444" height={0.5} wickHeight={1.2} delay={3} />
+      </group>
+    </Float>
+  );
+};
 
 export default function PhilosophyPage() {
   const t = useTranslations("Philosophy");
@@ -61,12 +118,24 @@ export default function PhilosophyPage() {
   return (
     <div className="bg-[#fafbfc] min-h-screen text-[#111A4A]" ref={containerRef}>
       {/* Hero Section */}
-      <section className="relative pt-32 pb-24 px-6 overflow-hidden">
+      <section className="relative pt-32 pb-24 px-6 overflow-hidden min-h-[70vh] flex items-center justify-center flex-col">
+        {/* 3D Background */}
+        <motion.div style={{ y: y1 }} className="absolute inset-0 z-0 pointer-events-none opacity-40">
+          <Canvas camera={{ position: [0, 0, 7] }} gl={{ antialias: true, alpha: true }}>
+            <ambientLight intensity={1.5} />
+            <directionalLight position={[5, 5, 5]} intensity={2} color="#ffffff" />
+            <directionalLight position={[-5, -5, -5]} intensity={1} color="#167E6C" />
+            <spotLight position={[0, 10, 0]} intensity={2.5} color="#22d3a8" />
+            <Environment preset="city" />
+            <AnimatedForexChart3D />
+          </Canvas>
+        </motion.div>
+
         {/* Lusion style Background Blobs */}
         <motion.div style={{ y: y1 }} className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-br from-[#22d3a8]/20 to-[#167E6C]/10 rounded-full mix-blend-multiply filter blur-[100px] opacity-70 -z-10 translate-x-1/3 -translate-y-1/3" />
         <motion.div style={{ y: y2 }} className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-tr from-[#167E6C]/20 to-[#22d3a8]/10 rounded-full mix-blend-multiply filter blur-[100px] opacity-70 -z-10 -translate-x-1/3 translate-y-1/3" />
 
-        <div className="max-w-5xl mx-auto text-center mt-12">
+        <div className="max-w-5xl mx-auto text-center mt-12 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}

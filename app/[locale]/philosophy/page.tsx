@@ -118,7 +118,7 @@ export default function PhilosophyPage() {
   return (
     <div className="bg-[#fafbfc] min-h-screen text-[#111A4A]" ref={containerRef}>
       {/* Hero Section */}
-      <section className="relative pt-32 pb-24 px-6 overflow-hidden min-h-[70vh] flex items-center justify-center flex-col">
+      <section className="relative pt-32 pb-24 px-6 overflow-hidden min-h-[70vh]">
         {/* 3D Background */}
         <motion.div style={{ y: y1 }} className="absolute inset-0 z-0 pointer-events-none opacity-40">
           <Canvas camera={{ position: [0, 0, 7] }} gl={{ antialias: true, alpha: true }}>

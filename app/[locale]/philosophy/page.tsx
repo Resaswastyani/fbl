@@ -3,29 +3,37 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ShieldCheck, Target, Clock, HeartPulse, XCircle, ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { useRef } from "react";
+import { useRef, useMemo } from "react";
 import { useTranslations } from "next-intl";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Float, Box, Cylinder, Environment } from "@react-three/drei";
+import { Float, Environment } from "@react-three/drei";
 import * as THREE from "three";
 
-const Candlestick = ({ position, color, height, wickHeight, delay = 0 }: { position: [number, number, number], color: string, height: number, wickHeight: number, delay?: number }) => {
+const Candlestick = ({ position, color, height, wickHeight, delay = 0, isDynamic = false }: { position: [number, number, number], color: string, height: number, wickHeight: number, delay?: number, isDynamic?: boolean }) => {
   const groupRef = useRef<THREE.Group>(null);
+  const bodyRef = useRef<THREE.Mesh>(null);
   
   useFrame((state) => {
     if (groupRef.current) {
-      groupRef.current.position.y = position[1] + Math.sin(state.clock.getElapsedTime() * 2 + delay) * 0.1;
+      groupRef.current.position.y = position[1] + Math.sin(state.clock.getElapsedTime() * 1.5 + delay) * 0.05;
+      
+      if (isDynamic && bodyRef.current) {
+        const pulse = 1 + Math.sin(state.clock.getElapsedTime() * 3 + delay) * 0.1;
+        bodyRef.current.scale.y = pulse;
+      }
     }
   });
 
   return (
     <group ref={groupRef} position={position}>
       {/* Wick */}
-      <Cylinder args={[0.02, 0.02, wickHeight, 8]} position={[0, 0, 0]}>
+      <mesh position={[0, 0, 0]}>
+        <cylinderGeometry args={[0.015, 0.015, wickHeight, 8]} />
         <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.8} />
-      </Cylinder>
+      </mesh>
       {/* Body */}
-      <Box args={[0.25, height, 0.25]} position={[0, 0, 0]}>
+      <mesh ref={bodyRef} position={[0, 0, 0]}>
+        <boxGeometry args={[0.2, height, 0.2]} />
         <meshPhysicalMaterial 
           color={color} 
           emissive={color} 
@@ -33,11 +41,71 @@ const Candlestick = ({ position, color, height, wickHeight, delay = 0 }: { posit
           transparent
           opacity={0.8}
           roughness={0.1}
-          metalness={0.5}
+          metalness={0.8}
           clearcoat={1}
         />
-      </Box>
+      </mesh>
     </group>
+  );
+};
+
+const FloatingCoin = () => {
+  const ref = useRef<THREE.Mesh>(null);
+  useFrame((state) => {
+    if (ref.current) {
+      ref.current.rotation.x = state.clock.getElapsedTime() * 0.4;
+      ref.current.rotation.y = state.clock.getElapsedTime() * 0.5;
+    }
+  });
+
+  return (
+    <Float speed={3} rotationIntensity={1.5} floatIntensity={2} position={[2, 1, -1]}>
+      <mesh ref={ref}>
+        <torusGeometry args={[0.4, 0.1, 16, 32]} />
+        <meshStandardMaterial color="#fbbf24" metalness={1} roughness={0.2} emissive="#fbbf24" emissiveIntensity={0.4} />
+      </mesh>
+    </Float>
+  );
+};
+
+const AbstractNodes = () => {
+  return (
+    <group>
+      <Float speed={2} rotationIntensity={1} floatIntensity={1.5} position={[-2, 1.5, -2]}>
+        <mesh>
+          <sphereGeometry args={[0.2, 32, 32]} />
+          <meshPhysicalMaterial color="#22d3a8" emissive="#22d3a8" emissiveIntensity={0.5} clearcoat={1} metalness={0.9} roughness={0.1} transparent opacity={0.7} />
+        </mesh>
+      </Float>
+      <Float speed={1.5} rotationIntensity={1} floatIntensity={2} position={[1.5, -0.5, 1.5]}>
+        <mesh>
+          <sphereGeometry args={[0.1, 32, 32]} />
+          <meshStandardMaterial color="#167E6C" emissive="#167E6C" emissiveIntensity={0.8} />
+        </mesh>
+      </Float>
+    </group>
+  );
+};
+
+const TrendLine = () => {
+  // A glowing line connecting the candlesticks abstractly
+  const points = useMemo(() => {
+    return [
+      new THREE.Vector3(-1.5, -0.5, 0.2),
+      new THREE.Vector3(-0.8, 0.1, -0.1),
+      new THREE.Vector3(-0.1, 0.7, 0.1),
+      new THREE.Vector3(0.6, 1.3, -0.2),
+      new THREE.Vector3(1.3, 0.8, 0.3)
+    ];
+  }, []);
+  
+  const curve = useMemo(() => new THREE.CatmullRomCurve3(points), [points]);
+  
+  return (
+    <mesh>
+      <tubeGeometry args={[curve, 64, 0.02, 8, false]} />
+      <meshStandardMaterial color="#22d3a8" emissive="#22d3a8" emissiveIntensity={2} />
+    </mesh>
   );
 };
 
@@ -46,20 +114,37 @@ const AnimatedForexChart3D = () => {
 
   useFrame((state) => {
     if (groupRef.current) {
-      groupRef.current.rotation.y = state.clock.getElapsedTime() * 0.15;
-      groupRef.current.rotation.x = Math.sin(state.clock.getElapsedTime() * 0.5) * 0.1;
+      groupRef.current.rotation.y = Math.sin(state.clock.getElapsedTime() * 0.1) * 0.3;
+      groupRef.current.rotation.x = Math.sin(state.clock.getElapsedTime() * 0.2) * 0.1;
     }
   });
 
   return (
-    <Float speed={2} rotationIntensity={0.5} floatIntensity={1.5}>
-      <group ref={groupRef} scale={1.8} position={[0, -0.5, 0]}>
-        <Candlestick position={[-1.2, -0.2, 0.2]} color="#ef4444" height={0.8} wickHeight={1.5} delay={0} />
-        <Candlestick position={[-0.4, 0.4, -0.2]} color="#22d3a8" height={1.2} wickHeight={2.0} delay={1} />
-        <Candlestick position={[0.4, 1.0, 0.3]} color="#22d3a8" height={1.6} wickHeight={2.5} delay={2} />
-        <Candlestick position={[1.2, 0.6, -0.1]} color="#ef4444" height={0.5} wickHeight={1.2} delay={3} />
-      </group>
-    </Float>
+    <group scale={1.5} position={[0, -0.5, 0]}>
+      {/* Decorative Floor Rings */}
+      <mesh position={[0, -1.2, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <ringGeometry args={[2.5, 2.55, 64]} />
+        <meshStandardMaterial color="#167E6C" emissive="#167E6C" emissiveIntensity={0.5} transparent opacity={0.3} />
+      </mesh>
+      <mesh position={[0, -1.2, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <ringGeometry args={[3.5, 3.52, 64]} />
+        <meshStandardMaterial color="#22d3a8" emissive="#22d3a8" emissiveIntensity={0.2} transparent opacity={0.1} />
+      </mesh>
+
+      <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.5}>
+        <group ref={groupRef}>
+          <Candlestick position={[-1.5, -0.5, 0.2]} color="#ef4444" height={0.6} wickHeight={1.2} delay={0} />
+          <Candlestick position={[-0.8, 0.1, -0.1]} color="#22d3a8" height={1.0} wickHeight={1.8} delay={1} isDynamic />
+          <Candlestick position={[-0.1, 0.7, 0.1]} color="#22d3a8" height={1.4} wickHeight={2.2} delay={2} isDynamic />
+          <Candlestick position={[0.6, 1.3, -0.2]} color="#22d3a8" height={1.8} wickHeight={2.8} delay={3} isDynamic />
+          <Candlestick position={[1.3, 0.8, 0.3]} color="#ef4444" height={0.5} wickHeight={1.2} delay={4} />
+          
+          <TrendLine />
+          <FloatingCoin />
+          <AbstractNodes />
+        </group>
+      </Float>
+    </group>
   );
 };
 

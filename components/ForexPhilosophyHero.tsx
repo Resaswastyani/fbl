@@ -123,14 +123,14 @@ export const ForexPhilosophyHero = () => {
             <span className="text-[#167E6C] text-sm font-semibold tracking-widest uppercase">{t("tagline")}</span>
           </motion.div>
           
-          <h2 className="text-5xl md:text-7xl font-extrabold text-[#111A4A] mb-8 leading-[1.1] tracking-tight">
+          <h2 className="text-5xl md:text-7xl font-bold text-[#111A4A] mb-8 leading-[1.1] tracking-normal font-[family-name:var(--font-figtree)]">
             {t("titlePart1")} <br className="hidden md:block" />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#167E6C] to-[#22d3a8]">
               {t("titlePart2")}
             </span>
           </h2>
           
-          <p className="text-xl md:text-3xl text-[#111A4A] mb-12 max-w-4xl mx-auto leading-relaxed font-bold italic tracking-tight">
+          <p className="text-lg md:text-2xl text-[#111A4A]/70 mb-12 max-w-3xl mx-auto leading-relaxed font-medium italic font-[family-name:var(--font-figtree)]">
             "{t("description")}"
           </p>
 

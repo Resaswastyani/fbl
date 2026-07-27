@@ -1,5 +1,6 @@
 import { Header } from "@/components/Header";
 import { ProductTeaserCard } from "@/components/ProductTeaserCard";
+import { ForexPhilosophyHero } from "@/components/ForexPhilosophyHero";
 import { BankingScaleHero } from "@/components/BankingScaleHero";
 import ForexCarousel from "@/components/ForexCarousel";
 import CourseSection from "@/components/CourseSection";
@@ -15,6 +16,7 @@ export default function Page() {
     <>
       {/* <Header /> */}
       <ProductTeaserCard />
+      <ForexPhilosophyHero />
       <BankingScaleHero />
       <ForexCarousel />
       {/* <CourseSection /> */}

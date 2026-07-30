@@ -490,6 +490,15 @@ export const Header = () => {
               {t("brokerRecommendation")}
             </button>
 
+            <button
+              onClick={() => handleLinkClick("/panduan-ea-trial")}
+              className={`font-medium hover:text-primary transition 
+                ${isScrolled ? "text-sm" : "text-base"} ${textColorClass}
+              `}
+            >
+              {t("panduanEATrial")}
+            </button>
+
             <Dropdown
               title={t("tools")}
               items={[
@@ -647,6 +656,12 @@ export const Header = () => {
                   className="block w-full text-left text-lg text-gray-800"
                 >
                   {t("brokerRecommendation")}
+                </button>
+                <button
+                  onClick={() => handleLinkClick("/panduan-ea-trial")}
+                  className="block w-full text-left text-lg text-gray-800"
+                >
+                  {t("panduanEATrial")}
                 </button>
 
                 <div>

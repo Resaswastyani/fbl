@@ -25,46 +25,7 @@ const staggerContainer = {
   }
 };
 
-import { useEffect, useRef } from "react";
-
-// Real TradingView Widget for XAUUSD (M5)
-const TradingViewWidget = () => {
-  const container = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (container.current && container.current.children.length === 0) {
-      const script = document.createElement("script");
-      script.src = "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
-      script.type = "text/javascript";
-      script.async = true;
-      script.innerHTML = `
-        {
-          "autosize": true,
-          "symbol": "OANDA:XAUUSD",
-          "interval": "5",
-          "timezone": "Asia/Jakarta",
-          "theme": "light",
-          "style": "1",
-          "locale": "id",
-          "enable_publishing": false,
-          "hide_top_toolbar": true,
-          "hide_legend": true,
-          "save_image": false,
-          "allow_symbol_change": false,
-          "calendar": false,
-          "support_host": "https://www.tradingview.com"
-        }`;
-      container.current.appendChild(script);
-    }
-  }, []);
-
-  return (
-    <div className="tradingview-widget-container h-full w-full bg-white rounded-xl overflow-hidden pointer-events-none md:pointer-events-auto" ref={container}>
-    </div>
-  );
-};
-
-// Realistic Monitor Mockup wrapping the chart
+// Realistic Monitor Mockup wrapping the chart image
 const MonitorMockup = () => {
   return (
     <motion.div 
@@ -81,7 +42,12 @@ const MonitorMockup = () => {
         
         {/* Screen */}
         <div className="relative bg-white rounded-xl overflow-hidden w-full aspect-[4/3] sm:aspect-[16/10] md:aspect-[21/9] border border-slate-800">
-          <TradingViewWidget />
+          <img 
+            src="/images/xauusd-chart.png" 
+            alt="XAUUSD Real Chart" 
+            className="w-full h-full object-cover object-center pointer-events-none select-none"
+            draggable="false"
+          />
         </div>
         
         {/* Bottom Bezel */}

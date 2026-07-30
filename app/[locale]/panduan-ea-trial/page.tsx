@@ -25,102 +25,78 @@ const staggerContainer = {
   }
 };
 
-// Animated Chart Component mimicking XAUUSD movement (FBL Theme)
-const TradingChartBackground = () => {
-  return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-[#f8fafc] to-white"></div>
-      
-      {/* Ambient glowing blobs behind content */}
-      <motion.div 
-        animate={{ 
-          scale: [1, 1.2, 1],
-          opacity: [0.1, 0.2, 0.1],
-          x: [0, 50, 0],
-          y: [0, -50, 0]
-        }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-1/4 -left-[10%] w-[600px] h-[600px] bg-[#22d3a8] rounded-full mix-blend-multiply filter blur-[128px] pointer-events-none"
-      />
-      <motion.div 
-        animate={{ 
-          scale: [1, 1.3, 1],
-          opacity: [0.1, 0.25, 0.1],
-          x: [0, -50, 0],
-          y: [0, 50, 0]
-        }}
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-        className="absolute bottom-1/4 -right-[10%] w-[600px] h-[600px] bg-[#167E6C] rounded-full mix-blend-multiply filter blur-[128px] pointer-events-none"
-      />
+import { useEffect, useRef } from "react";
 
-      <svg className="absolute w-full h-full opacity-60" preserveAspectRatio="none" viewBox="0 0 1000 300">
-        <defs>
-          <linearGradient id="chartGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#22d3a8" stopOpacity={0.3} />
-            <stop offset="100%" stopColor="#22d3a8" stopOpacity={0} />
-          </linearGradient>
-        </defs>
-        <motion.path
-          d="M0,250 C100,220 150,280 250,200 C350,120 400,240 500,180 C600,120 650,150 750,80 C850,10 950,100 1000,50 L1000,300 L0,300 Z"
-          fill="url(#chartGradient)"
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.5, ease: "easeOut" }}
-        />
-        <motion.path
-          d="M0,250 C100,220 150,280 250,200 C350,120 400,240 500,180 C600,120 650,150 750,80 C850,10 950,100 1000,50"
-          fill="none"
-          stroke="#167E6C"
-          strokeWidth="3"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          initial={{ pathLength: 0 }}
-          animate={{ pathLength: 1 }}
-          transition={{ duration: 2.5, ease: "easeInOut" }}
-        />
-        {/* Animated Data Points */}
-        {[
-          { cx: 250, cy: 200, delay: 0.5 },
-          { cx: 500, cy: 180, delay: 1.0 },
-          { cx: 750, cy: 80, delay: 1.5 },
-          { cx: 1000, cy: 50, delay: 2.0 },
-        ].map((point, i) => (
-          <motion.circle
-            key={i}
-            cx={point.cx}
-            cy={point.cy}
-            r="6"
-            fill="white"
-            stroke="#22d3a8"
-            strokeWidth="3"
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: point.delay, duration: 0.5, type: "spring" }}
-          />
-        ))}
-      </svg>
-      
-      {/* Floating Particles for Lusion-like effect */}
-      {Array.from({ length: 25 }).map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute w-1.5 h-1.5 bg-[#167E6C]/30 rounded-full"
-          style={{
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
-          }}
-          animate={{
-            y: [0, -40, 0],
-            opacity: [0.1, 0.6, 0.1],
-          }}
-          transition={{
-            duration: 3 + Math.random() * 3,
-            repeat: Infinity,
-            delay: Math.random() * 2,
-          }}
-        />
-      ))}
+// Real TradingView Widget for XAUUSD (M5)
+const TradingViewWidget = () => {
+  const container = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (container.current && container.current.children.length === 0) {
+      const script = document.createElement("script");
+      script.src = "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
+      script.type = "text/javascript";
+      script.async = true;
+      script.innerHTML = `
+        {
+          "autosize": true,
+          "symbol": "OANDA:XAUUSD",
+          "interval": "5",
+          "timezone": "Asia/Jakarta",
+          "theme": "light",
+          "style": "1",
+          "locale": "id",
+          "enable_publishing": false,
+          "hide_top_toolbar": true,
+          "hide_legend": true,
+          "save_image": false,
+          "allow_symbol_change": false,
+          "calendar": false,
+          "support_host": "https://www.tradingview.com"
+        }`;
+      container.current.appendChild(script);
+    }
+  }, []);
+
+  return (
+    <div className="tradingview-widget-container h-full w-full bg-white rounded-xl overflow-hidden pointer-events-none md:pointer-events-auto" ref={container}>
     </div>
+  );
+};
+
+// Realistic Monitor Mockup wrapping the chart
+const MonitorMockup = () => {
+  return (
+    <motion.div 
+      initial={{ opacity: 0, y: 80 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 1.2, delay: 0.4, ease: "easeOut" }}
+      className="relative mx-auto w-full max-w-5xl z-20 mt-16 pb-16"
+    >
+      <div 
+        className="relative bg-[#1e293b] rounded-t-2xl rounded-b-lg p-2 md:p-3 shadow-2xl border border-slate-700 shadow-[#167E6C]/30 transition-transform duration-700 ease-out hover:-translate-y-2"
+      >
+        {/* Camera dot */}
+        <div className="absolute top-1 md:top-1.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-slate-900 rounded-full border border-slate-800"></div>
+        
+        {/* Screen */}
+        <div className="relative bg-white rounded-xl overflow-hidden w-full aspect-[4/3] sm:aspect-[16/10] md:aspect-[21/9] border border-slate-800">
+          <TradingViewWidget />
+        </div>
+        
+        {/* Bottom Bezel */}
+        <div className="h-4 md:h-6 w-full bg-[#1e293b] flex items-center justify-center">
+          <div className="w-8 h-1 rounded-full bg-slate-600/50"></div>
+        </div>
+      </div>
+      
+      {/* Monitor Stand */}
+      <div className="absolute -bottom-6 md:-bottom-10 left-1/2 -translate-x-1/2 w-24 md:w-32 h-8 md:h-12 bg-gradient-to-b from-slate-700 to-slate-900" style={{ clipPath: 'polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%)' }}></div>
+      <div className="absolute -bottom-8 md:-bottom-12 left-1/2 -translate-x-1/2 w-40 md:w-56 h-2 md:h-3 bg-slate-800 rounded-full shadow-lg"></div>
+
+      {/* Glow effect behind monitor */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-[#22d3a8] rounded-full mix-blend-multiply filter blur-[120px] opacity-20 -z-10 pointer-events-none"></div>
+    </motion.div>
   );
 };
 
@@ -132,11 +108,13 @@ export default function PanduanEATrialPage() {
   return (
     <main className="w-full bg-white font-[family-name:var(--font-figtree)] overflow-x-hidden">
       
-      {/* Hero Section - Full Screen */}
-      <section className="relative w-full min-h-screen flex flex-col items-center justify-center text-center px-6 pt-24 pb-12 overflow-hidden">
-        <TradingChartBackground />
+      {/* Hero Section - Full Width, Dark Theme Transition */}
+      <section className="relative w-full min-h-screen flex flex-col items-center justify-start text-center px-6 pt-32 pb-24 overflow-hidden bg-gradient-to-b from-[#f8fafc] via-white to-white">
+        {/* Decorative background blur blobs */}
+        <div className="absolute top-1/4 -left-32 w-[600px] h-[600px] bg-[#22d3a8]/10 rounded-full mix-blend-multiply filter blur-[128px] pointer-events-none"></div>
+        <div className="absolute top-1/3 -right-32 w-[600px] h-[600px] bg-[#167E6C]/10 rounded-full mix-blend-multiply filter blur-[128px] pointer-events-none"></div>
 
-        <div className="relative z-10 w-full max-w-5xl mx-auto flex flex-col items-center mt-12">
+        <div className="relative z-10 w-full max-w-5xl mx-auto flex flex-col items-center mt-4">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -195,10 +173,13 @@ export default function PanduanEATrialPage() {
           </motion.div>
         </div>
         
+        {/* Real Monitor with TradingView */}
+        <MonitorMockup />
+
         {/* Scroll Indicator */}
         <motion.div 
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5, duration: 1 }}
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-[#111A4A]/50"
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-[#111A4A]/50 z-10"
         >
           <span className="text-sm font-medium tracking-widest uppercase">Scroll</span>
           <div className="w-px h-12 bg-gradient-to-b from-[#111A4A]/20 to-transparent"></div>

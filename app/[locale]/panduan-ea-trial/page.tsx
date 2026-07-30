@@ -29,10 +29,10 @@ const staggerContainer = {
 const MonitorMockup = () => {
   return (
     <motion.div 
-      initial={{ opacity: 0, y: 80 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, x: 50 }}
+      animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 1.2, delay: 0.4, ease: "easeOut" }}
-      className="relative mx-auto w-full max-w-5xl z-20 mt-16 pb-16"
+      className="relative w-full max-w-xl mx-auto lg:max-w-none z-20 pb-12"
     >
       <div 
         className="relative bg-[#1e293b] rounded-t-2xl rounded-b-lg p-2 md:p-3 shadow-2xl border border-slate-700 shadow-[#167E6C]/30 transition-transform duration-700 ease-out hover:-translate-y-2"
@@ -41,12 +41,14 @@ const MonitorMockup = () => {
         <div className="absolute top-1 md:top-1.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-slate-900 rounded-full border border-slate-800"></div>
         
         {/* Screen */}
-        <div className="relative bg-white rounded-xl overflow-hidden w-full aspect-[4/3] sm:aspect-[16/10] md:aspect-[21/9] border border-slate-800">
-          <img 
+        <div className="relative bg-[#0f172a] rounded-xl overflow-hidden w-full aspect-[4/3] sm:aspect-[16/10] border border-slate-800 relative">
+          <motion.img 
             src="/images/xauusd-chart.png" 
             alt="XAUUSD Real Chart" 
-            className="w-full h-full object-cover object-center pointer-events-none select-none"
+            className="absolute top-0 left-0 w-auto h-full max-w-none pointer-events-none select-none"
             draggable="false"
+            animate={{ x: ["0%", "-20%", "0%"] }}
+            transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
           />
         </div>
         
@@ -61,7 +63,7 @@ const MonitorMockup = () => {
       <div className="absolute -bottom-8 md:-bottom-12 left-1/2 -translate-x-1/2 w-40 md:w-56 h-2 md:h-3 bg-slate-800 rounded-full shadow-lg"></div>
 
       {/* Glow effect behind monitor */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-[#22d3a8] rounded-full mix-blend-multiply filter blur-[120px] opacity-20 -z-10 pointer-events-none"></div>
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-[#22d3a8] rounded-full mix-blend-multiply filter blur-[100px] opacity-15 -z-10 pointer-events-none"></div>
     </motion.div>
   );
 };
@@ -74,73 +76,80 @@ export default function PanduanEATrialPage() {
   return (
     <main className="w-full bg-white font-[family-name:var(--font-figtree)] overflow-x-hidden">
       
-      {/* Hero Section - Full Width, Dark Theme Transition */}
-      <section className="relative w-full min-h-screen flex flex-col items-center justify-start text-center px-6 pt-32 pb-24 overflow-hidden bg-gradient-to-b from-[#f8fafc] via-white to-white">
+      {/* Hero Section - Two Column Layout */}
+      <section className="relative w-full min-h-screen flex items-center justify-center px-6 pt-32 pb-24 overflow-hidden bg-gradient-to-b from-[#f8fafc] via-white to-white">
         {/* Decorative background blur blobs */}
         <div className="absolute top-1/4 -left-32 w-[600px] h-[600px] bg-[#22d3a8]/10 rounded-full mix-blend-multiply filter blur-[128px] pointer-events-none"></div>
-        <div className="absolute top-1/3 -right-32 w-[600px] h-[600px] bg-[#167E6C]/10 rounded-full mix-blend-multiply filter blur-[128px] pointer-events-none"></div>
+        <div className="absolute bottom-1/4 -right-32 w-[600px] h-[600px] bg-[#167E6C]/10 rounded-full mix-blend-multiply filter blur-[128px] pointer-events-none"></div>
 
-        <div className="relative z-10 w-full max-w-5xl mx-auto flex flex-col items-center mt-4">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/70 border border-[#167E6C]/20 text-[#167E6C] font-semibold text-sm mb-8 backdrop-blur-md shadow-sm"
-          >
-            <span className="w-2 h-2 rounded-full bg-[#22d3a8] animate-pulse"></span>
-            <span>{t("version")}</span>
-          </motion.div>
-
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
-            className="text-5xl md:text-7xl lg:text-8xl font-bold text-[#111A4A] tracking-tight leading-[1.1] mb-6"
-          >
-            {t("title")} <br className="hidden md:block" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#167E6C] to-[#22d3a8]">
-              {t("subtitle")}
-            </span>
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-            className="text-xl md:text-2xl text-[#111A4A]/70 font-medium italic mb-12 max-w-3xl leading-relaxed"
-          >
-            "{t("description")}"
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-            className="flex flex-col sm:flex-row gap-5"
-          >
-            <a
-              href="/Panduan_Free_Trial_30_Hari.pdf"
-              download
-              className="group relative inline-flex items-center justify-center gap-3 px-10 py-5 rounded-full bg-[#111A4A] text-white font-semibold text-lg overflow-hidden transition-all shadow-xl hover:shadow-[#22d3a8]/30 hover:shadow-2xl hover:-translate-y-1"
+        <div className="relative z-10 w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center mt-4">
+          
+          {/* Left Content */}
+          <div className="flex flex-col items-center lg:items-start text-center lg:text-left order-2 lg:order-1">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6 }}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/70 border border-[#167E6C]/20 text-[#167E6C] font-semibold text-sm mb-6 lg:mb-8 backdrop-blur-md shadow-sm"
             >
-              <span className="relative z-10 flex items-center gap-3">
-                <Download size={22} className="group-hover:-translate-y-1 transition-transform" />
-                {t("downloadPDF")}
+              <span className="w-2 h-2 rounded-full bg-[#22d3a8] animate-pulse"></span>
+              <span>{t("version")}</span>
+            </motion.div>
+
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
+              className="text-5xl md:text-6xl lg:text-7xl font-bold text-[#111A4A] tracking-tight leading-[1.1] mb-6"
+            >
+              {t("title")} <br className="hidden md:block" />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#167E6C] to-[#22d3a8]">
+                {t("subtitle")}
               </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-[#167E6C] to-[#22d3a8] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            </a>
-            <a
-              href="#panduan-lengkap"
-              className="inline-flex items-center justify-center gap-3 px-10 py-5 bg-white text-[#111A4A] rounded-full font-semibold text-lg border border-[#111A4A]/10 hover:border-[#167E6C]/50 transition-all shadow-sm hover:shadow-lg hover:-translate-y-1"
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+              className="text-xl md:text-2xl text-[#111A4A]/70 font-medium italic mb-10 lg:mb-12 max-w-2xl leading-relaxed"
             >
-              <BookOpen size={22} className="text-[#167E6C]" />
-              {t("readOnline")}
-            </a>
-          </motion.div>
+              "{t("description")}"
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
+              className="flex flex-col sm:flex-row gap-5"
+            >
+              <a
+                href="/Panduan_Free_Trial_30_Hari.pdf"
+                download
+                className="group relative inline-flex items-center justify-center gap-3 px-8 lg:px-10 py-4 lg:py-5 rounded-full bg-[#111A4A] text-white font-semibold text-lg overflow-hidden transition-all shadow-xl hover:shadow-[#22d3a8]/30 hover:shadow-2xl hover:-translate-y-1"
+              >
+                <span className="relative z-10 flex items-center gap-3">
+                  <Download size={22} className="group-hover:-translate-y-1 transition-transform" />
+                  {t("downloadPDF")}
+                </span>
+                <div className="absolute inset-0 bg-gradient-to-r from-[#167E6C] to-[#22d3a8] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              </a>
+              <a
+                href="#panduan-lengkap"
+                className="inline-flex items-center justify-center gap-3 px-8 lg:px-10 py-4 lg:py-5 bg-white text-[#111A4A] rounded-full font-semibold text-lg border border-[#111A4A]/10 hover:border-[#167E6C]/50 transition-all shadow-sm hover:shadow-lg hover:-translate-y-1"
+              >
+                <BookOpen size={22} className="text-[#167E6C]" />
+                {t("readOnline")}
+              </a>
+            </motion.div>
+          </div>
+
+          {/* Right Visual (Monitor) */}
+          <div className="order-1 lg:order-2 w-full px-4 sm:px-12 lg:px-0">
+            <MonitorMockup />
+          </div>
+
         </div>
-        
-        {/* Real Monitor with TradingView */}
-        <MonitorMockup />
 
         {/* Scroll Indicator */}
         <motion.div 

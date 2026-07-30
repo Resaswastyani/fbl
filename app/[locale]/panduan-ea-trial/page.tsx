@@ -41,13 +41,13 @@ const MonitorMockup = () => {
         <div className="absolute top-1 md:top-1.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-slate-900 rounded-full border border-slate-800"></div>
         
         {/* Screen */}
-        <div className="relative bg-[#0f172a] rounded-xl overflow-hidden w-full aspect-[4/3] sm:aspect-[16/10] border border-slate-800 relative">
+        <div className="relative bg-[#0f172a] rounded-xl overflow-hidden w-full aspect-[4/3] sm:aspect-[16/10] border border-slate-800 flex items-center">
           <motion.img 
             src="/images/xauusd-chart.png" 
             alt="XAUUSD Real Chart" 
-            className="absolute top-0 left-0 w-auto h-full max-w-none pointer-events-none select-none"
+            className="w-[150%] max-w-none h-auto pointer-events-none select-none"
             draggable="false"
-            animate={{ x: ["0%", "-20%", "0%"] }}
+            animate={{ x: ["0%", "-33.33%", "0%"] }}
             transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
           />
         </div>

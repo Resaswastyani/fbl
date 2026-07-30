@@ -11,8 +11,8 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 
 const fadeIn = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
 };
 
 const staggerContainer = {
@@ -20,21 +20,44 @@ const staggerContainer = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.1
+      staggerChildren: 0.15
     }
   }
 };
 
-// Animated Chart Component mimicking XAUUSD movement
+// Animated Chart Component mimicking XAUUSD movement (FBL Theme)
 const TradingChartBackground = () => {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-primary/5 to-transparent"></div>
-      <svg className="absolute w-full h-full" preserveAspectRatio="none" viewBox="0 0 1000 300">
+      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-[#f8fafc] to-white"></div>
+      
+      {/* Ambient glowing blobs behind content */}
+      <motion.div 
+        animate={{ 
+          scale: [1, 1.2, 1],
+          opacity: [0.1, 0.2, 0.1],
+          x: [0, 50, 0],
+          y: [0, -50, 0]
+        }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute top-1/4 -left-[10%] w-[600px] h-[600px] bg-[#22d3a8] rounded-full mix-blend-multiply filter blur-[128px] pointer-events-none"
+      />
+      <motion.div 
+        animate={{ 
+          scale: [1, 1.3, 1],
+          opacity: [0.1, 0.25, 0.1],
+          x: [0, -50, 0],
+          y: [0, 50, 0]
+        }}
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+        className="absolute bottom-1/4 -right-[10%] w-[600px] h-[600px] bg-[#167E6C] rounded-full mix-blend-multiply filter blur-[128px] pointer-events-none"
+      />
+
+      <svg className="absolute w-full h-full opacity-60" preserveAspectRatio="none" viewBox="0 0 1000 300">
         <defs>
           <linearGradient id="chartGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="rgba(var(--color-primary-rgb), 0.2)" />
-            <stop offset="100%" stopColor="rgba(var(--color-primary-rgb), 0)" />
+            <stop offset="0%" stopColor="#22d3a8" stopOpacity={0.3} />
+            <stop offset="100%" stopColor="#22d3a8" stopOpacity={0} />
           </linearGradient>
         </defs>
         <motion.path
@@ -47,7 +70,7 @@ const TradingChartBackground = () => {
         <motion.path
           d="M0,250 C100,220 150,280 250,200 C350,120 400,240 500,180 C600,120 650,150 750,80 C850,10 950,100 1000,50"
           fill="none"
-          stroke="var(--color-primary, #0070f3)"
+          stroke="#167E6C"
           strokeWidth="3"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -68,7 +91,7 @@ const TradingChartBackground = () => {
             cy={point.cy}
             r="6"
             fill="white"
-            stroke="var(--color-primary, #0070f3)"
+            stroke="#22d3a8"
             strokeWidth="3"
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -76,21 +99,22 @@ const TradingChartBackground = () => {
           />
         ))}
       </svg>
+      
       {/* Floating Particles for Lusion-like effect */}
-      {Array.from({ length: 20 }).map((_, i) => (
+      {Array.from({ length: 25 }).map((_, i) => (
         <motion.div
           key={i}
-          className="absolute w-1.5 h-1.5 bg-primary/40 rounded-full"
+          className="absolute w-1.5 h-1.5 bg-[#167E6C]/30 rounded-full"
           style={{
             left: `${Math.random() * 100}%`,
             top: `${Math.random() * 100}%`,
           }}
           animate={{
-            y: [0, -30, 0],
-            opacity: [0.2, 0.8, 0.2],
+            y: [0, -40, 0],
+            opacity: [0.1, 0.6, 0.1],
           }}
           transition={{
-            duration: 3 + Math.random() * 2,
+            duration: 3 + Math.random() * 3,
             repeat: Infinity,
             delay: Math.random() * 2,
           }}
@@ -106,225 +130,256 @@ export default function PanduanEATrialPage() {
   const t = useTranslations("PanduanEATrial");
 
   return (
-    <main className="min-h-screen bg-gray-50 overflow-hidden pt-24 pb-20">
-      {/* Hero Section */}
-      <section className="relative w-full max-w-7xl mx-auto px-6 pt-12 pb-24 lg:pt-24 lg:pb-32 flex flex-col items-center justify-center text-center">
+    <main className="w-full bg-white font-[family-name:var(--font-figtree)] overflow-x-hidden">
+      
+      {/* Hero Section - Full Screen */}
+      <section className="relative w-full min-h-screen flex flex-col items-center justify-center text-center px-6 pt-24 pb-12 overflow-hidden">
         <TradingChartBackground />
 
-        <div className="relative z-10 max-w-4xl mx-auto flex flex-col items-center">
+        <div className="relative z-10 w-full max-w-5xl mx-auto flex flex-col items-center mt-12">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary font-medium text-sm mb-6 border border-primary/20 backdrop-blur-sm"
+            transition={{ duration: 0.6 }}
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/70 border border-[#167E6C]/20 text-[#167E6C] font-semibold text-sm mb-8 backdrop-blur-md shadow-sm"
           >
-            <Activity size={16} />
+            <span className="w-2 h-2 rounded-full bg-[#22d3a8] animate-pulse"></span>
             <span>{t("version")}</span>
           </motion.div>
 
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.1 }}
-            className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-gray-900 tracking-tight leading-tight mb-6"
+            transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
+            className="text-5xl md:text-7xl lg:text-8xl font-bold text-[#111A4A] tracking-tight leading-[1.1] mb-6"
           >
-            {t("title")} <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-600">{t("subtitle")}</span>
+            {t("title")} <br className="hidden md:block" />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#167E6C] to-[#22d3a8]">
+              {t("subtitle")}
+            </span>
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
-            className="text-xl md:text-2xl text-gray-600 font-medium mb-10 max-w-2xl"
+            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+            className="text-xl md:text-2xl text-[#111A4A]/70 font-medium italic mb-12 max-w-3xl leading-relaxed"
           >
-            {t("description")}
+            "{t("description")}"
           </motion.p>
 
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.3 }}
-            className="flex flex-col sm:flex-row gap-4"
+            transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
+            className="flex flex-col sm:flex-row gap-5"
           >
             <a
               href="/Panduan_Free_Trial_30_Hari.pdf"
               download
-              className="flex items-center justify-center gap-2 px-8 py-4 bg-primary text-white rounded-xl font-semibold text-lg hover:bg-primary/90 transition shadow-lg shadow-primary/30 hover:shadow-xl hover:-translate-y-1"
+              className="group relative inline-flex items-center justify-center gap-3 px-10 py-5 rounded-full bg-[#111A4A] text-white font-semibold text-lg overflow-hidden transition-all shadow-xl hover:shadow-[#22d3a8]/30 hover:shadow-2xl hover:-translate-y-1"
             >
-              <Download size={20} />
-              {t("downloadPDF")}
+              <span className="relative z-10 flex items-center gap-3">
+                <Download size={22} className="group-hover:-translate-y-1 transition-transform" />
+                {t("downloadPDF")}
+              </span>
+              <div className="absolute inset-0 bg-gradient-to-r from-[#167E6C] to-[#22d3a8] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             </a>
             <a
-              href="/Panduan_Free_Trial_30_Hari_EA_FBL_1.pdf"
-              className="flex items-center justify-center gap-2 px-8 py-4 bg-white text-gray-800 rounded-xl font-semibold text-lg border border-gray-200 hover:border-gray-300 transition shadow-sm hover:shadow hover:-translate-y-1"
+              href="#panduan-lengkap"
+              className="inline-flex items-center justify-center gap-3 px-10 py-5 bg-white text-[#111A4A] rounded-full font-semibold text-lg border border-[#111A4A]/10 hover:border-[#167E6C]/50 transition-all shadow-sm hover:shadow-lg hover:-translate-y-1"
             >
-              <BookOpen size={20} />
+              <BookOpen size={22} className="text-[#167E6C]" />
               {t("readOnline")}
             </a>
           </motion.div>
         </div>
+        
+        {/* Scroll Indicator */}
+        <motion.div 
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5, duration: 1 }}
+          className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-[#111A4A]/50"
+        >
+          <span className="text-sm font-medium tracking-widest uppercase">Scroll</span>
+          <div className="w-px h-12 bg-gradient-to-b from-[#111A4A]/20 to-transparent"></div>
+        </motion.div>
       </section>
 
-      <div id="panduan-lengkap" className="max-w-5xl mx-auto px-6 space-y-24 relative z-10">
+      {/* Content Sections Wrapper */}
+      <div id="panduan-lengkap" className="w-full relative z-10">
 
-        {/* Section 1: Tujuan */}
-        <motion.section
-          initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeIn}
-          className="bg-white rounded-3xl p-8 md:p-12 shadow-xl shadow-gray-200/50 border border-gray-100"
-        >
-          <div className="flex items-center gap-4 mb-8">
-            <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center">
-              <ShieldCheck size={28} />
+        {/* Section 1: Tujuan - Full Width Background */}
+        <section className="w-full bg-white py-24 border-t border-gray-100">
+          <motion.div 
+            initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeIn}
+            className="container mx-auto px-6 max-w-6xl"
+          >
+            <div className="flex items-center gap-5 mb-12">
+              <div className="w-16 h-16 bg-[#167E6C]/10 text-[#167E6C] rounded-2xl flex items-center justify-center">
+                <ShieldCheck size={32} />
+              </div>
+              <h2 className="text-4xl font-bold text-[#111A4A]">{t("section1Title")}</h2>
             </div>
-            <h2 className="text-3xl font-bold text-gray-900">{t("section1Title")}</h2>
-          </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="space-y-4">
-              <h3 className="text-xl font-semibold text-gray-800">{t("principleTitle")}</h3>
-              <p className="text-gray-600 leading-relaxed">
-                {t("principleDesc1")} <strong className="text-gray-900">{t("principleDesc2")}</strong>
-              </p>
-            </div>
-            <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4">{t("scopeTitle")}</h3>
-              <ul className="space-y-3">
-                {[
-                  t("scope1"),
-                  t("scope2"),
-                  t("scope3"),
-                  t("scope4")
-                ].map((item, i) => (
-                  <li key={i} className="flex items-start gap-3 text-gray-600">
-                    <CheckCircle size={20} className="text-green-500 shrink-0 mt-0.5" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </motion.section>
-
-        {/* Section 2: Persiapan */}
-        <motion.section
-          initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer}
-        >
-          <motion.div variants={fadeIn} className="flex items-center gap-4 mb-8">
-            <div className="w-12 h-12 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center">
-              <Settings size={28} />
-            </div>
-            <h2 className="text-3xl font-bold text-gray-900">{t("section2Title")}</h2>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              { label: t("prepPlatform"), value: t("prepPlatformVal") },
-              { label: t("prepBroker"), value: t("prepBrokerVal") },
-              { label: t("prepInstrument"), value: t("prepInstrumentVal") },
-              { label: t("prepTimeframe"), value: t("prepTimeframeVal") },
-              { label: t("prepCapital"), value: t("prepCapitalVal") },
-              { label: t("prepConnection"), value: t("prepConnectionVal") },
-            ].map((item, i) => (
-              <motion.div key={i} variants={fadeIn} className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition">
-                <p className="text-sm text-gray-500 font-medium mb-1">{item.label}</p>
-                <p className="text-lg font-semibold text-gray-900">{item.value}</p>
-              </motion.div>
-            ))}
-          </div>
-
-          <motion.div variants={fadeIn} className="mt-8 bg-amber-50 border border-amber-200 p-6 rounded-2xl flex gap-4">
-            <AlertTriangle className="text-amber-500 shrink-0" size={24} />
-            <div>
-              <h4 className="font-semibold text-amber-900 mb-1">{t("importantCentTitle")}</h4>
-              <p className="text-amber-800/80">{t("importantCentDesc")}</p>
+            <div className="grid md:grid-cols-2 gap-12">
+              <div className="space-y-6">
+                <h3 className="text-2xl font-semibold text-[#111A4A] border-b border-gray-100 pb-4">{t("principleTitle")}</h3>
+                <p className="text-lg text-gray-600 leading-relaxed">
+                  {t("principleDesc1")}
+                </p>
+                <div className="p-6 bg-[#111A4A] rounded-2xl shadow-xl shadow-[#111A4A]/10 mt-6">
+                  <p className="text-white font-medium text-lg italic">
+                    "{t("principleDesc2")}"
+                  </p>
+                </div>
+              </div>
+              <div className="bg-[#f8fafc] p-8 rounded-3xl border border-gray-200 shadow-sm">
+                <h3 className="text-xl font-semibold text-[#111A4A] mb-6">{t("scopeTitle")}</h3>
+                <ul className="space-y-5">
+                  {[ t("scope1"), t("scope2"), t("scope3"), t("scope4") ].map((item, i) => (
+                    <li key={i} className="flex items-start gap-4">
+                      <div className="w-8 h-8 rounded-full bg-white shadow-sm flex items-center justify-center shrink-0 mt-0.5">
+                        <CheckCircle size={18} className="text-[#22d3a8]" />
+                      </div>
+                      <span className="text-gray-700 text-lg leading-relaxed">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </motion.div>
-        </motion.section>
+        </section>
+
+        {/* Section 2: Persiapan - Different Background */}
+        <section className="w-full bg-[#f8fafc] py-24 border-t border-gray-100">
+          <motion.div 
+            initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer}
+            className="container mx-auto px-6 max-w-6xl"
+          >
+            <motion.div variants={fadeIn} className="flex items-center gap-5 mb-12">
+              <div className="w-16 h-16 bg-[#111A4A]/5 text-[#111A4A] rounded-2xl flex items-center justify-center">
+                <Settings size={32} />
+              </div>
+              <h2 className="text-4xl font-bold text-[#111A4A]">{t("section2Title")}</h2>
+            </motion.div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[
+                { label: t("prepPlatform"), value: t("prepPlatformVal") },
+                { label: t("prepBroker"), value: t("prepBrokerVal") },
+                { label: t("prepInstrument"), value: t("prepInstrumentVal") },
+                { label: t("prepTimeframe"), value: t("prepTimeframeVal") },
+                { label: t("prepCapital"), value: t("prepCapitalVal") },
+                { label: t("prepConnection"), value: t("prepConnectionVal") },
+              ].map((item, i) => (
+                <motion.div key={i} variants={fadeIn} className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:shadow-xl hover:border-[#167E6C]/30 transition-all duration-300 group">
+                  <p className="text-sm text-gray-500 font-medium mb-2 uppercase tracking-wider">{item.label}</p>
+                  <p className="text-xl font-bold text-[#111A4A] group-hover:text-[#167E6C] transition-colors">{item.value}</p>
+                </motion.div>
+              ))}
+            </div>
+
+            <motion.div variants={fadeIn} className="mt-10 bg-[#111A4A] text-white p-8 rounded-3xl flex flex-col md:flex-row gap-6 items-start md:items-center shadow-2xl shadow-[#111A4A]/20">
+              <div className="w-14 h-14 bg-amber-400/20 text-amber-400 rounded-full flex items-center justify-center shrink-0">
+                <AlertTriangle size={28} />
+              </div>
+              <div>
+                <h4 className="text-xl font-bold text-amber-400 mb-2">{t("importantCentTitle")}</h4>
+                <p className="text-white/80 text-lg">{t("importantCentDesc")}</p>
+              </div>
+            </motion.div>
+          </motion.div>
+        </section>
 
         {/* Section 3: Instalasi */}
-        <motion.section
-          initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeIn}
-        >
-          <div className="flex items-center gap-4 mb-8">
-            <div className="w-12 h-12 bg-primary/10 text-primary rounded-2xl flex items-center justify-center">
-              <Cpu size={28} />
-            </div>
-            <h2 className="text-3xl font-bold text-gray-900">{t("section3Title")}</h2>
-          </div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              { step: 1, title: t("step1Title"), desc: t("step1Desc") },
-              { step: 2, title: t("step2Title"), desc: t("step2Desc") },
-              { step: 3, title: t("step3Title"), desc: t("step3Desc") },
-              { step: 4, title: t("step4Title"), desc: t("step4Desc") },
-              { step: 5, title: t("step5Title"), desc: t("step5Desc") },
-              { step: 6, title: t("step6Title"), desc: t("step6Desc") },
-            ].map((step, i) => (
-              <div key={i} className="relative bg-white p-6 rounded-2xl shadow-sm border border-gray-100 z-10 group overflow-hidden">
-                <div className="absolute top-0 right-0 -mr-4 -mt-4 w-24 h-24 bg-gray-50 rounded-full z-[-1] group-hover:scale-150 transition-transform duration-500 ease-out"></div>
-                <div className="text-4xl font-black text-gray-100 mb-2">{step.step}</div>
-                <h4 className="font-semibold text-gray-900 mb-2">{step.title}</h4>
-                <p className="text-gray-600 text-sm">{step.desc}</p>
+        <section className="w-full bg-white py-24 border-t border-gray-100">
+          <motion.div 
+            initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeIn}
+            className="container mx-auto px-6 max-w-6xl"
+          >
+            <div className="flex items-center gap-5 mb-16">
+              <div className="w-16 h-16 bg-[#167E6C]/10 text-[#167E6C] rounded-2xl flex items-center justify-center">
+                <Cpu size={32} />
               </div>
-            ))}
-          </div>
-        </motion.section>
+              <h2 className="text-4xl font-bold text-[#111A4A]">{t("section3Title")}</h2>
+            </div>
+
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[
+                { step: 1, title: t("step1Title"), desc: t("step1Desc") },
+                { step: 2, title: t("step2Title"), desc: t("step2Desc") },
+                { step: 3, title: t("step3Title"), desc: t("step3Desc") },
+                { step: 4, title: t("step4Title"), desc: t("step4Desc") },
+                { step: 5, title: t("step5Title"), desc: t("step5Desc") },
+                { step: 6, title: t("step6Title"), desc: t("step6Desc") },
+              ].map((step, i) => (
+                <div key={i} className="relative bg-white p-8 rounded-3xl shadow-md border border-gray-100 group overflow-hidden hover:-translate-y-2 transition-all duration-300 hover:shadow-xl hover:shadow-[#167E6C]/10 hover:border-[#167E6C]/30">
+                  <div className="absolute top-0 right-0 -mr-6 -mt-6 w-32 h-32 bg-[#f8fafc] rounded-full z-[0] group-hover:scale-[2.5] group-hover:bg-[#167E6C]/5 transition-transform duration-700 ease-out"></div>
+                  
+                  <div className="relative z-10">
+                    <div className="text-5xl font-black text-gray-200 group-hover:text-[#22d3a8] transition-colors duration-300 mb-4">{step.step}</div>
+                    <h4 className="text-xl font-bold text-[#111A4A] mb-3">{step.title}</h4>
+                    <p className="text-gray-600 leading-relaxed">{step.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        </section>
 
         {/* Section: Do's and Don'ts */}
-        <motion.section
-          initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeIn}
-        >
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900">{t("disciplineTitle")}</h2>
-            <p className="text-gray-500 mt-3">{t("disciplineDesc")}</p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-8">
-            {/* Boleh */}
-            <div className="bg-white rounded-3xl overflow-hidden shadow-lg shadow-green-900/5 border border-green-100">
-              <div className="bg-green-50 px-8 py-4 border-b border-green-100 flex items-center gap-3">
-                <CheckCircle className="text-green-600" />
-                <h3 className="text-xl font-bold text-green-900">{t("dosTitle")}</h3>
-              </div>
-              <ul className="p-8 space-y-6">
-                {[
-                  t("do1"),
-                  t("do2"),
-                  t("do3"),
-                  t("do4")
-                ].map((item, i) => (
-                  <li key={i} className="flex gap-4">
-                    <div className="w-2 h-2 rounded-full bg-green-500 mt-2 shrink-0" />
-                    <span className="text-gray-700">{item}</span>
-                  </li>
-                ))}
-              </ul>
+        <section className="w-full bg-[#111A4A] py-24 overflow-hidden relative">
+          {/* Decorative background elements for dark section */}
+          <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-[#167E6C] rounded-full mix-blend-screen filter blur-[150px] opacity-20 pointer-events-none translate-x-1/2 -translate-y-1/2"></div>
+          
+          <motion.div 
+            initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeIn}
+            className="container mx-auto px-6 max-w-6xl relative z-10"
+          >
+            <div className="text-center mb-16">
+              <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">{t("disciplineTitle")}</h2>
+              <p className="text-xl text-[#22d3a8] font-medium">{t("disciplineDesc")}</p>
             </div>
 
-            {/* Tidak Boleh */}
-            <div className="bg-white rounded-3xl overflow-hidden shadow-lg shadow-red-900/5 border border-red-100">
-              <div className="bg-red-50 px-8 py-4 border-b border-red-100 flex items-center gap-3">
-                <XCircle className="text-red-600" />
-                <h3 className="text-xl font-bold text-red-900">{t("dontsTitle")}</h3>
+            <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
+              {/* Boleh */}
+              <div className="bg-white/5 backdrop-blur-xl rounded-[2rem] overflow-hidden border border-white/10 hover:border-[#22d3a8]/50 transition-colors">
+                <div className="bg-gradient-to-r from-[#167E6C]/40 to-transparent px-10 py-6 border-b border-white/10 flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-full bg-[#22d3a8]/20 flex items-center justify-center">
+                    <CheckCircle className="text-[#22d3a8]" size={24} />
+                  </div>
+                  <h3 className="text-2xl font-bold text-white">{t("dosTitle")}</h3>
+                </div>
+                <ul className="p-10 space-y-6">
+                  {[ t("do1"), t("do2"), t("do3"), t("do4") ].map((item, i) => (
+                    <li key={i} className="flex gap-4 items-start">
+                      <div className="w-3 h-3 rounded-full bg-[#22d3a8] mt-2 shrink-0 shadow-[0_0_10px_rgba(34,211,168,0.5)]" />
+                      <span className="text-gray-200 text-lg">{item}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <ul className="p-8 space-y-6">
-                {[
-                  t("dont1"),
-                  t("dont2"),
-                  t("dont3"),
-                  t("dont4")
-                ].map((item, i) => (
-                  <li key={i} className="flex gap-4">
-                    <div className="w-2 h-2 rounded-full bg-red-500 mt-2 shrink-0" />
-                    <span className="text-gray-700">{item}</span>
-                  </li>
-                ))}
-              </ul>
+
+              {/* Tidak Boleh */}
+              <div className="bg-white/5 backdrop-blur-xl rounded-[2rem] overflow-hidden border border-white/10 hover:border-red-500/50 transition-colors">
+                <div className="bg-gradient-to-r from-red-900/40 to-transparent px-10 py-6 border-b border-white/10 flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center">
+                    <XCircle className="text-red-400" size={24} />
+                  </div>
+                  <h3 className="text-2xl font-bold text-white">{t("dontsTitle")}</h3>
+                </div>
+                <ul className="p-10 space-y-6">
+                  {[ t("dont1"), t("dont2"), t("dont3"), t("dont4") ].map((item, i) => (
+                    <li key={i} className="flex gap-4 items-start">
+                      <div className="w-3 h-3 rounded-full bg-red-400 mt-2 shrink-0 shadow-[0_0_10px_rgba(248,113,113,0.5)]" />
+                      <span className="text-gray-200 text-lg">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
-          </div>
-        </motion.section>
+          </motion.div>
+        </section>
 
       </div>
     </main>

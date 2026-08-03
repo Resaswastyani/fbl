@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { useState, useRef } from "react";
+import { motion, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion";
 import {
   Download, CheckCircle, XCircle, AlertTriangle,
   Settings, BarChart3, ShieldCheck, Cpu,
@@ -27,40 +27,100 @@ const staggerContainer = {
 
 // Realistic Monitor Mockup wrapping the chart image
 const MonitorMockup = () => {
+  const ref = useRef<HTMLDivElement>(null);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const mouseXSpring = useSpring(x, { stiffness: 150, damping: 20 });
+  const mouseYSpring = useSpring(y, { stiffness: 150, damping: 20 });
+
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["12deg", "-12deg"]);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-12deg", "12deg"]);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    const xPct = mouseX / width - 0.5;
+    const yPct = mouseY / height - 0.5;
+    x.set(xPct);
+    y.set(yPct);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
   return (
     <motion.div 
+      ref={ref}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
       initial={{ opacity: 0, x: 50 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 1.2, delay: 0.4, ease: "easeOut" }}
-      className="relative w-full max-w-xl mx-auto lg:max-w-none z-20 pb-12"
+      className="relative w-full max-w-xl mx-auto lg:max-w-none z-20 pb-12 perspective-[1200px]"
+      style={{ perspective: 1200 }}
     >
-      <div 
-        className="relative bg-[#1e293b] rounded-t-2xl rounded-b-lg p-2 md:p-3 shadow-2xl border border-slate-700 shadow-[#167E6C]/30 transition-transform duration-700 ease-out hover:-translate-y-2"
+      <motion.div 
+        style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+        animate={{ y: [-8, 8, -8] }}
+        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+        className="relative"
       >
-        {/* Camera dot */}
-        <div className="absolute top-1 md:top-1.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-slate-900 rounded-full border border-slate-800"></div>
-        
-        {/* Screen */}
-        <div className="relative bg-[#0f172a] rounded-xl overflow-hidden w-full aspect-[4/3] sm:aspect-[16/10] border border-slate-800 flex items-center">
-          <motion.img 
-            src="/images/xauusd-chart.png" 
-            alt="XAUUSD Real Chart" 
-            className="w-[150%] max-w-none h-auto pointer-events-none select-none"
-            draggable="false"
-            animate={{ x: ["0%", "-33.33%", "0%"] }}
-            transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-          />
+        <div 
+          className="relative bg-[#1e293b] rounded-t-2xl rounded-b-lg p-2 md:p-3 shadow-2xl border border-slate-700 shadow-[#167E6C]/30"
+          style={{ transform: "translateZ(30px)" }}
+        >
+          {/* Camera dot */}
+          <div className="absolute top-1 md:top-1.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-slate-900 rounded-full border border-slate-800"></div>
+          
+          {/* Screen */}
+          <div className="relative bg-[#0f172a] rounded-xl overflow-hidden w-full aspect-[4/3] sm:aspect-[16/10] border border-slate-800 flex items-center shadow-inner">
+            <motion.img 
+              src="/images/xauusd-chart.png" 
+              alt="XAUUSD Real Chart" 
+              className="w-[150%] max-w-none h-auto pointer-events-none select-none"
+              draggable="false"
+              animate={{ x: ["0%", "-33.33%", "0%"] }}
+              transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+              style={{ transform: "translateZ(20px)" }}
+            />
+            {/* 3D Floating Elements inside screen */}
+            <motion.div 
+              className="absolute top-1/4 left-1/4 w-16 h-16 bg-[#22d3a8] rounded-full opacity-40 mix-blend-screen blur-[10px]"
+              animate={{ y: [-15, 15, -15], scale: [1, 1.2, 1] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              style={{ transform: "translateZ(40px)" }}
+            />
+            <motion.div 
+              className="absolute bottom-1/4 right-1/4 w-20 h-20 bg-blue-500 rounded-full opacity-30 mix-blend-screen blur-[12px]"
+              animate={{ y: [15, -15, 15], scale: [1.2, 1, 1.2] }}
+              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+              style={{ transform: "translateZ(50px)" }}
+            />
+          </div>
+          
+          {/* Bottom Bezel */}
+          <div className="h-4 md:h-6 w-full bg-[#1e293b] flex items-center justify-center rounded-b-md">
+            <div className="w-8 h-1 rounded-full bg-slate-600/50"></div>
+          </div>
         </div>
         
-        {/* Bottom Bezel */}
-        <div className="h-4 md:h-6 w-full bg-[#1e293b] flex items-center justify-center">
-          <div className="w-8 h-1 rounded-full bg-slate-600/50"></div>
-        </div>
-      </div>
-      
-      {/* Monitor Stand */}
-      <div className="absolute -bottom-6 md:-bottom-10 left-1/2 -translate-x-1/2 w-24 md:w-32 h-8 md:h-12 bg-gradient-to-b from-slate-700 to-slate-900" style={{ clipPath: 'polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%)' }}></div>
-      <div className="absolute -bottom-8 md:-bottom-12 left-1/2 -translate-x-1/2 w-40 md:w-56 h-2 md:h-3 bg-slate-800 rounded-full shadow-lg"></div>
+        {/* Monitor Stand */}
+        <div 
+          className="absolute -bottom-6 md:-bottom-10 left-1/2 -translate-x-1/2 w-24 md:w-32 h-8 md:h-12 bg-gradient-to-b from-slate-700 to-slate-900" 
+          style={{ clipPath: 'polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%)', transform: "translateZ(10px)" }}
+        ></div>
+        <div 
+          className="absolute -bottom-8 md:-bottom-12 left-1/2 -translate-x-1/2 w-40 md:w-56 h-2 md:h-3 bg-slate-800 rounded-full shadow-lg"
+          style={{ transform: "translateZ(0px)" }}
+        ></div>
+      </motion.div>
 
       {/* Glow effect behind monitor */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-[#22d3a8] rounded-full mix-blend-multiply filter blur-[100px] opacity-15 -z-10 pointer-events-none"></div>
@@ -121,24 +181,50 @@ export default function PanduanEATrialPage() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-              className="flex flex-col sm:flex-row gap-5"
+              className="flex flex-col sm:flex-row flex-wrap gap-4"
             >
               <a
                 href="/Panduan_Free_Trial_30_Hari.pdf"
                 download
-                className="group relative inline-flex items-center justify-center gap-3 px-8 lg:px-10 py-4 lg:py-5 rounded-full bg-[#111A4A] text-white font-semibold text-lg overflow-hidden transition-all shadow-xl hover:shadow-[#22d3a8]/30 hover:shadow-2xl hover:-translate-y-1"
+                className="group relative inline-flex items-center justify-center gap-3 px-6 lg:px-8 py-3 lg:py-4 rounded-full bg-[#111A4A] text-white font-semibold text-base overflow-hidden transition-all shadow-xl hover:shadow-[#22d3a8]/30 hover:shadow-2xl hover:-translate-y-1"
               >
-                <span className="relative z-10 flex items-center gap-3">
-                  <Download size={22} className="group-hover:-translate-y-1 transition-transform" />
+                <span className="relative z-10 flex items-center gap-2">
+                  <Download size={20} className="group-hover:-translate-y-1 transition-transform" />
                   {t("downloadPDF")}
                 </span>
                 <div className="absolute inset-0 bg-gradient-to-r from-[#167E6C] to-[#22d3a8] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               </a>
+
+              <a
+                href="/exness5setup.exe"
+                download
+                className="group relative inline-flex items-center justify-center gap-3 px-6 lg:px-8 py-3 lg:py-4 rounded-full bg-[#167E6C] text-white font-semibold text-base overflow-hidden transition-all shadow-xl hover:shadow-[#22d3a8]/30 hover:shadow-2xl hover:-translate-y-1"
+              >
+                <span className="relative z-10 flex items-center gap-2">
+                  <Download size={20} className="group-hover:-translate-y-1 transition-transform" />
+                  Download MT5
+                </span>
+                <div className="absolute inset-0 bg-gradient-to-r from-[#0f5b4d] to-[#22d3a8] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              </a>
+
+              <a
+                href="https://one.exnessonelink.com/a/p0xhj9ay9j"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative inline-flex items-center justify-center gap-3 px-6 lg:px-8 py-3 lg:py-4 rounded-full bg-[#f59e0b] text-white font-semibold text-base overflow-hidden transition-all shadow-xl hover:shadow-[#f59e0b]/30 hover:shadow-2xl hover:-translate-y-1"
+              >
+                <span className="relative z-10 flex items-center gap-2">
+                  <CheckCircle size={20} className="group-hover:scale-110 transition-transform" />
+                  Buat Akun Exness
+                </span>
+                <div className="absolute inset-0 bg-gradient-to-r from-[#d97706] to-[#fcd34d] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              </a>
+
               <a
                 href="#panduan-lengkap"
-                className="inline-flex items-center justify-center gap-3 px-8 lg:px-10 py-4 lg:py-5 bg-white text-[#111A4A] rounded-full font-semibold text-lg border border-[#111A4A]/10 hover:border-[#167E6C]/50 transition-all shadow-sm hover:shadow-lg hover:-translate-y-1"
+                className="inline-flex items-center justify-center gap-3 px-6 lg:px-8 py-3 lg:py-4 bg-white text-[#111A4A] rounded-full font-semibold text-base border border-[#111A4A]/10 hover:border-[#167E6C]/50 transition-all shadow-sm hover:shadow-lg hover:-translate-y-1"
               >
-                <BookOpen size={22} className="text-[#167E6C]" />
+                <BookOpen size={20} className="text-[#167E6C]" />
                 {t("readOnline")}
               </a>
             </motion.div>

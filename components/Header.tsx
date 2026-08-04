@@ -276,11 +276,7 @@ export const Header = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
             transition={{ duration: 0.18 }}
-            className="absolute left-0 mt-2 w-[250px] bg-white dark:bg-gray-900 shadow-xl dark:shadow-black/40 rounded-xl border border-gray-100 dark:border-white/10 py-2 z-40"
-            style={{
-              paddingTop: "8px",
-              marginTop: "4px",
-            }}
+            className="absolute left-0 top-[calc(100%+0.5rem)] min-w-[220px] w-max bg-white dark:bg-[#0a0a1a] shadow-xl dark:shadow-[0_4px_24px_rgba(0,0,0,0.4)] rounded-xl border border-gray-100 dark:border-white/10 p-2 z-40"
           >
             {/* Pseudo-element bridge untuk menghubungkan trigger dan dropdown */}
             <div
@@ -291,9 +287,9 @@ export const Header = () => {
               <button
                 key={item.name}
                 onClick={() => handleLinkClick(item.href)}
-                className="flex items-center gap-3 w-full px-4 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10 transition rounded-lg"
+                className="flex items-center gap-3 w-full px-4 py-2.5 text-left text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-[#22d3a8] hover:bg-gray-50 dark:hover:bg-white/5 transition-all rounded-lg group"
               >
-                <item.icon size={18} />
+                <item.icon size={18} className="text-gray-400 group-hover:text-primary dark:group-hover:text-[#22d3a8] transition-colors" />
                 {item.name}
               </button>
             ))}

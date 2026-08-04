@@ -96,7 +96,7 @@ export default async function RootLayout({
         className={`${inter.variable} ${figtree.variable} ${geistMono.variable} font-sans antialiased`}
       >
         <NextIntlClientProvider messages={messages} locale={locale}>
-          <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
             <CartProvider>
               <LayoutClient>{children}</LayoutClient>
               <CartDrawer />

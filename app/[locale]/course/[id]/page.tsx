@@ -555,6 +555,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -801,7 +802,7 @@ export default function CourseDetailPage() {
           );
         }
         return (
-          <div className="p-8 text-center text-gray-500">
+          <div className="p-8 text-center text-gray-500 dark:text-gray-400">
             PDF tidak tersedia
           </div>
         );
@@ -817,8 +818,8 @@ export default function CourseDetailPage() {
                 className="w-full rounded-lg shadow-md"
               />
               {actualContent && (
-                <div className="mt-4 p-4 bg-gray-50 rounded-lg">
-                  <p className="text-gray-700">{actualContent}</p>
+                <div className="mt-4 p-4 bg-gray-50 dark:bg-white/5 rounded-lg">
+                  <p className="text-gray-700 dark:text-gray-300">{actualContent}</p>
                 </div>
               )}
             </div>
@@ -841,7 +842,7 @@ export default function CourseDetailPage() {
           );
         }
         return (
-          <div className="p-8 text-center text-gray-500">
+          <div className="p-8 text-center text-gray-500 dark:text-gray-400">
             Gambar tidak tersedia
           </div>
         );
@@ -857,7 +858,7 @@ export default function CourseDetailPage() {
             // Render sebagai HTML
             return (
               <div
-                className="prose max-w-none mb-4 p-6 bg-white border rounded-lg"
+                className="prose dark:prose-invert max-w-none mb-4 p-6 bg-white dark:bg-transparent border dark:border-white/10 rounded-lg text-gray-800 dark:text-gray-200 dark:[&_*]:!text-gray-200"
                 dangerouslySetInnerHTML={{
                   __html: actualContent,
                 }}
@@ -866,8 +867,8 @@ export default function CourseDetailPage() {
           } else {
             // Render sebagai teks biasa (plain text)
             return (
-              <div className="prose max-w-none mb-4 p-6 bg-gray-50 rounded-lg">
-                <p className="whitespace-pre-wrap text-gray-800 leading-relaxed text-base">
+              <div className="prose dark:prose-invert max-w-none mb-4 p-6 bg-gray-50 dark:bg-transparent dark:border dark:border-white/10 rounded-lg">
+                <p className="whitespace-pre-wrap text-gray-800 dark:text-gray-200 leading-relaxed text-base">
                   {actualContent}
                 </p>
               </div>
@@ -875,14 +876,14 @@ export default function CourseDetailPage() {
           }
         }
         return (
-          <div className="p-8 text-center text-gray-500">Tidak ada konten</div>
+          <div className="p-8 text-center text-gray-500 dark:text-gray-400">Tidak ada konten</div>
         );
 
       case "HTML":
         // ✅ PERBAIKAN: Render HTML content
         return (
           <div
-            className="prose max-w-none mb-4 p-6 bg-white border rounded-lg"
+            className="prose dark:prose-invert max-w-none mb-4 p-6 bg-white dark:bg-transparent border dark:border-white/10 rounded-lg text-gray-800 dark:text-gray-200 dark:[&_*]:!text-gray-200"
             dangerouslySetInnerHTML={{
               __html: actualContent || "<p>Tidak ada konten</p>",
             }}
@@ -891,7 +892,7 @@ export default function CourseDetailPage() {
 
       default:
         return (
-          <div className="p-8 text-center text-gray-500">
+          <div className="p-8 text-center text-gray-500 dark:text-gray-400">
             Tipe konten tidak dikenali: {selectedLesson.type}
           </div>
         );
@@ -900,10 +901,10 @@ export default function CourseDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-[#050508] transition-colors duration-500">
         <div className="text-center">
           <Loader2 className="animate-spin h-12 w-12 text-[#156d95] mx-auto" />
-          <p className="mt-4 text-gray-600">Memuat course...</p>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">Memuat course...</p>
         </div>
       </div>
     );
@@ -911,7 +912,7 @@ export default function CourseDetailPage() {
 
   if (error || !course) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-[#050508] transition-colors duration-500">
         <div className="text-center">
           <p className="text-red-500 text-lg mb-4">
             {error || "Course tidak ditemukan"}
@@ -925,9 +926,9 @@ export default function CourseDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-[#050508] transition-colors duration-500">
       {/* Header */}
-      <header className="bg-white border-b sticky top-0 z-10">
+      <header className="bg-white dark:bg-[#0a0a12] border-b dark:border-white/10 sticky top-0 z-10 transition-colors duration-500">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center">
@@ -940,16 +941,17 @@ export default function CourseDetailPage() {
                 <ArrowLeft className="h-5 w-5" />
               </Button>
               <div>
-                <h1 className="text-xl font-bold text-gray-900">
+                <h1 className="text-xl font-bold text-gray-900 dark:text-white">
                   {locale === "en" ? course.title_en || course.title : course.title}
                 </h1>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 dark:text-gray-400">
                   {course.lessons.length} Lessons
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3">
               <LanguageSwitcher />
+              <ThemeToggle />
               {/* Toggle Sidebar Button - Desktop Only */}
               <Button
                 variant="outline"
@@ -994,7 +996,7 @@ export default function CourseDetailPage() {
                   {selectedLesson ? (
                     <div>
                       <div className="flex items-center justify-between mb-4">
-                        <h2 className="text-2xl font-bold">
+                        <h2 className="text-2xl font-bold dark:text-white">
                           {locale === "en" ? selectedLesson.title_en || selectedLesson.title : selectedLesson.title}
                         </h2>
                         <Badge variant="outline" className="capitalize">
@@ -1006,7 +1008,7 @@ export default function CourseDetailPage() {
                       {renderLessonContent()}
 
                       {selectedLesson.duration && (
-                        <p className="text-sm text-gray-500 mb-4 flex items-center">
+                        <p className="text-sm text-gray-500 dark:text-gray-400 mb-4 flex items-center">
                           <Clock className="h-4 w-4 mr-1" />
                           Durasi: {selectedLesson.duration}
                         </p>
@@ -1034,7 +1036,7 @@ export default function CourseDetailPage() {
                       )}
                     </div>
                   ) : (
-                    <p className="text-center text-gray-500 py-12">
+                    <p className="text-center text-gray-500 dark:text-gray-400 py-12">
                       Pilih lesson untuk memulai belajar
                     </p>
                   )}
@@ -1043,9 +1045,9 @@ export default function CourseDetailPage() {
             ) : (
               <Card className="mb-6">
                 <CardContent className="p-12 text-center">
-                  <Lock className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                  <h2 className="text-xl font-bold mb-2">Course Terkunci</h2>
-                  <p className="text-gray-500 mb-6">
+                  <Lock className="h-16 w-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
+                  <h2 className="text-xl font-bold mb-2 dark:text-white">Course Terkunci</h2>
+                  <p className="text-gray-500 dark:text-gray-400 mb-6">
                     {isFree
                       ? "Daftar sekarang untuk mengakses course gratis ini"
                       : "Beli course ini untuk mengakses semua materi"}
@@ -1072,8 +1074,8 @@ export default function CourseDetailPage() {
             {/* Course Description */}
             <Card>
               <CardContent className="p-6">
-                <h3 className="text-lg font-bold mb-2">Deskripsi</h3>
-                <p className="text-gray-600">
+                <h3 className="text-lg font-bold mb-2 dark:text-white">Deskripsi</h3>
+                <p className="text-gray-600 dark:text-gray-300">
                   {locale === "en" ? course.description_en || course.description || "Tidak ada deskripsi" : course.description || "Tidak ada deskripsi"}
                 </p>
               </CardContent>
@@ -1086,7 +1088,7 @@ export default function CourseDetailPage() {
               <Card className="sticky top-24">
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="font-bold">Daftar Lesson</h3>
+                    <h3 className="font-bold dark:text-white">Daftar Lesson</h3>
                     {/* Mobile Close Button */}
                     <Button
                       variant="ghost"
@@ -1113,8 +1115,8 @@ export default function CourseDetailPage() {
                             selectedLesson?.id === lesson.id
                               ? "bg-[#156d95] text-white"
                               : isLocked
-                                ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                                : "bg-gray-50 hover:bg-gray-100"
+                                ? "bg-gray-100 dark:bg-white/5 text-gray-400 dark:text-gray-600 cursor-not-allowed"
+                                : "bg-gray-50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 dark:text-gray-200"
                           }`}
                         >
                           <div className="flex-shrink-0 mr-3">

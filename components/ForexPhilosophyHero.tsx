@@ -69,7 +69,7 @@ export const ForexPhilosophyHero = () => {
   const y = useTransform(scrollYProgress, [0, 1], [0, -200]);
 
   return (
-    <section className="relative w-full min-h-[95vh] flex items-center justify-center overflow-hidden bg-white">
+    <section className="relative w-full min-h-[95vh] flex items-center justify-center overflow-hidden bg-white dark:bg-[#050508] transition-colors duration-500">
       {/* Lusion-style 3D Background */}
       <motion.div style={{ y }} className="absolute inset-0 z-0 pointer-events-none opacity-90">
         <Canvas camera={{ position: [0, 0, 7] }} gl={{ antialias: true, alpha: true }}>
@@ -91,7 +91,7 @@ export const ForexPhilosophyHero = () => {
           y: [0, -50, 0]
         }}
         transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-1/4 -left-[10%] w-[600px] h-[600px] bg-[#22d3a8] rounded-full mix-blend-multiply filter blur-[128px] pointer-events-none"
+        className="absolute top-1/4 -left-[10%] w-[600px] h-[600px] bg-[#22d3a8] rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-[128px] pointer-events-none"
       />
       <motion.div 
         animate={{ 
@@ -101,7 +101,7 @@ export const ForexPhilosophyHero = () => {
           y: [0, 50, 0]
         }}
         transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-        className="absolute bottom-1/4 -right-[10%] w-[600px] h-[600px] bg-[#167E6C] rounded-full mix-blend-multiply filter blur-[128px] pointer-events-none"
+        className="absolute bottom-1/4 -right-[10%] w-[600px] h-[600px] bg-[#167E6C] rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-[128px] pointer-events-none"
       />
 
       {/* Content overlay */}
@@ -117,20 +117,20 @@ export const ForexPhilosophyHero = () => {
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2, duration: 0.8, ease: "easeOut" }}
-            className="inline-flex items-center gap-2 mb-8 px-5 py-2 rounded-full border border-[#167E6C]/20 bg-white/70 backdrop-blur-md shadow-sm"
+            className="inline-flex items-center gap-2 mb-8 px-5 py-2 rounded-full border border-[#167E6C]/20 dark:border-white/10 bg-white/70 dark:bg-white/5 backdrop-blur-md shadow-sm"
           >
             <span className="w-2 h-2 rounded-full bg-[#22d3a8] animate-pulse"></span>
             <span className="text-[#167E6C] text-sm font-semibold tracking-widest uppercase">{t("tagline")}</span>
           </motion.div>
           
-          <h2 className="text-5xl md:text-7xl font-bold text-[#111A4A] mb-8 leading-[1.1] tracking-normal font-[family-name:var(--font-figtree)]">
+          <h2 className="text-5xl md:text-7xl font-bold text-[#111A4A] dark:text-white mb-8 leading-[1.1] tracking-normal font-[family-name:var(--font-figtree)]">
             {t("titlePart1")} <br className="hidden md:block" />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#167E6C] to-[#22d3a8]">
               {t("titlePart2")}
             </span>
           </h2>
           
-          <p className="text-lg md:text-2xl text-[#111A4A]/70 mb-12 max-w-3xl mx-auto leading-relaxed font-medium italic font-[family-name:var(--font-figtree)]">
+          <p className="text-lg md:text-2xl text-[#111A4A]/70 dark:text-gray-400 mb-12 max-w-3xl mx-auto leading-relaxed font-medium italic font-[family-name:var(--font-figtree)]">
             "{t("description")}"
           </p>
 
@@ -138,7 +138,7 @@ export const ForexPhilosophyHero = () => {
             <motion.button
               whileHover={{ scale: 1.05, y: -5 }}
               whileTap={{ scale: 0.95 }}
-              className="group relative inline-flex items-center justify-center gap-3 px-10 py-5 rounded-full bg-[#111A4A] text-white font-semibold text-lg overflow-hidden transition-all shadow-xl hover:shadow-[#22d3a8]/30 hover:shadow-2xl"
+              className="group relative inline-flex items-center justify-center gap-3 px-10 py-5 rounded-full bg-[#111A4A] dark:bg-[#167E6C] text-white font-semibold text-lg overflow-hidden transition-all shadow-xl hover:shadow-[#22d3a8]/30 hover:shadow-2xl"
             >
               <span className="relative z-10 flex items-center gap-2">
                 {t("button")}

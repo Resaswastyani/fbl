@@ -109,7 +109,10 @@ import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { ThreeDMonitor } from "@/components/ThreeDMonitor";
+
+const RightAnimationCard = dynamic(() => import("./RightAnimationCard"), {
+  ssr: false,
+});
 
 export const ProductTeaserCard = () => {
   const t = useTranslations("Hero");
@@ -197,8 +200,8 @@ export const ProductTeaserCard = () => {
           transition={{ duration: 0.8, delay: 0.15 }}
           className="col-span-12 lg:col-span-6 flex items-center justify-center mt-6 md:mt-0"
         >
-          <div className="relative w-full max-w-[420px] md:max-w-[520px] lg:max-w-[600px] h-[400px] md:h-[500px]">
-            <ThreeDMonitor textureUrl="/bt1.png" />
+          <div className="relative w-auto max-w-[420px] md:max-w-[520px] lg:max-w-[600px] h-auto">
+            <RightAnimationCard />
           </div>
         </motion.div>
       </div>

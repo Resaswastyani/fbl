@@ -318,14 +318,14 @@ export const BankingScaleHero = () => {
   };
 
   return (
-    <div className="w-full overflow-hidden bg-white relative">
+    <div className="w-full overflow-hidden bg-white dark:bg-[#050508] transition-colors duration-500 relative">
       <div className="mx-auto max-w-7xl px-8 py-24 pt-16 relative">
         <div className="grid grid-cols-12 gap-5 gap-y-16 relative">
           {/* LEFT CONTENT */}
           <div className="col-span-12 md:col-span-6 relative z-20">
             {/* TOP TAGLINE */}
             <motion.div
-              className="relative h-6 inline-flex items-center font-mono text-xs text-[#167E6C] mb-12 px-2"
+              className="relative h-6 inline-flex items-center font-mono text-xs text-[#167E6C] dark:text-[#22d3a8] mb-12 px-2"
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, ease: "easeOut" }}
@@ -335,7 +335,7 @@ export const BankingScaleHero = () => {
                   initial={{ width: 0 }}
                   animate={{ width: "auto" }}
                   transition={{ duration: 0.8, ease: "easeOut" }}
-                  className="block whitespace-nowrap overflow-hidden text-[#167E6C]"
+                  className="block whitespace-nowrap overflow-hidden text-[#167E6C] dark:text-[#22d3a8]"
                 >
                   {t("tagline")
                     .split("")
@@ -355,14 +355,14 @@ export const BankingScaleHero = () => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: typingComplete ? [1, 0, 1, 0] : 0 }}
                   transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                  className="block w-1.5 h-3 bg-[#167E6C] ml-0.5 rounded-sm"
+                  className="block w-1.5 h-3 bg-[#167E6C] dark:bg-[#22d3a8] ml-0.5 rounded-sm"
                 />
               </div>
             </motion.div>
 
             {/* TITLE */}
             <motion.h2
-              className="text-[40px] font-normal leading-tight tracking-tight text-[#111A4A] mb-6"
+              className="text-[40px] font-normal leading-tight tracking-tight text-[#111A4A] dark:text-white mb-6"
               variants={titleVariants}
               initial="hidden"
               animate="visible"
@@ -372,7 +372,7 @@ export const BankingScaleHero = () => {
 
             {/* DESCRIPTION */}
             <motion.p
-              className="text-lg leading-6 text-[#111A4A] opacity-60 mt-0 mb-6"
+              className="text-lg leading-6 text-[#111A4A] dark:text-gray-300 opacity-60 dark:opacity-80 mt-0 mb-6"
               variants={descriptionVariants}
               initial="hidden"
               animate="visible"
@@ -450,7 +450,7 @@ export const BankingScaleHero = () => {
                     }}
                   >
                     <motion.div
-                      className="flex flex-col gap-2 p-4 rounded-xl transition-all duration-300 hover:bg-[#167E6C]/5 cursor-default bg-white/80 backdrop-blur-sm"
+                      className="flex flex-col gap-2 p-4 rounded-xl transition-all duration-300 hover:bg-[#167E6C]/5 dark:hover:bg-[#22d3a8]/5 cursor-default bg-white/80 dark:bg-white/5 border border-transparent dark:border-white/10 backdrop-blur-sm"
                       whileHover={{
                         boxShadow: "0 20px 40px -15px rgba(22, 126, 108, 0.2)",
                       }}

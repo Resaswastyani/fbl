@@ -580,7 +580,7 @@ export default function CourseSection() {
   }
 
   return (
-    <section className="w-full pt-24 pb-16 md:pt-32 md:pb-24 bg-white">
+    <section className="w-full pt-24 pb-16 md:pt-32 md:pb-24 bg-white dark:bg-[#050508] transition-colors duration-500">
       <AnimatePresence>
         {showSuccessPopup && lastAddedItem && (
           <motion.div
@@ -623,7 +623,7 @@ export default function CourseSection() {
               initial="hidden"
               animate="visible"
               exit="exit"
-              className="bg-white rounded-2xl w-full max-w-md p-8 shadow-2xl text-center"
+              className="bg-white dark:bg-gray-900 rounded-2xl w-full max-w-md p-8 shadow-2xl text-center"
             >
               <motion.div
                 initial={{ scale: 0, rotate: -180 }}
@@ -645,7 +645,7 @@ export default function CourseSection() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="text-gray-700 mb-8 leading-relaxed"
+                className="text-gray-700 dark:text-gray-300 mb-8 leading-relaxed"
               >
                 <strong>{lastAddedItem.name}</strong> {t("loginText")}
               </motion.p>
@@ -667,7 +667,7 @@ export default function CourseSection() {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={handleCloseLoginPrompt}
-                  className="text-gray-600 hover:text-gray-800 underline"
+                  className="text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 underline"
                 >
                   {t("later")}
                 </motion.button>
@@ -816,7 +816,7 @@ export default function CourseSection() {
                     animate="visible"
                   >
                     <motion.div variants={cardHoverVariants}>
-                      <Card className="border border-gray-200 overflow-hidden bg-white">
+                      <Card className="border border-gray-200 dark:border-white/10 overflow-hidden bg-white dark:bg-[#0a0a12]">
                         <CardContent className="p-6">
                           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                             <div className="flex-1">
@@ -824,7 +824,7 @@ export default function CourseSection() {
                                 <motion.h3
                                   initial={{ opacity: 0 }}
                                   animate={{ opacity: 1 }}
-                                  className="text-xl font-bold text-gray-900"
+                                  className="text-xl font-bold text-gray-900 dark:text-white"
                                 >
                                   {locale === "en" ? course.title_en || course.title : course.title}
                                 </motion.h3>
@@ -859,7 +859,7 @@ export default function CourseSection() {
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.2 }}
-                                className="mt-2 flex items-center gap-4 text-sm text-gray-500"
+                                className="mt-2 flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400"
                               >
                                 <span className="flex items-center gap-1">
                                   <BookOpen className="w-4 h-4" />
@@ -883,7 +883,7 @@ export default function CourseSection() {
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 transition={{ delay: 0.3 }}
-                                className="text-gray-600 mt-2 text-sm line-clamp-2"
+                                className="text-gray-600 dark:text-gray-400 mt-2 text-sm line-clamp-2"
                               >
                                 {locale === "en" ? course.description_en || course.description : course.description}
                               </motion.p>
@@ -952,7 +952,7 @@ export default function CourseSection() {
                   whileTap={{ scale: 0.9 }}
                   onClick={() => handlePageChange(currentPage - 1)}
                   disabled={currentPage === 1}
-                  className="p-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-[#156d95] hover:text-white hover:border-[#156d95] transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                className="p-2 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-[#156d95] hover:text-white hover:border-[#156d95] transition-all disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   <ChevronLeft size={20} />
                 </motion.button>
@@ -969,7 +969,7 @@ export default function CourseSection() {
                         className={`w-10 h-10 rounded-lg font-medium text-sm transition-all ${
                           currentPage === page
                             ? "bg-[#156d95] text-white shadow-lg"
-                            : "border border-gray-200 text-gray-600 hover:bg-[#156d95] hover:text-white hover:border-[#156d95]"
+                            : "border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-[#156d95] hover:text-white hover:border-[#156d95]"
                         }`}
                       >
                         {page}
@@ -983,7 +983,7 @@ export default function CourseSection() {
                   whileTap={{ scale: 0.9 }}
                   onClick={() => handlePageChange(currentPage + 1)}
                   disabled={currentPage === totalPages}
-                  className="p-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-[#156d95] hover:text-white hover:border-[#156d95] transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                  className="p-2 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-[#156d95] hover:text-white hover:border-[#156d95] transition-all disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   <ChevronRight size={20} />
                 </motion.button>
@@ -1017,7 +1017,7 @@ export default function CourseSection() {
                     <motion.h3
                       initial={{ opacity: 0, y: -20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="text-2xl font-bold text-gray-900 mb-4"
+                      className="text-2xl font-bold text-gray-900 dark:text-white mb-4"
                     >
                       {locale === "en" ? selectedCourse.title_en || selectedCourse.title : selectedCourse.title}
                     </motion.h3>
@@ -1028,7 +1028,7 @@ export default function CourseSection() {
                       transition={{ delay: 0.2 }}
                       className="mb-8"
                     >
-                      <h4 className="font-bold text-lg mb-4 text-gray-900 flex items-center gap-2">
+                      <h4 className="font-bold text-lg mb-4 text-gray-900 dark:text-white flex items-center gap-2">
                         <BookOpen className="w-5 h-5 text-[#156d95]" />
                         {t("lessons")}:
                       </h4>
@@ -1045,7 +1045,7 @@ export default function CourseSection() {
                             className={`flex items-center p-4 rounded-lg cursor-pointer transition-colors ${
                               selectedLesson?.id === lesson.id
                                 ? "bg-[#156d95] text-white shadow-lg"
-                                : "bg-gray-50 hover:bg-gray-100"
+                                : "bg-gray-50 dark:bg-gray-800/50 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-200"
                             }`}
                           >
                             <motion.div
@@ -1081,11 +1081,11 @@ export default function CourseSection() {
                           transition={{ duration: 0.3 }}
                           className="border-t pt-6"
                         >
-                          <h4 className="text-xl font-bold text-gray-900 mb-4">
+                          <h4 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
                             {locale === "en" ? selectedLesson.title_en || selectedLesson.title : selectedLesson.title}
                           </h4>
                           <div className="mb-4">
-                            <div className="text-sm text-gray-500 mb-1">
+                            <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">
                               Duration
                             </div>
                             <div className="font-medium flex items-center gap-2">
@@ -1095,10 +1095,10 @@ export default function CourseSection() {
                             </div>
                           </div>
                           <div className="mb-6">
-                            <div className="text-sm text-gray-500 mb-1">
+                            <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">
                               Description
                             </div>
-                            <div className="text-gray-600">
+                            <div className="text-gray-600 dark:text-gray-300">
                               {getPlainTextPreview(locale === "en" ? selectedLesson.content_en || selectedLesson.content : selectedLesson.content, 30)}
                             </div>
                           </div>

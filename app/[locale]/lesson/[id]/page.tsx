@@ -51,7 +51,7 @@ export default function LessonPage({ params }: { params: { id: string, locale: s
   const actualContent = locale === "en" ? lesson.content_en || lesson.content : lesson.content;
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white dark:bg-[#050508] transition-colors duration-500">
       <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">{actualTitle}</h1>
@@ -76,7 +76,7 @@ export default function LessonPage({ params }: { params: { id: string, locale: s
                 </video>
               </div>
               <div className="mt-4">
-                <p className="text-gray-600">{actualContent}</p>
+                <p className="text-gray-600 dark:text-gray-300">{actualContent}</p>
                 <div className="mt-4 flex justify-between">
                   <Button variant="outline" onClick={() => router.back()}>
                     Kembali

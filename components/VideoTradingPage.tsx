@@ -79,9 +79,9 @@ export const VideoTradingPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white dark:bg-[#050508] transition-colors duration-500">
       {/* HERO SECTION */}
-      <section className="w-full pt-24 md:pt-32 pb-16 bg-white">
+      <section className="w-full pt-24 md:pt-32 pb-16 bg-white dark:bg-[#050508]">
         <div className="max-w-7xl mx-auto grid grid-cols-12 gap-5 lg:gap-16 px-8 md:px-12">
           {/* LEFT TEXT */}
           <motion.div
@@ -93,16 +93,16 @@ export const VideoTradingPage = () => {
             {/* Small Link */}
             <a
               href="https://www.youtube.com/@forexforbetterliving"
-              className="flex items-center gap-1 text-[#6e6e6e] mb-4 cursor-pointer"
+              className="flex items-center gap-1 text-[#6e6e6e] dark:text-gray-400 mb-4 cursor-pointer"
             >
-              <span className="text-xs uppercase tracking-tight font-mono flex items-center gap-1 hover:text-[#202020]">
+              <span className="text-xs uppercase tracking-tight font-mono flex items-center gap-1 hover:text-[#202020] dark:hover:text-white transition-colors">
                 {t("seeAllVideos")} <ArrowUpRight size={14} strokeWidth={1.5} />
               </span>
             </a>
 
             {/* Headline */}
             <h1
-              className="text-[40px] font-normal leading-tight tracking-tight text-[#111A4A] mb-6"
+              className="text-[40px] font-normal leading-tight tracking-tight text-[#111A4A] dark:text-white mb-6"
               style={{
                 fontFamily: "var(--font-figtree), Figtree",
                 fontSize: "50px",
@@ -114,30 +114,30 @@ export const VideoTradingPage = () => {
 
             {/* Subheadline */}
             <p
-              className="text-lg leading-6 text-[#111A4A] opacity-60 mt-0 mb-6"
+              className="text-lg leading-6 text-[#111A4A] dark:text-gray-300 opacity-60 dark:opacity-80 mt-0 mb-6"
               style={{ fontFamily: "var(--font-figtree), Figtree" }}
             >
               {t("heroSubtitle")}
             </p>
-            <p className="mb-5 text-sm text-[#111A4A] opacity-40">
+            <p className="mb-5 text-sm text-[#111A4A] dark:text-gray-400 opacity-40 dark:opacity-60">
               PT AKADEMI KEUANGAN NUSANTARA
             </p>
 
             {/* Stats */}
             <div className="flex gap-8 mb-8">
               <div>
-                <div className="text-3xl font-semibold text-[#156d95]">
+                <div className="text-3xl font-semibold text-[#156d95] dark:text-[#22d3a8]">
                   {videos.length}+
                 </div>
-                <div className="text-sm text-[#6e6e6e]">{t("videosAvailable")}</div>
+                <div className="text-sm text-[#6e6e6e] dark:text-gray-400">{t("videosAvailable")}</div>
               </div>
               <div>
-                <div className="text-3xl font-semibold text-[#156d95]">
+                <div className="text-3xl font-semibold text-[#156d95] dark:text-[#22d3a8]">
                   {formatViewCount(
                     videos.reduce((acc, v) => acc + v.viewCount, 0),
                   )}
                 </div>
-                <div className="text-sm text-[#6e6e6e]">{t("totalViews")}</div>
+                <div className="text-sm text-[#6e6e6e] dark:text-gray-400">{t("totalViews")}</div>
               </div>
             </div>
 
@@ -207,7 +207,7 @@ export const VideoTradingPage = () => {
       </section>
 
       {/* VIDEOS GRID SECTION */}
-      <section id="videos" className="w-full py-16 bg-gray-50">
+      <section id="videos" className="w-full py-16 bg-gray-50 dark:bg-[#0a0a12] transition-colors">
         <div className="max-w-7xl mx-auto px-8 md:px-12">
           {/* Section Header */}
           <motion.div
@@ -218,11 +218,11 @@ export const VideoTradingPage = () => {
             className="flex items-end justify-between mb-10"
           >
             <div>
-              <span className="text-xs uppercase tracking-tight font-mono text-[#6e6e6e]">
+              <span className="text-xs uppercase tracking-tight font-mono text-[#6e6e6e] dark:text-gray-400">
                 {t("videoCollection")}
               </span>
               <h2
-                className="text-3xl font-semibold text-[#111A4A] mt-2"
+                className="text-3xl font-semibold text-[#111A4A] dark:text-white mt-2"
                 style={{ fontFamily: "var(--font-figtree), Figtree" }}
               >
                 {t("latestTradingVideos")}
@@ -242,7 +242,7 @@ export const VideoTradingPage = () => {
               {[1, 2, 3, 4, 5, 6].map((i) => (
                 <div
                   key={i}
-                  className="bg-white rounded-xl overflow-hidden shadow-sm animate-pulse"
+                  className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm animate-pulse"
                 >
                   <div className="aspect-video bg-gray-200" />
                   <div className="p-4 space-y-3">
@@ -271,7 +271,7 @@ export const VideoTradingPage = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer"
+                  className="group bg-white dark:bg-white/5 rounded-xl overflow-hidden shadow-sm dark:shadow-none hover:shadow-lg dark:hover:shadow-[0_0_20px_rgba(34,211,168,0.08)] transition-all duration-300 cursor-pointer border border-transparent dark:border-white/10"
                   onClick={() => setSelectedVideo(video)}
                 >
                   {/* Thumbnail */}
@@ -300,15 +300,15 @@ export const VideoTradingPage = () => {
                   {/* Content */}
                   <div className="p-5">
                     <h3
-                      className="font-semibold text-[#111A4A] line-clamp-2 mb-2 group-hover:text-[#156d95] transition-colors"
+                      className="font-semibold text-[#111A4A] dark:text-white line-clamp-2 mb-2 group-hover:text-[#156d95] dark:group-hover:text-[#22d3a8] transition-colors"
                       style={{ fontFamily: "var(--font-figtree), Figtree" }}
                     >
                       {locale === "en" && video.title_en ? video.title_en : video.title}
                     </h3>
-                    <p className="text-sm text-[#6e6e6e] line-clamp-2 mb-4">
+                    <p className="text-sm text-[#6e6e6e] dark:text-gray-400 line-clamp-2 mb-4">
                       {locale === "en" && video.description_en ? video.description_en : video.description || t("noDescription")}
                     </p>
-                    <div className="flex items-center justify-between text-xs text-[#9ca3af]">
+                    <div className="flex items-center justify-between text-xs text-[#9ca3af] dark:text-gray-500">
                       <span className="flex items-center gap-1">
                         <Eye size={14} />
                         {formatViewCount(video.viewCount)} views
@@ -337,7 +337,7 @@ export const VideoTradingPage = () => {
       </section>
 
       {/* CTA SECTION */}
-      <section className="w-full py-20 bg-[#111A4A]">
+      <section className="w-full py-20 bg-[#111A4A] dark:bg-[#080c27] transition-colors">
         <div className="max-w-4xl mx-auto px-8 md:px-12 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -404,17 +404,17 @@ export const VideoTradingPage = () => {
                 />
               )}
             </div>
-            <div className="p-6 bg-white">
+            <div className="p-6 bg-white dark:bg-gray-900 transition-colors">
               <h3
-                className="text-xl font-semibold text-[#111A4A] mb-2"
+                className="text-xl font-semibold text-[#111A4A] dark:text-white mb-2"
                 style={{ fontFamily: "var(--font-figtree), Figtree" }}
               >
                 {locale === "en" && selectedVideo.title_en ? selectedVideo.title_en : selectedVideo.title}
               </h3>
-              <p className="text-[#6e6e6e] mb-4">
+              <p className="text-[#6e6e6e] dark:text-gray-400 mb-4">
                 {locale === "en" && selectedVideo.description_en ? selectedVideo.description_en : selectedVideo.description || t("noDescription")}
               </p>
-              <div className="flex items-center gap-4 text-sm text-[#9ca3af]">
+              <div className="flex items-center gap-4 text-sm text-[#9ca3af] dark:text-gray-500">
                 <span className="flex items-center gap-1">
                   <Eye size={16} />
                   {formatViewCount(selectedVideo.viewCount)} views

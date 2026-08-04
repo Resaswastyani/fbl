@@ -183,9 +183,9 @@ export default function DisclaimerPage() {
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-white pt-24 md:pt-28">
+      <div className="min-h-screen bg-white dark:bg-[#050508] transition-colors duration-500 pt-24 md:pt-28">
         {/* Header Section */}
-        <section className="w-full py-8 md:py-12 bg-gray-50 border-b border-gray-200">
+        <section className="w-full py-8 md:py-12 bg-gray-50 dark:bg-[#0a0a12] border-b border-gray-200 dark:border-white/10 transition-colors duration-500">
           <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -194,7 +194,7 @@ export default function DisclaimerPage() {
             >
               <Link
                 href="/"
-                className="inline-flex items-center gap-2 text-[#6e6e6e] text-sm mb-6 hover:text-[#156d95] transition-colors"
+                className="inline-flex items-center gap-2 text-[#6e6e6e] dark:text-gray-400 text-sm mb-6 hover:text-[#156d95] dark:hover:text-[#22d3a8] transition-colors"
               >
                 <ArrowLeft size={16} />
                 {t("backToHome")}
@@ -203,7 +203,7 @@ export default function DisclaimerPage() {
               <div className="flex items-center gap-3 mb-4">
                 <AlertTriangle className="text-[#156d95]" size={32} />
                 <h1
-                  className="text-2xl md:text-3xl font-semibold text-[#111A4A]"
+                  className="text-2xl md:text-3xl font-semibold text-[#111A4A] dark:text-white"
                   style={{ fontFamily: "var(--font-figtree), Figtree" }}
                 >
                   {t("title")}
@@ -211,7 +211,7 @@ export default function DisclaimerPage() {
               </div>
 
               <p
-                className="text-[#6e6e6e]"
+                className="text-[#6e6e6e] dark:text-gray-300"
                 style={{ fontFamily: "var(--font-figtree), Figtree" }}
               >
                 {t("subtitle")}
@@ -229,10 +229,10 @@ export default function DisclaimerPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-white rounded-lg p-6 md:p-8 border border-gray-100 shadow-sm"
+                className="bg-white dark:bg-[#0a0a12] rounded-lg p-6 md:p-8 border border-gray-100 dark:border-white/10 shadow-sm transition-colors duration-500"
               >
                 <h2
-                  className="text-xl md:text-2xl font-semibold text-[#111A4A] mb-4 pb-4 border-b border-gray-100"
+                  className="text-xl md:text-2xl font-semibold text-[#111A4A] dark:text-white mb-4 pb-4 border-b border-gray-100 dark:border-white/10"
                   style={{ fontFamily: "var(--font-figtree), Figtree" }}
                 >
                   {index + 1}. {section.title}
@@ -242,7 +242,7 @@ export default function DisclaimerPage() {
                   {section.content.map((paragraph, pIndex) => (
                     <p
                       key={pIndex}
-                      className="text-[#374151] leading-relaxed text-justify"
+                      className="text-[#374151] dark:text-gray-300 leading-relaxed text-justify"
                       style={{ fontFamily: "var(--font-figtree), Figtree" }}
                     >
                       {paragraph}
@@ -255,17 +255,17 @@ export default function DisclaimerPage() {
         </section>
 
         {/* Bottom CTA */}
-        <section className="w-full py-12 bg-gray-50">
+        <section className="w-full py-12 bg-gray-50 dark:bg-[#0a0a12] transition-colors duration-500">
           <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 text-center">
             <p
-              className="text-[#6e6e6e] mb-6"
+              className="text-[#6e6e6e] dark:text-gray-400 mb-6"
               style={{ fontFamily: "var(--font-figtree), Figtree" }}
             >
               {t("agreementText")}
             </p>
             <Link
               href="/"
-              className="inline-flex items-center justify-center bg-[#156d95] text-white rounded-lg px-8 py-3 text-base font-medium transition-all hover:bg-[#0d5a7c]"
+              className="inline-flex items-center justify-center bg-[#156d95] dark:bg-[#22d3a8] text-white dark:text-gray-900 rounded-lg px-8 py-3 text-base font-medium transition-all hover:bg-[#0d5a7c] dark:hover:bg-[#1bb38f]"
             >
               {t("agreeButton")}
             </Link>

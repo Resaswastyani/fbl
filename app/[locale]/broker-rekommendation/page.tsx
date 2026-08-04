@@ -272,7 +272,7 @@ export default function BrokerRecommendationPage() {
 
   return (
     <>
-      <main className="min-h-screen bg-white pt-35 md:pt-40">
+      <main className="min-h-screen bg-white dark:bg-[#050508] transition-colors duration-500 pt-35 md:pt-40">
         {" "}
         {/* ✅ TAMBAHKAN pt-20 atau pt-24 */}
         {/* Hero Section */}
@@ -353,6 +353,10 @@ export default function BrokerRecommendationPage() {
                 d="M0 120L60 110C120 100 240 80 360 70C480 60 600 60 720 65C840 70 960 80 1080 85C1200 90 1320 90 1380 90L1440 90V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z"
                 fill="white"
               />
+              <path className="hidden dark:block"
+                d="M0 120L60 110C120 100 240 80 360 70C480 60 600 60 720 65C840 70 960 80 1080 85C1200 90 1320 90 1380 90L1440 90V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z"
+                fill="#050508"
+              />
             </svg>
           </div>
         </section>
@@ -381,7 +385,7 @@ export default function BrokerRecommendationPage() {
               >
                 {t("bestChoices")}
               </h2>
-              <p className="text-gray-600 max-w-2xl mx-auto">
+              <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
                 {t("bestChoicesDesc")}
               </p>
             </div>
@@ -396,16 +400,16 @@ export default function BrokerRecommendationPage() {
         {/* Comparison Section */}
         <BrokerComparison />
         {/* Why Choose Us */}
-        <section className="py-16 bg-gradient-to-b from-white to-[#f8fafc]">
+        <section className="py-16 bg-gradient-to-b from-white dark:from-[#050508] to-[#f8fafc] dark:to-[#090910]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2
-                className="text-3xl font-bold text-[#111A4A] mb-4"
+                className="text-3xl font-bold text-[#111A4A] dark:text-white mb-4"
                 style={{ fontFamily: "var(--font-figtree), Figtree" }}
               >
                 {t("selectionCriteria")}
               </h2>
-              <p className="text-gray-600">{t("selectionCriteriaDesc")}</p>
+              <p className="text-gray-600 dark:text-gray-400">{t("selectionCriteriaDesc")}</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -437,7 +441,7 @@ export default function BrokerRecommendationPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: idx * 0.1 }}
-                  className="bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-shadow"
+                  className="bg-white dark:bg-white/5 rounded-xl p-6 shadow-lg dark:shadow-none border border-gray-100 dark:border-white/10 hover:shadow-xl dark:hover:shadow-[0_0_20px_rgba(34,211,168,0.1)] transition-shadow"
                 >
                   <div className="w-12 h-12 bg-gradient-to-br from-[#156d95] to-[#111A4A] rounded-lg flex items-center justify-center mb-4">
                     {item.icon === "support" ? (
@@ -459,12 +463,12 @@ export default function BrokerRecommendationPage() {
                     )}
                   </div>
                   <h3
-                    className="font-semibold text-[#111A4A] mb-2"
+                    className="font-semibold text-[#111A4A] dark:text-white mb-2"
                     style={{ fontFamily: "var(--font-figtree), Figtree" }}
                   >
                     {item.title}
                   </h3>
-                  <p className="text-sm text-gray-600 leading-relaxed">
+                  <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
                     {item.desc}
                   </p>
                 </motion.div>

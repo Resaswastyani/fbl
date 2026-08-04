@@ -50,7 +50,7 @@ const FloatingCard = ({
       scale: 1.02,
       transition: { duration: 0.2 },
     }}
-    className={`absolute backdrop-blur-xl bg-white/90 rounded-2xl shadow-2xl border border-white/50 ${className}`}
+    className={`absolute backdrop-blur-xl bg-white/90 dark:bg-gray-800/90 rounded-2xl shadow-2xl border border-white/50 dark:border-white/10 ${className}`}
     style={style}
   >
     {children}
@@ -129,7 +129,7 @@ const AnimatedChart = ({ accentColor }: { accentColor: string }) => (
     style={{ top: "10%", right: "15%" }}
   >
     <div className="flex items-center justify-between mb-4">
-      <span className="text-xs font-semibold text-gray-600">Performance</span>
+      <span className="text-xs font-semibold text-gray-600 dark:text-gray-300">Performance</span>
       <span className="text-xs text-green-500 font-medium">+24.5%</span>
     </div>
     <div className="flex items-end gap-2 h-24">
@@ -154,8 +154,8 @@ const StatsCard = ({ accentColor }: { accentColor: string }) => (
     <div className="flex items-center gap-3">
       <CircularProgress percentage={92} color={accentColor} size={60} />
       <div>
-        <p className="text-xs text-gray-500 mb-1">Materi Tuntas</p>
-        <p className="text-lg font-bold text-gray-800">92%</p>
+        <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Materi Tuntas</p>
+        <p className="text-lg font-bold text-gray-800 dark:text-white">92%</p>
         <p className="text-xs text-green-500">Tingkat penyelesaian</p>
       </div>
     </div>
@@ -181,11 +181,11 @@ const FloatingBadge = ({
     initial={{ opacity: 0, scale: 0.5, x: -20 }}
     animate={{ opacity: 1, scale: 1, x: 0 }}
     transition={{ duration: 0.5, delay, type: "spring", stiffness: 200 }}
-    className="absolute flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-lg border border-gray-100"
+    className="absolute flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 rounded-full shadow-lg border border-gray-100 dark:border-gray-700"
     style={{ top, left }}
   >
     <span className="text-lg">{icon}</span>
-    <span className="text-sm font-medium text-gray-700">{text}</span>
+    <span className="text-sm font-medium text-gray-700 dark:text-gray-200">{text}</span>
     <motion.div
       className="w-2 h-2 rounded-full"
       style={{ backgroundColor: color }}
@@ -336,14 +336,14 @@ export const ForexTestimonials = () => {
   };
 
   return (
-    <div className="w-full min-h-screen bg-linear-to-br from-background via-background to-muted/20 flex items-center justify-center py-24 px-8 overflow-hidden">
+    <div className="w-full min-h-screen bg-white dark:bg-[#050508] transition-colors duration-500 flex items-center justify-center py-24 px-8 overflow-hidden">
       <div className="max-w-7xl w-full">
         {/* Header */}
         <div className="text-center mb-16">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-[40px] leading-tight font-normal mb-6 tracking-tight"
+            className="text-[40px] leading-tight font-normal mb-6 tracking-tight text-[#111A4A] dark:text-white"
           >
             {t("title")}
           </motion.h1>
@@ -351,7 +351,7 @@ export const ForexTestimonials = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-lg leading-7 text-muted-foreground max-w-2xl mx-auto"
+            className="text-lg leading-7 text-[#111A4A]/60 dark:text-gray-400 max-w-2xl mx-auto"
           >
             {t("subtitle")}
           </motion.p>
@@ -371,16 +371,16 @@ export const ForexTestimonials = () => {
                 transition={{ duration: 0.6 }}
                 className="space-y-6"
               >
-                <div className="inline-flex items-center gap-3 bg-black text-white px-4 py-1.5 rounded-full text-sm font-medium">
+                <div className="inline-flex items-center gap-3 bg-black dark:bg-white/10 text-white px-4 py-1.5 rounded-full text-sm font-medium">
                   {currentStudy.logo}
                   {currentStudy.program}
                 </div>
 
-                <h2 className="text-3xl leading-snug font-semibold">
+                <h2 className="text-3xl leading-snug font-semibold text-[#111A4A] dark:text-white">
                   {currentStudy.title}
                 </h2>
 
-                <blockquote className="text-lg font-medium text-muted-foreground italic">
+                <blockquote className="text-lg font-medium text-[#111A4A]/60 dark:text-gray-400 italic">
                   "{currentStudy.quote}"
                 </blockquote>
               </motion.div>
@@ -394,8 +394,8 @@ export const ForexTestimonials = () => {
                   onClick={() => goToSlide(index)}
                   className={`h-3 rounded-full transition-all duration-300 ${
                     index === currentIndex
-                      ? "bg-foreground w-8"
-                      : "bg-muted-foreground/30 w-3 hover:bg-muted-foreground/50"
+                      ? "bg-[#111A4A] dark:bg-white w-8"
+                      : "bg-gray-300 dark:bg-gray-600 w-3 hover:bg-gray-400 dark:hover:bg-gray-500"
                   }`}
                 />
               ))}

@@ -255,7 +255,7 @@ export default function ArticlesPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
+      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-[#050508] transition-colors">
         <Loader className="animate-spin h-8 w-8 text-[#156d95]" />
       </div>
     );
@@ -264,17 +264,17 @@ export default function ArticlesPage() {
   return (
     <>
       {/* <Header /> */}
-      <div className="min-h-screen bg-white pt-24 md:pt-28">
+      <div className="min-h-screen bg-white dark:bg-[#050508] transition-colors duration-500 pt-24 md:pt-28">
         {" "}
         {/* ✅ PADDING TOP DITAMBAH */}
         {/* ARTICLES GRID */}
-        <section className="w-full py-8 md:py-12 bg-white">
+        <section className="w-full py-8 md:py-12 bg-white dark:bg-[#050508]">
           {" "}
           {/* ✅ TAMBAH PADDING Y */}
           <div className="max-w-7xl mx-auto px-8 md:px-12">
             {articles.length === 0 ? (
               <div className="text-center py-20">
-                <p className="text-[#6e6e6e] text-lg">
+                <p className="text-[#6e6e6e] dark:text-gray-400 text-lg">
                   Belum ada artikel yang tersedia.
                 </p>
               </div>
@@ -291,7 +291,7 @@ export default function ArticlesPage() {
                       onClick={() => router.push(`/articles/${article.id}`)}
                     >
                       {/* Thumbnail */}
-                      <div className="relative aspect-[16/10] rounded-lg overflow-hidden mb-4 bg-gray-100">
+                      <div className="relative aspect-[16/10] rounded-lg overflow-hidden mb-4 bg-gray-100 dark:bg-gray-800">
                         {article.thumbnail ? (
                           <img
                             src={article.thumbnail}
@@ -310,7 +310,7 @@ export default function ArticlesPage() {
                       </div>
 
                       {/* Meta Info */}
-                      <div className="flex items-center gap-4 text-xs text-[#6e6e6e] mb-3 font-mono uppercase tracking-tight">
+                      <div className="flex items-center gap-4 text-xs text-[#6e6e6e] dark:text-gray-400 mb-3 font-mono uppercase tracking-tight">
                         <span className="flex items-center gap-1">
                           <Calendar size={12} />
                           {formatDate(article.createdAt)}
@@ -323,7 +323,7 @@ export default function ArticlesPage() {
 
                       {/* Title */}
                       <h2
-                        className="text-xl font-medium text-[#111A4A] mb-2 leading-tight group-hover:text-[#156d95] transition-colors"
+                        className="text-xl font-medium text-[#111A4A] dark:text-white mb-2 leading-tight group-hover:text-[#156d95] dark:group-hover:text-[#22d3a8] transition-colors"
                         style={{ fontFamily: "var(--font-figtree), Figtree" }}
                       >
                         {locale === 'en' && article.title_en ? article.title_en : article.title}
@@ -331,7 +331,7 @@ export default function ArticlesPage() {
 
                       {/* Excerpt */}
                       <p
-                        className="text-sm text-[#6e6e6e] leading-relaxed mb-3"
+                        className="text-sm text-[#6e6e6e] dark:text-gray-400 leading-relaxed mb-3"
                         style={{ fontFamily: "var(--font-figtree), Figtree" }}
                       >
                         {stripHtml(locale === 'en' && article.content_en ? article.content_en : article.content)}
@@ -344,7 +344,7 @@ export default function ArticlesPage() {
                             .charAt(0)
                             .toUpperCase()}
                         </div>
-                        <span className="text-xs text-[#6e6e6e]">
+                        <span className="text-xs text-[#6e6e6e] dark:text-gray-400">
                           {article.author.name || article.author.email}
                         </span>
                       </div>
@@ -364,7 +364,7 @@ export default function ArticlesPage() {
                     <button
                       onClick={() => handlePageChange(currentPage - 1)}
                       disabled={currentPage === 1}
-                      className="p-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-[#156d95] hover:text-white hover:border-[#156d95] transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-gray-600 disabled:hover:border-gray-200"
+                      className="p-2 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-[#156d95] hover:text-white hover:border-[#156d95] transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-gray-600 disabled:hover:border-gray-200"
                     >
                       <ChevronLeft size={20} />
                     </button>
@@ -379,7 +379,7 @@ export default function ArticlesPage() {
                             className={`w-10 h-10 rounded-lg font-medium text-sm transition-all ${
                               currentPage === page
                                 ? "bg-[#156d95] text-white"
-                                : "border border-gray-200 text-gray-600 hover:bg-[#156d95] hover:text-white hover:border-[#156d95]"
+                                : "border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-[#156d95] hover:text-white hover:border-[#156d95]"
                             }`}
                           >
                             {page}
@@ -391,7 +391,7 @@ export default function ArticlesPage() {
                     <button
                       onClick={() => handlePageChange(currentPage + 1)}
                       disabled={currentPage === totalPages}
-                      className="p-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-[#156d95] hover:text-white hover:border-[#156d95] transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-gray-600 disabled:hover:border-gray-200"
+                      className="p-2 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-[#156d95] hover:text-white hover:border-[#156d95] transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-gray-600 disabled:hover:border-gray-200"
                     >
                       <ChevronRight size={20} />
                     </button>

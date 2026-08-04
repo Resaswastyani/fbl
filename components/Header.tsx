@@ -52,7 +52,7 @@ export const Header = () => {
   const itemCount = items.reduce((t, i) => t + i.quantity, 0);
 
   const isDarkBgAtTop = pathname === '/' || pathname === '/id' || pathname === '/en' || pathname?.includes('/giveaway');
-  const textColorClass = "text-gray-700";
+  const textColorClass = "text-gray-700 dark:text-gray-200";
 
   // Refs untuk tracking hover state
   const dropdownTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -276,7 +276,7 @@ export const Header = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
             transition={{ duration: 0.18 }}
-            className="absolute left-0 mt-2 w-[250px] bg-white shadow-xl rounded-xl border border-gray-100 py-2 z-40"
+            className="absolute left-0 mt-2 w-[250px] bg-white dark:bg-gray-900 shadow-xl dark:shadow-black/40 rounded-xl border border-gray-100 dark:border-white/10 py-2 z-40"
             style={{
               paddingTop: "8px",
               marginTop: "4px",
@@ -291,7 +291,7 @@ export const Header = () => {
               <button
                 key={item.name}
                 onClick={() => handleLinkClick(item.href)}
-                className="flex items-center gap-3 w-full px-4 py-3 text-gray-600 hover:bg-gray-100 transition rounded-lg"
+                className="flex items-center gap-3 w-full px-4 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10 transition rounded-lg"
               >
                 <item.icon size={18} />
                 {item.name}
@@ -345,7 +345,7 @@ export const Header = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -4 }}
               transition={{ duration: 0.18 }}
-              className="absolute right-0 mt-2 w-[280px] bg-white shadow-xl rounded-xl border border-gray-100 py-2 z-40"
+              className="absolute right-0 mt-2 w-[280px] bg-white dark:bg-gray-900 shadow-xl dark:shadow-black/40 rounded-xl border border-gray-100 dark:border-white/10 py-2 z-40"
               style={{
                 paddingTop: "8px",
                 marginTop: "4px",
@@ -356,8 +356,8 @@ export const Header = () => {
                 className="absolute -top-2 left-0 right-0 h-2 bg-transparent"
                 aria-hidden="true"
               />
-              <div className="px-4 py-3 border-b border-gray-100">
-                <p className="font-semibold text-gray-900 truncate">
+              <div className="px-4 py-3 border-b border-gray-100 dark:border-white/10">
+                <p className="font-semibold text-gray-900 dark:text-white truncate">
                   {user.name || "User"}
                 </p>
                 <p className="text-sm text-gray-500 truncate">{user.email}</p>
@@ -369,7 +369,7 @@ export const Header = () => {
               <div className="py-2">
                 <button
                   onClick={() => handleLinkClick(dashboardUrl)}
-                  className="flex items-center gap-3 w-full px-4 py-3 text-gray-600 hover:bg-gray-100 transition"
+                  className="flex items-center gap-3 w-full px-4 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10 transition"
                 >
                   <LayoutDashboard size={18} />
                   {t("dashboard")}
@@ -377,7 +377,7 @@ export const Header = () => {
 
                 <button
                   onClick={() => handleLinkClick("/profile")}
-                  className="flex items-center gap-3 w-full px-4 py-3 text-gray-600 hover:bg-gray-100 transition"
+                  className="flex items-center gap-3 w-full px-4 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10 transition"
                 >
                   <Settings size={18} />
                   {t("settings")}
@@ -387,14 +387,14 @@ export const Header = () => {
                 {userIsAdminOrMentor && (
                   <button
                     onClick={handleManageCourses}
-                    className="flex items-center gap-3 w-full px-4 py-3 text-gray-600 hover:bg-gray-100 transition"
+                    className="flex items-center gap-3 w-full px-4 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10 transition"
                   >
                     <BookOpen size={18} />
                     {t("manageCourses")}
                   </button>
                 )}
 
-                <div className="border-t border-gray-100 my-2"></div>
+                <div className="border-t border-gray-100 dark:border-white/10 my-2"></div>
 
                 <button
                   onClick={handleLogout}
@@ -423,7 +423,7 @@ export const Header = () => {
           className={`
             mx-auto transition-all duration-300 flex items-center justify-between
             ${isScrolled
-              ? "max-w-5xl bg-white shadow-lg rounded-2xl px-6 py-1.5 backdrop-blur-xl"
+              ? "max-w-5xl bg-white dark:bg-gray-900 shadow-lg dark:shadow-black/40 rounded-2xl px-6 py-1.5 backdrop-blur-xl border border-transparent dark:border-white/10"
               : "max-w-7xl bg-transparent px-8 py-3"
             }
           `}

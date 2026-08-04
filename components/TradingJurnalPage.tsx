@@ -455,7 +455,7 @@ const SectionCard = ({
 }) => (
   <motion.div
     variants={itemVariants}
-    className={`bg-white border border-[#e5e7eb] rounded-xl p-5 shadow-sm ${className}`}
+    className={`bg-white dark:bg-[#0a0a12] border border-[#e5e7eb] dark:border-white/10 rounded-xl p-5 shadow-sm ${className}`}
   >
     {children}
   </motion.div>
@@ -475,7 +475,7 @@ const StatBadge = ({
   <motion.div
     variants={itemVariants}
     whileHover={{ scale: 1.03 }}
-    className="bg-white border border-[#e5e7eb] rounded-xl p-4 shadow-sm"
+    className="bg-white dark:bg-[#0a0a12] border border-[#e5e7eb] dark:border-white/10 rounded-xl p-4 shadow-sm"
   >
     <div className="flex items-center gap-3">
       <div className={`p-2 rounded-lg ${color}`}>
@@ -483,13 +483,13 @@ const StatBadge = ({
       </div>
       <div>
         <p
-          className="text-xs text-[#6e6e6e]"
+          className="text-xs text-[#6e6e6e] dark:text-gray-400"
           style={{ fontFamily: "var(--font-figtree), Figtree" }}
         >
           {label}
         </p>
         <p
-          className="text-lg font-semibold text-[#111A4A]"
+          className="text-lg font-semibold text-[#111A4A] dark:text-white"
           style={{ fontFamily: "var(--font-figtree), Figtree" }}
         >
           {value}
@@ -508,10 +508,10 @@ const FeatureItem = ({
 }) => (
   <motion.div
     variants={itemVariants}
-    className="flex items-center gap-3 text-[#111A4A]/80"
+    className="flex items-center gap-3 text-[#111A4A]/80 dark:text-gray-300"
   >
-    <div className="w-8 h-8 rounded-full bg-[#dcfce7] flex items-center justify-center flex-shrink-0">
-      <Icon size={16} className="text-[#166534]" strokeWidth={2} />
+    <div className="w-8 h-8 rounded-full bg-[#dcfce7] dark:bg-green-900/30 flex items-center justify-center flex-shrink-0">
+      <Icon size={16} className="text-[#166534] dark:text-green-400" strokeWidth={2} />
     </div>
     <span
       className="text-sm font-medium"
@@ -537,8 +537,8 @@ const TabButton = ({
     onClick={onClick}
     className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${
       active
-        ? "bg-[#111A4A] text-white"
-        : "bg-[#f3f4f6] text-[#6e6e6e] hover:bg-[#e5e7eb]"
+        ? "bg-[#111A4A] dark:bg-[#22d3a8] text-white dark:text-gray-900"
+        : "bg-[#f3f4f6] dark:bg-gray-800 text-[#6e6e6e] dark:text-gray-400 hover:bg-[#e5e7eb] dark:hover:bg-gray-700"
     }`}
     style={{ fontFamily: "var(--font-figtree), Figtree" }}
   >
@@ -548,7 +548,7 @@ const TabButton = ({
 );
 
 const TableHeader = ({ children }: { children: React.ReactNode }) => (
-  <th className="text-left text-xs font-medium text-[#6e6e6e] uppercase tracking-wider px-3 py-2 border-b border-[#e5e7eb] bg-[#fafafa]">
+  <th className="text-left text-xs font-medium text-[#6e6e6e] dark:text-gray-400 uppercase tracking-wider px-3 py-2 border-b border-[#e5e7eb] dark:border-gray-700 bg-[#fafafa] dark:bg-gray-800/50">
     {children}
   </th>
 );
@@ -561,7 +561,7 @@ const TableCell = ({
   className?: string;
 }) => (
   <td
-    className={`text-sm px-3 py-2 border-b border-[#f3f4f6] ${className}`}
+    className={`text-sm px-3 py-2 border-b border-[#f3f4f6] dark:border-gray-800 ${className}`}
     style={{ fontFamily: "var(--font-figtree), Figtree" }}
   >
     {children}
@@ -1463,10 +1463,10 @@ export const TradingJournalPage = () => {
             <motion.div
               key={s.setup}
               variants={itemVariants}
-              className="bg-[#fafafa] rounded-lg p-3 border border-[#e5e7eb]"
+              className="bg-[#fafafa] dark:bg-gray-800/50 rounded-lg p-3 border border-[#e5e7eb] dark:border-gray-700"
             >
-              <p className="font-medium text-[#111A4A] text-sm">{s.setup}</p>
-              <p className="text-xs text-[#6e6e6e] mt-1">{s.desc}</p>
+              <p className="font-medium text-[#111A4A] dark:text-white text-sm">{s.setup}</p>
+              <p className="text-xs text-[#6e6e6e] dark:text-gray-400 mt-1">{s.desc}</p>
             </motion.div>
           ))}
         </div>
@@ -1475,7 +1475,7 @@ export const TradingJournalPage = () => {
   );
 
   return (
-    <section className="w-full pt-24 md:pt-32 pb-20 bg-white min-h-screen">
+    <section className="w-full pt-24 md:pt-32 pb-20 bg-white dark:bg-[#050508] transition-colors duration-500 min-h-screen text-[#111A4A] dark:text-gray-200">
       <div className="max-w-7xl mx-auto grid grid-cols-12 gap-5 lg:gap-16 px-8 md:px-12">
         {/* ─── LEFT: MAIN CONTENT ─── */}
         <div className="col-span-12 lg:col-span-8 flex flex-col">
@@ -1490,13 +1490,13 @@ export const TradingJournalPage = () => {
               onClick={(e) => e.preventDefault()}
               className="flex items-center gap-1 text-[#6e6e6e] mb-4 cursor-pointer"
             >
-              <span className="text-xs uppercase tracking-tight font-mono flex items-center gap-1 hover:text-[#202020]">
+              <span className="text-xs uppercase tracking-tight font-mono flex items-center gap-1 hover:text-[#202020] dark:hover:text-white">
                 FBL Trading Journal <ArrowUpRight size={14} strokeWidth={1.5} />
               </span>
             </a>
 
             <h1
-              className="text-[40px] font-normal leading-tight tracking-tight text-[#111A4A] mb-4"
+              className="text-[40px] font-normal leading-tight tracking-tight text-[#111A4A] dark:text-white mb-4"
               style={{
                 fontFamily: "var(--font-figtree), Figtree",
                 fontSize: "50px",
@@ -1507,7 +1507,7 @@ export const TradingJournalPage = () => {
             </h1>
 
             <p
-              className="text-lg leading-6 text-[#111A4A] opacity-60 mt-0 mb-6"
+              className="text-lg leading-6 text-[#111A4A] dark:text-gray-300 opacity-60 dark:opacity-80 mt-0 mb-6"
               style={{ fontFamily: "var(--font-figtree), Figtree" }}
             >
               {t("title")}
@@ -1682,11 +1682,11 @@ export const TradingJournalPage = () => {
           >
             <motion.div
               variants={itemVariants}
-              className="bg-white border border-[#e5e7eb] rounded-xl p-4 shadow-sm"
+              className="bg-white dark:bg-[#0a0a12] border border-[#e5e7eb] dark:border-white/10 rounded-xl p-4 shadow-sm"
             >
-              <p className="text-xs text-[#6e6e6e] mb-1">Total Trades</p>
+              <p className="text-xs text-[#6e6e6e] dark:text-gray-400 mb-1">Total Trades</p>
               <p
-                className="text-xl font-bold text-[#111A4A]"
+                className="text-xl font-bold text-[#111A4A] dark:text-white"
                 style={{ fontFamily: "var(--font-figtree), Figtree" }}
               >
                 {totalTrades}
@@ -1694,11 +1694,11 @@ export const TradingJournalPage = () => {
             </motion.div>
             <motion.div
               variants={itemVariants}
-              className="bg-white border border-[#e5e7eb] rounded-xl p-4 shadow-sm"
+              className="bg-white dark:bg-[#0a0a12] border border-[#e5e7eb] dark:border-white/10 rounded-xl p-4 shadow-sm"
             >
-              <p className="text-xs text-[#6e6e6e] mb-1">Win Rate</p>
+              <p className="text-xs text-[#6e6e6e] dark:text-gray-400 mb-1">Win Rate</p>
               <p
-                className="text-xl font-bold text-[#111A4A]"
+                className="text-xl font-bold text-[#111A4A] dark:text-white"
                 style={{ fontFamily: "var(--font-figtree), Figtree" }}
               >
                 {winRate}%
@@ -1706,11 +1706,11 @@ export const TradingJournalPage = () => {
             </motion.div>
             <motion.div
               variants={itemVariants}
-              className="bg-white border border-[#e5e7eb] rounded-xl p-4 shadow-sm"
+              className="bg-white dark:bg-[#0a0a12] border border-[#e5e7eb] dark:border-white/10 rounded-xl p-4 shadow-sm"
             >
-              <p className="text-xs text-[#6e6e6e] mb-1">Net P&L</p>
+              <p className="text-xs text-[#6e6e6e] dark:text-gray-400 mb-1">Net P&L</p>
               <p
-                className={`text-xl font-bold ${totalPnL >= 0 ? "text-[#166534]" : "text-[#991b1b]"}`}
+                className={`text-xl font-bold ${totalPnL >= 0 ? "text-[#166534] dark:text-[#22d3a8]" : "text-[#991b1b] dark:text-red-400"}`}
                 style={{ fontFamily: "var(--font-figtree), Figtree" }}
               >
                 {totalPnL >= 0 ? "+" : ""}${totalPnL}
@@ -1718,11 +1718,11 @@ export const TradingJournalPage = () => {
             </motion.div>
             <motion.div
               variants={itemVariants}
-              className="bg-white border border-[#e5e7eb] rounded-xl p-4 shadow-sm"
+              className="bg-white dark:bg-[#0a0a12] border border-[#e5e7eb] dark:border-white/10 rounded-xl p-4 shadow-sm"
             >
-              <p className="text-xs text-[#6e6e6e] mb-1">Profit Factor</p>
+              <p className="text-xs text-[#6e6e6e] dark:text-gray-400 mb-1">Profit Factor</p>
               <p
-                className="text-xl font-bold text-[#111A4A]"
+                className="text-xl font-bold text-[#111A4A] dark:text-white"
                 style={{ fontFamily: "var(--font-figtree), Figtree" }}
               >
                 2.5

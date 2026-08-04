@@ -829,14 +829,14 @@ export default function SignupForm({
           </form>
 
           {/* Right Image */}
-          <div className="relative hidden md:flex justify-center items-center bg-gray-50">
+          <div className="relative hidden md:flex justify-center items-center bg-gray-50 dark:bg-[#050508] transition-colors duration-500">
             <div className="p-4 w-full flex justify-center">
               <Image
                 src="/signup-form.svg"
                 alt={t("signupImageAlt")}
                 width={380}
                 height={506}
-                className="object-contain rounded-xl"
+                className="object-contain rounded-xl dark:brightness-[0.8]"
               />
             </div>
           </div>

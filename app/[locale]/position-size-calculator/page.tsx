@@ -312,153 +312,6 @@
 //                   />
 //                   <Input
 //                     label="Stop Loss (Pips)"
-//                     value={stopLoss}
-//                     onChange={setStopLoss}
-//                   />
-//                 </div>
-
-//                 <button
-//                   onClick={handleCalculate}
-//                   className="w-full mt-6 md:mt-8 py-3 rounded-xl bg-[#156d95] text-white font-medium text-sm md:text-base transition-all hover:opacity-90 active:scale-[0.98]"
-//                 >
-//                   Hitung Position Size
-//                 </button>
-//               </motion.div>
-
-//               {/* RESULT */}
-//               <ResultPanel
-//                 isCalculated={isCalculated}
-//                 positionSize={positionSize}
-//                 positionUnits={positionUnits}
-//                 balance={balance}
-//                 riskPercent={riskPercent}
-//                 pipValue={pipValue}
-//                 currency={accountCurrency}
-//                 pair={pair}
-//               />
-//             </div>
-//           </div>
-//         </section>
-//       </main>
-//     </>
-//   );
-// }
-
-// /* ================= INPUT ================= */
-// function Input({ label, value, onChange }: any) {
-//   return (
-//     <div>
-//       <label className="block text-sm font-medium mb-1.5 md:mb-2 opacity-80">
-//         {label}
-//       </label>
-//       <input
-//         type="number"
-//         value={value}
-//         onChange={(e) => onChange(Number(e.target.value) || 0)}
-//         className="w-full border rounded-lg px-3 md:px-4 py-2.5 md:py-3 text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-[#156d95] transition-all"
-//       />
-//     </div>
-//   );
-// }
-
-// function Select({ label, value, options, onChange }: any) {
-//   return (
-//     <div>
-//       <label className="block text-sm font-medium mb-1.5 md:mb-2 opacity-80">
-//         {label}
-//       </label>
-//       <select
-//         value={value}
-//         onChange={(e) => onChange(e.target.value)}
-//         className="w-full border rounded-lg px-3 md:px-4 py-2.5 md:py-3 text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-[#156d95] bg-white transition-all"
-//       >
-//         {options.map((o: string) => (
-//           <option key={o} value={o}>
-//             {o}
-//           </option>
-//         ))}
-//       </select>
-//     </div>
-//   );
-// }
-
-// /* ================= RESULT ================= */
-// function ResultPanel({
-//   isCalculated,
-//   positionSize,
-//   positionUnits,
-//   balance,
-//   riskPercent,
-//   pipValue,
-//   currency,
-//   pair,
-// }: any) {
-//   return (
-//     <motion.div
-//       initial={{ opacity: 0, y: 20 }}
-//       animate={{ opacity: 1, y: 0 }}
-//       transition={{ duration: 0.8, delay: 0.1 }}
-//       className="space-y-4 md:space-y-5"
-//     >
-//       {/* LOT */}
-//       <div className="rounded-xl md:rounded-2xl p-4 md:p-6 text-center text-white bg-gradient-to-r from-blue-500 to-purple-600 shadow-lg">
-//         <p className="text-xs md:text-sm opacity-80 mb-1">Ukuran Lot</p>
-//         <p className="text-2xl md:text-3xl font-bold">
-//           {isCalculated ? positionSize.toFixed(3) : "0.000"}
-//         </p>
-//       </div>
-
-//       {/* POSITION SIZE */}
-//       <div className="rounded-xl md:rounded-2xl p-4 md:p-6 text-center text-white bg-gradient-to-r from-blue-500 to-purple-600 shadow-lg">
-//         <p className="text-xs md:text-sm opacity-80 mb-1">Ukuran Posisi</p>
-//         <p className="text-2xl md:text-3xl font-bold">
-//           {isCalculated ? positionUnits.toFixed(0) : "0"}
-//         </p>
-//       </div>
-
-//       {/* RISK */}
-//       <div className="rounded-xl md:rounded-2xl p-4 md:p-6 text-center text-white bg-gradient-to-r from-blue-500 to-purple-600 shadow-lg">
-//         <p className="text-xs md:text-sm opacity-80 mb-1">Jumlah Risiko</p>
-//         <p className="text-2xl md:text-3xl font-bold">
-//           {isCalculated
-//             ? `${((balance * riskPercent) / 100).toFixed(2)} ${currency}`
-//             : `0.00 ${currency}`}
-//         </p>
-//       </div>
-
-//       {/* INFO PANEL */}
-//       <div className="bg-white rounded-xl md:rounded-2xl p-4 md:p-6 border text-xs md:text-sm space-y-3 shadow-sm">
-//         <div className="flex justify-between items-center">
-//           <p className="font-semibold">Terdeteksi</p>
-//           <p className="opacity-70">{pair}</p>
-//         </div>
-
-//         <div className="flex justify-between items-center">
-//           <p className="font-semibold">Perlu Harga?</p>
-//           <p className="opacity-70">
-//             {needPriceConversion(pair) ? "Ya" : "Tidak"}
-//           </p>
-//         </div>
-//         <p className="text-xs opacity-50 -mt-2">
-//           Kolom harga muncul hanya saat diperlukan
-//         </p>
-
-//         <div className="flex justify-between items-center">
-//           <p className="font-semibold">Nilai Pip (1 lot)</p>
-//           <p className="opacity-70">
-//             {isCalculated ? `${pipValue.toFixed(2)} ${currency}` : "-"}
-//           </p>
-//         </div>
-
-//         <div className="flex justify-between items-center">
-//           <p className="font-semibold">Dalam mata uang akun</p>
-//           <p className="opacity-70">{currency}</p>
-//         </div>
-//       </div>
-//     </motion.div>
-//   );
-// }
-
 "use client";
 
 import { useTranslations } from "next-intl";
@@ -553,7 +406,7 @@ export default function PositionSizeCalculatorPage() {
 
   return (
     <>
-      <main className="pt-[100px] md:pt-[140px] bg-white text-[#111A4A]">
+      <main className="pt-[100px] md:pt-[140px] bg-white dark:bg-[#050508] transition-colors duration-500 text-[#111A4A] dark:text-gray-200">
         {/* ================= SECTION 1 : PROMOSI ================= */}
         <section className="w-full pt-12 md:pt-24 pb-16 md:pb-28">
           <div className="max-w-7xl mx-auto grid grid-cols-12 gap-6 md:gap-12 px-4 sm:px-6 lg:px-8">
@@ -569,7 +422,7 @@ export default function PositionSizeCalculatorPage() {
               </span>
 
               <h1
-                className="text-3xl sm:text-4xl md:text-[50px] font-medium leading-tight mb-4 md:mb-6"
+                className="text-3xl sm:text-4xl md:text-[50px] font-medium leading-tight mb-4 md:mb-6 text-[#111A4A] dark:text-white"
                 style={{ fontFamily: "var(--font-figtree), Figtree" }}
               >
                 {t.rich("title", {
@@ -579,13 +432,13 @@ export default function PositionSizeCalculatorPage() {
                 })}
               </h1>
 
-              <p className="text-base md:text-lg opacity-70 mb-4 md:mb-6 leading-relaxed">
+              <p className="text-base md:text-lg opacity-70 dark:opacity-90 dark:text-gray-300 mb-4 md:mb-6 leading-relaxed">
                 {t.rich("subtitle", {
                   b: (chunks) => <b>{chunks}</b>,
                 })}
               </p>
 
-              <ul className="text-sm opacity-70 space-y-2 mb-4 md:mb-6">
+              <ul className="text-sm opacity-70 dark:opacity-90 dark:text-gray-300 space-y-2 mb-4 md:mb-6">
                 <li className="flex items-start gap-2">
                   <span className="text-green-600">✔</span>
                   <span>{t("antiOverlot")}</span>
@@ -600,7 +453,7 @@ export default function PositionSizeCalculatorPage() {
                 </li>
               </ul>
 
-              <p className="text-xs opacity-50">
+              <p className="text-xs opacity-50 dark:opacity-40">
                 © PT Akademi Keuangan Nusantara
               </p>
             </motion.div>
@@ -622,17 +475,17 @@ export default function PositionSizeCalculatorPage() {
                 </span>
 
                 {/* PRICE */}
-                <p className="text-sm opacity-60 mb-1">{t("normalPrice")}</p>
-                <p className="text-base md:text-lg line-through opacity-50 mb-2">
+                <p className="text-sm opacity-60 dark:opacity-80 dark:text-gray-300 mb-1">{t("normalPrice")}</p>
+                <p className="text-base md:text-lg line-through opacity-50 dark:opacity-70 dark:text-gray-400 mb-2">
                   Rp 299.000
                 </p>
 
-                <p className="text-sm opacity-60 mb-1">{t("promoPrice")}</p>
-                <p className="text-2xl md:text-4xl font-semibold text-[#156d95] mb-2">
+                <p className="text-sm opacity-60 dark:opacity-80 dark:text-gray-300 mb-1">{t("promoPrice")}</p>
+                <p className="text-2xl md:text-4xl font-semibold text-[#156d95] dark:text-[#22d3a8] mb-2">
                   Rp 149.000
                 </p>
 
-                <p className="text-xs opacity-60 mb-4 md:mb-6">
+                <p className="text-xs opacity-60 dark:opacity-70 dark:text-gray-400 mb-4 md:mb-6">
                   {t("savePercent")}
                 </p>
 
@@ -675,8 +528,8 @@ export default function PositionSizeCalculatorPage() {
 
               {/* PROS & CONS */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 mb-8 md:mb-10">
-                <div className="p-4 md:p-6 rounded-2xl bg-green-50 border border-green-200">
-                  <h3 className="flex items-center gap-2 font-semibold text-green-700 mb-3 text-sm md:text-base">
+                <div className="p-4 md:p-6 rounded-2xl bg-green-50 dark:bg-green-900/10 border border-green-200 dark:border-green-800">
+                  <h3 className="flex items-center gap-2 font-semibold text-green-700 dark:text-green-400 mb-3 text-sm md:text-base">
                     <ShieldCheck size={18} /> {t("advantages")}
                   </h3>
                   <ul className="text-xs md:text-sm opacity-80 space-y-2">
@@ -686,8 +539,8 @@ export default function PositionSizeCalculatorPage() {
                   </ul>
                 </div>
 
-                <div className="p-4 md:p-6 rounded-2xl bg-red-50 border border-red-200">
-                  <h3 className="flex items-center gap-2 font-semibold text-red-700 mb-3 text-sm md:text-base">
+                <div className="p-4 md:p-6 rounded-2xl bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-800">
+                  <h3 className="flex items-center gap-2 font-semibold text-red-700 dark:text-red-400 mb-3 text-sm md:text-base">
                     <AlertTriangle size={18} /> {t("disadvantages")}
                   </h3>
                   <ul className="text-xs md:text-sm opacity-80 space-y-2">
@@ -725,7 +578,7 @@ export default function PositionSizeCalculatorPage() {
         </section>
 
         {/* ================= SECTION 3 : CALCULATOR ================= */}
-        <section className="pb-16 md:pb-32 bg-[#f4f7fb]">
+        <section className="pb-16 md:pb-32 bg-[#f4f7fb] dark:bg-gray-900/50">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-10">
               {/* INPUT */}
@@ -733,8 +586,9 @@ export default function PositionSizeCalculatorPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
-                className="bg-white rounded-2xl md:rounded-3xl p-6 md:p-10 shadow-xl"
+                className="bg-white dark:bg-white/5 rounded-2xl md:rounded-3xl p-6 md:p-10 border border-gray-100 dark:border-white/10 shadow-lg dark:shadow-none relative overflow-hidden"
               >
+                <div className="absolute top-0 left-0 w-2 h-full bg-[#156d95] dark:bg-[#22d3a8]" />
                 <div className="flex items-center gap-3 mb-6 md:mb-8">
                   <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-[#156d95] text-white flex items-center justify-center">
                     <Calculator size={20} />
@@ -820,7 +674,7 @@ function Input({ label, value, onChange }: any) {
         type="number"
         value={value}
         onChange={(e) => onChange(Number(e.target.value) || 0)}
-        className="w-full border rounded-lg px-3 md:px-4 py-2.5 md:py-3 text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-[#156d95] transition-all"
+        className="w-full border dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg px-3 md:px-4 py-2.5 md:py-3 text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-[#156d95] dark:focus:ring-[#22d3a8] transition-all"
       />
     </div>
   );
@@ -835,7 +689,7 @@ function Select({ label, value, options, onChange }: any) {
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full border rounded-lg px-3 md:px-4 py-2.5 md:py-3 text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-[#156d95] bg-white transition-all"
+        className="w-full border dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg px-3 md:px-4 py-2.5 md:py-3 text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-[#156d95] dark:focus:ring-[#22d3a8] transition-all"
       >
         {options.map((o: string) => (
           <option key={o} value={o}>
@@ -896,7 +750,7 @@ function ResultPanel({
       </div>
 
       {/* INFO PANEL */}
-      <div className="bg-white rounded-xl md:rounded-2xl p-4 md:p-6 border text-xs md:text-sm space-y-3 shadow-sm">
+      <div className="bg-white dark:bg-gray-800 rounded-xl md:rounded-2xl p-4 md:p-6 border dark:border-gray-700 text-xs md:text-sm space-y-3 shadow-sm text-[#111A4A] dark:text-gray-300">
         <div className="flex justify-between items-center">
           <p className="font-semibold">{t("detected")}</p>
           <p className="opacity-70">{pair}</p>

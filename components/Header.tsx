@@ -428,16 +428,18 @@ export const Header = () => {
             onClick={() => handleLinkClick("/")}
             className="flex items-center"
           >
-            <div className="dark:bg-white/95 dark:rounded-md overflow-hidden flex items-center justify-center transition-all">
-              <motion.img
+            <motion.div 
+              animate={{ scale: isScrolled ? 0.8 : 1 }}
+              transition={{ duration: 0.25 }}
+              className="dark:bg-white/95 dark:rounded-md overflow-hidden flex items-center justify-center origin-left"
+            >
+              <img
                 src="/logo-fbl.png"
                 alt="Forex Logo"
-                animate={{ scale: isScrolled ? 0.77 : 1 }}
-                transition={{ duration: 0.25 }}
-                className="h-auto object-contain transition-all dark:-my-[6px] dark:-mx-1"
-                style={{ width: isScrolled ? "110px" : "145px" }}
+                className="h-auto object-contain dark:-my-1 dark:-mx-1"
+                style={{ width: "145px", display: "block" }}
               />
-            </div>
+            </motion.div>
           </button>
 
           <div

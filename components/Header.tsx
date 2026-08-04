@@ -261,7 +261,7 @@ export const Header = () => {
       onMouseLeave={handleMouseLeave}
     >
       <button
-        className={`flex items-center gap-1 font-medium hover:text-primary transition
+        className={`flex items-center gap-1 font-medium hover:text-primary transition whitespace-nowrap
           ${isScrolled ? "text-sm" : "text-base"} ${textColorClass}
         `}
       >
@@ -317,7 +317,7 @@ export const Header = () => {
         onMouseLeave={handleMouseLeave}
       >
         <button
-          className={`flex items-center gap-2 font-medium hover:text-primary transition
+          className={`flex items-center gap-2 font-medium hover:text-primary transition whitespace-nowrap
             ${isScrolled ? "text-sm" : "text-base"} ${textColorClass}
           `}
         >
@@ -437,7 +437,7 @@ export const Header = () => {
               alt="Forex Logo"
               animate={{ scale: isScrolled ? 0.77 : 1 }}
               transition={{ duration: 0.25 }}
-              className="h-auto object-contain"
+              className="h-auto object-contain dark:bg-white/90 dark:p-1.5 dark:rounded-xl transition-all"
               style={{ width: isScrolled ? "110px" : "145px" }}
             />
           </button>
@@ -445,13 +445,13 @@ export const Header = () => {
           <div
             className={`
               hidden md:flex items-center transition-all duration-200
-              ${isScrolled ? "gap-5" : "gap-8"}
+              ${isScrolled ? "gap-4" : "gap-6"}
             `}
           >
 
             {/* <button
               onClick={() => handleLinkClick("/robot-trading")}
-              className={`font-medium hover:text-primary transition 
+              className={`font-medium hover:text-primary transition whitespace-nowrap 
                 ${isScrolled ? "text-sm" : "text-base"} ${textColorClass}
               `}
             >
@@ -475,7 +475,7 @@ export const Header = () => {
 
             <button
               onClick={() => handleLinkClick("/professional-course")}
-              className={`font-medium hover:text-primary transition 
+              className={`font-medium hover:text-primary transition whitespace-nowrap 
                 ${isScrolled ? "text-sm" : "text-base"} ${textColorClass}
               `}
             >
@@ -484,7 +484,7 @@ export const Header = () => {
 
             <button
               onClick={() => handleLinkClick("/broker-rekommendation")}
-              className={`font-medium hover:text-primary transition 
+              className={`font-medium hover:text-primary transition whitespace-nowrap 
                 ${isScrolled ? "text-sm" : "text-base"} ${textColorClass}
               `}
             >
@@ -493,7 +493,7 @@ export const Header = () => {
 
             <button
               onClick={() => handleLinkClick("/panduan-ea-trial")}
-              className={`font-medium hover:text-primary transition 
+              className={`font-medium hover:text-primary transition whitespace-nowrap 
                 ${isScrolled ? "text-sm" : "text-base"} ${textColorClass}
               `}
             >
@@ -568,7 +568,7 @@ export const Header = () => {
 
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className={`md:hidden p-2 hover:text-primary transition text-gray-800`}
+            className={`md:hidden p-2 hover:text-primary transition text-gray-800 dark:text-gray-200`}
           >
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -581,7 +581,7 @@ export const Header = () => {
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.25 }}
-              className="md:hidden bg-white/95 backdrop-blur-lg border-t border-gray-200"
+              className="md:hidden bg-white/95 dark:bg-[#0a0a12]/95 backdrop-blur-lg border-t border-gray-200 dark:border-white/10 transition-colors duration-300"
             >
               <div className="px-6 py-6 space-y-5">
                 {/* LANGUAGE SWITCHER MOBILE - Added here */}
@@ -599,7 +599,7 @@ export const Header = () => {
                 </div>
 
                 {user && (
-                  <div className="border-b border-gray-200 pb-4">
+                  <div className="border-b border-gray-200 dark:border-white/10 pb-4">
                     <div className="flex items-center gap-3 mb-3">
                       <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center overflow-hidden">
                         {user.image ? (
@@ -613,7 +613,7 @@ export const Header = () => {
                         )}
                       </div>
                       <div>
-                        <p className="font-semibold text-gray-900">
+                        <p className="font-semibold text-gray-900 dark:text-white">
                           {user.name || "User"}
                         </p>
                         <p className="text-sm text-gray-500">{user.email}</p>
@@ -634,19 +634,19 @@ export const Header = () => {
                   </button>
                 </div> */}
                 <div>
-                  <p className="text-gray-900 font-semibold mb-2">
+                  <p className="text-gray-900 dark:text-white font-semibold mb-2">
                     {t("tradingLesson")}
                   </p>
                   <div className="space-y-2 pl-3">
                     <button
                       onClick={() => handleLinkClick("/articles")}
-                      className="flex gap-2 items-center text-gray-700 w-full"
+                      className="flex gap-2 items-center text-gray-700 dark:text-gray-300 w-full"
                     >
                       <FileText size={16} /> {t("articleTrading")}
                     </button>
                     <button
                       onClick={() => handleLinkClick("/video-trading")}
-                      className="flex gap-2 items-center text-gray-700 w-full"
+                      className="flex gap-2 items-center text-gray-700 dark:text-gray-300 w-full"
                     >
                       <PlayCircle size={16} /> {t("videoTrading")}
                     </button>
@@ -655,25 +655,25 @@ export const Header = () => {
 
                 <button
                   onClick={() => handleLinkClick("/professional-course")}
-                  className="block w-full text-left text-lg text-gray-800"
+                  className="block w-full text-left text-lg text-gray-800 dark:text-gray-200"
                 >
                   {t("professionalCourse")}
                 </button>
                 <button
                   onClick={() => handleLinkClick("/broker-rekommendation")}
-                  className="block w-full text-left text-lg text-gray-800"
+                  className="block w-full text-left text-lg text-gray-800 dark:text-gray-200"
                 >
                   {t("brokerRecommendation")}
                 </button>
                 <button
                   onClick={() => handleLinkClick("/panduan-ea-trial")}
-                  className="block w-full text-left text-lg text-gray-800"
+                  className="block w-full text-left text-lg text-gray-800 dark:text-gray-200"
                 >
                   {t("panduanEATrial")}
                 </button>
 
                 <div>
-                  <p className="text-gray-900 font-semibold mb-2">
+                  <p className="text-gray-900 dark:text-white font-semibold mb-2">
                     {t("tools")}
                   </p>
                   <div className="space-y-2 pl-3">
@@ -681,13 +681,13 @@ export const Header = () => {
                       onClick={() =>
                         handleLinkClick("/position-size-calculator")
                       }
-                      className="flex gap-2 items-center text-gray-700 w-full"
+                      className="flex gap-2 items-center text-gray-700 dark:text-gray-300 w-full"
                     >
                       <Calculator size={16} /> {t("positionSizeCalculator")}
                     </button>
                     <button
                       onClick={() => handleLinkClick("/Jurnal-trading")}
-                      className="flex gap-2 items-center text-gray-700 w-full"
+                      className="flex gap-2 items-center text-gray-700 dark:text-gray-300 w-full"
                     >
                       <Book size={16} /> Jurnal Trading
                     </button>
@@ -696,7 +696,7 @@ export const Header = () => {
 
                 <button
                   onClick={() => handleLinkClick("/cart")}
-                  className="flex items-center gap-2 w-full text-lg text-gray-800"
+                  className="flex items-center gap-2 w-full text-lg text-gray-800 dark:text-gray-200"
                 >
                   <ShoppingCart size={20} />
                   {t("cart")}
@@ -710,19 +710,19 @@ export const Header = () => {
                 {!loading && (
                   <>
                     {user ? (
-                      <div className="space-y-3 pt-4 border-t border-gray-200">
+                      <div className="space-y-3 pt-4 border-t border-gray-200 dark:border-white/10">
                         <button
                           onClick={() =>
                             handleLinkClick(getDashboardUrl(user.role))
                           }
-                          className="flex items-center gap-2 w-full text-lg text-gray-800"
+                          className="flex items-center gap-2 w-full text-lg text-gray-800 dark:text-gray-200"
                         >
                           <LayoutDashboard size={20} />
                           {t("dashboard")}
                         </button>
                         <button
                           onClick={() => handleLinkClick("/profile")}
-                          className="flex items-center gap-2 w-full text-lg text-gray-800"
+                          className="flex items-center gap-2 w-full text-lg text-gray-800 dark:text-gray-200"
                         >
                           <Settings size={20} />
                           {t("settings")}
@@ -731,7 +731,7 @@ export const Header = () => {
                         {isAdminOrMentor(user.role) && (
                           <button
                             onClick={handleManageCourses}
-                            className="flex items-center gap-2 w-full text-lg text-gray-800"
+                            className="flex items-center gap-2 w-full text-lg text-gray-800 dark:text-gray-200"
                           >
                             <BookOpen size={20} />
                             {t("manageCourses")}
@@ -746,10 +746,10 @@ export const Header = () => {
                         </button>
                       </div>
                     ) : (
-                      <div className="space-y-3 pt-4 border-t border-gray-200">
+                      <div className="space-y-3 pt-4 border-t border-gray-200 dark:border-white/10">
                         <button
                           onClick={() => handleLinkClick("/login")}
-                          className="block w-full text-left text-lg text-gray-800"
+                          className="block w-full text-left text-lg text-gray-800 dark:text-gray-200"
                         >
                           {t("login")}
                         </button>

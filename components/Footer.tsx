@@ -35,7 +35,7 @@ export default function Footer() {
             <img
               src="/logo-fbl.png"
               alt="Managed By Logo"
-              className="w-40 h-auto opacity-90"
+              className="w-40 h-auto opacity-90 dark:bg-white/90 dark:p-1.5 dark:rounded-xl transition-all"
             />
             {/* REGISTERED BADGE - POJOK KANAN ATAS LOGO */}
             <span

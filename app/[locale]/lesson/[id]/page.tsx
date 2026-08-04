@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useRouter } from "next/navigation";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export default function LessonPage({ params }: { params: { id: string, locale: string } }) {
   const [lesson, setLesson] = useState<any>(null);
@@ -54,9 +55,10 @@ export default function LessonPage({ params }: { params: { id: string, locale: s
     <div className="min-h-screen bg-white dark:bg-[#050508] transition-colors duration-500">
       <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">{actualTitle}</h1>
+          <h1 className="text-2xl font-bold dark:text-white">{actualTitle}</h1>
           <div className="flex items-center gap-4">
             <LanguageSwitcher />
+            <ThemeToggle />
             <Button variant="outline" onClick={() => router.back()}>
               Kembali
             </Button>
@@ -94,7 +96,7 @@ export default function LessonPage({ params }: { params: { id: string, locale: s
         ) : (
           <Card className="mb-8">
             <CardContent className="p-6">
-              <div className="prose prose-slate dark:prose-invert max-w-none">
+              <div className="prose prose-slate dark:prose-invert max-w-none dark:[&_*]:!text-gray-200">
                 <div dangerouslySetInnerHTML={{ __html: actualContent }} />
               </div>
               <div className="mt-4 flex justify-between">

@@ -171,7 +171,7 @@ export default function DisclaimerPreview() {
     <section ref={ref} className="w-full relative overflow-hidden">
       {/* Animated Background Gradient */}
       <motion.div
-        className="absolute inset-0 bg-gradient-to-br from-slate-50 via-white to-slate-100"
+        className="absolute inset-0 bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-[#050508] dark:via-[#0a0a12] dark:to-[#050508] transition-colors duration-500"
         animate={{
           background: [
             "linear-gradient(to bottom right, rgb(248 250 252), rgb(255 255 255), rgb(241 245 249))",
@@ -273,7 +273,7 @@ export default function DisclaimerPreview() {
             whileHover="hover"
             onHoverStart={() => setHoveredCard(true)}
             onHoverEnd={() => setHoveredCard(false)}
-            className="bg-white/80 backdrop-blur-xl rounded-3xl p-6 md:p-10 pt-12 md:pt-10 shadow-2xl border border-white/50 relative overflow-hidden w-full"
+            className="bg-white/80 dark:bg-[#0a0a12]/80 backdrop-blur-xl rounded-3xl p-6 md:p-10 pt-12 md:pt-10 shadow-2xl border border-white/50 dark:border-white/10 relative overflow-hidden w-full transition-colors duration-500"
           >
             {/* Shimmer Effect */}
             <motion.div
@@ -289,7 +289,7 @@ export default function DisclaimerPreview() {
               <div className="flex-1">
                 <motion.h3
                   variants={itemVariants}
-                  className="text-xl md:text-2xl font-bold text-[#111A4A] flex items-center gap-3"
+                  className="text-xl md:text-2xl font-bold text-[#111A4A] dark:text-white flex items-center gap-3"
                   style={{ fontFamily: "var(--font-figtree), Figtree" }}
                 >
                   <motion.div
@@ -308,7 +308,7 @@ export default function DisclaimerPreview() {
                 </motion.h3>
                 <motion.p
                   variants={itemVariants}
-                  className="text-sm text-[#6e6e6e] mt-2 ml-9"
+                  className="text-sm text-[#6e6e6e] dark:text-gray-400 mt-2 ml-9"
                   style={{ fontFamily: "var(--font-figtree), Figtree" }}
                 >
                   {t("subtitle")}
@@ -319,7 +319,7 @@ export default function DisclaimerPreview() {
               <motion.span
                 variants={scaleUp}
                 whileHover={{ scale: 1.05 }}
-                className="inline-flex items-center px-4 py-2 rounded-full text-xs font-semibold bg-gradient-to-r from-amber-50 to-orange-50 text-amber-700 border border-amber-200 shadow-sm w-fit cursor-default"
+                className="inline-flex items-center px-4 py-2 rounded-full text-xs font-semibold bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/30 dark:to-orange-900/30 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-700/50 shadow-sm w-fit cursor-default"
               >
                 <motion.span
                   className="w-2 h-2 rounded-full bg-amber-500 mr-2"
@@ -357,7 +357,7 @@ export default function DisclaimerPreview() {
             >
               <motion.p
                 variants={itemVariants}
-                className="text-[#374151] leading-relaxed text-sm md:text-base w-full"
+                className="text-[#374151] dark:text-gray-300 leading-relaxed text-sm md:text-base w-full"
                 style={{ fontFamily: "var(--font-figtree), Figtree" }}
               >
                 {t("educationText")}
@@ -369,7 +369,7 @@ export default function DisclaimerPreview() {
                   x: 5,
                   boxShadow: "0 10px 40px -10px rgba(21, 109, 149, 0.2)",
                 }}
-                className="bg-gradient-to-r from-slate-50 to-white rounded-xl p-5 border-l-4 border-[#156d95] shadow-sm cursor-default transition-shadow w-full"
+                className="bg-gradient-to-r from-slate-50 to-white dark:from-[#050508] dark:to-[#0a0a12] rounded-xl p-5 border-l-4 border-[#156d95] shadow-sm cursor-default transition-shadow w-full"
                 style={{ fontFamily: "var(--font-figtree), Figtree" }}
               >
                 <div className="flex items-start gap-3 w-full">
@@ -387,8 +387,8 @@ export default function DisclaimerPreview() {
                     <Info size={20} className="text-[#156d95]" />
                   </motion.div>
                   <div className="flex-1">
-                    <p className="text-sm text-[#374151] leading-relaxed">
-                      <span className="font-bold text-[#111A4A] text-base">
+                    <p className="text-sm text-[#374151] dark:text-gray-300 leading-relaxed">
+                      <span className="font-bold text-[#111A4A] dark:text-white text-base">
                         {t("responsibility")}
                       </span>{" "}
                       {t("responsibilityText")}
@@ -401,13 +401,13 @@ export default function DisclaimerPreview() {
             {/* CTA Section - Full Width */}
             <motion.div
               variants={itemVariants}
-              className="mt-8 pt-8 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4 w-full"
+              className="mt-8 pt-8 border-t border-slate-100 dark:border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 w-full"
             >
               <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.8 }}
-                className="text-xs text-[#6e6e6e] flex items-center gap-2"
+                className="text-xs text-[#6e6e6e] dark:text-gray-400 flex items-center gap-2"
                 style={{ fontFamily: "var(--font-figtree), Figtree" }}
               >
                 <ShieldCheck size={14} className="text-green-500" />

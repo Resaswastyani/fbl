@@ -9,6 +9,7 @@ import "@/app/globals.css";
 import LayoutClient from "@/components/LayoutClient";
 import { CartProvider } from "@/context/cart-context";
 import CartDrawer from "@/components/cart/cart-drawer";
+import { ThemeProvider } from "@/components/theme-provider";
 
 const figtree = Figtree({
   subsets: ["latin"],
@@ -95,10 +96,12 @@ export default async function RootLayout({
         className={`${inter.variable} ${figtree.variable} ${geistMono.variable} font-sans antialiased`}
       >
         <NextIntlClientProvider messages={messages} locale={locale}>
-          <CartProvider>
-            <LayoutClient>{children}</LayoutClient>
-            <CartDrawer />
-          </CartProvider>
+          <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+            <CartProvider>
+              <LayoutClient>{children}</LayoutClient>
+              <CartDrawer />
+            </CartProvider>
+          </ThemeProvider>
         </NextIntlClientProvider>
 
         <Analytics />

@@ -4,7 +4,7 @@ import { useState, useRef } from "react";
 import { motion, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion";
 import {
   Download, CheckCircle, XCircle, AlertTriangle,
-  Settings, BarChart3, ShieldCheck, Cpu,
+  Settings, BarChart3, Cpu,
   ChevronRight, PlayCircle, BookOpen, Clock, Activity
 } from "lucide-react";
 import Link from "next/link";
@@ -82,8 +82,8 @@ const MonitorMockup = () => {
           {/* Screen */}
           <div className="relative bg-[#0f172a] rounded-xl overflow-hidden w-full aspect-[4/3] sm:aspect-[16/10] border border-slate-800 flex items-center shadow-inner">
             <motion.img 
-              src="/images/xauusd-chart.png" 
-              alt="XAUUSD Real Chart" 
+              src="/bt1.png" 
+              alt="Backtest Results" 
               className="w-[150%] max-w-none h-auto pointer-events-none select-none"
               draggable="false"
               animate={{ x: ["0%", "-33.33%", "0%"] }}
@@ -124,6 +124,49 @@ const MonitorMockup = () => {
 
       {/* Glow effect behind monitor */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-[#22d3a8] rounded-full mix-blend-multiply filter blur-[100px] opacity-15 -z-10 pointer-events-none"></div>
+    </motion.div>
+  );
+};
+
+// 3D Tilt Card Component for Action Buttons
+const TiltCard = ({ children, className }: { children: React.ReactNode, className?: string }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const mouseXSpring = useSpring(x, { stiffness: 150, damping: 20 });
+  const mouseYSpring = useSpring(y, { stiffness: 150, damping: 20 });
+
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["10deg", "-10deg"]);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-10deg", "10deg"]);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    const xPct = mouseX / width - 0.5;
+    const yPct = mouseY / height - 0.5;
+    x.set(xPct);
+    y.set(yPct);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
+  return (
+    <motion.div
+      ref={ref}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+      className={`relative perspective-[1000px] w-full h-full ${className || ""}`}
+    >
+      {children}
     </motion.div>
   );
 };
@@ -247,50 +290,39 @@ export default function PanduanEATrialPage() {
         </motion.div>
       </section>
 
+      {/* Backtest Section */}
+      <section className="w-full bg-white py-24 border-t border-gray-100 overflow-hidden relative z-10">
+        <motion.div 
+          initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeIn}
+          className="container mx-auto px-6 max-w-6xl text-center"
+        >
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#167E6C]/10 text-[#167E6C] font-semibold text-sm mb-6">
+            <Activity size={16} />
+            <span>Performa Teruji</span>
+          </div>
+          
+          <h2 className="text-4xl md:text-5xl font-bold text-[#111A4A] mb-6">Hasil Backtest EA</h2>
+          <p className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto">
+            Lihat performa konsisten dari EA kami melalui hasil backtest.
+          </p>
+
+          <motion.div 
+            className="relative rounded-3xl overflow-hidden shadow-2xl shadow-[#111A4A]/20 border border-gray-200"
+            whileHover={{ scale: 1.02 }}
+            transition={{ duration: 0.5 }}
+          >
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent z-10 pointer-events-none"></div>
+            <img 
+              src="/bt1.png" 
+              alt="Backtest Results" 
+              className="w-full h-auto object-cover"
+            />
+          </motion.div>
+        </motion.div>
+      </section>
+
       {/* Content Sections Wrapper */}
       <div id="panduan-lengkap" className="w-full relative z-10">
-
-        {/* Section 1: Tujuan - Full Width Background */}
-        <section className="w-full bg-white py-24 border-t border-gray-100">
-          <motion.div 
-            initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeIn}
-            className="container mx-auto px-6 max-w-6xl"
-          >
-            <div className="flex items-center gap-5 mb-12">
-              <div className="w-16 h-16 bg-[#167E6C]/10 text-[#167E6C] rounded-2xl flex items-center justify-center">
-                <ShieldCheck size={32} />
-              </div>
-              <h2 className="text-4xl font-bold text-[#111A4A]">{t("section1Title")}</h2>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-12">
-              <div className="space-y-6">
-                <h3 className="text-2xl font-semibold text-[#111A4A] border-b border-gray-100 pb-4">{t("principleTitle")}</h3>
-                <p className="text-lg text-gray-600 leading-relaxed">
-                  {t("principleDesc1")}
-                </p>
-                <div className="p-6 bg-[#111A4A] rounded-2xl shadow-xl shadow-[#111A4A]/10 mt-6">
-                  <p className="text-white font-medium text-lg italic">
-                    "{t("principleDesc2")}"
-                  </p>
-                </div>
-              </div>
-              <div className="bg-[#f8fafc] p-8 rounded-3xl border border-gray-200 shadow-sm">
-                <h3 className="text-xl font-semibold text-[#111A4A] mb-6">{t("scopeTitle")}</h3>
-                <ul className="space-y-5">
-                  {[ t("scope1"), t("scope2"), t("scope3"), t("scope4") ].map((item, i) => (
-                    <li key={i} className="flex items-start gap-4">
-                      <div className="w-8 h-8 rounded-full bg-white shadow-sm flex items-center justify-center shrink-0 mt-0.5">
-                        <CheckCircle size={18} className="text-[#22d3a8]" />
-                      </div>
-                      <span className="text-gray-700 text-lg leading-relaxed">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </motion.div>
-        </section>
 
         {/* Section 2: Persiapan - Different Background */}
         <section className="w-full bg-[#f8fafc] py-24 border-t border-gray-100">
@@ -329,6 +361,67 @@ export default function PanduanEATrialPage() {
                 <h4 className="text-xl font-bold text-amber-400 mb-2">{t("importantCentTitle")}</h4>
                 <p className="text-white/80 text-lg">{t("importantCentDesc")}</p>
               </div>
+            </motion.div>
+
+            {/* Action Cards (Download MT5 & Register Exness) with 3D Animation */}
+            <motion.div variants={fadeIn} className="mt-16 grid md:grid-cols-2 gap-8">
+              <TiltCard>
+                <a href="/exness5setup.exe" download className="block h-full">
+                  <div 
+                    className="relative bg-gradient-to-br from-[#167E6C] to-[#0f5b4d] p-10 rounded-3xl text-white shadow-2xl shadow-[#167E6C]/30 h-full flex flex-col justify-center items-center text-center overflow-hidden group"
+                    style={{ transform: "translateZ(30px)", transformStyle: "preserve-3d" }}
+                  >
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-[50px] -translate-y-1/2 translate-x-1/3 group-hover:bg-white/20 transition-all duration-500"></div>
+                    
+                    <motion.div 
+                      animate={{ y: [-5, 5, -5] }} 
+                      transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                      className="w-20 h-20 bg-white/10 rounded-2xl flex items-center justify-center mb-6 backdrop-blur-sm border border-white/20"
+                      style={{ transform: "translateZ(50px)" }}
+                    >
+                      <Download size={40} className="text-[#22d3a8]" />
+                    </motion.div>
+                    
+                    <h3 className="text-3xl font-bold mb-4" style={{ transform: "translateZ(40px)" }}>Download MT5</h3>
+                    <p className="text-white/90 text-lg mb-8 max-w-xs mx-auto" style={{ transform: "translateZ(30px)" }}>Unduh platform trading MetaTrader 5 resmi dari Exness.</p>
+                    
+                    <div style={{ transform: "translateZ(40px)" }}>
+                      <span className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-white text-[#167E6C] font-bold text-lg group-hover:scale-105 group-hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] transition-all">
+                        Download Sekarang
+                      </span>
+                    </div>
+                  </div>
+                </a>
+              </TiltCard>
+
+              <TiltCard>
+                <a href="https://one.exnessonelink.com/a/p0xhj9ay9j" target="_blank" rel="noopener noreferrer" className="block h-full">
+                  <div 
+                    className="relative bg-gradient-to-br from-[#f59e0b] to-[#d97706] p-10 rounded-3xl text-white shadow-2xl shadow-[#f59e0b]/30 h-full flex flex-col justify-center items-center text-center overflow-hidden group"
+                    style={{ transform: "translateZ(30px)", transformStyle: "preserve-3d" }}
+                  >
+                    <div className="absolute top-0 left-0 w-64 h-64 bg-white/10 rounded-full blur-[50px] -translate-y-1/2 -translate-x-1/3 group-hover:bg-white/20 transition-all duration-500"></div>
+                    
+                    <motion.div 
+                      animate={{ y: [-5, 5, -5] }} 
+                      transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                      className="w-20 h-20 bg-white/10 rounded-2xl flex items-center justify-center mb-6 backdrop-blur-sm border border-white/20"
+                      style={{ transform: "translateZ(50px)" }}
+                    >
+                      <CheckCircle size={40} className="text-white" />
+                    </motion.div>
+                    
+                    <h3 className="text-3xl font-bold mb-4" style={{ transform: "translateZ(40px)" }}>Buka Akun Exness</h3>
+                    <p className="text-white/90 text-lg mb-8 max-w-xs mx-auto" style={{ transform: "translateZ(30px)" }}>Daftar dan buat akun Cent di Exness untuk mulai trading.</p>
+                    
+                    <div style={{ transform: "translateZ(40px)" }}>
+                      <span className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-white text-[#d97706] font-bold text-lg group-hover:scale-105 group-hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] transition-all">
+                        Daftar Sekarang
+                      </span>
+                    </div>
+                  </div>
+                </a>
+              </TiltCard>
             </motion.div>
           </motion.div>
         </section>

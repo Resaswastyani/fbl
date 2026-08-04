@@ -434,7 +434,7 @@ export const Header = () => {
                 alt="Forex Logo"
                 animate={{ scale: isScrolled ? 0.77 : 1 }}
                 transition={{ duration: 0.25 }}
-                className="h-auto object-contain transition-all dark:-my-4 dark:-mx-3"
+                className="h-auto object-contain transition-all dark:-my-[6px] dark:-mx-1"
                 style={{ width: isScrolled ? "110px" : "145px" }}
               />
             </div>

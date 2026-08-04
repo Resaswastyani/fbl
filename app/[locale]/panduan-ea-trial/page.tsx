@@ -283,7 +283,7 @@ export default function PanduanEATrialPage() {
                 </div>
                 <div>
                   <h2 className="text-4xl md:text-5xl font-bold text-[#111A4A] mb-2">{t("section2Title")}</h2>
-                  <p className="text-slate-500 text-lg">Langkah pra-instalasi untuk memastikan kelancaran trading.</p>
+                  <p className="text-slate-500 text-lg">{t("section2Desc")}</p>
                 </div>
               </div>
             </motion.div>
@@ -298,8 +298,8 @@ export default function PanduanEATrialPage() {
                        <Download size={28} className="text-[#22d3a8]" />
                     </div>
                     <div>
-                      <h3 className="text-2xl font-bold mb-2">Download MT5</h3>
-                      <p className="text-white/80 text-sm md:text-base">Unduh platform trading MetaTrader 5 resmi dari Exness untuk PC Anda.</p>
+                      <h3 className="text-2xl font-bold mb-2">{t("downloadMT5")}</h3>
+                      <p className="text-white/80 text-sm md:text-base">{t("downloadMT5Desc")}</p>
                     </div>
                   </div>
                 </a>
@@ -313,8 +313,8 @@ export default function PanduanEATrialPage() {
                        <CheckCircle size={28} className="text-white" />
                     </div>
                     <div>
-                      <h3 className="text-2xl font-bold mb-2">Buka Akun Exness</h3>
-                      <p className="text-white/80 text-sm md:text-base">Daftar dan buat akun Cent di Exness untuk persyaratan minimum margin yang aman.</p>
+                      <h3 className="text-2xl font-bold mb-2">{t("openExnessAccount")}</h3>
+                      <p className="text-white/80 text-sm md:text-base">{t("openExnessAccountDesc")}</p>
                     </div>
                   </div>
                 </a>
@@ -370,7 +370,7 @@ export default function PanduanEATrialPage() {
                 <Cpu size={32} />
               </div>
               <h2 className="text-4xl md:text-5xl font-bold text-[#111A4A]">{t("section3Title")}</h2>
-              <p className="text-slate-500 max-w-2xl text-lg">Ikuti langkah-langkah berikut untuk mengaktifkan EA di MetaTrader 5 Anda.</p>
+              <p className="text-slate-500 max-w-2xl text-lg">{t("section3Desc")}</p>
             </div>
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">

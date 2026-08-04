@@ -363,7 +363,7 @@ export default function WhatsAppFloat() {
             transition={{ duration: 0.3 }}
             className="fixed bottom-0 right-0 sm:bottom-6 sm:right-6 z-50 w-full sm:w-[420px] max-w-full sm:max-w-[calc(100vw-2rem)] h-[100dvh] sm:h-[600px]"
           >
-            <div className="bg-white sm:rounded-2xl shadow-2xl overflow-hidden border-0 sm:border border-gray-100 h-full flex flex-col">
+            <div className="bg-white dark:bg-[#0a0a1a] sm:rounded-2xl shadow-2xl dark:shadow-[0_8px_30px_rgb(0,0,0,0.5)] overflow-hidden border-0 sm:border border-gray-100 dark:border-white/10 h-full flex flex-col">
               <div className="bg-gradient-to-r from-[#156d95] to-[#111A4A] p-4 relative flex-shrink-0">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
@@ -461,7 +461,7 @@ export default function WhatsAppFloat() {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -20 }}
-                    className="absolute inset-0 bg-white z-20 flex flex-col"
+                    className="absolute inset-0 bg-white dark:bg-[#0a0a1a] z-20 flex flex-col"
                   >
                     <div className="bg-gradient-to-r from-[#156d95] to-[#111A4A] p-4 flex items-center gap-3">
                       <button
@@ -472,7 +472,7 @@ export default function WhatsAppFloat() {
                       </button>
                       <h3 className="text-white font-semibold">{t("history")}</h3>
                     </div>
-                    <div className="flex-1 overflow-y-auto p-4 bg-gray-50">
+                    <div className="flex-1 overflow-y-auto p-4 bg-gray-50 dark:bg-transparent">
                       {messages.length === 0 ? (
                         <p className="text-center text-gray-400 text-sm py-8">
                           Belum ada riwayat chat
@@ -484,13 +484,13 @@ export default function WhatsAppFloat() {
                             .map((msg, idx) => (
                               <div
                                 key={msg.id}
-                                className="bg-white p-3 rounded-lg shadow-sm border border-gray-100"
+                                className="bg-white dark:bg-white/5 p-3 rounded-lg shadow-sm border border-gray-100 dark:border-white/10"
                               >
                                 <p className="text-xs text-gray-400 mb-1">
                                   {formatDate(msg.timestamp)}{" "}
                                   {formatTime(msg.timestamp)}
                                 </p>
-                                <p className="text-sm text-gray-800">
+                                <p className="text-sm text-gray-800 dark:text-gray-200">
                                   {msg.text}
                                 </p>
                               </div>
@@ -499,7 +499,7 @@ export default function WhatsAppFloat() {
                       )}
                     </div>
                     {messages.length > 0 && (
-                      <div className="p-3 border-t border-gray-100 bg-white">
+                      <div className="p-3 border-t border-gray-100 dark:border-white/10 bg-white dark:bg-[#0a0a1a]">
                         <button
                           onClick={clearHistory}
                           className="w-full flex items-center justify-center gap-2 text-red-500 hover:bg-red-50 py-2 rounded-lg transition text-sm"
@@ -515,10 +515,10 @@ export default function WhatsAppFloat() {
 
               <div
                 ref={chatBodyRef}
-                className="bg-[#E5DDD5] p-3 flex-1 overflow-y-auto min-h-0"
+                className="bg-[#E5DDD5] dark:bg-[#050508] p-3 flex-1 overflow-y-auto min-h-0"
               >
                 <div className="text-center mb-3">
-                  <span className="bg-[#99BEBA]/30 text-[#54656F] text-xs px-3 py-1 rounded-full">
+                  <span className="bg-[#99BEBA]/30 dark:bg-white/10 text-[#54656F] dark:text-gray-400 text-xs px-3 py-1 rounded-full">
                     {t("today")} {formatDate(new Date())}
                   </span>
                 </div>
@@ -539,7 +539,7 @@ export default function WhatsAppFloat() {
 
                     {msg.type === "quick_reply" ? (
                       <div className="w-full">
-                        <p className="text-xs text-gray-500 mb-2 ml-9">
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mb-2 ml-9">
                           {msg.text}
                         </p>
                         <div className="flex flex-wrap gap-2 ml-9">
@@ -550,7 +550,7 @@ export default function WhatsAppFloat() {
                               animate={{ opacity: 1, scale: 1 }}
                               transition={{ delay: idx * 0.1 }}
                               onClick={() => handleQuickReply(reply)}
-                              className="bg-white hover:bg-[#DCF8C6] text-gray-800 text-xs py-2 px-3 rounded-full shadow-sm border border-gray-200 transition-colors text-left"
+                              className="bg-white dark:bg-[#1a1a2e] hover:bg-[#DCF8C6] dark:hover:bg-[#2a2a4e] text-gray-800 dark:text-gray-200 text-xs py-2 px-3 rounded-full shadow-sm border border-gray-200 dark:border-white/10 transition-colors text-left"
                             >
                               {reply}
                             </motion.button>
@@ -561,15 +561,15 @@ export default function WhatsAppFloat() {
                       <div
                         className={`max-w-[85%] rounded-2xl p-3 shadow-sm ${
                           msg.sender === "user"
-                            ? "bg-[#DCF8C6] rounded-tr-sm"
-                            : "bg-white rounded-tl-sm"
+                            ? "bg-[#DCF8C6] dark:bg-[#054640] rounded-tr-sm"
+                            : "bg-white dark:bg-[#202c33] rounded-tl-sm"
                         }`}
                       >
-                        <p className="text-gray-800 text-sm leading-relaxed whitespace-pre-line">
+                        <p className="text-gray-800 dark:text-gray-100 text-sm leading-relaxed whitespace-pre-line">
                           {msg.text}
                         </p>
                         <div
-                          className={`flex items-center gap-1 mt-1 text-[#99BEBA] text-xs ${
+                          className={`flex items-center gap-1 mt-1 text-[#99BEBA] dark:text-gray-400 text-xs ${
                             msg.sender === "user" ? "justify-end" : ""
                           }`}
                         >
@@ -582,8 +582,8 @@ export default function WhatsAppFloat() {
                     )}
 
                     {msg.sender === "user" && (
-                      <div className="w-7 h-7 bg-gray-300 rounded-full flex items-center justify-center flex-shrink-0">
-                        <User size={14} className="text-gray-600" />
+                      <div className="w-7 h-7 bg-gray-300 dark:bg-gray-700 rounded-full flex items-center justify-center flex-shrink-0">
+                        <User size={14} className="text-gray-600 dark:text-gray-300" />
                       </div>
                     )}
                   </motion.div>
@@ -598,7 +598,7 @@ export default function WhatsAppFloat() {
                     <div className="w-7 h-7 bg-gradient-to-br from-[#156d95] to-[#111A4A] rounded-full flex items-center justify-center flex-shrink-0">
                       <Bot size={14} className="text-white" />
                     </div>
-                    <div className="bg-white rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm">
+                    <div className="bg-white dark:bg-[#202c33] rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm">
                       <div className="flex gap-1">
                         <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></span>
                         <span
@@ -617,7 +617,7 @@ export default function WhatsAppFloat() {
                 <div ref={messagesEndRef} />
               </div>
 
-              <div className="p-3 bg-white border-t border-gray-100 flex-shrink-0">
+              <div className="p-3 bg-white dark:bg-[#0a0a1a] border-t border-gray-100 dark:border-white/10 flex-shrink-0">
                 <div className="flex gap-2">
                   <input
                     ref={inputRef}
@@ -626,7 +626,7 @@ export default function WhatsAppFloat() {
                     onChange={(e) => setInputValue(e.target.value)}
                     onKeyPress={handleKeyPress}
                     placeholder={t("typeMessage")}
-                    className="flex-1 bg-gray-100 text-gray-800 text-sm px-4 py-2.5 rounded-full focus:outline-none focus:ring-2 focus:ring-[#156d95]/50 placeholder-gray-500"
+                    className="flex-1 bg-gray-100 dark:bg-[#1a1a2e] text-gray-800 dark:text-gray-100 text-sm px-4 py-2.5 rounded-full focus:outline-none focus:ring-2 focus:ring-[#156d95]/50 placeholder-gray-500 dark:placeholder-gray-400"
                   />
                   <motion.button
                     onClick={handleSendMessage}
@@ -640,7 +640,7 @@ export default function WhatsAppFloat() {
                 </div>
               </div>
 
-              <div className="p-3 bg-gray-50 border-t border-gray-100 flex-shrink-0">
+              <div className="p-3 bg-gray-50 dark:bg-transparent border-t border-gray-100 dark:border-white/10 flex-shrink-0">
                 <motion.button
                   onClick={handleStartChat}
                   whileHover={{ scale: 1.02 }}

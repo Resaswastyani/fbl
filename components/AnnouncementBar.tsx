@@ -30,18 +30,18 @@ export default function AnnouncementBar() {
     <div
       className="
         fixed top-0 left-0 w-full z-9999
-        bg-[#EFE9FF] text-[#111A4A]
+        bg-[#EFE9FF] dark:bg-[#0a0a1a] text-[#111A4A] dark:text-gray-200
         py-2 px-4 text-sm
         flex items-center justify-center gap-4
-        shadow-sm
-        animate-fade-in
+        shadow-sm dark:shadow-[0_1px_0_rgba(255,255,255,0.08)]
+        animate-fade-in transition-colors duration-500
       "
     >
       <span className="font-medium">{t("newBatch")}</span>
 
       <a
         href="/signup"
-        className="underline font-medium text-[#111A4A] hover:opacity-70"
+        className="underline font-medium text-[#111A4A] dark:text-[#22d3a8] hover:opacity-70 transition-opacity"
       >
         {t("registerNow")}
       </a>
@@ -50,11 +50,12 @@ export default function AnnouncementBar() {
         onClick={handleClose}
         className="
           absolute right-3 top-1/2 -translate-y-1/2
-          text-[#111A4A] hover:opacity-70 transition
+          text-[#111A4A] dark:text-gray-400 hover:opacity-70 transition
         "
       >
         <X size={16} />
       </button>
     </div>
+
   );
 }

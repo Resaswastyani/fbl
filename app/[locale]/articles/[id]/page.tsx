@@ -106,7 +106,7 @@ export default function ArticleDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
+      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-[#050508] transition-colors duration-500">
         <Loader className="animate-spin h-8 w-8 text-[#156d95]" />
       </div>
     );
@@ -114,14 +114,14 @@ export default function ArticleDetailPage() {
 
   if (!article) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
+      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-[#050508] transition-colors duration-500">
         <div className="text-center">
-          <h1 className="text-2xl font-medium text-[#111A4A] mb-4">
+          <h1 className="text-2xl font-medium text-[#111A4A] dark:text-white mb-4">
             Artikel tidak ditemukan
           </h1>
           <Link
             href="/articles"
-            className="inline-flex items-center gap-2 text-[#156d95] hover:underline"
+            className="inline-flex items-center gap-2 text-[#156d95] dark:text-[#22d3a8] hover:underline"
           >
             <ArrowLeft size={16} />
             Kembali ke Artikel
@@ -134,9 +134,9 @@ export default function ArticleDetailPage() {
   return (
     <>
       {/* <Header /> */}
-      <div className="min-h-screen bg-white">
+      <div className="min-h-screen bg-white dark:bg-[#050508] transition-colors duration-500">
         {/* HERO SECTION WITH THUMBNAIL - FULLWIDTH */}
-        <section className="w-full pt-24 md:pt-32 pb-12 bg-white">
+        <section className="w-full pt-24 md:pt-32 pb-12 bg-white dark:bg-[#050508]">
           <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-16">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -146,7 +146,7 @@ export default function ArticleDetailPage() {
               {/* Back Link */}
               <Link
                 href="/articles"
-                className="inline-flex items-center gap-1 text-[#6e6e6e] mb-6 hover:text-[#202020] transition-colors"
+                className="inline-flex items-center gap-1 text-[#6e6e6e] dark:text-gray-400 mb-6 hover:text-[#202020] dark:hover:text-white transition-colors"
               >
                 <span className="text-xs uppercase tracking-tight font-mono flex items-center gap-1">
                   <ArrowLeft size={14} strokeWidth={1.5} />
@@ -156,7 +156,7 @@ export default function ArticleDetailPage() {
 
               {/* Title - Full width */}
               <h1
-                className="text-[32px] md:text-[48px] lg:text-[56px] font-medium leading-tight tracking-tight text-[#111A4A] mb-6 max-w-5xl"
+                className="text-[32px] md:text-[48px] lg:text-[56px] font-medium leading-tight tracking-tight text-[#111A4A] dark:text-white mb-6 max-w-5xl"
                 style={{
                   fontFamily: "var(--font-figtree), Figtree",
                 }}
@@ -165,7 +165,7 @@ export default function ArticleDetailPage() {
               </h1>
 
               {/* Meta Info - Full width layout */}
-              <div className="flex flex-wrap items-center gap-6 text-sm text-[#6e6e6e] mb-8 pb-8 border-b border-gray-200">
+              <div className="flex flex-wrap items-center gap-6 text-sm text-[#6e6e6e] dark:text-gray-400 mb-8 pb-8 border-b border-gray-200 dark:border-white/10">
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-8 rounded-full bg-[#156d95] text-white flex items-center justify-center text-sm font-bold">
                     {(article.author.name || article.author.email)
@@ -173,7 +173,7 @@ export default function ArticleDetailPage() {
                       .toUpperCase()}
                   </div>
                   <div>
-                    <p className="font-medium text-[#111A4A]">
+                    <p className="font-medium text-[#111A4A] dark:text-white">
                       {article.author.name || article.author.email}
                     </p>
                     <p className="text-xs">Penulis</p>
@@ -193,7 +193,7 @@ export default function ArticleDetailPage() {
 
                 <button
                   onClick={handleShare}
-                  className="ml-auto flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-200 hover:border-[#156d95] hover:text-[#156d95] transition-colors"
+                  className="ml-auto flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-200 dark:border-white/20 hover:border-[#156d95] dark:hover:border-[#22d3a8] hover:text-[#156d95] dark:hover:text-[#22d3a8] transition-colors"
                 >
                   <Share2 size={14} />
                   Bagikan
@@ -205,7 +205,7 @@ export default function ArticleDetailPage() {
 
         {/* THUMBNAIL - FULLWIDTH EDGE TO EDGE */}
         {article.thumbnail && (
-          <section className="w-full pb-12 bg-white">
+          <section className="w-full pb-12 bg-white dark:bg-[#050508]">
             <div className="w-full px-4 md:px-8 lg:px-12">
               <motion.div
                 initial={{ opacity: 0, scale: 0.98 }}
@@ -224,7 +224,7 @@ export default function ArticleDetailPage() {
         )}
 
         {/* ARTICLE CONTENT - FULLWIDTH */}
-        <section className="w-full pb-20 bg-white">
+        <section className="w-full pb-20 bg-white dark:bg-[#050508]">
           <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-16">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -235,17 +235,17 @@ export default function ArticleDetailPage() {
             >
               {/* Custom prose styling to match theme - Full width */}
               <div
-                className="article-content text-[#111A4A] leading-relaxed w-full"
+                className="article-content text-[#111A4A] dark:text-gray-200 leading-relaxed w-full"
                 dangerouslySetInnerHTML={{ __html: locale === 'en' && article.content_en ? article.content_en : article.content }}
               />
             </motion.div>
 
             {/* Tags or Categories (if available) */}
-            <div className="mt-12 pt-8 border-t border-gray-200">
+            <div className="mt-12 pt-8 border-t border-gray-200 dark:border-white/10">
               <p className="text-sm text-[#6e6e6e] mb-3">
                 Dipublikasikan pada:
               </p>
-              <p className="text-[#111A4A] font-medium">
+              <p className="text-[#111A4A] dark:text-white font-medium">
                 {formatDate(article.createdAt)}
               </p>
               {article.updatedAt !== article.createdAt && (
@@ -259,7 +259,7 @@ export default function ArticleDetailPage() {
 
         {/* RELATED ARTICLES - FULLWIDTH */}
         {relatedArticles.length > 0 && (
-          <section className="w-full py-20 bg-gray-50">
+          <section className="w-full py-20 bg-gray-50 dark:bg-[#0a0a12] transition-colors duration-500">
             <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-16">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -268,7 +268,7 @@ export default function ArticleDetailPage() {
                 transition={{ duration: 0.6 }}
               >
                 <h2
-                  className="text-2xl font-medium text-[#111A4A] mb-8"
+                  className="text-2xl font-medium text-[#111A4A] dark:text-white mb-8"
                   style={{ fontFamily: "var(--font-figtree), Figtree" }}
                 >
                   Artikel Terkait
@@ -282,7 +282,7 @@ export default function ArticleDetailPage() {
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
                       transition={{ duration: 0.5, delay: index * 0.1 }}
-                      className="group cursor-pointer bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+                      className="group cursor-pointer bg-white dark:bg-[#0a0a12] rounded-lg overflow-hidden shadow-sm hover:shadow-md dark:hover:shadow-white/5 border dark:border-white/10 transition-shadow"
                       onClick={() => router.push(`/articles/${related.id}`)}
                     >
                       {/* Thumbnail */}
@@ -310,7 +310,7 @@ export default function ArticleDetailPage() {
                           <span>{related.viewCount} views</span>
                         </div>
                         <h3
-                          className="text-lg font-medium text-[#111A4A] leading-tight group-hover:text-[#156d95] transition-colors line-clamp-2"
+                          className="text-lg font-medium text-[#111A4A] dark:text-white leading-tight group-hover:text-[#156d95] dark:group-hover:text-[#22d3a8] transition-colors line-clamp-2"
                           style={{ fontFamily: "var(--font-figtree), Figtree" }}
                         >
                           {locale === 'en' && related.title_en ? related.title_en : related.title}
@@ -325,7 +325,7 @@ export default function ArticleDetailPage() {
         )}
 
         {/* CTA SECTION - FULLWIDTH */}
-        <section className="w-full py-20 bg-white">
+        <section className="w-full py-20 bg-white dark:bg-[#050508]">
           <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-16 text-center">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -334,13 +334,13 @@ export default function ArticleDetailPage() {
               transition={{ duration: 0.6 }}
             >
               <h2
-                className="text-[32px] md:text-[40px] font-medium leading-tight text-[#111A4A] mb-6"
+                className="text-[32px] md:text-[40px] font-medium leading-tight text-[#111A4A] dark:text-white mb-6"
                 style={{ fontFamily: "var(--font-figtree), Figtree" }}
               >
                 Siap Memulai Trading Journey Anda?
               </h2>
               <p
-                className="text-lg text-[#6e6e6e] mb-8 max-w-2xl mx-auto"
+                className="text-lg text-[#6e6e6e] dark:text-gray-400 mb-8 max-w-2xl mx-auto"
                 style={{ fontFamily: "var(--font-figtree), Figtree" }}
               >
                 Bergabunglah dengan ribuan trader Indonesia yang telah belajar
@@ -356,7 +356,7 @@ export default function ArticleDetailPage() {
                 </button>
                 <Link
                   href="/articles"
-                  className="inline-flex items-center justify-center border-2 border-[#111A4A] text-[#111A4A] rounded-lg px-8 py-4 text-base font-medium transition-all hover:bg-[#111A4A] hover:text-white"
+                  className="inline-flex items-center justify-center border-2 border-[#111A4A] dark:border-white/30 text-[#111A4A] dark:text-white rounded-lg px-8 py-4 text-base font-medium transition-all hover:bg-[#111A4A] hover:text-white dark:hover:bg-white/10"
                 >
                   Lihat Semua Artikel
                 </Link>

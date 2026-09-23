@@ -19,6 +19,7 @@ import {
 import CourseSection from "@/components/CourseSection";
 import { useCart } from "@/context/cart-context";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 interface EnrolledCourse {
   id: string;
@@ -175,10 +176,10 @@ export default function StudentDashboardPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-slate-900">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#156d95] mx-auto"></div>
-          <p className="mt-4 text-gray-600">{t("loadingDashboard")}</p>
+          <p className="mt-4 text-gray-600 dark:text-slate-300">{t("loadingDashboard")}</p>
         </div>
       </div>
     );
@@ -189,10 +190,10 @@ export default function StudentDashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 flex">
       <button
         onClick={toggleSidebar}
-        className="fixed top-4 left-4 z-50 md:hidden bg-white p-2 rounded-lg shadow-md"
+        className="fixed top-4 left-4 z-50 md:hidden bg-white dark:bg-slate-800 p-2 rounded-lg shadow-md"
         aria-label={isSidebarOpen ? "Close menu" : "Open menu"}
       >
         {isSidebarOpen ? (
@@ -204,13 +205,13 @@ export default function StudentDashboardPage() {
 
       <aside
         className={`
-          fixed md:sticky top-0 left-0 z-40 w-64 h-screen bg-white border-r shadow-lg
+          fixed md:sticky top-0 left-0 z-40 w-64 h-screen bg-white dark:bg-slate-900 border-r dark:border-slate-700 shadow-lg
           transform transition-transform duration-300 ease-in-out
           ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}
           md:translate-x-0 flex flex-col
         `}
       >
-        <div className="p-6 border-b shrink-0 flex justify-center">
+        <div className="p-6 border-b dark:border-slate-700 shrink-0 flex justify-center">
           <Image
             src="/logo-fbl.png"
             alt="EduTrade Logo"
@@ -297,7 +298,7 @@ export default function StudentDashboardPage() {
           </ul>
         </nav>
 
-        <div className="p-4 border-t shrink-0">
+        <div className="p-4 border-t dark:border-slate-700 shrink-0">
           <div className="flex items-center justify-between p-3 bg-[#156d95]/5 rounded-lg">
             <div className="flex items-center min-w-0">
               <div className="w-10 h-10 rounded-full bg-[#156d95] text-white flex items-center justify-center flex-shrink-0">
@@ -306,8 +307,8 @@ export default function StudentDashboardPage() {
                 </span>
               </div>
               <div className="ml-3 min-w-0">
-                <p className="font-medium text-sm truncate">{user.name}</p>
-                <p className="text-xs text-gray-500 truncate">{user.email}</p>
+                <p className="font-medium text-sm truncate dark:text-slate-100">{user.name}</p>
+                <p className="text-xs text-gray-500 dark:text-slate-400 truncate">{user.email}</p>
               </div>
             </div>
             <Button
@@ -324,15 +325,16 @@ export default function StudentDashboardPage() {
       </aside>
 
       <main className="flex-1 min-w-0 relative">
-        <div className="absolute top-4 right-4 z-10">
+        <div className="absolute top-4 right-4 z-10 flex items-center gap-2">
+          <ThemeToggle />
           <LanguageSwitcher />
         </div>
         <div className="p-4 md:p-8 max-w-7xl mx-auto">
           <div className="mb-8 mt-12 md:mt-0">
-            <h1 className="text-3xl font-bold text-gray-900">
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-slate-100">
               {t("hello", { name: user.name })}
             </h1>
-            <p className="text-gray-600 mt-2">
+            <p className="text-gray-600 dark:text-slate-300 mt-2">
               {t("welcomeMessage")}
             </p>
           </div>
@@ -342,7 +344,7 @@ export default function StudentDashboardPage() {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-500">{t("myCoursesLabel")}</p>
+                    <p className="text-sm text-gray-500 dark:text-slate-400">{t("myCoursesLabel")}</p>
                     <p className="text-2xl font-bold mt-1">
                       {enrolledCourses.length}
                     </p>
@@ -355,7 +357,7 @@ export default function StudentDashboardPage() {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-500">{t("inCartLabel")}</p>
+                    <p className="text-sm text-gray-500 dark:text-slate-400">{t("inCartLabel")}</p>
                     <p className="text-2xl font-bold mt-1">
                       {cartItems.length}
                     </p>
@@ -383,7 +385,7 @@ export default function StudentDashboardPage() {
 
           <section className="mb-12">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-              <h2 className="text-2xl font-bold text-gray-900">{t("myCoursesLabel")}</h2>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-slate-100">{t("myCoursesLabel")}</h2>
               <Button
                 variant="outline"
                 onClick={() => router.push("/student/courses")}
@@ -412,18 +414,18 @@ export default function StudentDashboardPage() {
                       <h3 className="font-bold text-lg mb-2 line-clamp-1">
                         {course.title}
                       </h3>
-                      <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                      <p className="text-gray-600 dark:text-slate-300 text-sm mb-4 line-clamp-2">
                         {course.description || t("noDescription")}
                       </p>
 
                       <div className="mb-4">
                         <div className="flex justify-between text-sm mb-1">
-                          <span className="text-gray-500">{t("progress")}</span>
+                          <span className="text-gray-500 dark:text-slate-400">{t("progress")}</span>
                           <span className="font-medium text-[#156d95]">
                             {course.progress}%
                           </span>
                         </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                        <div className="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2 overflow-hidden">
                           <div
                             className="bg-[#156d95] h-2 rounded-full transition-all duration-500"
                             style={{ width: `${course.progress}%` }}
@@ -431,7 +433,7 @@ export default function StudentDashboardPage() {
                         </div>
                       </div>
 
-                      <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
+                      <div className="flex items-center justify-between text-sm text-gray-500 dark:text-slate-400 mb-4">
                         <div className="flex items-center">
                           <CheckCircle className="h-4 w-4 text-green-500 mr-1" />
                           <span>
@@ -458,12 +460,12 @@ export default function StudentDashboardPage() {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-12 bg-white rounded-lg border-2 border-dashed border-gray-200">
+              <div className="text-center py-12 bg-white dark:bg-slate-800 rounded-lg border-2 border-dashed border-gray-200 dark:border-slate-700">
                 <div className="text-4xl mb-4">🎓</div>
-                <p className="text-gray-500 mb-4 text-lg">
+                <p className="text-gray-500 dark:text-slate-400 mb-4 text-lg">
                   {t("noCoursesYet")}
                 </p>
-                <p className="text-gray-400 mb-6">
+                <p className="text-gray-400 dark:text-slate-500 mb-6">
                   {t("startLearningJourney")}
                 </p>
                 <Button
@@ -488,7 +490,7 @@ export default function StudentDashboardPage() {
 
           <section className="mb-12">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-              <h2 className="text-2xl font-bold text-gray-900">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-slate-100">
                 {t("shoppingCart")}
               </h2>
               {cartItems.length > 0 && (
@@ -513,10 +515,10 @@ export default function StudentDashboardPage() {
                           <h3 className="font-bold text-lg">{item.name}</h3>
                           {item.isBundle && item.courseNames && (
                             <div className="mt-2">
-                              <p className="text-sm text-gray-600 font-medium mb-1">
+                              <p className="text-sm text-gray-600 dark:text-slate-300 font-medium mb-1">
                                 {t("includesCourses", { count: item.courseNames.length })}
                               </p>
-                              <ul className="text-xs text-gray-500 space-y-1 max-h-24 overflow-y-auto pr-2">
+                              <ul className="text-xs text-gray-500 dark:text-slate-400 space-y-1 max-h-24 overflow-y-auto pr-2">
                                 {item.courseNames.map(
                                   (name: string, index: number) => (
                                     <li
@@ -533,7 +535,7 @@ export default function StudentDashboardPage() {
                               </ul>
                             </div>
                           )}
-                          <p className="text-gray-600 mt-1 text-sm">
+                          <p className="text-gray-600 dark:text-slate-300 mt-1 text-sm">
                             {item.isBundle ? t("bundlePackage") : t("singleCourse")}
                           </p>
                         </div>
@@ -547,7 +549,7 @@ export default function StudentDashboardPage() {
                   </Card>
                 ))}
                 {cartItems.length > 3 && (
-                  <p className="text-center text-gray-500 text-sm">
+                  <p className="text-center text-gray-500 dark:text-slate-400 text-sm">
                     {t("andMoreItems", { count: cartItems.length - 3 })}
                   </p>
                 )}
@@ -560,12 +562,12 @@ export default function StudentDashboardPage() {
                 </Button>
               </div>
             ) : (
-              <div className="text-center py-12 bg-white rounded-lg border-2 border-dashed border-gray-200">
+              <div className="text-center py-12 bg-white dark:bg-slate-800 rounded-lg border-2 border-dashed border-gray-200 dark:border-slate-700">
                 <div className="text-4xl mb-4">🛒</div>
-                <p className="text-gray-500 mb-4 text-lg">
+                <p className="text-gray-500 dark:text-slate-400 mb-4 text-lg">
                   {t("emptyCart")}
                 </p>
-                <p className="text-gray-400 mb-6">
+                <p className="text-gray-400 dark:text-slate-500 mb-6">
                   {t("findCourses")}
                 </p>
                 <Button
@@ -581,7 +583,7 @@ export default function StudentDashboardPage() {
 
           <section>
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-              <h2 className="text-2xl font-bold text-gray-900">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-slate-100">
                 {t("popularCourses")}
               </h2>
               <Button

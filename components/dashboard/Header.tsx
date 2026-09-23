@@ -3,6 +3,7 @@
 import { Menu, Bell, Search, ShoppingCart } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useCart } from "@/context/cart-context";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 interface HeaderProps {
   openMobileSidebar: () => void;
@@ -15,7 +16,7 @@ export default function Header({ openMobileSidebar }: HeaderProps) {
   return (
     <header
       className="
-        w-full h-16 bg-white border-b 
+        w-full h-16 bg-white dark:bg-slate-900 border-b dark:border-slate-700
         fixed top-0 left-0 right-0 z-30
         flex items-center
         px-4
@@ -26,9 +27,9 @@ export default function Header({ openMobileSidebar }: HeaderProps) {
       <button
         onClick={openMobileSidebar}
         className="
-          md:hidden 
-          w-10 h-10 flex items-center justify-center 
-          rounded-lg hover:bg-gray-100
+          md:hidden
+          w-10 h-10 flex items-center justify-center
+          rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 dark:text-slate-200
         "
       >
         <Menu size={22} />
@@ -41,18 +42,23 @@ export default function Header({ openMobileSidebar }: HeaderProps) {
           gap-2 w-80 ml-6   /* ⭐️ ML-6: geser search sedikit ke kanan */
         "
       >
-        <Search size={16} className="text-gray-500" />
-        <Input placeholder="Cari materi, kelas, atau analisa..." />
+        <Search size={16} className="text-gray-500 dark:text-slate-400" />
+        <Input
+          placeholder="Cari materi, kelas, atau analisa..."
+          className="dark:bg-slate-800 dark:border-slate-700 dark:text-slate-100 dark:placeholder:text-slate-400"
+        />
       </div>
 
       {/* RIGHT ICONS */}
       <div className="flex items-center gap-4 ml-auto">
+        <ThemeToggle />
+
         {/* CART ICON */}
         <button
           onClick={toggleCart}
           className="
             relative w-10 h-10 flex items-center justify-center
-            rounded-full hover:bg-gray-100
+            rounded-full hover:bg-gray-100 dark:text-slate-200 dark:hover:bg-slate-800
           "
         >
           <ShoppingCart size={22} />
@@ -68,7 +74,7 @@ export default function Header({ openMobileSidebar }: HeaderProps) {
         <button
           className="
             relative w-10 h-10 flex items-center justify-center
-            rounded-full hover:bg-gray-100
+            rounded-full hover:bg-gray-100 dark:text-slate-200 dark:hover:bg-slate-800
           "
         >
           <Bell size={22} />

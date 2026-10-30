@@ -319,6 +319,7 @@ import { Header } from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import YouTubeEmbed from "@/components/YouTubeEmbed";
 import {
   Calculator,
   ShieldCheck,
@@ -565,12 +566,7 @@ export default function PositionSizeCalculatorPage() {
               </h2>
 
               <div className="relative aspect-video rounded-2xl overflow-hidden shadow-lg">
-                <iframe
-                  className="w-full h-full"
-                  src="https://www.youtube.com/embed/27LMFv-uaag"
-                  title={t("usageSteps")}
-                  allowFullScreen
-                />
+                <YouTubeEmbed videoId="27LMFv-uaag" title={t("usageSteps")} />
               </div>
             </motion.div>
           </div>

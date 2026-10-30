@@ -2,7 +2,7 @@
 
 import React, { useRef, useState, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Float, Environment, ContactShadows, useTexture, Points, PointMaterial } from '@react-three/drei';
+import { Float, ContactShadows, useTexture, Points, PointMaterial } from '@react-three/drei';
 import * as THREE from 'three';
 
 // Monitor component using a simple Box or loaded model. For a highly premium look, 
@@ -91,7 +91,7 @@ export function ThreeDMonitor({
 }) {
   return (
     <div className={`relative ${className}`}>
-      <Canvas shadows camera={{ position: [0, 0, 5], fov: 45 }}>
+      <Canvas shadows dpr={[1, 1.5]} camera={{ position: [0, 0, 5], fov: 45 }}>
         <ambientLight intensity={0.5} />
         <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} castShadow />
         
@@ -106,7 +106,7 @@ export function ThreeDMonitor({
           far={4} 
           color="#000"
         />
-        <Environment preset="city" />
+        <hemisphereLight intensity={1.2} groundColor="#167E6C" />
       </Canvas>
     </div>
   );

@@ -17,6 +17,7 @@ import {
   Sparkles,
   Zap,
   TrendingUp,
+  Loader,
 } from "lucide-react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useCart } from "@/context/cart-context";
@@ -258,7 +259,7 @@ export default function CourseSection() {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await fetch("/api/courses");
+        const response = await fetch("/api/courses?summary=1");
 
         const contentType = response.headers.get("content-type");
         if (!contentType || !contentType.includes("application/json")) {
@@ -344,10 +345,25 @@ export default function CourseSection() {
     return enrolledCourses.includes(courseId);
   };
 
-  const handlePreviewCourse = (course: Course) => {
+  const handlePreviewCourse = async (course: Course) => {
     setSelectedCourse(course);
     setSelectedLesson(course.lessons[0] || null);
     setIsPreviewOpen(true);
+
+    // Isi lesson (untuk preview deskripsi) baru diambil saat detail dibuka
+    try {
+      const res = await fetch(`/api/courses?id=${course.id}`);
+      if (!res.ok) return;
+      const data = await res.json();
+      const full: Course | undefined = data.course;
+      if (!full) return;
+      setSelectedCourse((prev) => (prev?.id === full.id ? full : prev));
+      setSelectedLesson((prev) =>
+        prev ? full.lessons.find((l) => l.id === prev.id) || prev : full.lessons[0] || null
+      );
+    } catch (error) {
+      console.error("Error fetching course detail:", error);
+    }
   };
 
   const handleClosePreview = () => {
@@ -561,26 +577,17 @@ export default function CourseSection() {
 
   const bundleInfo = calculateBundlePrice();
 
+  // Sama dengan loading di halaman artikel
   if (loading) {
     return (
-      <div className="w-full pt-24 pb-16 flex items-center justify-center">
-        <motion.div
-          animate={{
-            rotate: 360,
-            scale: [1, 1.2, 1],
-          }}
-          transition={{
-            rotate: { duration: 1, repeat: Infinity, ease: "linear" },
-            scale: { duration: 1.5, repeat: Infinity, ease: "easeInOut" },
-          }}
-          className="h-12 w-12 border-4 border-[#156d95] border-t-transparent rounded-full"
-        />
+      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-[#050508] transition-colors">
+        <Loader className="animate-spin h-8 w-8 text-[#156d95]" />
       </div>
     );
   }
 
   return (
-    <section className="w-full pt-24 pb-16 md:pt-32 md:pb-24 bg-white dark:bg-[#050508] transition-colors duration-500">
+    <section className="w-full pt-36 pb-16 md:pt-40 md:pb-24 bg-white dark:bg-[#050508] transition-colors duration-500">
       <AnimatePresence>
         {showSuccessPopup && lastAddedItem && (
           <motion.div
@@ -1099,7 +1106,13 @@ export default function CourseSection() {
                               Description
                             </div>
                             <div className="text-gray-600 dark:text-gray-300">
-                              {getPlainTextPreview(locale === "en" ? selectedLesson.content_en || selectedLesson.content : selectedLesson.content, 30)}
+                              {selectedLesson.content === undefined ? (
+                                <span className="inline-flex items-center gap-2 text-gray-400">
+                                  <Loader className="animate-spin h-4 w-4" />
+                                </span>
+                              ) : (
+                                getPlainTextPreview(locale === "en" ? selectedLesson.content_en || selectedLesson.content : selectedLesson.content, 30)
+                              )}
                             </div>
                           </div>
                         </motion.div>

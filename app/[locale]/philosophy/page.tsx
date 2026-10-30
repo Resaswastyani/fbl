@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useRef, useMemo } from "react";
 import { useTranslations } from "next-intl";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Float, Environment } from "@react-three/drei";
+import { Float } from "@react-three/drei";
 import * as THREE from "three";
 
 const Candlestick = ({ position, color, height, wickHeight, delay = 0, isDynamic = false }: { position: [number, number, number], color: string, height: number, wickHeight: number, delay?: number, isDynamic?: boolean }) => {
@@ -281,12 +281,12 @@ export default function PhilosophyPage() {
       <section className="relative pt-32 pb-24 px-6 overflow-hidden min-h-[70vh]">
         {/* 3D Background */}
         <motion.div style={{ y: y1 }} className="absolute inset-0 z-0 pointer-events-none opacity-40">
-          <Canvas camera={{ position: [0, 0, 7] }} gl={{ antialias: true, alpha: true }}>
+          <Canvas dpr={[1, 1.5]} camera={{ position: [0, 0, 7] }} gl={{ antialias: true, alpha: true }}>
             <ambientLight intensity={1.5} />
             <directionalLight position={[5, 5, 5]} intensity={2} color="#ffffff" />
             <directionalLight position={[-5, -5, -5]} intensity={1} color="#167E6C" />
             <spotLight position={[0, 10, 0]} intensity={2.5} color="#22d3a8" />
-            <Environment preset="city" />
+            <hemisphereLight intensity={1.2} groundColor="#167E6C" />
             <AnimatedForexChart3D />
           </Canvas>
         </motion.div>
@@ -392,11 +392,11 @@ export default function PhilosophyPage() {
             </p>
             
             <div className="h-64 md:h-80 w-full relative mt-8">
-              <Canvas camera={{ position: [0, 0, 5] }} gl={{ antialias: true, alpha: true }}>
+              <Canvas dpr={[1, 1.5]} camera={{ position: [0, 0, 5] }} gl={{ antialias: true, alpha: true }}>
                 <ambientLight intensity={1.5} />
                 <directionalLight position={[2, 5, 2]} intensity={2} color="#ffffff" />
                 <directionalLight position={[-2, -5, -2]} intensity={1} color="#ef4444" />
-                <Environment preset="city" />
+                <hemisphereLight intensity={1.2} groundColor="#167E6C" />
                 <PhoneChart3D />
               </Canvas>
             </div>

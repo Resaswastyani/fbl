@@ -69,7 +69,7 @@ export const VideoTradingPage = () => {
 
   const getYouTubeEmbedUrl = (url: string): string => {
     const videoId = extractYouTubeId(url);
-    return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
+    return videoId ? `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0` : url;
   };
 
   const formatViewCount = (count: number): string => {
@@ -81,7 +81,7 @@ export const VideoTradingPage = () => {
   return (
     <div className="min-h-screen bg-white dark:bg-[#050508] transition-colors duration-500">
       {/* HERO SECTION */}
-      <section className="w-full pt-24 md:pt-32 pb-16 bg-white dark:bg-[#050508]">
+      <section className="w-full pt-36 md:pt-40 pb-16 bg-white dark:bg-[#050508]">
         <div className="max-w-7xl mx-auto grid grid-cols-12 gap-5 lg:gap-16 px-8 md:px-12">
           {/* LEFT TEXT */}
           <motion.div

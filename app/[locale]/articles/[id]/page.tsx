@@ -136,7 +136,7 @@ export default function ArticleDetailPage() {
       {/* <Header /> */}
       <div className="min-h-screen bg-white dark:bg-[#050508] transition-colors duration-500">
         {/* HERO SECTION WITH THUMBNAIL - FULLWIDTH */}
-        <section className="w-full pt-24 md:pt-32 pb-12 bg-white dark:bg-[#050508]">
+        <section className="w-full pt-32 md:pt-36 pb-12 bg-white dark:bg-[#050508]">
           <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-16">
             <motion.div
               initial={{ opacity: 0, y: 20 }}

@@ -15,12 +15,9 @@ export const ForexPhilosophyHero = () => {
   const [enable3D, setEnable3D] = useState(false);
   const [inView, setInView] = useState(false);
 
-  // 3D hanya untuk layar >= md dan bila user tidak minta reduced motion
+  // Visual 3D (CSS) dimuat setelah mount; animasi berhenti saat di luar layar
   useEffect(() => {
-    const ok =
-      window.matchMedia("(min-width: 768px)").matches &&
-      !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    setEnable3D(ok);
+    setEnable3D(true);
   }, []);
 
   // Render loop 3D hanya berjalan saat section terlihat
@@ -38,7 +35,7 @@ export const ForexPhilosophyHero = () => {
     <section ref={sectionRef} className="relative w-full min-h-[70vh] md:min-h-[95vh] py-20 md:py-0 flex items-center justify-center overflow-hidden bg-white dark:bg-[#050508] transition-colors duration-500">
       {/* Lusion-style 3D Background */}
       {enable3D && (
-        <div className="absolute inset-0 z-0 pointer-events-none opacity-90">
+        <div className="absolute inset-0 z-0 pointer-events-none opacity-25 md:opacity-60">
           <ForexChart3D active={inView} />
         </div>
       )}

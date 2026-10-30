@@ -67,7 +67,7 @@
 //   return (
 //     <>
 //       {/* <Header /> */}
-//       <div className="min-h-screen bg-white pt-24 md:pt-28">
+//       <div className="min-h-screen bg-white pt-32 md:pt-36">
 //         {" "}
 //         {/* ✅ PADDING TOP DITAMBAH */}
 //         {/* ARTICLES GRID */}

@@ -34,6 +34,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { useTranslations } from "next-intl";
+import YouTubeEmbed from "@/components/YouTubeEmbed";
 
 // Data arrays are built inside the component using t() for i18n
 
@@ -406,7 +407,7 @@ export default function RobotTradingCenter() {
       <ScrollProgressBar />
 
       {/* 1. HERO SECTION */}
-      <section ref={heroRef} className="relative w-full min-h-[90vh] flex items-center pt-24 pb-16 overflow-hidden bg-white">
+      <section ref={heroRef} className="relative w-full min-h-[90vh] flex items-center pt-36 md:pt-40 pb-16 overflow-hidden bg-white">
         {/* Animated Background Gradients */}
         <div className="absolute inset-0 z-0">
           <motion.div
@@ -785,13 +786,7 @@ export default function RobotTradingCenter() {
               <div
                 className="relative w-full rounded-3xl overflow-hidden shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] border border-slate-200 aspect-video bg-slate-900 flex items-center justify-center group"
               >
-                <iframe
-                  className="absolute inset-0 w-full h-full"
-                  src="https://www.youtube.com/embed/dQw4w9WgXcQ?si=placeholder"
-                  title="Panduan EA FBL"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                ></iframe>
+                <YouTubeEmbed videoId="dQw4w9WgXcQ" title="Panduan EA FBL" />
               </div>
             </RevealOnScroll>
 

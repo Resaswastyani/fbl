@@ -402,3 +402,12 @@
 @media (prefers-reduced-motion: reduce) {
   .fx-shine { animation: none !important; }
 }
+
+@keyframes fx-orbit {
+  0%, 100% { transform: rotateX(8deg) rotateY(-25deg); }
+  50% { transform: rotateX(-4deg) rotateY(25deg); }
+}
+.fx-orbit { animation: fx-orbit 14s ease-in-out infinite; will-change: transform; }
+@media (prefers-reduced-motion: reduce) {
+  .fx-orbit { animation: none !important; }
+}

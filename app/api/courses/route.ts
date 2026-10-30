@@ -42,6 +42,39 @@ export async function GET(request: NextRequest) {
       }
 
       return NextResponse.json({ course }, { status: 200 });
+    } else if (searchParams.get("summary") === "1") {
+      // Daftar ringkas untuk halaman publik: tanpa isi lesson (LongText) yang besar
+      const courses = await prisma.course.findMany({
+        select: {
+          id: true,
+          title: true,
+          title_en: true,
+          description: true,
+          description_en: true,
+          price: true,
+          published: true,
+          lessons: {
+            select: {
+              id: true,
+              title: true,
+              title_en: true,
+              type: true,
+              duration: true,
+            },
+          },
+        },
+        orderBy: { createdAt: "desc" },
+      });
+
+      return NextResponse.json(
+        { courses },
+        {
+          status: 200,
+          headers: {
+            "Cache-Control": "public, s-maxage=300, stale-while-revalidate=600",
+          },
+        },
+      );
     } else {
       // Get all courses with lessons
       const courses = await prisma.course.findMany({

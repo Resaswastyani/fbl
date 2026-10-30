@@ -77,26 +77,10 @@ export default function WebinarRegistrationPage() {
       </Script>
 
       {/* Animated Background Blob */}
-      <motion.div
-        animate={{
-          scale: [1, 1.2, 1],
-          opacity: [0.3, 0.5, 0.3],
-          rotate: [0, 90, 0]
-        }}
-        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute -top-[20%] -left-[10%] w-[50vw] h-[50vw] bg-[#00C9A7]/10 rounded-full blur-[120px] pointer-events-none"
-      />
-      <motion.div
-        animate={{
-          scale: [1, 1.3, 1],
-          opacity: [0.2, 0.4, 0.2],
-          rotate: [0, -90, 0]
-        }}
-        transition={{ duration: 20, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-        className="absolute top-[40%] -right-[10%] w-[60vw] h-[60vw] bg-[#C9A84C]/10 rounded-full blur-[150px] pointer-events-none"
-      />
+      <div className="absolute -top-[20%] -left-[10%] w-[50vw] h-[50vw] bg-[#00C9A7]/10 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-[40%] -right-[10%] w-[60vw] h-[60vw] bg-[#C9A84C]/10 rounded-full blur-[150px] pointer-events-none" />
 
-      <div className="container mx-auto px-4 py-12 sm:py-20 relative z-10">
+      <div className="container mx-auto px-4 pt-36 pb-12 sm:pt-40 sm:pb-20 relative z-10">
 
         {/* Header Badge */}
         <div className="flex justify-center mb-8">

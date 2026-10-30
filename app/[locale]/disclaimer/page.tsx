@@ -69,7 +69,7 @@
 //   return (
 //     <>
 //       <Header />
-//       <div className="min-h-screen bg-white pt-24 md:pt-28">
+//       <div className="min-h-screen bg-white pt-32 md:pt-36">
 //         {/* Header Section */}
 //         <section className="w-full py-8 md:py-12 bg-gray-50 border-b border-gray-200">
 //           <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12">

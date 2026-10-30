@@ -37,7 +37,7 @@
 // //         >
 // //           <h2
 // //             className="text-3xl font-bold text-[#111A4A] mb-4"
-// //             style={{ fontFamily: "var(--font-figtree), Figtree" }}
+// //
 // //           >
 // //             Bandingkan Broker
 // //           </h2>
@@ -277,7 +277,7 @@
 //         >
 //           <h2
 //             className="text-3xl font-bold text-[#111A4A] mb-4"
-//             style={{ fontFamily: "var(--font-figtree), Figtree" }}
+//
 //           >
 //             {t("compareBrokers")}
 //           </h2>
@@ -516,7 +516,6 @@ export default function BrokerComparison() {
         >
           <h2
             className="text-3xl font-bold text-[#111A4A] dark:text-white mb-4"
-            style={{ fontFamily: "var(--font-figtree), Figtree" }}
           >
             {t("compareBrokers")}
           </h2>

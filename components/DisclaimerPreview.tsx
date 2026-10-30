@@ -172,45 +172,14 @@ export default function DisclaimerPreview() {
       {/* Animated Background Gradient */}
       <motion.div
         className="absolute inset-0 bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-[#050508] dark:via-[#0a0a12] dark:to-[#050508] transition-colors duration-500"
-        animate={{
-          background: [
-            "linear-gradient(to bottom right, rgb(248 250 252), rgb(255 255 255), rgb(241 245 249))",
-            "linear-gradient(to bottom right, rgb(241 245 249), rgb(248 250 252), rgb(255 255 255))",
-            "linear-gradient(to bottom right, rgb(255 255 255), rgb(241 245 249), rgb(248 250 252))",
-            "linear-gradient(to bottom right, rgb(248 250 252), rgb(255 255 255), rgb(241 245 249))",
-          ],
-        }}
-        transition={{
-          duration: 10,
-          repeat: Infinity,
-          ease: "linear",
-        }}
       />
 
       {/* Decorative Elements */}
       <motion.div
         className="absolute top-10 left-10 w-32 h-32 bg-[#156d95]/5 rounded-full blur-3xl"
-        animate={{
-          scale: [1, 1.2, 1],
-          opacity: [0.3, 0.6, 0.3],
-        }}
-        transition={{
-          duration: 5,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
       />
       <motion.div
         className="absolute bottom-10 right-10 w-40 h-40 bg-amber-500/5 rounded-full blur-3xl"
-        animate={{
-          scale: [1.2, 1, 1.2],
-          opacity: [0.3, 0.6, 0.3],
-        }}
-        transition={{
-          duration: 6,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
       />
 
       {/* FULL WIDTH CONTAINER */}
@@ -226,18 +195,15 @@ export default function DisclaimerPreview() {
             variants={itemVariants}
             className="absolute -top-6 left-4 md:left-8 z-20"
           >
-            <motion.div animate={floatAnimation} className="relative">
+            <motion.div className="relative fx-float" style={{ "--fx-float": "-8px", "--fx-dur": "4s" } as React.CSSProperties}>
               {/* Pulse Rings */}
-              <motion.div
-                className="absolute inset-0 bg-[#156d95] rounded-2xl"
-                animate={pulseRing}
+              <div
+                className="absolute inset-0 bg-[#156d95] rounded-2xl fx-ripple"
+                style={{ "--fx-ripple-scale": 1.25, "--fx-ripple-opacity": 0.5 } as React.CSSProperties}
               />
-              <motion.div
-                className="absolute inset-0 bg-[#156d95] rounded-2xl"
-                animate={{
-                  ...pulseRing,
-                  transition: { ...pulseRing.transition, delay: 0.5 },
-                }}
+              <div
+                className="absolute inset-0 bg-[#156d95] rounded-2xl fx-ripple"
+                style={{ "--fx-ripple-scale": 1.25, "--fx-ripple-opacity": 0.5, "--fx-delay": "0.5s" } as React.CSSProperties}
               />
 
               {/* Main Badge */}
@@ -250,15 +216,6 @@ export default function DisclaimerPreview() {
                 <Shield size={28} />
                 <motion.div
                   className="absolute -top-1 -right-1"
-                  animate={{
-                    rotate: [0, 15, -15, 0],
-                    scale: [1, 1.2, 1],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
                 >
                   <Sparkles size={16} className="text-yellow-300" />
                 </motion.div>
@@ -278,7 +235,6 @@ export default function DisclaimerPreview() {
             {/* Shimmer Effect */}
             <motion.div
               className="absolute inset-0 pointer-events-none"
-              animate={hoveredCard ? shimmerAnimation : {}}
             />
 
             {/* Header - Full Width Layout */}
@@ -290,17 +246,8 @@ export default function DisclaimerPreview() {
                 <motion.h3
                   variants={itemVariants}
                   className="text-xl md:text-2xl font-bold text-[#111A4A] dark:text-white flex items-center gap-3"
-                  style={{ fontFamily: "var(--font-figtree), Figtree" }}
                 >
                   <motion.div
-                    animate={{
-                      rotate: [0, 10, -10, 0],
-                    }}
-                    transition={{
-                      duration: 3,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    }}
                   >
                     <AlertCircle size={24} className="text-[#156d95]" />
                   </motion.div>
@@ -309,7 +256,6 @@ export default function DisclaimerPreview() {
                 <motion.p
                   variants={itemVariants}
                   className="text-sm text-[#6e6e6e] dark:text-gray-400 mt-2 ml-9"
-                  style={{ fontFamily: "var(--font-figtree), Figtree" }}
                 >
                   {t("subtitle")}
                 </motion.p>
@@ -323,27 +269,10 @@ export default function DisclaimerPreview() {
               >
                 <motion.span
                   className="w-2 h-2 rounded-full bg-amber-500 mr-2"
-                  animate={{
-                    scale: [1, 1.3, 1],
-                    opacity: [1, 0.7, 1],
-                  }}
-                  transition={{
-                    duration: 1.5,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
                 />
                 {t("important")}
                 <motion.div
                   className="ml-2"
-                  animate={{
-                    x: [0, 3, 0],
-                  }}
-                  transition={{
-                    duration: 1,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
                 >
                   <AlertTriangle size={14} />
                 </motion.div>
@@ -358,7 +287,6 @@ export default function DisclaimerPreview() {
               <motion.p
                 variants={itemVariants}
                 className="text-[#374151] dark:text-gray-300 leading-relaxed text-sm md:text-base w-full"
-                style={{ fontFamily: "var(--font-figtree), Figtree" }}
               >
                 {t("educationText")}
               </motion.p>
@@ -370,18 +298,9 @@ export default function DisclaimerPreview() {
                   boxShadow: "0 10px 40px -10px rgba(21, 109, 149, 0.2)",
                 }}
                 className="bg-gradient-to-r from-slate-50 to-white dark:from-[#050508] dark:to-[#0a0a12] rounded-xl p-5 border-l-4 border-[#156d95] shadow-sm cursor-default transition-shadow w-full"
-                style={{ fontFamily: "var(--font-figtree), Figtree" }}
               >
                 <div className="flex items-start gap-3 w-full">
                   <motion.div
-                    animate={{
-                      rotate: [0, 10, -10, 0],
-                    }}
-                    transition={{
-                      duration: 4,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    }}
                     className="mt-1"
                   >
                     <Info size={20} className="text-[#156d95]" />
@@ -408,7 +327,6 @@ export default function DisclaimerPreview() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.8 }}
                 className="text-xs text-[#6e6e6e] dark:text-gray-400 flex items-center gap-2"
-                style={{ fontFamily: "var(--font-figtree), Figtree" }}
               >
                 <ShieldCheck size={14} className="text-green-500" />
                 {t("learnMore")}
@@ -423,7 +341,6 @@ export default function DisclaimerPreview() {
                 <Link
                   href="/disclaimer"
                   className="group relative inline-flex items-center gap-2 bg-[#111A4A] text-white px-6 py-3 rounded-xl text-sm font-semibold overflow-hidden"
-                  style={{ fontFamily: "var(--font-figtree), Figtree" }}
                 >
                   {/* Button Background Animation */}
                   <motion.div
@@ -435,27 +352,11 @@ export default function DisclaimerPreview() {
 
                   <span className="relative z-10 flex items-center gap-2">
                     <motion.div
-                      animate={{
-                        y: [0, -2, 0],
-                      }}
-                      transition={{
-                        duration: 1.5,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                      }}
                     >
                       <BookOpen size={18} />
                     </motion.div>
                     {t("readMore")}
                     <motion.div
-                      animate={{
-                        x: [0, 4, 0],
-                      }}
-                      transition={{
-                        duration: 1,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                      }}
                     >
                       <ArrowRight size={18} />
                     </motion.div>
@@ -467,14 +368,6 @@ export default function DisclaimerPreview() {
             {/* Decorative Corner Icons */}
             <motion.div
               className="absolute top-4 right-4 opacity-10"
-              animate={{
-                rotate: 360,
-              }}
-              transition={{
-                duration: 20,
-                repeat: Infinity,
-                ease: "linear",
-              }}
             >
               <Shield size={80} />
             </motion.div>

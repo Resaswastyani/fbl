@@ -484,13 +484,11 @@ const StatBadge = ({
       <div>
         <p
           className="text-xs text-[#6e6e6e] dark:text-gray-400"
-          style={{ fontFamily: "var(--font-figtree), Figtree" }}
         >
           {label}
         </p>
         <p
           className="text-lg font-semibold text-[#111A4A] dark:text-white"
-          style={{ fontFamily: "var(--font-figtree), Figtree" }}
         >
           {value}
         </p>
@@ -515,7 +513,6 @@ const FeatureItem = ({
     </div>
     <span
       className="text-sm font-medium"
-      style={{ fontFamily: "var(--font-figtree), Figtree" }}
     >
       {text}
     </span>
@@ -540,7 +537,6 @@ const TabButton = ({
         ? "bg-[#111A4A] dark:bg-[#22d3a8] text-white dark:text-gray-900"
         : "bg-[#f3f4f6] dark:bg-gray-800 text-[#6e6e6e] dark:text-gray-400 hover:bg-[#e5e7eb] dark:hover:bg-gray-700"
     }`}
-    style={{ fontFamily: "var(--font-figtree), Figtree" }}
   >
     <Icon size={16} />
     {label}
@@ -562,7 +558,6 @@ const TableCell = ({
 }) => (
   <td
     className={`text-sm px-3 py-2 border-b border-[#f3f4f6] dark:border-gray-800 ${className}`}
-    style={{ fontFamily: "var(--font-figtree), Figtree" }}
   >
     {children}
   </td>
@@ -661,7 +656,6 @@ export const TradingJournalPage = () => {
         <SectionCard>
           <h3
             className="text-sm font-semibold text-[#111A4A] mb-4 flex items-center gap-2"
-            style={{ fontFamily: "var(--font-figtree), Figtree" }}
           >
             <PieChart size={16} /> Overall Performance
           </h3>
@@ -696,7 +690,6 @@ export const TradingJournalPage = () => {
         <SectionCard>
           <h3
             className="text-sm font-semibold text-[#111A4A] mb-4 flex items-center gap-2"
-            style={{ fontFamily: "var(--font-figtree), Figtree" }}
           >
             <TrendingDown size={16} /> Drawdown & Streak
           </h3>
@@ -727,7 +720,6 @@ export const TradingJournalPage = () => {
         <SectionCard>
           <h3
             className="text-sm font-semibold text-[#111A4A] mb-4 flex items-center gap-2"
-            style={{ fontFamily: "var(--font-figtree), Figtree" }}
           >
             <Target size={16} /> Win Rate & Profit Stats
           </h3>
@@ -762,7 +754,6 @@ export const TradingJournalPage = () => {
         <SectionCard>
           <h3
             className="text-sm font-semibold text-[#111A4A] mb-4 flex items-center gap-2"
-            style={{ fontFamily: "var(--font-figtree), Figtree" }}
           >
             <Hash size={16} /> Statistics
           </h3>
@@ -802,7 +793,6 @@ export const TradingJournalPage = () => {
         <SectionCard>
           <h3
             className="text-sm font-semibold text-[#111A4A] mb-4 flex items-center gap-2"
-            style={{ fontFamily: "var(--font-figtree), Figtree" }}
           >
             <Trophy size={16} /> Top Currency Pairs
           </h3>
@@ -837,7 +827,6 @@ export const TradingJournalPage = () => {
         <SectionCard>
           <h3
             className="text-sm font-semibold text-[#111A4A] mb-4 flex items-center gap-2"
-            style={{ fontFamily: "var(--font-figtree), Figtree" }}
           >
             <Zap size={16} /> Performance by Setup
           </h3>
@@ -893,7 +882,6 @@ export const TradingJournalPage = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full pl-9 pr-4 py-2.5 border border-[#e5e7eb] rounded-lg text-sm focus:outline-none focus:border-[#156d95] text-[#111A4A]"
-            style={{ fontFamily: "var(--font-figtree), Figtree" }}
           />
         </div>
       </div>
@@ -990,7 +978,6 @@ export const TradingJournalPage = () => {
       <SectionCard>
         <h3
           className="text-sm font-semibold text-[#111A4A] mb-4 flex items-center gap-2"
-          style={{ fontFamily: "var(--font-figtree), Figtree" }}
         >
           <CalendarDays size={16} /> Monthly Performance Report
         </h3>
@@ -1067,7 +1054,6 @@ export const TradingJournalPage = () => {
       <SectionCard>
         <h3
           className="text-sm font-semibold text-[#111A4A] mb-4 flex items-center gap-2"
-          style={{ fontFamily: "var(--font-figtree), Figtree" }}
         >
           <BarChart3 size={16} /> Trade Statistics by Instrument
         </h3>
@@ -1126,7 +1112,6 @@ export const TradingJournalPage = () => {
       <SectionCard>
         <h3
           className="text-sm font-semibold text-[#111A4A] mb-4 flex items-center gap-2"
-          style={{ fontFamily: "var(--font-figtree), Figtree" }}
         >
           <Smile size={16} /> Emotion Analysis
         </h3>
@@ -1170,7 +1155,6 @@ export const TradingJournalPage = () => {
       <SectionCard>
         <h3
           className="text-sm font-semibold text-[#111A4A] mb-4 flex items-center gap-2"
-          style={{ fontFamily: "var(--font-figtree), Figtree" }}
         >
           <Zap size={16} /> Setup Analysis
         </h3>
@@ -1214,7 +1198,6 @@ export const TradingJournalPage = () => {
       <SectionCard>
         <h3
           className="text-sm font-semibold text-[#111A4A] mb-4 flex items-center gap-2"
-          style={{ fontFamily: "var(--font-figtree), Figtree" }}
         >
           <CheckCircle2 size={16} /> Entry Quality
         </h3>
@@ -1258,7 +1241,6 @@ export const TradingJournalPage = () => {
       <SectionCard>
         <h3
           className="text-sm font-semibold text-[#111A4A] mb-4 flex items-center gap-2"
-          style={{ fontFamily: "var(--font-figtree), Figtree" }}
         >
           <Calendar size={16} /> Performance by Day
         </h3>
@@ -1330,7 +1312,6 @@ export const TradingJournalPage = () => {
         <SectionCard>
           <h3
             className="text-sm font-semibold text-[#111A4A] mb-4 flex items-center gap-2"
-            style={{ fontFamily: "var(--font-figtree), Figtree" }}
           >
             <CalendarDays size={16} /> Trading Calendar — {currentMonth}
           </h3>
@@ -1383,7 +1364,6 @@ export const TradingJournalPage = () => {
       <SectionCard>
         <h3
           className="text-sm font-semibold text-[#111A4A] mb-4 flex items-center gap-2"
-          style={{ fontFamily: "var(--font-figtree), Figtree" }}
         >
           <Settings size={16} /> Account Settings
         </h3>
@@ -1412,7 +1392,6 @@ export const TradingJournalPage = () => {
       <SectionCard>
         <h3
           className="text-sm font-semibold text-[#111A4A] mb-4 flex items-center gap-2"
-          style={{ fontFamily: "var(--font-figtree), Figtree" }}
         >
           <ShieldCheck size={16} /> Risk Settings
         </h3>
@@ -1439,7 +1418,6 @@ export const TradingJournalPage = () => {
       <SectionCard className="md:col-span-2">
         <h3
           className="text-sm font-semibold text-[#111A4A] mb-4 flex items-center gap-2"
-          style={{ fontFamily: "var(--font-figtree), Figtree" }}
         >
           <Layers size={16} /> Trade Setup Definitions
         </h3>
@@ -1496,19 +1474,13 @@ export const TradingJournalPage = () => {
             </a>
 
             <h1
-              className="text-[40px] font-normal leading-tight tracking-tight text-[#111A4A] dark:text-white mb-4"
-              style={{
-                fontFamily: "var(--font-figtree), Figtree",
-                fontSize: "50px",
-                fontWeight: "500",
-              }}
+              className="text-4xl sm:text-5xl font-medium leading-[1.1] tracking-tight text-[#111A4A] dark:text-white mb-4"
             >
               FBL Trading Journal
             </h1>
 
             <p
               className="text-lg leading-6 text-[#111A4A] dark:text-gray-300 opacity-60 dark:opacity-80 mt-0 mb-6"
-              style={{ fontFamily: "var(--font-figtree), Figtree" }}
             >
               {t("title")}
             </p>
@@ -1554,7 +1526,6 @@ export const TradingJournalPage = () => {
                     <div className="flex items-baseline gap-2 mb-4">
                       <span
                         className="text-4xl font-bold"
-                        style={{ fontFamily: "var(--font-figtree), Figtree" }}
                       >
                         Rp 99.000
                       </span>
@@ -1687,7 +1658,6 @@ export const TradingJournalPage = () => {
               <p className="text-xs text-[#6e6e6e] dark:text-gray-400 mb-1">Total Trades</p>
               <p
                 className="text-xl font-bold text-[#111A4A] dark:text-white"
-                style={{ fontFamily: "var(--font-figtree), Figtree" }}
               >
                 {totalTrades}
               </p>
@@ -1699,7 +1669,6 @@ export const TradingJournalPage = () => {
               <p className="text-xs text-[#6e6e6e] dark:text-gray-400 mb-1">Win Rate</p>
               <p
                 className="text-xl font-bold text-[#111A4A] dark:text-white"
-                style={{ fontFamily: "var(--font-figtree), Figtree" }}
               >
                 {winRate}%
               </p>
@@ -1711,7 +1680,6 @@ export const TradingJournalPage = () => {
               <p className="text-xs text-[#6e6e6e] dark:text-gray-400 mb-1">Net P&L</p>
               <p
                 className={`text-xl font-bold ${totalPnL >= 0 ? "text-[#166534] dark:text-[#22d3a8]" : "text-[#991b1b] dark:text-red-400"}`}
-                style={{ fontFamily: "var(--font-figtree), Figtree" }}
               >
                 {totalPnL >= 0 ? "+" : ""}${totalPnL}
               </p>
@@ -1723,7 +1691,6 @@ export const TradingJournalPage = () => {
               <p className="text-xs text-[#6e6e6e] dark:text-gray-400 mb-1">Profit Factor</p>
               <p
                 className="text-xl font-bold text-[#111A4A] dark:text-white"
-                style={{ fontFamily: "var(--font-figtree), Figtree" }}
               >
                 2.5
               </p>
@@ -1754,7 +1721,6 @@ export const TradingJournalPage = () => {
           >
             <h3
               className="font-medium mb-3 flex items-center gap-2"
-              style={{ fontFamily: "var(--font-figtree), Figtree" }}
             >
               <Activity size={18} /> Quick Overview
             </h3>
@@ -1789,7 +1755,6 @@ export const TradingJournalPage = () => {
           >
             <h3
               className="font-medium mb-2"
-              style={{ fontFamily: "var(--font-figtree), Figtree" }}
             >
               Dapatkan Template Lengkap
             </h3>
@@ -1799,7 +1764,6 @@ export const TradingJournalPage = () => {
             <div className="flex items-baseline gap-2 mb-4">
               <span
                 className="text-2xl font-bold"
-                style={{ fontFamily: "var(--font-figtree), Figtree" }}
               >
                 Rp 99.000
               </span>
@@ -1829,14 +1793,12 @@ export const TradingJournalPage = () => {
               <CheckCircle2 size={20} className="text-[#166534]" />
               <h4
                 className="font-medium text-[#111A4A]"
-                style={{ fontFamily: "var(--font-figtree), Figtree" }}
               >
                 Garansi 7 Hari
               </h4>
             </div>
             <p
               className="text-sm text-[#6e6e6e]"
-              style={{ fontFamily: "var(--font-figtree), Figtree" }}
             >
               Tidak puas? Uang kembali 100% dalam 7 hari setelah pembelian.
             </p>

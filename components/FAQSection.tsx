@@ -9,6 +9,8 @@ import { useTranslations } from "next-intl";
 // ANIMATED BACKGROUND COMPONENTS
 // ============================================
 
+// Dekorasi latar dianimasikan dengan CSS (lihat .fx-* di globals.css)
+// agar tidak membebani main thread saat scroll.
 const FloatingShape = ({
   delay,
   duration,
@@ -24,27 +26,20 @@ const FloatingShape = ({
   initialX: string;
   initialY: string;
 }) => (
-  <motion.div
-    className="absolute rounded-full opacity-20 pointer-events-none"
-    style={{
-      width: size,
-      height: size,
-      background: color,
-      left: initialX,
-      top: initialY,
-      filter: "blur(40px)",
-    }}
-    animate={{
-      x: [0, 30, -20, 0],
-      y: [0, -40, 20, 0],
-      scale: [1, 1.2, 0.8, 1],
-    }}
-    transition={{
-      duration,
-      delay,
-      repeat: Infinity,
-      ease: "easeInOut",
-    }}
+  <div
+    className="absolute rounded-full opacity-20 pointer-events-none fx-drift"
+    style={
+      {
+        width: size,
+        height: size,
+        background: color,
+        left: initialX,
+        top: initialY,
+        filter: "blur(40px)",
+        "--fx-dur": `${duration}s`,
+        "--fx-delay": `${delay}s`,
+      } as React.CSSProperties
+    }
   />
 );
 
@@ -55,57 +50,50 @@ const GradientOrb = ({
   className?: string;
   color: string;
 }) => (
-  <motion.div
-    className={`absolute rounded-full pointer-events-none ${className}`}
+  <div
+    className={`absolute rounded-full pointer-events-none opacity-40 ${className}`}
     style={{
       background: `radial-gradient(circle, ${color} 0%, transparent 70%)`,
-      filter: "blur(60px)",
-    }}
-    animate={{
-      scale: [1, 1.2, 1],
-      opacity: [0.3, 0.5, 0.3],
-    }}
-    transition={{
-      duration: 8,
-      repeat: Infinity,
-      ease: "easeInOut",
     }}
   />
 );
 
 const ParticleField = () => {
-  const particles = Array.from({ length: 15 }, (_, i) => ({
-    id: i,
-    size: Math.random() * 4 + 2,
-    x: Math.random() * 100,
-    y: Math.random() * 100,
-    duration: Math.random() * 4 + 3,
-    delay: Math.random() * 2,
-  }));
+  const [particles, setParticles] = useState<
+    { id: number; size: number; x: number; y: number; duration: number; delay: number }[]
+  >([]);
+
+  useEffect(() => {
+    const count = window.innerWidth < 768 ? 6 : 12;
+    setParticles(
+      Array.from({ length: count }, (_, i) => ({
+        id: i,
+        size: Math.random() * 4 + 2,
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        duration: Math.random() * 4 + 3,
+        delay: Math.random() * 2,
+      }))
+    );
+  }, []);
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
       {particles.map((p) => (
-        <motion.div
+        <div
           key={p.id}
-          className="absolute rounded-full bg-gradient-to-br from-blue-400/30 to-purple-400/30"
-          style={{
-            width: p.size,
-            height: p.size,
-            left: `${p.x}%`,
-            top: `${p.y}%`,
-          }}
-          animate={{
-            y: [0, -30, 0],
-            opacity: [0.2, 0.6, 0.2],
-            scale: [1, 1.5, 1],
-          }}
-          transition={{
-            duration: p.duration,
-            delay: p.delay,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
+          className="absolute rounded-full bg-gradient-to-br from-blue-400/40 to-purple-400/40 fx-float"
+          style={
+            {
+              width: p.size,
+              height: p.size,
+              left: `${p.x}%`,
+              top: `${p.y}%`,
+              "--fx-float": "-30px",
+              "--fx-dur": `${p.duration}s`,
+              "--fx-delay": `${p.delay}s`,
+            } as React.CSSProperties
+          }
         />
       ))}
     </div>
@@ -126,19 +114,15 @@ const AnimatedLine = ({ delay }: { delay: number }) => (
 );
 
 const PulseRing = ({ delay }: { delay: number }) => (
-  <motion.div
-    className="absolute -left-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full border-2 border-blue-400/30"
-    initial={{ scale: 0.8, opacity: 0 }}
-    animate={{
-      scale: [0.8, 1.5, 0.8],
-      opacity: [0, 0.5, 0],
-    }}
-    transition={{
-      duration: 2,
-      delay,
-      repeat: Infinity,
-      ease: "easeOut",
-    }}
+  <div
+    className="absolute -left-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full border-2 border-blue-400/30 fx-ripple"
+    style={
+      {
+        "--fx-delay": `${delay}s`,
+        "--fx-ripple-scale": 1.5,
+        "--fx-ripple-opacity": 0.5,
+      } as React.CSSProperties
+    }
   />
 );
 
@@ -206,7 +190,7 @@ export const FAQSection = () => {
   return (
     <section
       ref={sectionRef}
-      className="w-full py-24 px-8 bg-white dark:bg-[#050508] transition-colors duration-500 relative overflow-hidden"
+      className="w-full py-16 md:py-24 px-5 sm:px-8 bg-white dark:bg-[#050508] transition-colors duration-500 relative overflow-hidden"
     >
       {/* Animated Background Elements */}
       <div className="absolute inset-0 pointer-events-none">
@@ -238,7 +222,7 @@ export const FAQSection = () => {
       </div>
 
       <div className="max-w-7xl mx-auto relative z-10">
-        <div className="grid lg:grid-cols-12 gap-16">
+        <div className="grid lg:grid-cols-12 gap-10 lg:gap-16">
           {/* Left Column - Title with Animation */}
           <motion.div
             className="lg:col-span-4"
@@ -250,27 +234,13 @@ export const FAQSection = () => {
               {/* Decorative Icon */}
               <motion.div
                 className="mb-6 inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 shadow-lg shadow-blue-500/25"
-                animate={{
-                  rotate: [0, 5, -5, 0],
-                  scale: [1, 1.05, 1],
-                }}
-                transition={{
-                  duration: 6,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
                 whileHover={{ scale: 1.1, rotate: 10 }}
               >
                 <HelpCircle className="w-7 h-7 text-white" />
               </motion.div>
 
               <h2
-                className="text-[40px] leading-tight font-normal text-[#202020] dark:text-white tracking-tight mb-4"
-                style={{
-                  fontFamily: "var(--font-figtree), Figtree",
-                  fontWeight: "400",
-                  fontSize: "40px",
-                }}
+                className="text-3xl md:text-[40px] leading-tight font-normal text-[#202020] dark:text-white tracking-tight mb-4"
               >
                 {t("title")}
               </h2>
@@ -342,7 +312,6 @@ export const FAQSection = () => {
                             : "text-[#202020] dark:text-gray-200 group-hover:text-blue-500 dark:group-hover:text-blue-400"
                         }`}
                         style={{
-                          fontFamily: "var(--font-figtree), Figtree",
                           fontWeight: "400",
                         }}
                       >
@@ -399,22 +368,15 @@ export const FAQSection = () => {
                             transition={{ delay: 0.1 }}
                           >
                             {/* Decorative sparkles */}
-                            <motion.div
-                              className="absolute top-0 right-4 text-yellow-400"
-                              animate={{
-                                rotate: [0, 20, -20, 0],
-                                scale: [1, 1.2, 1],
-                              }}
-                              transition={{ duration: 2, repeat: Infinity }}
+                            <div
+                              className="absolute top-0 right-4 text-yellow-400 fx-pulse"
+                              style={{ "--fx-dur": "2s" } as React.CSSProperties}
                             >
                               <Sparkles className="w-5 h-5" />
-                            </motion.div>
+                            </div>
 
                             <p
-                              className="text-lg leading-7 text-[#666666] dark:text-gray-400 relative"
-                              style={{
-                                fontFamily: "var(--font-figtree), Figtree",
-                              }}
+                              className="text-base md:text-lg leading-7 text-[#666666] dark:text-gray-400 relative"
                             >
                               {faq.answer}
                             </p>

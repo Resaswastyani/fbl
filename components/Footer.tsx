@@ -59,10 +59,11 @@ export default function Footer() {
         </div>
 
         {/* SOCIAL ICONS */}
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           {/* Instagram */}
           <a
             href="https://www.instagram.com/forexforbetterliving/#"
+            aria-label="Instagram"
             target="_blank"
             rel="noopener noreferrer"
             className="
@@ -75,6 +76,7 @@ export default function Footer() {
           {/* TikTok */}
           <a
             href="https://www.tiktok.com/@forexforbetterliving"
+            aria-label="TikTok"
             target="_blank"
             rel="noopener noreferrer"
             className="
@@ -87,6 +89,7 @@ export default function Footer() {
           {/* Facebook */}
           <a
             href="https://web.facebook.com/forexforbetterliving?_rdc=1&_rdr#"
+            aria-label="Facebook"
             target="_blank"
             rel="noopener noreferrer"
             className="
@@ -99,6 +102,7 @@ export default function Footer() {
           {/* YouTube */}
           <a
             href="https://www.youtube.com/@forexforbetterliving"
+            aria-label="YouTube"
             target="_blank"
             rel="noopener noreferrer"
             className="
@@ -111,6 +115,7 @@ export default function Footer() {
           {/* WhatsApp */}
           <a
             href="https://wa.me/6285187555440?text=Hi%20admin%20FBL,%20saya%20ingin%20konsultasi"
+            aria-label="WhatsApp"
             target="_blank"
             rel="noopener noreferrer"
             className="
@@ -174,7 +179,7 @@ export default function Footer() {
 
       {/* BOTTOM */}
       <div className="w-full border-t border-[#e5e5e5] dark:border-white/10">
-        <div className="w-full px-6 md:px-12 py-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <div className="w-full px-6 md:px-12 pt-8 pb-24 md:pb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           {/* COPYRIGHT */}
           <p className="text-sm opacity-90">{t("copyright", { year })}</p>
 

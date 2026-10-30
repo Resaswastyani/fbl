@@ -311,7 +311,7 @@ export default function PhilosophyPage() {
               <span className="text-[#167E6C] text-sm font-semibold tracking-widest uppercase">{t("heroTagline")}</span>
             </motion.div>
             
-            <h1 className="text-5xl md:text-7xl font-extrabold mb-8 tracking-tight leading-[1.1]">
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold mb-6 md:mb-8 tracking-tight leading-[1.1]">
               {t("heroTitle")} <br className="md:hidden"/> 
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#167E6C] to-[#22d3a8]">{t("heroTitleHighlight")}</span>
             </h1>

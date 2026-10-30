@@ -122,7 +122,8 @@ export const Header = () => {
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", handleScroll);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -412,15 +413,15 @@ export const Header = () => {
       <nav
         className={`
           fixed left-0 right-0 z-50 transition-all duration-300
-          ${isScrolled ? "top-5" : "top-10"}
+          ${isScrolled ? "top-3 md:top-5" : "top-10"}
         `}
       >
         <div
           className={`
-            mx-auto transition-all duration-300 flex items-center justify-between
+            mx-3 md:mx-auto transition-all duration-300 flex items-center justify-between
             ${isScrolled
-              ? "max-w-5xl bg-white dark:bg-gray-900 shadow-lg dark:shadow-black/40 rounded-2xl px-6 py-1.5 backdrop-blur-xl border border-transparent dark:border-white/10"
-              : "max-w-7xl bg-transparent px-8 py-3"
+              ? "max-w-5xl bg-white/95 dark:bg-gray-900/95 shadow-lg dark:shadow-black/40 rounded-2xl px-4 md:px-6 py-1.5 border border-transparent dark:border-white/10"
+              : "max-w-7xl bg-transparent px-2 md:px-8 py-3"
             }
           `}
         >
@@ -436,8 +437,7 @@ export const Header = () => {
               <img
                 src="/logo-fbl.png"
                 alt="Forex Logo"
-                className="h-auto object-contain dark:-my-1 dark:-mx-1"
-                style={{ width: "145px", display: "block" }}
+                className="block h-auto w-[112px] md:w-[145px] object-contain dark:-my-1 dark:-mx-1"
               />
             </motion.div>
           </button>
@@ -568,7 +568,8 @@ export const Header = () => {
 
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className={`md:hidden p-2 hover:text-primary transition text-gray-800 dark:text-gray-200`}
+            aria-label="Menu"
+            className={`md:hidden p-2 -mr-2 hover:text-primary transition text-gray-800 dark:text-gray-200`}
           >
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>

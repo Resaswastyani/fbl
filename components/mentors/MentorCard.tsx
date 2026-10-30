@@ -64,7 +64,6 @@ export default function MentorCard({ mentor, index }: MentorCardProps) {
           <div className="absolute bottom-0 left-0 right-0 p-6">
             <h3
               className="text-2xl font-bold text-white mb-1"
-              style={{ fontFamily: "var(--font-figtree), Figtree" }}
             >
               {mentor.name}
             </h3>
@@ -81,7 +80,6 @@ export default function MentorCard({ mentor, index }: MentorCardProps) {
         {/* Bio */}
         <p
           className="text-gray-600 leading-relaxed mb-6"
-          style={{ fontFamily: "var(--font-figtree), Figtree" }}
         >
           {mentor.bio}
         </p>

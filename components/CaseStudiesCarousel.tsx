@@ -186,28 +186,16 @@ const FloatingBadge = ({
   >
     <span className="text-lg">{icon}</span>
     <span className="text-sm font-medium text-gray-700 dark:text-gray-200">{text}</span>
-    <motion.div
-      className="w-2 h-2 rounded-full"
-      style={{ backgroundColor: color }}
-      animate={{ scale: [1, 1.2, 1] }}
-      transition={{ duration: 2, repeat: Infinity }}
+    <div
+      className="w-2 h-2 rounded-full fx-pulse"
+      style={{ backgroundColor: color, "--fx-dur": "2s" } as React.CSSProperties}
     />
   </motion.div>
 );
 
 const BackgroundGlow = ({ gradient }: { gradient: string }) => (
-  <motion.div
+  <div
     className={`absolute inset-0 bg-gradient-to-br ${gradient} rounded-full blur-3xl opacity-60`}
-    animate={{
-      scale: [1, 1.1, 1],
-      rotate: [0, 5, -5, 0],
-    }}
-    transition={{
-      duration: 8,
-      repeat: Infinity,
-      ease: "easeInOut",
-    }}
-    style={{ filter: "blur(60px)" }}
   />
 );
 
@@ -223,25 +211,20 @@ const FloatingParticles = () => {
   return (
     <>
       {particles.map((p) => (
-        <motion.div
+        <div
           key={p.id}
-          className="absolute rounded-full bg-white/30 backdrop-blur-sm"
-          style={{
-            width: p.size,
-            height: p.size,
-            left: `${p.x}%`,
-            top: `${p.y}%`,
-          }}
-          animate={{
-            y: [0, -20, 0],
-            opacity: [0.3, 0.8, 0.3],
-          }}
-          transition={{
-            duration: p.duration,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: p.id * 0.3,
-          }}
+          className="absolute rounded-full bg-white/40 fx-float"
+          style={
+            {
+              width: p.size,
+              height: p.size,
+              left: `${p.x}%`,
+              top: `${p.y}%`,
+              "--fx-float": "-20px",
+              "--fx-dur": `${p.duration}s`,
+              "--fx-delay": `${p.id * 0.3}s`,
+            } as React.CSSProperties
+          }
         />
       ))}
     </>
@@ -257,6 +240,16 @@ export const ForexTestimonials = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const autoPlayRef = useRef<NodeJS.Timeout | null>(null);
+  const [isLg, setIsLg] = useState(false);
+
+  // Visual kanan hanya dirender di layar lg ke atas (sebelumnya tetap dianimasikan walau tersembunyi)
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const update = () => setIsLg(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
 
   const caseStudies: CaseStudy[] = [
     {
@@ -336,22 +329,22 @@ export const ForexTestimonials = () => {
   };
 
   return (
-    <div className="w-full min-h-screen bg-white dark:bg-[#050508] transition-colors duration-500 flex items-center justify-center py-24 px-8 overflow-hidden">
+    <div className="w-full lg:min-h-screen bg-white dark:bg-[#050508] transition-colors duration-500 flex items-center justify-center py-16 md:py-24 px-5 sm:px-8 overflow-hidden">
       <div className="max-w-7xl w-full">
         {/* Header */}
-        <div className="text-center mb-16">
-          <motion.h1
+        <div className="text-center mb-10 md:mb-16">
+          <motion.h2
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-[40px] leading-tight font-normal mb-6 tracking-tight text-[#111A4A] dark:text-white"
+            className="text-3xl md:text-[40px] leading-tight font-normal mb-4 md:mb-6 tracking-tight text-[#111A4A] dark:text-white"
           >
             {t("title")}
-          </motion.h1>
+          </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-lg leading-7 text-[#111A4A]/60 dark:text-gray-400 max-w-2xl mx-auto"
+            className="text-base md:text-lg leading-7 text-[#111A4A]/60 dark:text-gray-400 max-w-2xl mx-auto"
           >
             {t("subtitle")}
           </motion.p>
@@ -359,7 +352,7 @@ export const ForexTestimonials = () => {
 
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* LEFT SIDE - CONTENT (TIDAK DIUBAH) */}
-          <div className="relative z-10">
+          <div className="relative z-10 min-h-[300px] md:min-h-0">
             <AnimatePresence mode="wait" initial={false} custom={direction}>
               <motion.div
                 key={currentStudy.id}
@@ -376,11 +369,11 @@ export const ForexTestimonials = () => {
                   {currentStudy.program}
                 </div>
 
-                <h2 className="text-3xl leading-snug font-semibold text-[#111A4A] dark:text-white">
+                <h2 className="text-2xl md:text-3xl leading-snug font-semibold text-[#111A4A] dark:text-white">
                   {currentStudy.title}
                 </h2>
 
-                <blockquote className="text-lg font-medium text-[#111A4A]/60 dark:text-gray-400 italic">
+                <blockquote className="text-base md:text-lg font-medium text-[#111A4A]/60 dark:text-gray-400 italic">
                   "{currentStudy.quote}"
                 </blockquote>
               </motion.div>
@@ -392,7 +385,8 @@ export const ForexTestimonials = () => {
                 <button
                   key={cs.id}
                   onClick={() => goToSlide(index)}
-                  className={`h-3 rounded-full transition-all duration-300 ${
+                  aria-label={cs.program}
+                  className={`relative h-3 rounded-full transition-all duration-300 after:absolute after:-inset-3 after:content-[""] ${
                     index === currentIndex
                       ? "bg-[#111A4A] dark:bg-white w-8"
                       : "bg-gray-300 dark:bg-gray-600 w-3 hover:bg-gray-400 dark:hover:bg-gray-500"
@@ -403,7 +397,8 @@ export const ForexTestimonials = () => {
           </div>
 
           {/* RIGHT SIDE - ANIMATED VISUALS (BARU) */}
-          <div className="relative h-[500px] lg:h-[600px] hidden lg:block">
+          {isLg && (
+          <div className="relative h-[600px]">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentStudy.id + "-visuals"}
@@ -422,16 +417,10 @@ export const ForexTestimonials = () => {
                 <FloatingParticles />
 
                 {/* Main Central Element */}
-                <motion.div
-                  className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-                  animate={{
-                    y: [0, -10, 0],
-                  }}
-                  transition={{
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                <div
+                  className="fx-float"
+                  style={{ "--fx-float": "-10px", "--fx-dur": "4s" } as React.CSSProperties}
                 >
                   <div
                     className="w-48 h-48 rounded-3xl shadow-2xl flex items-center justify-center relative overflow-hidden"
@@ -440,27 +429,18 @@ export const ForexTestimonials = () => {
                       border: `2px solid ${currentStudy.accentColor}30`,
                     }}
                   >
-                    <motion.div
-                      className="text-6xl font-black"
-                      style={{ color: currentStudy.accentColor }}
-                      animate={{ scale: [1, 1.05, 1] }}
-                      transition={{ duration: 2, repeat: Infinity }}
+                    <div
+                      className="text-6xl font-black fx-pulse"
+                      style={{ color: currentStudy.accentColor, "--fx-dur": "2s" } as React.CSSProperties}
                     >
                       FBL
-                    </motion.div>
+                    </div>
 
                     {/* Shine Effect */}
-                    <motion.div
-                      className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12"
-                      animate={{ x: ["-200%", "200%"] }}
-                      transition={{
-                        duration: 3,
-                        repeat: Infinity,
-                        repeatDelay: 2,
-                      }}
-                    />
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent fx-shine" />
                   </div>
-                </motion.div>
+                </div>
+                </div>
 
                 {/* Floating Cards */}
                 <AnimatedChart accentColor={currentStudy.accentColor} />
@@ -494,37 +474,28 @@ export const ForexTestimonials = () => {
                 />
 
                 {/* Decorative Elements */}
-                <motion.div
-                  className="absolute w-20 h-20 border-2 rounded-full"
+                <div
+                  className="absolute w-20 h-20 border-2 rounded-full fx-spin"
                   style={{
                     borderColor: `${currentStudy.accentColor}30`,
                     top: "20%",
                     left: "60%",
-                  }}
-                  animate={{ rotate: 360 }}
-                  transition={{
-                    duration: 20,
-                    repeat: Infinity,
-                    ease: "linear",
-                  }}
+                    "--fx-dur": "20s",
+                  } as React.CSSProperties}
                 />
-                <motion.div
-                  className="absolute w-12 h-12 border-2 rounded-lg"
+                <div
+                  className="absolute w-12 h-12 border-2 rounded-lg fx-spin fx-spin-reverse"
                   style={{
                     borderColor: `${currentStudy.accentColor}20`,
                     bottom: "25%",
                     right: "15%",
-                  }}
-                  animate={{ rotate: -360 }}
-                  transition={{
-                    duration: 15,
-                    repeat: Infinity,
-                    ease: "linear",
-                  }}
+                    "--fx-dur": "15s",
+                  } as React.CSSProperties}
                 />
               </motion.div>
             </AnimatePresence>
           </div>
+          )}
         </div>
       </div>
     </div>

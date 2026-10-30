@@ -24,7 +24,8 @@ const generateDataPoints = (): DataPoint[] => {
   const points: DataPoint[] = [];
   const baseLeft = 1;
   const spacing = 32;
-  for (let i = 0; i < 50; i++) {
+  // Area grafik 680px / spacing 32px ≈ 22 garis yang benar-benar terlihat
+  for (let i = 0; i < 22; i++) {
     const direction = i % 2 === 0 ? "down" : "up";
     const height = Math.round(Math.random() * 120) + 88;
     const top =
@@ -89,21 +90,22 @@ const ShimmerText = ({
   children: React.ReactNode;
   delay?: number;
 }) => (
-  <motion.div
-    initial={{ backgroundPosition: "-200% 0" }}
-    animate={{ backgroundPosition: "200% 0" }}
-    transition={{ duration: 3, delay, repeat: Infinity, ease: "linear" }}
-    style={{
-      background:
-        "linear-gradient(90deg, #167E6C 0%, #22d3a8 50%, #167E6C 100%)",
-      backgroundSize: "200% 100%",
-      WebkitBackgroundClip: "text",
-      WebkitTextFillColor: "transparent",
-      backgroundClip: "text",
-    }}
+  <div
+    className="fx-shimmer"
+    style={
+      {
+        background:
+          "linear-gradient(90deg, #167E6C 0%, #22d3a8 50%, #167E6C 100%)",
+        backgroundSize: "200% 100%",
+        WebkitBackgroundClip: "text",
+        WebkitTextFillColor: "transparent",
+        backgroundClip: "text",
+        "--fx-delay": `${delay}s`,
+      } as React.CSSProperties
+    }
   >
     {children}
-  </motion.div>
+  </div>
 );
 
 // KOMPONEN DATA LINE DENGAN ANIMASI BERGERAK
@@ -134,52 +136,34 @@ const AnimatedDataLine = ({
         backgroundColor: "rgba(22, 126, 108, 0.01)",
       }}
     >
-      {/* ANIMASI WAVE YANG BERGERAK NAik TURUN */}
-      <motion.div
-        className="absolute inset-0 rounded-[3px] origin-bottom"
-        style={{
-          background:
-            point.direction === "down"
-              ? "linear-gradient(to top, rgba(22, 126, 108, 0.8) 0%, rgba(176, 200, 196, 0.4) 100%)"
-              : "linear-gradient(to bottom, rgba(22, 126, 108, 0.8) 0%, rgba(176, 200, 196, 0.4) 100%)",
-        }}
-        animate={
-          isVisible
-            ? {
-                scaleY: [0.3, 1, 0.5, 0.9, 0.4, 1, 0.6],
-                opacity: [0.4, 0.9, 0.5, 0.8, 0.3, 0.9, 0.5],
-              }
-            : {}
-        }
-        transition={{
-          duration: point.duration,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: point.delay + 1.5,
-        }}
-      />
-
-      {/* ANIMASI GLOW PULSE */}
-      <motion.div
-        className="absolute inset-0 rounded-[3px]"
-        style={{
-          boxShadow: "0 0 8px rgba(22, 126, 108, 0.6)",
-        }}
-        animate={
-          isVisible
-            ? {
-                opacity: [0.2, 0.7, 0.2],
-                scale: [1, 1.1, 1],
-              }
-            : {}
-        }
-        transition={{
-          duration: 2,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: point.delay + 1.5,
-        }}
-      />
+      {/* Animasi wave & glow via CSS (jalan di compositor, bukan JS per frame) */}
+      {isVisible && (
+        <>
+          <div
+            className="absolute inset-0 rounded-[3px] fx-wave"
+            style={
+              {
+                background:
+                  point.direction === "down"
+                    ? "linear-gradient(to top, rgba(22, 126, 108, 0.8) 0%, rgba(176, 200, 196, 0.4) 100%)"
+                    : "linear-gradient(to bottom, rgba(22, 126, 108, 0.8) 0%, rgba(176, 200, 196, 0.4) 100%)",
+                "--fx-dur": `${point.duration}s`,
+                "--fx-delay": `${point.delay + 1.5}s`,
+              } as React.CSSProperties
+            }
+          />
+          <div
+            className="absolute inset-0 rounded-[3px] fx-pulse"
+            style={
+              {
+                boxShadow: "0 0 8px rgba(22, 126, 108, 0.6)",
+                "--fx-dur": "2s",
+                "--fx-delay": `${point.delay + 1.5}s`,
+              } as React.CSSProperties
+            }
+          />
+        </>
+      )}
 
       {/* DOT DENGAN ANIMASI */}
       <motion.div
@@ -196,42 +180,21 @@ const AnimatedDataLine = ({
         }}
       >
         {/* RIPPLE EFFECT */}
-        <motion.div
-          className="absolute inset-0 bg-[#167E6C] rounded-full"
-          animate={
-            isVisible
-              ? {
-                  scale: [1, 3, 3],
-                  opacity: [0.6, 0, 0],
-                }
-              : {}
-          }
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            repeatDelay: 1,
-            ease: "easeOut",
-          }}
-        />
-        {/* SECONDARY RIPPLE */}
-        <motion.div
-          className="absolute inset-0 bg-[#22d3a8] rounded-full"
-          animate={
-            isVisible
-              ? {
-                  scale: [1, 2.5, 2.5],
-                  opacity: [0.4, 0, 0],
-                }
-              : {}
-          }
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            repeatDelay: 1,
-            delay: 0.5,
-            ease: "easeOut",
-          }}
-        />
+        {isVisible && (
+          <>
+            <div className="absolute inset-0 bg-[#167E6C] rounded-full fx-ripple" />
+            <div
+              className="absolute inset-0 bg-[#22d3a8] rounded-full fx-ripple"
+              style={
+                {
+                  "--fx-delay": "0.5s",
+                  "--fx-ripple-scale": 2.5,
+                  "--fx-ripple-opacity": 0.4,
+                } as React.CSSProperties
+              }
+            />
+          </>
+        )}
       </motion.div>
     </motion.div>
   );
@@ -290,11 +253,10 @@ export const BankingScaleHero = () => {
   };
 
   const descriptionVariants = {
-    hidden: { opacity: 0, y: 20, filter: "blur(10px)" },
+    hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 0.6,
       y: 0,
-      filter: "blur(0px)",
       transition: { duration: 1, delay: 0.3, ease: "easeOut" },
     },
   };
@@ -319,13 +281,13 @@ export const BankingScaleHero = () => {
 
   return (
     <div className="w-full overflow-hidden bg-white dark:bg-[#050508] transition-colors duration-500 relative">
-      <div className="mx-auto max-w-7xl px-8 py-24 pt-16 relative">
-        <div className="grid grid-cols-12 gap-5 gap-y-16 relative">
+      <div className="mx-auto max-w-7xl px-5 sm:px-8 py-16 md:py-24 pt-12 md:pt-16 relative">
+        <div className="grid grid-cols-12 gap-5 gap-y-10 md:gap-y-16 relative">
           {/* LEFT CONTENT */}
           <div className="col-span-12 md:col-span-6 relative z-20">
             {/* TOP TAGLINE */}
             <motion.div
-              className="relative h-6 inline-flex items-center font-mono text-xs text-[#167E6C] dark:text-[#22d3a8] mb-12 px-2"
+              className="relative h-6 inline-flex items-center text-xs font-medium uppercase tracking-[0.12em] text-[#167E6C] dark:text-[#22d3a8] mb-8 md:mb-12 px-2"
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, ease: "easeOut" }}
@@ -351,18 +313,15 @@ export const BankingScaleHero = () => {
                       </motion.span>
                     ))}
                 </motion.span>
-                <motion.span
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: typingComplete ? [1, 0, 1, 0] : 0 }}
-                  transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                  className="block w-1.5 h-3 bg-[#167E6C] dark:bg-[#22d3a8] ml-0.5 rounded-sm"
+                <span
+                  className={`block w-1.5 h-3 bg-[#167E6C] dark:bg-[#22d3a8] ml-0.5 rounded-sm ${typingComplete ? "fx-blink" : "opacity-0"}`}
                 />
               </div>
             </motion.div>
 
             {/* TITLE */}
             <motion.h2
-              className="text-[40px] font-normal leading-tight tracking-tight text-[#111A4A] dark:text-white mb-6"
+              className="text-3xl md:text-[40px] font-normal leading-tight tracking-tight text-[#111A4A] dark:text-white mb-6"
               variants={titleVariants}
               initial="hidden"
               animate="visible"
@@ -372,7 +331,7 @@ export const BankingScaleHero = () => {
 
             {/* DESCRIPTION */}
             <motion.p
-              className="text-lg leading-6 text-[#111A4A] dark:text-gray-300 opacity-60 dark:opacity-80 mt-0 mb-6"
+              className="text-base md:text-lg leading-relaxed text-[#111A4A] dark:text-gray-300 opacity-60 dark:opacity-80 mt-0 mb-6"
               variants={descriptionVariants}
               initial="hidden"
               animate="visible"
@@ -384,7 +343,7 @@ export const BankingScaleHero = () => {
           {/* RIGHT GRAPH - Z-INDEX LEBIH RENDAH */}
           <div className="col-span-12 md:col-span-6 relative z-10">
             <motion.div
-              className="relative w-full h-[416px] md:-ml-[200px]"
+              className="relative w-full h-[260px] md:h-[416px] md:-ml-[200px]"
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{
@@ -394,25 +353,16 @@ export const BankingScaleHero = () => {
               }}
             >
               {/* BACKGROUND GLOW */}
-              <div className="absolute top-0 left-0 md:left-[302px] w-full md:w-[680px] h-[416px] pointer-events-none overflow-hidden">
-                <motion.div
-                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full"
+              <div className="absolute top-0 left-0 md:left-[302px] w-full md:w-[680px] h-[260px] md:h-[416px] pointer-events-none overflow-hidden">
+                <div
+                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full opacity-50"
                   style={{
                     background:
                       "radial-gradient(circle, rgba(22, 126, 108, 0.15) 0%, transparent 70%)",
                   }}
-                  animate={{
-                    scale: [1, 1.2, 1],
-                    opacity: [0.3, 0.6, 0.3],
-                  }}
-                  transition={{
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
                 />
 
-                <div className="relative w-full h-full">
+                <div className="relative w-[680px] h-[416px] origin-top-left scale-[0.62] md:scale-100">
                   {!mounted || dataPoints === null ? (
                     <div className="w-full h-full" aria-hidden />
                   ) : (

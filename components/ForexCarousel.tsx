@@ -6,6 +6,22 @@ function ForexCarousel() {
   const container = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const el = container.current;
+    if (!el) return;
+    // Widget TradingView baru dimuat saat mendekati layar
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        io.disconnect();
+        injectWidget();
+      },
+      { rootMargin: "300px" }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  const injectWidget = () => {
     // Prevent duplicate injections in React Strict Mode
     if (container.current && container.current.querySelector("iframe")) return;
     if (container.current && container.current.querySelector("script")) {
@@ -50,7 +66,7 @@ function ForexCarousel() {
     if (container.current) {
       container.current.appendChild(script);
     }
-  }, []);
+  };
 
   return (
     <div className="w-full bg-[#0B0F19] border-y border-white/10 overflow-hidden" style={{ minHeight: "46px" }}>

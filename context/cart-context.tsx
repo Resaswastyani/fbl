@@ -402,6 +402,7 @@ import React, {
   useState,
   useEffect,
   useCallback,
+  useRef,
 } from "react";
 
 export interface CartItem {
@@ -433,31 +434,42 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [isOpen, setIsOpen] = useState(false);
-  const [snapReady, setSnapReady] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState<string | null>(null);
 
-  // Load Midtrans Snap
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.src =
-      process.env.NEXT_PUBLIC_MIDTRANS_ENVIRONMENT === "production"
-        ? "https://app.midtrans.com/snap/snap.js"
-        : "https://app.sandbox.midtrans.com/snap/snap.js";
-    script.setAttribute(
-      "data-client-key",
-      process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY || "",
-    );
-    script.onload = () => setSnapReady(true);
-    script.onerror = () => console.error("Failed to load Snap.js");
-    document.body.appendChild(script);
-    return () => {
-      if (script.parentNode) {
-        document.body.removeChild(script);
-      }
-    };
+  // Muat Midtrans Snap hanya saat dibutuhkan (keranjang dibuka / checkout),
+  // bukan di setiap halaman — lebih ringan dan tidak memicu script pihak ketiga.
+  const snapPromiseRef = useRef<Promise<boolean> | null>(null);
+  const loadSnap = useCallback(() => {
+    if ((window as any).snap) return Promise.resolve(true);
+    if (snapPromiseRef.current) return snapPromiseRef.current;
+    snapPromiseRef.current = new Promise<boolean>((resolve) => {
+      const script = document.createElement("script");
+      script.src =
+        process.env.NEXT_PUBLIC_MIDTRANS_ENVIRONMENT === "production"
+          ? "https://app.midtrans.com/snap/snap.js"
+          : "https://app.sandbox.midtrans.com/snap/snap.js";
+      script.setAttribute(
+        "data-client-key",
+        process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY || "",
+      );
+      script.async = true;
+      script.onload = () => resolve(true);
+      script.onerror = () => {
+        console.error("Failed to load Snap.js");
+        snapPromiseRef.current = null;
+        resolve(false);
+      };
+      document.body.appendChild(script);
+    });
+    return snapPromiseRef.current;
   }, []);
+
+  // Preload Snap begitu keranjang dibuka agar checkout tetap instan
+  useEffect(() => {
+    if (isOpen) loadSnap();
+  }, [isOpen, loadSnap]);
 
   // Check auth dan load cart - menggunakan API backend
   const checkAuth = useCallback(async () => {
@@ -467,9 +479,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         cache: "no-store",
       });
 
-      const authenticated = authRes.ok;
-      const authData = authenticated ? await authRes.json() : null;
+      const authData = authRes.ok ? await authRes.json() : null;
       const currentUserId = authData?.user?.id || null;
+      const authenticated = !!currentUserId;
 
       setIsLoggedIn(authenticated);
       setUserId(currentUserId);
@@ -638,7 +650,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         credentials: "include",
         cache: "no-store",
       });
-      const authenticated = authRes.ok;
+      const authData = authRes.ok ? await authRes.json() : null;
+      const authenticated = !!authData?.user;
       setIsLoggedIn(authenticated);
 
       if (authenticated) {
@@ -751,7 +764,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       cache: "no-store",
     });
 
-    if (!authCheck.ok) {
+    const authCheckData = authCheck.ok ? await authCheck.json() : null;
+    if (!authCheckData?.user) {
       // Gunakan notifikasi frontend (alert) bukan redirect langsung
       alert("Silakan login terlebih dahulu untuk melanjutkan pembayaran.");
       // Dispatch event untuk membuka modal login jika ada
@@ -759,7 +773,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       return;
     }
 
-    if (!snapReady || !(window as any).snap) {
+    const snapLoaded = await loadSnap();
+    if (!snapLoaded || !(window as any).snap) {
       alert("Pembayaran belum siap. Tunggu 1–2 detik lalu coba lagi.");
       return;
     }

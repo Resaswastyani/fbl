@@ -80,10 +80,9 @@
     var(--font-figtree), "Figtree", "Figtree Fallback", system-ui, sans-serif;
   --font-figtree:
     var(--font-figtree), "Figtree", "Figtree Fallback", system-ui, sans-serif;
-  /* Update font-mono to use Geist Mono variable */
+  /* font-mono disamakan ke Figtree agar senada; angka dibuat tabular (lihat .font-mono) */
   --font-mono:
-    var(--font-geist-mono), "Geist Mono", "Geist Mono Fallback", ui-monospace,
-    monospace;
+    var(--font-figtree), "Figtree", "Figtree Fallback", system-ui, sans-serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -202,6 +201,11 @@
   color: #6e6e6e;
 }
 
+.article-content code,
+.article-content pre {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
 .article-content code {
   background-color: #f3f4f6;
   padding: 0.2rem 0.4rem;
@@ -292,4 +296,109 @@
 
 .animate-pulse-green {
   animation: pulse-green 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Lightweight decorative animations (CSS, GPU-friendly)
+   Dipakai untuk efek dekoratif agar tidak membebani main thread
+   seperti loop framer-motion `repeat: Infinity`.
+   ───────────────────────────────────────────────────────────── */
+@keyframes fx-float {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, var(--fx-float, -8px), 0); }
+}
+@keyframes fx-drift {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  33% { transform: translate3d(40px, -30px, 0) scale(1.08); }
+  66% { transform: translate3d(-20px, 20px, 0) scale(0.95); }
+}
+@keyframes fx-twinkle {
+  0%, 100% { opacity: 0; transform: scale(0.5); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+@keyframes fx-scan {
+  0% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, 100%, 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
+@keyframes fx-pulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+@keyframes fx-spin {
+  to { transform: rotate(360deg); }
+}
+
+.fx-float { animation: fx-float var(--fx-dur, 5s) ease-in-out var(--fx-delay, 0s) infinite; will-change: transform; }
+.fx-drift { animation: fx-drift var(--fx-dur, 16s) ease-in-out var(--fx-delay, 0s) infinite; will-change: transform; }
+.fx-twinkle { animation: fx-twinkle var(--fx-dur, 3s) ease-in-out var(--fx-delay, 0s) infinite; opacity: 0; }
+.fx-scan { animation: fx-scan var(--fx-dur, 10s) linear infinite; will-change: transform; }
+.fx-pulse { animation: fx-pulse var(--fx-dur, 3s) ease-in-out var(--fx-delay, 0s) infinite; }
+.fx-spin { animation: fx-spin var(--fx-dur, 8s) linear infinite; }
+
+/* Jangan render section di luar layar sampai mendekati viewport */
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 800px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fx-float, .fx-drift, .fx-twinkle, .fx-scan, .fx-pulse, .fx-spin {
+    animation: none !important;
+  }
+  .fx-twinkle { opacity: 0.6; }
+  html { scroll-behavior: auto; }
+}
+
+/* Angka sejajar untuk harga/statistik yang dulu memakai font mono */
+.font-mono {
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes fx-wave {
+  0% { transform: scaleY(0.3); opacity: 0.4; }
+  17% { transform: scaleY(1); opacity: 0.9; }
+  33% { transform: scaleY(0.5); opacity: 0.5; }
+  50% { transform: scaleY(0.9); opacity: 0.8; }
+  67% { transform: scaleY(0.4); opacity: 0.3; }
+  83% { transform: scaleY(1); opacity: 0.9; }
+  100% { transform: scaleY(0.6); opacity: 0.5; }
+}
+@keyframes fx-ripple {
+  0% { transform: scale(1); opacity: var(--fx-ripple-opacity, 0.6); }
+  66%, 100% { transform: scale(var(--fx-ripple-scale, 3)); opacity: 0; }
+}
+@keyframes fx-shimmer {
+  from { background-position: -200% 0; }
+  to { background-position: 200% 0; }
+}
+@keyframes fx-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+.fx-wave { animation: fx-wave var(--fx-dur, 4s) ease-in-out var(--fx-delay, 0s) infinite alternate; transform-origin: bottom; }
+.fx-ripple { animation: fx-ripple 3s ease-out var(--fx-delay, 0s) infinite; }
+.fx-shimmer { animation: fx-shimmer 3s linear var(--fx-delay, 0s) infinite; }
+.fx-blink { animation: fx-blink 1s steps(1) infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .fx-wave, .fx-ripple, .fx-shimmer, .fx-blink { animation: none !important; }
+}
+
+@keyframes fx-marquee {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+.fx-marquee { animation: fx-marquee var(--fx-dur, 40s) linear infinite; will-change: transform; }
+@media (prefers-reduced-motion: reduce) {
+  .fx-marquee { animation: none !important; }
+}
+
+@keyframes fx-shine {
+  0% { transform: translate3d(-200%, 0, 0) skewX(-12deg); }
+  60%, 100% { transform: translate3d(200%, 0, 0) skewX(-12deg); }
+}
+.fx-shine { animation: fx-shine 5s ease-in-out infinite; }
+.fx-spin-reverse { animation-direction: reverse; }
+@media (prefers-reduced-motion: reduce) {
+  .fx-shine { animation: none !important; }
 }

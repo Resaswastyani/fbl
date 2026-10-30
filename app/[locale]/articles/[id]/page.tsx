@@ -157,9 +157,6 @@ export default function ArticleDetailPage() {
               {/* Title - Full width */}
               <h1
                 className="text-[32px] md:text-[48px] lg:text-[56px] font-medium leading-tight tracking-tight text-[#111A4A] dark:text-white mb-6 max-w-5xl"
-                style={{
-                  fontFamily: "var(--font-figtree), Figtree",
-                }}
               >
                 {locale === 'en' && article.title_en ? article.title_en : article.title}
               </h1>
@@ -231,7 +228,6 @@ export default function ArticleDetailPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
               className="prose prose-lg max-w-none w-full"
-              style={{ fontFamily: "var(--font-figtree), Figtree" }}
             >
               {/* Custom prose styling to match theme - Full width */}
               <div
@@ -269,7 +265,6 @@ export default function ArticleDetailPage() {
               >
                 <h2
                   className="text-2xl font-medium text-[#111A4A] dark:text-white mb-8"
-                  style={{ fontFamily: "var(--font-figtree), Figtree" }}
                 >
                   Artikel Terkait
                 </h2>
@@ -311,7 +306,6 @@ export default function ArticleDetailPage() {
                         </div>
                         <h3
                           className="text-lg font-medium text-[#111A4A] dark:text-white leading-tight group-hover:text-[#156d95] dark:group-hover:text-[#22d3a8] transition-colors line-clamp-2"
-                          style={{ fontFamily: "var(--font-figtree), Figtree" }}
                         >
                           {locale === 'en' && related.title_en ? related.title_en : related.title}
                         </h3>
@@ -335,13 +329,11 @@ export default function ArticleDetailPage() {
             >
               <h2
                 className="text-[32px] md:text-[40px] font-medium leading-tight text-[#111A4A] dark:text-white mb-6"
-                style={{ fontFamily: "var(--font-figtree), Figtree" }}
               >
                 Siap Memulai Trading Journey Anda?
               </h2>
               <p
                 className="text-lg text-[#6e6e6e] dark:text-gray-400 mb-8 max-w-2xl mx-auto"
-                style={{ fontFamily: "var(--font-figtree), Figtree" }}
               >
                 Bergabunglah dengan ribuan trader Indonesia yang telah belajar
                 bersama Forex for Better Living.

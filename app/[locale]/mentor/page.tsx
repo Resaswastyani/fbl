@@ -132,7 +132,6 @@ export default function MentorPage() {
                 {/* Animated Title */}
                 <motion.h1
                   className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight"
-                  style={{ fontFamily: "var(--font-figtree), Figtree" }}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.2 }}
@@ -166,7 +165,6 @@ export default function MentorPage() {
                 {/* Animated Description */}
                 <motion.p
                   className="text-lg md:text-xl text-white/80 leading-relaxed mb-12 max-w-2xl mx-auto"
-                  style={{ fontFamily: "var(--font-figtree), Figtree" }}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.4 }}
@@ -316,7 +314,6 @@ export default function MentorPage() {
               </motion.span>
               <h2
                 className="text-3xl md:text-4xl font-bold text-[#111A4A]"
-                style={{ fontFamily: "var(--font-figtree), Figtree" }}
               >
                 Bertemu dengan Para Expert
               </h2>
@@ -336,7 +333,6 @@ export default function MentorPage() {
             <div className="text-center mb-12">
               <motion.h2
                 className="text-3xl font-bold text-[#111A4A] mb-4"
-                style={{ fontFamily: "var(--font-figtree), Figtree" }}
                 initial={{ opacity: 0, scale: 0.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
@@ -393,7 +389,6 @@ export default function MentorPage() {
                   </motion.div>
                   <h3
                     className="text-xl font-semibold text-[#111A4A] mb-3"
-                    style={{ fontFamily: "var(--font-figtree), Figtree" }}
                   >
                     {item.title}
                   </h3>
@@ -433,7 +428,6 @@ export default function MentorPage() {
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
             <motion.h2
               className="text-3xl font-bold text-white mb-4"
-              style={{ fontFamily: "var(--font-figtree), Figtree" }}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}

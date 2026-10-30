@@ -413,14 +413,7 @@ export default function RobotTradingCenter() {
             style={{ y: yBg }}
             className="absolute -top-[20%] -left-[10%] w-[50%] h-[70%] rounded-full bg-blue-100 opacity-60 blur-[100px]"
           />
-          <motion.div
-            animate={{
-              scale: [1, 1.1, 1],
-              opacity: [0.3, 0.5, 0.3]
-            }}
-            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute top-[20%] -right-[10%] w-[60%] h-[80%] rounded-full bg-cyan-100 opacity-50 blur-[120px]"
-          />
+          <div className="absolute top-[20%] -right-[10%] w-[60%] h-[80%] rounded-full bg-cyan-100 opacity-40 blur-[120px]" />
           {/* Subtle Grid */}
           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03]"></div>
           {/* Floating particles */}
@@ -447,7 +440,7 @@ export default function RobotTradingCenter() {
               <span className="text-xs font-bold text-[#156d95] uppercase tracking-wider">REGIME DEPENDENT EA</span>
             </div>
 
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1] tracking-tight text-[#111A4A]">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1] tracking-tight text-[#111A4A]">
               EA / Robot <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#156d95] to-cyan-500">Trading Center</span>
             </h1>

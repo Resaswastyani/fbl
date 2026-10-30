@@ -20,7 +20,7 @@ export default function AnnouncementBar() {
       if (window.scrollY > 40) setVisible(false);
       else setVisible(true);
     };
-    window.addEventListener("scroll", onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, [closed]);
 
@@ -31,8 +31,8 @@ export default function AnnouncementBar() {
       className="
         fixed top-0 left-0 w-full z-9999
         bg-[#EFE9FF] dark:bg-[#0a0a1a] text-[#111A4A] dark:text-gray-200
-        py-2 px-4 text-sm
-        flex items-center justify-center gap-4
+        py-2 pl-4 pr-10 text-xs sm:text-sm
+        flex items-center justify-center gap-2 sm:gap-4
         shadow-sm dark:shadow-[0_1px_0_rgba(255,255,255,0.08)]
         animate-fade-in transition-colors duration-500
       "
@@ -48,6 +48,7 @@ export default function AnnouncementBar() {
 
       <button
         onClick={handleClose}
+        aria-label="Tutup"
         className="
           absolute right-3 top-1/2 -translate-y-1/2
           text-[#111A4A] dark:text-gray-400 hover:opacity-70 transition

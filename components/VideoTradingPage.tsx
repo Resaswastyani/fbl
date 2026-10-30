@@ -102,12 +102,7 @@ export const VideoTradingPage = () => {
 
             {/* Headline */}
             <h1
-              className="text-[40px] font-normal leading-tight tracking-tight text-[#111A4A] dark:text-white mb-6"
-              style={{
-                fontFamily: "var(--font-figtree), Figtree",
-                fontSize: "50px",
-                fontWeight: "500",
-              }}
+              className="text-4xl sm:text-5xl font-medium leading-[1.1] tracking-tight text-[#111A4A] dark:text-white mb-6"
             >
               {t("heroTitle")}
             </h1>
@@ -115,7 +110,6 @@ export const VideoTradingPage = () => {
             {/* Subheadline */}
             <p
               className="text-lg leading-6 text-[#111A4A] dark:text-gray-300 opacity-60 dark:opacity-80 mt-0 mb-6"
-              style={{ fontFamily: "var(--font-figtree), Figtree" }}
             >
               {t("heroSubtitle")}
             </p>
@@ -223,7 +217,6 @@ export const VideoTradingPage = () => {
               </span>
               <h2
                 className="text-3xl font-semibold text-[#111A4A] dark:text-white mt-2"
-                style={{ fontFamily: "var(--font-figtree), Figtree" }}
               >
                 {t("latestTradingVideos")}
               </h2>
@@ -301,7 +294,6 @@ export const VideoTradingPage = () => {
                   <div className="p-5">
                     <h3
                       className="font-semibold text-[#111A4A] dark:text-white line-clamp-2 mb-2 group-hover:text-[#156d95] dark:group-hover:text-[#22d3a8] transition-colors"
-                      style={{ fontFamily: "var(--font-figtree), Figtree" }}
                     >
                       {locale === "en" && video.title_en ? video.title_en : video.title}
                     </h3>
@@ -347,7 +339,6 @@ export const VideoTradingPage = () => {
           >
             <h2
               className="text-3xl md:text-4xl font-semibold text-white mb-4"
-              style={{ fontFamily: "var(--font-figtree), Figtree" }}
             >
               {t("readyToStart")}
             </h2>
@@ -407,7 +398,6 @@ export const VideoTradingPage = () => {
             <div className="p-6 bg-white dark:bg-gray-900 transition-colors">
               <h3
                 className="text-xl font-semibold text-[#111A4A] dark:text-white mb-2"
-                style={{ fontFamily: "var(--font-figtree), Figtree" }}
               >
                 {locale === "en" && selectedVideo.title_en ? selectedVideo.title_en : selectedVideo.title}
               </h3>

@@ -31,13 +31,13 @@
   },
   "Stats": {
     "practical": "Practical & Simple",
-    "practicalDesc": "Methods designed for\\neasy access for anyone",
+    "practicalDesc": "Methods designed for easy access for anyone",
     "coreBusiness": "Core Business Materials",
-    "coreBusinessDesc": "Core strategies for building\\na solid trading business",
+    "coreBusinessDesc": "Core strategies for building a solid trading business",
     "easyImplement": "Easy to Implement",
-    "easyImplementDesc": "Technical steps ready\\nto be practiced immediately",
+    "easyImplementDesc": "Technical steps ready to be practiced immediately",
     "fastMastery": "Fast Mastery",
-    "fastMasteryDesc": "Efficient curriculum for\\nmore optimal results"
+    "fastMasteryDesc": "Efficient curriculum for more optimal results"
   },
   "WhyChoose": {
     "title": "Why Choose FBL",

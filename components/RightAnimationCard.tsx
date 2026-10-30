@@ -191,18 +191,18 @@ function CandlestickChart({ candles, pair, livePrice, crosshairX, onMouseMove, o
         <rect x={W} y={0} width={Y_AXIS_W} height={CHART_H + VOL_H + 4} fill="transparent" />
         <line x1={W} y1={0} x2={W} y2={CHART_H + VOL_H + 4} stroke="rgba(255,255,255,0.08)" strokeWidth={1} />
         {yLabels.map((l, i) => (
-          <text key={i} x={W + 6} y={l.y + 3} fill="rgba(255,255,255,0.4)" fontSize={8} fontFamily="monospace">{l.label}</text>
+          <text key={i} x={W + 6} y={l.y + 3} fill="rgba(255,255,255,0.4)" fontSize={8} fontFamily="inherit">{l.label}</text>
         ))}
 
         {/* Live Badge */}
         <rect x={W} y={livePriceY - 8} width={Y_AXIS_W} height={16} fill={liveUp ? pair.bullColor : pair.bearColor} rx={2} />
-        <text x={W + Y_AXIS_W / 2} y={livePriceY + 3} textAnchor="middle" fill="#fff" fontSize={9} fontWeight="bold" fontFamily="monospace">{fmtPrice(livePrice, pair.pip)}</text>
+        <text x={W + Y_AXIS_W / 2} y={livePriceY + 3} textAnchor="middle" fill="#fff" fontSize={9} fontWeight="bold" fontFamily="inherit">{fmtPrice(livePrice, pair.pip)}</text>
 
         {/* Hover Badge */}
         {crosshairX !== null && (
           <>
             <rect x={W} y={toY(hoverCandle.close) - 8} width={Y_AXIS_W} height={16} fill="#2a2e39" stroke="rgba(255,255,255,0.2)" strokeWidth={1} rx={2} />
-            <text x={W + Y_AXIS_W / 2} y={toY(hoverCandle.close) + 3} textAnchor="middle" fill="#fff" fontSize={8} fontFamily="monospace">{fmtPrice(hoverCandle.close, pair.pip)}</text>
+            <text x={W + Y_AXIS_W / 2} y={toY(hoverCandle.close) + 3} textAnchor="middle" fill="#fff" fontSize={8} fontFamily="inherit">{fmtPrice(hoverCandle.close, pair.pip)}</text>
           </>
         )}
       </svg>
@@ -487,6 +487,36 @@ export default function RightAnimationCard() {
   const [candles, setCandles] = useState<Candle[]>([]);
   const [livePrice, setLivePrice] = useState(0);
   const [crosshairX, setCrosshairX] = useState<number | null>(null);
+  const [isDesktop, setIsDesktop] = useState<boolean | null>(null);
+  const [isVisible, setIsVisible] = useState(true);
+
+  // Render hanya satu varian (desktop atau mobile), bukan keduanya
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    const update = () => setIsDesktop(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  // Hentikan update chart saat di luar layar atau tab tidak aktif
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([entry]) => setIsVisible(entry.isIntersecting), {
+      rootMargin: "100px",
+    });
+    io.observe(el);
+    const onVis = () => {
+      if (document.hidden) setIsVisible(false);
+      else setIsVisible(el.getBoundingClientRect().top < window.innerHeight);
+    };
+    document.addEventListener("visibilitychange", onVis);
+    return () => {
+      io.disconnect();
+      document.removeEventListener("visibilitychange", onVis);
+    };
+  }, []);
 
   // Initialize and scale (only for desktop collage)
   useEffect(() => {
@@ -511,7 +541,7 @@ export default function RightAnimationCard() {
   }, []);
 
   useEffect(() => {
-    if (candles.length === 0) return;
+    if (candles.length === 0 || !isVisible) return;
     const id = setInterval(() => {
       setCandles(prev => {
         if (prev.length === 0) return prev;
@@ -525,11 +555,12 @@ export default function RightAnimationCard() {
         setLivePrice(last.close);
         return newPrev;
       });
-    }, 400);
+    }, 700);
     return () => clearInterval(id);
-  }, [candles.length]);
+  }, [candles.length, isVisible]);
 
   useEffect(() => {
+    if (!isVisible) return;
     const id = setInterval(() => {
       setCandles(prev => {
         if (prev.length === 0) return prev;
@@ -542,7 +573,7 @@ export default function RightAnimationCard() {
       });
     }, 8000);
     return () => clearInterval(id);
-  }, []);
+  }, [isVisible]);
 
   return (
     <div className="w-full flex items-center justify-center relative overflow-visible" ref={containerRef}>
@@ -550,8 +581,9 @@ export default function RightAnimationCard() {
       {/* ─────────────────────────────────────────────────────────────────
           DESKTOP COLLAGE CONTAINER (Hidden on mobile) 
           ───────────────────────────────────────────────────────────────── */}
+      {isDesktop && (
       <div
-        className="relative hidden md:block"
+        className="relative"
         style={{
           width: 850,
           height: 600,
@@ -560,8 +592,8 @@ export default function RightAnimationCard() {
         }}
       >
         {/* Glows */}
-        <div className="absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-blue-600/15 rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-1/4 right-1/4 w-[300px] h-[300px] bg-teal-500/10 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute top-1/4 left-1/4 w-[400px] h-[400px] rounded-full pointer-events-none" style={{ background: "radial-gradient(circle, rgba(37,99,235,0.15) 0%, transparent 70%)" }} />
+        <div className="absolute bottom-1/4 right-1/4 w-[300px] h-[300px] rounded-full pointer-events-none" style={{ background: "radial-gradient(circle, rgba(20,184,166,0.10) 0%, transparent 70%)" }} />
 
         {/* IMAC */}
         <motion.div
@@ -570,7 +602,7 @@ export default function RightAnimationCard() {
           transition={{ duration: 0.8, type: "spring" }}
           className="absolute top-[20px] left-[65px] z-0"
         >
-          <motion.div animate={{ y: [0, -5, 0] }} transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}>
+          <div className="fx-float" style={{ "--fx-float": "-5px", "--fx-dur": "6s", "--fx-delay": "0s" } as React.CSSProperties}>
             <div className="flex flex-col items-center">
               <div className="w-[740px] h-[480px] bg-[#1a1b20] rounded-t-2xl rounded-b-lg shadow-2xl overflow-hidden flex flex-col border border-gray-800">
                 <div className="flex-1 overflow-hidden bg-[#131418] relative">
@@ -583,7 +615,7 @@ export default function RightAnimationCard() {
               <div className="w-32 h-14 bg-gradient-to-b from-[#24252a] to-[#141518] rounded-b-lg shadow-inner z-[-1]"></div>
               <div className="w-48 h-1.5 bg-[#141518] rounded-full shadow-2xl mt-[-2px] z-[-1]"></div>
             </div>
-          </motion.div>
+          </div>
         </motion.div>
 
         {/* FLOAT CARD */}
@@ -593,9 +625,9 @@ export default function RightAnimationCard() {
           transition={{ duration: 0.8, delay: 0.2, type: "spring" }}
           className="absolute top-[-10px] right-[10px] z-10"
         >
-          <motion.div animate={{ y: [0, -8, 0] }} transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 0.5 }} className="rotate-3 origin-bottom-left">
+          <div className="fx-float rotate-3 origin-bottom-left" style={{ "--fx-float": "-8px", "--fx-dur": "5s", "--fx-delay": "0.5s" } as React.CSSProperties}>
             <TopRightCard />
-          </motion.div>
+          </div>
         </motion.div>
 
         {/* TABLET */}
@@ -605,7 +637,7 @@ export default function RightAnimationCard() {
           transition={{ duration: 0.8, delay: 0.4, type: "spring" }}
           className="absolute bottom-[-10px] left-[5px] z-20"
         >
-          <motion.div animate={{ y: [0, -12, 0] }} transition={{ repeat: Infinity, duration: 4.5, ease: "easeInOut", delay: 1 }} className="-rotate-6 origin-bottom-right">
+          <div className="fx-float -rotate-6 origin-bottom-right" style={{ "--fx-float": "-12px", "--fx-dur": "4.5s", "--fx-delay": "1s" } as React.CSSProperties}>
             <div className="w-[280px] h-[380px] bg-[#131418] rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)] border-[12px] border-[#0a0a0c] relative overflow-hidden flex flex-col">
               <div className="absolute top-0 w-full h-4 flex justify-center items-center z-10">
                 <div className="w-1.5 h-1.5 rounded-full bg-[#2a2a30]"></div>
@@ -614,7 +646,7 @@ export default function RightAnimationCard() {
                 <TabletContent />
               </div>
             </div>
-          </motion.div>
+          </div>
         </motion.div>
 
         {/* PHONE */}
@@ -624,7 +656,7 @@ export default function RightAnimationCard() {
           transition={{ duration: 0.8, delay: 0.6, type: "spring" }}
           className="absolute bottom-[-30px] right-[25px] z-30"
         >
-          <motion.div animate={{ y: [0, -15, 0] }} transition={{ repeat: Infinity, duration: 4, ease: "easeInOut", delay: 1.5 }} className="rotate-[8deg] origin-bottom-left">
+          <div className="fx-float rotate-[8deg] origin-bottom-left" style={{ "--fx-float": "-15px", "--fx-dur": "4s", "--fx-delay": "1.5s" } as React.CSSProperties}>
             <div className="w-[150px] h-[320px] bg-[#131418] rounded-[2rem] shadow-[0_30px_60px_rgba(0,0,0,0.6)] border-[8px] border-[#0a0a0c] relative overflow-hidden flex flex-col">
               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-4 bg-[#0a0a0c] rounded-b-xl z-10 flex justify-center items-end pb-1">
                 <div className="w-5 h-1 bg-white/10 rounded-full"></div>
@@ -633,14 +665,16 @@ export default function RightAnimationCard() {
                 <PhoneContent />
               </div>
             </div>
-          </motion.div>
+          </div>
         </motion.div>
       </div>
+      )}
 
       {/* ─────────────────────────────────────────────────────────────────
-          MOBILE STACK CONTAINER (Hidden on desktop) 
+          MOBILE STACK CONTAINER — ringkas: chart utama + kartu akun
           ───────────────────────────────────────────────────────────────── */}
-      <div className="w-full flex flex-col md:hidden items-center gap-8 pb-10">
+      {isDesktop === false && (
+      <div className="w-full flex flex-col items-center gap-5">
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -659,49 +693,13 @@ export default function RightAnimationCard() {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="w-full max-w-[300px]"
         >
-          <motion.div animate={{ y: [0, -6, 0] }} transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}>
+          <div className="fx-float" style={{ "--fx-float": "-6px", "--fx-dur": "5s", "--fx-delay": "0s" } as React.CSSProperties}>
             <TopRightCard />
-          </motion.div>
+          </div>
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="w-full max-w-[320px]"
-        >
-          <motion.div animate={{ y: [0, -8, 0] }} transition={{ repeat: Infinity, duration: 4.5, ease: "easeInOut", delay: 0.5 }}>
-            <div className="w-full h-[380px] bg-[#131418] rounded-[2rem] shadow-xl border-[12px] border-[#0a0a0c] relative overflow-hidden flex flex-col">
-              <div className="absolute top-0 w-full h-4 flex justify-center items-center z-10">
-                <div className="w-1.5 h-1.5 rounded-full bg-[#2a2a30]"></div>
-              </div>
-              <div className="flex-1 px-3 pt-6 pb-3 overflow-hidden bg-[#181920]">
-                <TabletContent />
-              </div>
-            </div>
-          </motion.div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="w-[200px]"
-        >
-          <motion.div animate={{ y: [0, -10, 0] }} transition={{ repeat: Infinity, duration: 4, ease: "easeInOut", delay: 1 }}>
-            <div className="w-full h-[340px] bg-[#131418] rounded-[2rem] shadow-xl border-[8px] border-[#0a0a0c] relative overflow-hidden flex flex-col">
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-4 bg-[#0a0a0c] rounded-b-xl z-10 flex justify-center items-end pb-1">
-                <div className="w-5 h-1 bg-white/10 rounded-full"></div>
-              </div>
-              <div className="flex-1 px-3 pt-8 pb-3 bg-[#181920]">
-                <PhoneContent />
-              </div>
-            </div>
-          </motion.div>
-        </motion.div>
       </div>
+      )}
 
     </div>
   );

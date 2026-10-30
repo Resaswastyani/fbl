@@ -1,6 +1,6 @@
 import type React from "react";
 import type { Metadata } from "next";
-import { Figtree, Inter, Geist_Mono } from "next/font/google";
+import { Figtree } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
@@ -21,21 +21,12 @@ import {
   JsonLd,
 } from "@/lib/seo";
 
+// Satu keluarga font untuk seluruh situs. Figtree adalah variable font,
+// jadi semua ketebalan (300–900) asli tersedia tanpa "faux bold".
 const figtree = Figtree({
   subsets: ["latin"],
   variable: "--font-figtree",
-  weight: ["400", "500", "600"],
-});
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-});
-
-const geistMono = Geist_Mono({
-  subsets: ["latin"],
-  variable: "--font-geist-mono",
-  weight: ["400", "500", "600"],
+  display: "swap",
 });
 
 const DEFAULT_TITLE =
@@ -135,7 +126,7 @@ export default async function RootLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <body
-        className={`${inter.variable} ${figtree.variable} ${geistMono.variable} font-sans antialiased`}
+        className={`${figtree.variable} font-sans antialiased`}
       >
         <JsonLd data={organizationJsonLd} />
         <NextIntlClientProvider messages={messages} locale={locale}>

@@ -79,9 +79,10 @@ export async function GET(req: NextRequest) {
   try {
     const token = req.cookies.get("session")?.value;
 
+    // Pengunjung tanpa sesi bukan error: balas 200 agar tidak muncul 401 di console
     if (!token) {
       return new NextResponse(JSON.stringify({ user: null }), {
-        status: 401,
+        status: 200,
         headers: {
           "Content-Type": "application/json",
           "Cache-Control":

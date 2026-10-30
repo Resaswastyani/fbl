@@ -119,7 +119,7 @@ export default function WebinarRegistrationPage() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="text-center lg:text-left flex-1"
           >
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-tight tracking-tight">
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold leading-tight tracking-tight">
               Manajemen Trading Forex dengan <br className="hidden lg:block" /><span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00C9A7] to-teal-200">EA/Robot Trading FBL</span>
             </h1>
           </motion.div>

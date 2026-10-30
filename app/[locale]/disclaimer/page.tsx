@@ -90,7 +90,7 @@
 //                 <AlertTriangle className="text-[#156d95]" size={32} />
 //                 <h1
 //                   className="text-2xl md:text-3xl font-semibold text-[#111A4A]"
-//                   style={{ fontFamily: "var(--font-figtree), Figtree" }}
+//
 //                 >
 //                   Disclaimer & Ketentuan
 //                 </h1>
@@ -98,7 +98,7 @@
 
 //               <p
 //                 className="text-[#6e6e6e]"
-//                 style={{ fontFamily: "var(--font-figtree), Figtree" }}
+//
 //               >
 //                 Mohon baca dengan seksama sebelum menggunakan layanan kami.
 //               </p>
@@ -119,7 +119,7 @@
 //               >
 //                 <h2
 //                   className="text-xl md:text-2xl font-semibold text-[#111A4A] mb-4 pb-4 border-b border-gray-100"
-//                   style={{ fontFamily: "var(--font-figtree), Figtree" }}
+//
 //                 >
 //                   {section.id}. {section.title}
 //                 </h2>
@@ -129,7 +129,7 @@
 //                     <p
 //                       key={pIndex}
 //                       className="text-[#374151] leading-relaxed text-justify"
-//                       style={{ fontFamily: "var(--font-figtree), Figtree" }}
+//
 //                     >
 //                       {paragraph}
 //                     </p>
@@ -145,7 +145,7 @@
 //           <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 text-center">
 //             <p
 //               className="text-[#6e6e6e] mb-6"
-//               style={{ fontFamily: "var(--font-figtree), Figtree" }}
+//
 //             >
 //               Dengan menggunakan website ini, Anda menyetujui seluruh ketentuan
 //               di atas.
@@ -204,7 +204,6 @@ export default function DisclaimerPage() {
                 <AlertTriangle className="text-[#156d95]" size={32} />
                 <h1
                   className="text-2xl md:text-3xl font-semibold text-[#111A4A] dark:text-white"
-                  style={{ fontFamily: "var(--font-figtree), Figtree" }}
                 >
                   {t("title")}
                 </h1>
@@ -212,7 +211,6 @@ export default function DisclaimerPage() {
 
               <p
                 className="text-[#6e6e6e] dark:text-gray-300"
-                style={{ fontFamily: "var(--font-figtree), Figtree" }}
               >
                 {t("subtitle")}
               </p>
@@ -233,7 +231,6 @@ export default function DisclaimerPage() {
               >
                 <h2
                   className="text-xl md:text-2xl font-semibold text-[#111A4A] dark:text-white mb-4 pb-4 border-b border-gray-100 dark:border-white/10"
-                  style={{ fontFamily: "var(--font-figtree), Figtree" }}
                 >
                   {index + 1}. {section.title}
                 </h2>
@@ -243,7 +240,6 @@ export default function DisclaimerPage() {
                     <p
                       key={pIndex}
                       className="text-[#374151] dark:text-gray-300 leading-relaxed text-justify"
-                      style={{ fontFamily: "var(--font-figtree), Figtree" }}
                     >
                       {paragraph}
                     </p>
@@ -259,7 +255,6 @@ export default function DisclaimerPage() {
           <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 text-center">
             <p
               className="text-[#6e6e6e] dark:text-gray-400 mb-6"
-              style={{ fontFamily: "var(--font-figtree), Figtree" }}
             >
               {t("agreementText")}
             </p>

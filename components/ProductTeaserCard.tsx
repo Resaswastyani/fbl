@@ -12,14 +12,15 @@ const RightAnimationCard = dynamic(() => import("./RightAnimationCard"), {
   ssr: false,
 });
 
-// ─── Premium Star Field ──────────────────────────────────────────────────────
+// ─── Premium Star Field (CSS-animated, lebih ringan dari framer-motion) ─────
 function StarField() {
   const [stars, setStars] = useState<
     { x: number; y: number; size: number; delay: number; duration: number }[]
   >([]);
 
   useEffect(() => {
-    const generated = Array.from({ length: 90 }, () => ({
+    const count = window.innerWidth < 768 ? 24 : 50;
+    const generated = Array.from({ length: count }, () => ({
       x: Math.random() * 100,
       y: Math.random() * 100,
       size: Math.random() * 2.5 + 0.5,
@@ -32,25 +33,19 @@ function StarField() {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
       {stars.map((star, i) => (
-        <motion.div
+        <div
           key={i}
-          className="absolute rounded-full bg-white"
-          style={{
-            left: `${star.x}%`,
-            top: `${star.y}%`,
-            width: star.size,
-            height: star.size,
-          }}
-          animate={{
-            opacity: [0, 1, 0],
-            scale: [0.5, 1.3, 0.5],
-          }}
-          transition={{
-            duration: star.duration,
-            delay: star.delay,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
+          className="absolute rounded-full bg-white fx-twinkle"
+          style={
+            {
+              left: `${star.x}%`,
+              top: `${star.y}%`,
+              width: star.size,
+              height: star.size,
+              "--fx-dur": `${star.duration}s`,
+              "--fx-delay": `${star.delay}s`,
+            } as React.CSSProperties
+          }
         />
       ))}
     </div>
@@ -58,62 +53,31 @@ function StarField() {
 }
 
 // ─── Floating Orbs ────────────────────────────────────────────────────────────
+// Radial gradient sudah lembut, jadi tidak perlu filter blur yang mahal
 function FloatingOrbs() {
   const orbs = [
-    {
-      color: "rgba(34,211,168,0.18)",
-      w: 600,
-      h: 600,
-      x: "-15%",
-      y: "10%",
-      delay: 0,
-      dur: 16,
-    },
-    {
-      color: "rgba(99,102,241,0.14)",
-      w: 450,
-      h: 450,
-      x: "65%",
-      y: "-15%",
-      delay: 2,
-      dur: 20,
-    },
-    {
-      color: "rgba(236,72,153,0.10)",
-      w: 380,
-      h: 380,
-      x: "55%",
-      y: "55%",
-      delay: 4,
-      dur: 13,
-    },
+    { color: "rgba(34,211,168,0.16)", size: 600, x: "-15%", y: "10%", delay: 0, dur: 16 },
+    { color: "rgba(99,102,241,0.12)", size: 450, x: "65%", y: "-15%", delay: 2, dur: 20 },
+    { color: "rgba(236,72,153,0.09)", size: 380, x: "55%", y: "55%", delay: 4, dur: 13 },
   ];
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
       {orbs.map((orb, i) => (
-        <motion.div
+        <div
           key={i}
-          className="absolute rounded-full"
-          style={{
-            width: orb.w,
-            height: orb.h,
-            left: orb.x,
-            top: orb.y,
-            background: `radial-gradient(circle, ${orb.color} 0%, transparent 70%)`,
-            filter: "blur(80px)",
-          }}
-          animate={{
-            x: [0, 50, -25, 0],
-            y: [0, -40, 25, 0],
-            scale: [1, 1.12, 0.92, 1],
-          }}
-          transition={{
-            duration: orb.dur,
-            delay: orb.delay,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
+          className="absolute rounded-full fx-drift"
+          style={
+            {
+              width: orb.size,
+              height: orb.size,
+              left: orb.x,
+              top: orb.y,
+              background: `radial-gradient(circle, ${orb.color} 0%, transparent 65%)`,
+              "--fx-dur": `${orb.dur}s`,
+              "--fx-delay": `${orb.delay}s`,
+            } as React.CSSProperties
+          }
         />
       ))}
     </div>
@@ -123,12 +87,9 @@ function FloatingOrbs() {
 // ─── Scanning Line ────────────────────────────────────────────────────────────
 function ScanLine() {
   return (
-    <motion.div
-      className="absolute left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#22d3a8]/50 to-transparent pointer-events-none z-10"
-      style={{ top: "0%" }}
-      animate={{ top: ["0%", "100%", "0%"] }}
-      transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-    />
+    <div className="absolute inset-0 pointer-events-none z-10 fx-scan hidden md:block">
+      <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-[#22d3a8]/50 to-transparent" />
+    </div>
   );
 }
 
@@ -139,7 +100,7 @@ export const ProductTeaserCard = () => {
   const router = useRouter();
 
   return (
-    <section className="w-full pt-24 md:pt-32 pb-20 bg-white dark:bg-[#050508] transition-colors duration-500 relative overflow-hidden">
+    <section className="w-full pt-36 md:pt-40 pb-12 md:pb-20 bg-white dark:bg-[#050508] transition-colors duration-500 relative overflow-hidden">
       {/* ── DARK MODE PREMIUM AMBIENT EFFECTS ── */}
       <div className="hidden dark:block absolute inset-0">
         <FloatingOrbs />
@@ -159,7 +120,7 @@ export const ProductTeaserCard = () => {
         <div className="absolute bottom-0 right-0 w-48 h-48 border-r border-b border-[#6366f1]/20 rounded-tl-3xl" />
       </div>
 
-      <div className="max-w-7xl mx-auto grid grid-cols-12 gap-5 lg:gap-16 px-8 md:px-12 relative z-10">
+      <div className="max-w-7xl mx-auto grid grid-cols-12 gap-8 lg:gap-16 px-5 sm:px-8 md:px-12 relative z-10">
         {/* LEFT TEXT */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -172,28 +133,18 @@ export const ProductTeaserCard = () => {
             onClick={(e) => e.preventDefault()}
             className="flex items-center gap-1 text-[#6e6e6e] dark:text-[#22d3a8]/70 mb-4 cursor-pointer"
           >
-            <span className="text-xs uppercase tracking-tight font-mono flex items-center gap-1 hover:text-[#202020] dark:hover:text-[#22d3a8] transition-colors">
+            <span className="text-xs uppercase tracking-[0.12em] font-medium flex items-center gap-1 hover:text-[#202020] dark:hover:text-[#22d3a8] transition-colors">
               {t("tagline")} <ArrowUpRight size={14} strokeWidth={1.5} />
             </span>
           </a>
 
           {/* Headline */}
-          <h1
-            className="text-[40px] font-normal leading-tight tracking-tight text-[#111A4A] dark:text-white mb-6"
-            style={{
-              fontFamily: "var(--font-figtree), Figtree",
-              fontSize: "50px",
-              fontWeight: "500",
-            }}
-          >
+          <h1 className="text-4xl sm:text-5xl font-medium leading-[1.1] tracking-tight text-[#111A4A] dark:text-white mb-5 md:mb-6">
             {t("tagline")}
           </h1>
 
           {/* Subheadline */}
-          <p
-            className="text-lg leading-6 text-[#111A4A] dark:text-gray-300 opacity-60 dark:opacity-80 mt-0 mb-6"
-            style={{ fontFamily: "var(--font-figtree), Figtree" }}
-          >
+          <p className="text-base md:text-lg leading-relaxed text-[#111A4A] dark:text-gray-300 opacity-70 dark:opacity-80 mt-0 mb-6">
             {t("description")}
           </p>
 
@@ -228,7 +179,7 @@ export const ProductTeaserCard = () => {
           {/* CTA Button */}
           <button
             onClick={() => router.push("/login")}
-            className="relative inline-flex items-center justify-center overflow-hidden bg-[#156d95] dark:bg-transparent text-white rounded-lg px-5 py-3 text-sm sm:text-base font-medium w-fit transition-all hover:translate-x-1 group dark:border dark:border-[#22d3a8]/50"
+            className="relative inline-flex items-center justify-center overflow-hidden bg-[#156d95] dark:bg-transparent text-white rounded-lg px-6 py-3 text-base font-medium w-full sm:w-fit transition-all hover:translate-x-1 group dark:border dark:border-[#22d3a8]/50"
           >
             {/* Dark mode animated gradient fill */}
             <motion.span
@@ -245,9 +196,9 @@ export const ProductTeaserCard = () => {
           transition={{ duration: 0.8, delay: 0.15 }}
           className="col-span-12 lg:col-span-6 flex items-center justify-center mt-6 md:mt-0"
         >
-          <div className="relative w-auto max-w-[420px] md:max-w-[520px] lg:max-w-[600px] h-auto">
+          <div className="relative w-full max-w-[420px] md:max-w-[520px] lg:max-w-[600px] h-auto">
             {/* Glow halo behind image — dark mode only */}
-            <div className="hidden dark:block absolute inset-[-20px] rounded-3xl bg-gradient-to-br from-[#22d3a8]/10 via-[#6366f1]/5 to-transparent blur-3xl" />
+            <div className="hidden md:dark:block absolute inset-[-20px] rounded-3xl bg-gradient-to-br from-[#22d3a8]/10 via-[#6366f1]/5 to-transparent blur-3xl" />
             <RightAnimationCard />
           </div>
         </motion.div>

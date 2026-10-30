@@ -42,7 +42,7 @@
 
 //                 <h1
 //                   className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight"
-//                   style={{ fontFamily: "var(--font-figtree), Figtree" }}
+//
 //                 >
 //                   Rekomendasi Broker Forex{" "}
 //                   <span className="text-[#7dd3fc]">Terbaik 2026</span>
@@ -50,7 +50,7 @@
 
 //                 <p
 //                   className="text-lg md:text-xl text-white/80 leading-relaxed mb-8"
-//                   style={{ fontFamily: "var(--font-figtree), Figtree" }}
+//
 //                 >
 //                   Pilihan broker forex terpercaya dengan regulasi resmi, spread
 //                   kompetitif, dan layanan optimal untuk trader Indonesia.
@@ -120,7 +120,7 @@
 //             <div className="text-center mb-12">
 //               <h2
 //                 className="text-3xl font-bold text-[#111A4A] mb-4"
-//                 style={{ fontFamily: "var(--font-figtree), Figtree" }}
+//
 //               >
 //                 Pilihan Broker Terbaik
 //               </h2>
@@ -145,7 +145,7 @@
 //             <div className="text-center mb-12">
 //               <h2
 //                 className="text-3xl font-bold text-[#111A4A] mb-4"
-//                 style={{ fontFamily: "var(--font-figtree), Figtree" }}
+//
 //               >
 //                 Kriteria Pemilihan Broker
 //               </h2>
@@ -206,7 +206,7 @@
 //                   </div>
 //                   <h3
 //                     className="font-semibold text-[#111A4A] mb-2"
-//                     style={{ fontFamily: "var(--font-figtree), Figtree" }}
+//
 //                   >
 //                     {item.title}
 //                   </h3>
@@ -223,7 +223,7 @@
 //           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
 //             <h2
 //               className="text-3xl font-bold text-white mb-4"
-//               style={{ fontFamily: "var(--font-figtree), Figtree" }}
+//
 //             >
 //               Masih Bingung Memilih Broker?
 //             </h2>
@@ -301,7 +301,6 @@ export default function BrokerRecommendationPage() {
 
                 <h1
                   className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight"
-                  style={{ fontFamily: "var(--font-figtree), Figtree" }}
                 >
                   {t.rich("heroTitle", {
                     highlight: (chunks) => (
@@ -312,7 +311,6 @@ export default function BrokerRecommendationPage() {
 
                 <p
                   className="text-lg md:text-xl text-white/80 leading-relaxed mb-8"
-                  style={{ fontFamily: "var(--font-figtree), Figtree" }}
                 >
                   {t("heroSubtitle")}
                 </p>
@@ -381,7 +379,6 @@ export default function BrokerRecommendationPage() {
             <div className="text-center mb-12">
               <h2
                 className="text-3xl font-bold text-[#111A4A] mb-4"
-                style={{ fontFamily: "var(--font-figtree), Figtree" }}
               >
                 {t("bestChoices")}
               </h2>
@@ -405,7 +402,6 @@ export default function BrokerRecommendationPage() {
             <div className="text-center mb-12">
               <h2
                 className="text-3xl font-bold text-[#111A4A] dark:text-white mb-4"
-                style={{ fontFamily: "var(--font-figtree), Figtree" }}
               >
                 {t("selectionCriteria")}
               </h2>
@@ -464,7 +460,6 @@ export default function BrokerRecommendationPage() {
                   </div>
                   <h3
                     className="font-semibold text-[#111A4A] dark:text-white mb-2"
-                    style={{ fontFamily: "var(--font-figtree), Figtree" }}
                   >
                     {item.title}
                   </h3>
@@ -481,7 +476,6 @@ export default function BrokerRecommendationPage() {
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2
               className="text-3xl font-bold text-white mb-4"
-              style={{ fontFamily: "var(--font-figtree), Figtree" }}
             >
               {t("confusedTitle")}
             </h2>

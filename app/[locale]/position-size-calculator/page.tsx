@@ -106,7 +106,7 @@
 
 //               <h1
 //                 className="text-3xl sm:text-4xl md:text-[50px] font-medium leading-tight mb-4 md:mb-6"
-//                 style={{ fontFamily: "var(--font-figtree), Figtree" }}
+//
 //               >
 //                 Trading Lebih Aman dengan{" "}
 //                 <span className="text-[#156d95]">Position Size Calculator</span>
@@ -423,7 +423,6 @@ export default function PositionSizeCalculatorPage() {
 
               <h1
                 className="text-3xl sm:text-4xl md:text-[50px] font-medium leading-tight mb-4 md:mb-6 text-[#111A4A] dark:text-white"
-                style={{ fontFamily: "var(--font-figtree), Figtree" }}
               >
                 {t.rich("title", {
                   highlight: (chunks) => (

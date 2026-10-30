@@ -103,7 +103,7 @@ export default function PanduanEATrialPage() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
-              className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-[#111A4A] dark:text-white tracking-tight leading-[1.1] mb-6 drop-shadow-sm"
+              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-[#111A4A] dark:text-white tracking-tight leading-[1.1] mb-6 drop-shadow-sm"
             >
               {t("title")} <br className="hidden md:block" />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#167E6C] to-[#22d3a8]">

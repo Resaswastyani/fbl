@@ -126,7 +126,7 @@
 //                     {/* Title */}
 //                     <h2
 //                       className="text-xl font-medium text-[#111A4A] mb-2 leading-tight group-hover:text-[#156d95] transition-colors"
-//                       style={{ fontFamily: "var(--font-figtree), Figtree" }}
+//
 //                     >
 //                       {article.title}
 //                     </h2>
@@ -134,7 +134,7 @@
 //                     {/* Excerpt */}
 //                     <p
 //                       className="text-sm text-[#6e6e6e] leading-relaxed mb-3"
-//                       style={{ fontFamily: "var(--font-figtree), Figtree" }}
+//
 //                     >
 //                       {stripHtml(article.content)}
 //                     </p>
@@ -324,7 +324,6 @@ export default function ArticlesPage() {
                       {/* Title */}
                       <h2
                         className="text-xl font-medium text-[#111A4A] dark:text-white mb-2 leading-tight group-hover:text-[#156d95] dark:group-hover:text-[#22d3a8] transition-colors"
-                        style={{ fontFamily: "var(--font-figtree), Figtree" }}
                       >
                         {locale === 'en' && article.title_en ? article.title_en : article.title}
                       </h2>
@@ -332,7 +331,6 @@ export default function ArticlesPage() {
                       {/* Excerpt */}
                       <p
                         className="text-sm text-[#6e6e6e] dark:text-gray-400 leading-relaxed mb-3"
-                        style={{ fontFamily: "var(--font-figtree), Figtree" }}
                       >
                         {stripHtml(locale === 'en' && article.content_en ? article.content_en : article.content)}
                       </p>

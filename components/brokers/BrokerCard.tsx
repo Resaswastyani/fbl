@@ -53,7 +53,6 @@ export default function BrokerCard({ broker, index }: BrokerCardProps) {
           <div className="flex-1">
             <h3
               className="text-xl font-semibold text-[#111A4A] dark:text-white mb-1"
-              style={{ fontFamily: "var(--font-figtree), Figtree" }}
             >
               {broker.name}
             </h3>
@@ -116,7 +115,6 @@ export default function BrokerCard({ broker, index }: BrokerCardProps) {
       <div className="p-6">
         <p
           className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mb-4"
-          style={{ fontFamily: "var(--font-figtree), Figtree" }}
         >
           {description}
         </p>

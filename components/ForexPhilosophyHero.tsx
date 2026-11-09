@@ -138,12 +138,13 @@ export const ForexPhilosophyHero = () => {
       />
 
       <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 md:px-12 grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-        {/* ── KIRI: pesan utama ── */}
+        {/* ── Pesan utama (kanan di desktop, atas di mobile) ── */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.15 }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          className="lg:order-2"
         >
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#111A4A] dark:text-white leading-[1.08] tracking-tight mb-5">
             {t("titlePart1")}
@@ -190,13 +191,13 @@ export const ForexPhilosophyHero = () => {
           </div>
         </motion.div>
 
-        {/* ── KANAN: kartu trading plan ── */}
+        {/* ── Kartu trading plan (kiri di desktop, bawah di mobile) ── */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.15 }}
           transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-          className="relative"
+          className="relative lg:order-1"
         >
           <div className="rounded-3xl border border-slate-200 dark:border-white/10 bg-white dark:bg-[#0b1220] shadow-[0_24px_60px_-20px_rgba(17,26,74,0.25)] dark:shadow-black/40 overflow-hidden">
             {/* header */}

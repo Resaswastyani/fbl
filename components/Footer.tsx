@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useTranslations } from "next-intl";
 import {
   FaInstagram,
@@ -11,6 +12,38 @@ import {
 
 export default function Footer() {
   const t = useTranslations("Footer");
+  const tNav = useTranslations("Navigation");
+
+  // Link teks biasa agar semua halaman publik bisa dirayapi mesin pencari dari setiap halaman
+  const navGroups = [
+    {
+      title: tNav("tradingLesson"),
+      links: [
+        { href: "/articles", label: tNav("articleTrading") },
+        { href: "/video-trading", label: tNav("videoTrading") },
+        { href: "/webinar", label: "Webinar" },
+        { href: "/mentor", label: "Mentor" },
+      ],
+    },
+    {
+      title: tNav("professionalCourse"),
+      links: [
+        { href: "/professional-course", label: tNav("professionalCourse") },
+        { href: "/robot-trading", label: tNav("robotTrading") },
+        { href: "/panduan-ea-trial", label: tNav("panduanEATrial") },
+        { href: "/philosophy", label: "Philosophy" },
+      ],
+    },
+    {
+      title: tNav("tools"),
+      links: [
+        { href: "/broker-rekommendation", label: tNav("brokerRecommendation") },
+        { href: "/position-size-calculator", label: tNav("positionSizeCalculator") },
+        { href: "/Jurnal-trading", label: "Jurnal Trading" },
+        { href: "/disclaimer", label: "Disclaimer" },
+      ],
+    },
+  ];
   const year = new Date().getFullYear();
 
   return (
@@ -127,6 +160,34 @@ export default function Footer() {
           </a>
         </div>
       </div>
+
+      {/* SITE NAVIGATION */}
+      <nav
+        aria-label="Footer"
+        className="w-full border-t border-[#e5e5e5] dark:border-white/10 pt-8 pb-6 px-6 md:px-11"
+      >
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-6 max-w-5xl">
+          {navGroups.map((group) => (
+            <div key={group.title}>
+              <p className="text-xs font-semibold tracking-wider uppercase opacity-60 mb-3">
+                {group.title}
+              </p>
+              <ul className="space-y-2">
+                {group.links.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="text-sm opacity-80 hover:opacity-100 hover:text-[#156d95] dark:hover:text-[#22d3a8] transition"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </nav>
 
       {/* LEGAL & COMPLIANCE SECTION */}
       <div className="w-full border-t border-[#e5e5e5] dark:border-white/10 pt-6 pb-6 px-6 md:px-11">

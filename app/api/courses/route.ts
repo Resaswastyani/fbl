@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/server/db";
+import { getCourseSummaries } from "@/server/courses";
 
 export const runtime = "nodejs";
 
@@ -43,28 +44,7 @@ export async function GET(request: NextRequest) {
 
       return NextResponse.json({ course }, { status: 200 });
     } else if (searchParams.get("summary") === "1") {
-      // Daftar ringkas untuk halaman publik: tanpa isi lesson (LongText) yang besar
-      const courses = await prisma.course.findMany({
-        select: {
-          id: true,
-          title: true,
-          title_en: true,
-          description: true,
-          description_en: true,
-          price: true,
-          published: true,
-          lessons: {
-            select: {
-              id: true,
-              title: true,
-              title_en: true,
-              type: true,
-              duration: true,
-            },
-          },
-        },
-        orderBy: { createdAt: "desc" },
-      });
+      const courses = await getCourseSummaries();
 
       return NextResponse.json(
         { courses },

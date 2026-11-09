@@ -14,9 +14,9 @@ import Footer from "@/components/Footer";
 import { buildMetadata, JsonLd } from "@/lib/seo";
 
 export const metadata = buildMetadata({
-  title: "Forex for Better Living | Edukasi Forex, Belajar Trading & EA Trading",
+  title: "Forex for Better Living: Edukasi Forex & EA Trading",
   description:
-    "Belajar forex dan trading dari nol bersama Forex for Better Living (FBL). Edukasi forex terpercaya, kursus trading, mentor profesional, dan EA trading (robot trading forex MT4/MT5) untuk hasil yang lebih konsisten.",
+    "Belajar forex dan trading dari nol bersama FBL: edukasi forex terpercaya, kursus trading, mentor profesional, dan EA trading MT4/MT5.",
   path: "/",
   absoluteTitle: true,
 });

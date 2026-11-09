@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { prisma } from "@/server/db";
+import { getPublishedArticle } from "./data";
 import {
   buildMetadata,
   stripHtml,
@@ -15,24 +15,7 @@ type Props = {
   params: Promise<{ id: string }>;
 };
 
-async function getArticle(id: string) {
-  try {
-    return await prisma.article.findFirst({
-      where: { id, published: true },
-      select: {
-        id: true,
-        title: true,
-        content: true,
-        thumbnail: true,
-        createdAt: true,
-        updatedAt: true,
-        author: { select: { name: true } },
-      },
-    });
-  } catch {
-    return null;
-  }
-}
+const getArticle = getPublishedArticle;
 
 export async function generateMetadata({
   params,
@@ -50,7 +33,10 @@ export async function generateMetadata({
   }
 
   return buildMetadata({
-    title: article.title,
+    title:
+      article.title.length < 30
+        ? `${article.title} – Artikel Edukasi Forex`
+        : article.title,
     description: stripHtml(article.content),
     path: `/articles/${article.id}`,
     image: article.thumbnail || OG_IMAGE,

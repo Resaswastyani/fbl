@@ -16,6 +16,7 @@ import {
   LEGAL_NAME,
   OG_IMAGE,
   BASE_KEYWORDS,
+  TITLE_SUFFIX,
   SOCIAL_LINKS,
   absoluteUrl,
   JsonLd,
@@ -30,14 +31,14 @@ const figtree = Figtree({
 });
 
 const DEFAULT_TITLE =
-  "Forex for Better Living | Edukasi Forex, Belajar Trading & EA Trading";
+  "Forex for Better Living: Edukasi Forex & EA Trading";
 const DEFAULT_DESCRIPTION =
-  "Belajar forex dan trading dari nol bersama Forex for Better Living (FBL). Edukasi forex terpercaya, kursus trading, mentor profesional, dan EA trading (robot trading forex MT4/MT5) untuk hasil yang lebih konsisten.";
+  "Belajar forex dan trading dari nol bersama FBL: edukasi forex terpercaya, kursus trading, mentor profesional, dan EA trading MT4/MT5.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    template: `%s | ${SITE_NAME}`,
+    template: `%s | ${TITLE_SUFFIX}`,
     default: DEFAULT_TITLE,
   },
   description: DEFAULT_DESCRIPTION,

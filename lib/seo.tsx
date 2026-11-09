@@ -7,6 +7,7 @@ export const SITE_URL = (
 export const SITE_NAME = "Forex for Better Living";
 export const LEGAL_NAME = "PT. Akademi Keuangan Nusantara";
 export const OG_IMAGE = "/og-image.png";
+export const TITLE_SUFFIX = "FBL";
 
 export const SOCIAL_LINKS = [
   "https://www.facebook.com/forexforbetterliving",
@@ -54,7 +55,7 @@ export function buildMetadata({
   absoluteTitle = false,
   type = "website",
 }: PageSeo): Metadata {
-  const fullTitle = absoluteTitle ? title : `${title} | ${SITE_NAME}`;
+  const fullTitle = absoluteTitle ? title : `${title} | ${TITLE_SUFFIX}`;
 
   return {
     title: absoluteTitle ? { absolute: title } : title,
@@ -110,4 +111,27 @@ export function JsonLd({ data }: { data: Record<string, unknown> }) {
       }}
     />
   );
+}
+
+// Schema Article untuk halaman konten/panduan statis
+export function pageArticleJsonLd({
+  headline,
+  description,
+  path,
+}: {
+  headline: string;
+  description: string;
+  path: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline,
+    description,
+    image: [absoluteUrl(OG_IMAGE)],
+    author: { "@type": "Organization", name: SITE_NAME, url: SITE_URL },
+    publisher: { "@id": `${SITE_URL}/#organization` },
+    mainEntityOfPage: absoluteUrl(path),
+    inLanguage: "id-ID",
+  };
 }

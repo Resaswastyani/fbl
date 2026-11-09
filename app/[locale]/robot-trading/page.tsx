@@ -398,7 +398,7 @@ export default function RobotTradingCenter() {
     [selectedYear, monthlyData]
   );
 
-  if (!mounted) return <div className="min-h-screen bg-slate-50" />;
+  // Konten dirender di server juga (sebelumnya kosong sampai JS jalan) agar terbaca mesin pencari
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 overflow-hidden selection:bg-[#156d95] selection:text-white">

@@ -183,20 +183,36 @@ const lessonItemVariants = {
   }),
 };
 
-export default function CourseSection() {
+const sortByTitleNumber = (list: Course[]) =>
+  [...list].sort((a, b) => {
+    const numA = parseInt(a.title.match(/^(\d+)\./)?.[1] ?? "999", 10);
+    const numB = parseInt(b.title.match(/^(\d+)\./)?.[1] ?? "999", 10);
+    return numA - numB;
+  });
+
+export default function CourseSection({
+  initialCourses,
+}: {
+  initialCourses?: Course[];
+} = {}) {
   const t = useTranslations("Course");
   const locale = useLocale();
   const { addToCart, items, isLoggedIn } = useCart();
   const router = useRouter();
-  const [courses, setCourses] = useState<Course[]>([]);
-  const [bundleCourses, setBundleCourses] = useState<Course[]>([]);
+  // Daftar kursus bisa dikirim dari server agar langsung tampil (tanpa spinner) dan terbaca mesin pencari
+  const [courses, setCourses] = useState<Course[]>(() =>
+    initialCourses ? sortByTitleNumber(initialCourses) : []
+  );
+  const [bundleCourses, setBundleCourses] = useState<Course[]>(() =>
+    initialCourses ? sortByTitleNumber(initialCourses) : []
+  );
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [showLoginPrompt, setShowLoginPrompt] = useState(false);
   const [lastAddedItem, setLastAddedItem] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!initialCourses);
   const [enrolledCourses, setEnrolledCourses] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [usdRate, setUsdRate] = useState<number>(0.000063); // Default fallback rate
@@ -257,6 +273,7 @@ export default function CourseSection() {
   }, []);
 
   useEffect(() => {
+    if (initialCourses) return;
     const fetchCourses = async () => {
       try {
         const response = await fetch("/api/courses?summary=1");
@@ -588,6 +605,11 @@ export default function CourseSection() {
 
   return (
     <section className="w-full pt-36 pb-16 md:pt-40 md:pb-24 bg-white dark:bg-[#050508] transition-colors duration-500">
+      <h1 className="sr-only">
+        {locale === "en"
+          ? "Professional Forex Course – Learn Forex Trading from Scratch"
+          : "Kursus Forex Profesional – Belajar Trading Forex dari Nol"}
+      </h1>
       <AnimatePresence>
         {showSuccessPopup && lastAddedItem && (
           <motion.div

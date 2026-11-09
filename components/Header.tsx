@@ -24,6 +24,7 @@ import {
   Gift,
 } from "lucide-react";
 import { useRouter, usePathname } from "next/navigation";
+import Link from "next/link";
 import { useTranslations } from "next-intl";
 
 import { useCart } from "@/context/cart-context";
@@ -126,6 +127,11 @@ export const Header = () => {
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const closeMenus = () => {
+    setIsMobileMenuOpen(false);
+    setOpenDropdown(null);
+  };
 
   const handleLinkClick = (href: string) => {
     setIsMobileMenuOpen(false);
@@ -285,14 +291,14 @@ export const Header = () => {
               aria-hidden="true"
             />
             {items.map((item) => (
-              <button
+              <Link href={item.href}
                 key={item.name}
-                onClick={() => handleLinkClick(item.href)}
+                onClick={closeMenus}
                 className="flex items-center gap-3 w-full px-4 py-2.5 text-left text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-[#22d3a8] hover:bg-gray-50 dark:hover:bg-white/5 transition-all rounded-lg group"
               >
                 <item.icon size={18} className="text-gray-400 group-hover:text-primary dark:group-hover:text-[#22d3a8] transition-colors" />
                 {item.name}
-              </button>
+              </Link>
             ))}
           </motion.div>
         )}
@@ -364,21 +370,21 @@ export const Header = () => {
               </div>
 
               <div className="py-2">
-                <button
-                  onClick={() => handleLinkClick(dashboardUrl)}
+                <Link href={dashboardUrl}
+                  onClick={closeMenus}
                   className="flex items-center gap-3 w-full px-4 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10 transition"
                 >
                   <LayoutDashboard size={18} />
                   {t("dashboard")}
-                </button>
+                </Link>
 
-                <button
-                  onClick={() => handleLinkClick("/profile")}
+                <Link href="/profile"
+                  onClick={closeMenus}
                   className="flex items-center gap-3 w-full px-4 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10 transition"
                 >
                   <Settings size={18} />
                   {t("settings")}
-                </button>
+                </Link>
 
                 {/* PERBAIKAN: Kelola Kursus menggunakan handleManageCourses */}
                 {userIsAdminOrMentor && (
@@ -425,8 +431,8 @@ export const Header = () => {
             }
           `}
         >
-          <button
-            onClick={() => handleLinkClick("/")}
+          <Link href="/"
+            onClick={closeMenus}
             className="flex items-center"
           >
             <motion.div 
@@ -440,7 +446,7 @@ export const Header = () => {
                 className="block h-auto w-[112px] md:w-[145px] object-contain dark:-my-1 dark:-mx-1"
               />
             </motion.div>
-          </button>
+          </Link>
 
           <div
             className={`
@@ -449,14 +455,14 @@ export const Header = () => {
             `}
           >
 
-            {/* <button
-              onClick={() => handleLinkClick("/robot-trading")}
+            {/* <Link href="/robot-trading"
+              onClick={closeMenus}
               className={`font-medium hover:text-primary transition whitespace-nowrap 
                 ${isScrolled ? "text-sm" : "text-base"} ${textColorClass}
               `}
             >
               {t("robotTrading")}
-            </button> */}
+            </Link> */}
             <Dropdown
               title={t("tradingLesson")}
               items={[
@@ -473,32 +479,32 @@ export const Header = () => {
               ]}
             />
 
-            <button
-              onClick={() => handleLinkClick("/professional-course")}
+            <Link href="/professional-course"
+              onClick={closeMenus}
               className={`font-medium hover:text-primary transition whitespace-nowrap 
                 ${isScrolled ? "text-sm" : "text-base"} ${textColorClass}
               `}
             >
               {t("professionalCourse")}
-            </button>
+            </Link>
 
-            <button
-              onClick={() => handleLinkClick("/broker-rekommendation")}
+            <Link href="/broker-rekommendation"
+              onClick={closeMenus}
               className={`font-medium hover:text-primary transition whitespace-nowrap 
                 ${isScrolled ? "text-sm" : "text-base"} ${textColorClass}
               `}
             >
               {t("brokerRecommendation")}
-            </button>
+            </Link>
 
-            <button
-              onClick={() => handleLinkClick("/panduan-ea-trial")}
+            <Link href="/panduan-ea-trial"
+              onClick={closeMenus}
               className={`font-medium hover:text-primary transition whitespace-nowrap 
                 ${isScrolled ? "text-sm" : "text-base"} ${textColorClass}
               `}
             >
               {t("panduanEATrial")}
-            </button>
+            </Link>
 
             <Dropdown
               title={t("tools")}
@@ -627,76 +633,74 @@ export const Header = () => {
                 )}
                 {/* 
                 <div>
-                  <button
-                    onClick={() => handleLinkClick("/robot-trading")}
+                  <Link href="/robot-trading"
+                    onClick={closeMenus}
                     className="text-gray-900 font-semibold mb-2 w-full text-left"
                   >
                     {t("robotTrading")}
-                  </button>
+                  </Link>
                 </div> */}
                 <div>
                   <p className="text-gray-900 dark:text-white font-semibold mb-2">
                     {t("tradingLesson")}
                   </p>
                   <div className="space-y-2 pl-3">
-                    <button
-                      onClick={() => handleLinkClick("/articles")}
+                    <Link href="/articles"
+                      onClick={closeMenus}
                       className="flex gap-2 items-center text-gray-700 dark:text-gray-300 w-full"
                     >
                       <FileText size={16} /> {t("articleTrading")}
-                    </button>
-                    <button
-                      onClick={() => handleLinkClick("/video-trading")}
+                    </Link>
+                    <Link href="/video-trading"
+                      onClick={closeMenus}
                       className="flex gap-2 items-center text-gray-700 dark:text-gray-300 w-full"
                     >
                       <PlayCircle size={16} /> {t("videoTrading")}
-                    </button>
+                    </Link>
                   </div>
                 </div>
 
-                <button
-                  onClick={() => handleLinkClick("/professional-course")}
+                <Link href="/professional-course"
+                  onClick={closeMenus}
                   className="block w-full text-left text-lg text-gray-800 dark:text-gray-200"
                 >
                   {t("professionalCourse")}
-                </button>
-                <button
-                  onClick={() => handleLinkClick("/broker-rekommendation")}
+                </Link>
+                <Link href="/broker-rekommendation"
+                  onClick={closeMenus}
                   className="block w-full text-left text-lg text-gray-800 dark:text-gray-200"
                 >
                   {t("brokerRecommendation")}
-                </button>
-                <button
-                  onClick={() => handleLinkClick("/panduan-ea-trial")}
+                </Link>
+                <Link href="/panduan-ea-trial"
+                  onClick={closeMenus}
                   className="block w-full text-left text-lg text-gray-800 dark:text-gray-200"
                 >
                   {t("panduanEATrial")}
-                </button>
+                </Link>
 
                 <div>
                   <p className="text-gray-900 dark:text-white font-semibold mb-2">
                     {t("tools")}
                   </p>
                   <div className="space-y-2 pl-3">
-                    <button
-                      onClick={() =>
-                        handleLinkClick("/position-size-calculator")
-                      }
+                    <Link href="/position-size-calculator"
+                      onClick={closeMenus}
                       className="flex gap-2 items-center text-gray-700 dark:text-gray-300 w-full"
                     >
                       <Calculator size={16} /> {t("positionSizeCalculator")}
-                    </button>
-                    <button
-                      onClick={() => handleLinkClick("/Jurnal-trading")}
+                    </Link>
+                    <Link href="/Jurnal-trading"
+                      onClick={closeMenus}
                       className="flex gap-2 items-center text-gray-700 dark:text-gray-300 w-full"
                     >
                       <Book size={16} /> Jurnal Trading
-                    </button>
+                    </Link>
                   </div>
                 </div>
 
-                <button
-                  onClick={() => handleLinkClick("/cart")}
+                <Link href="/cart"
+                  onClick={closeMenus}
                   className="flex items-center gap-2 w-full text-lg text-gray-800 dark:text-gray-200"
                 >
                   <ShoppingCart size={20} />
@@ -706,7 +710,7 @@ export const Header = () => {
                       {itemCount}
                     </span>
                   )}
-                </button>
+                </Link>
 
                 {!loading && (
                   <>
@@ -721,13 +725,13 @@ export const Header = () => {
                           <LayoutDashboard size={20} />
                           {t("dashboard")}
                         </button>
-                        <button
-                          onClick={() => handleLinkClick("/profile")}
+                        <Link href="/profile"
+                          onClick={closeMenus}
                           className="flex items-center gap-2 w-full text-lg text-gray-800 dark:text-gray-200"
                         >
                           <Settings size={20} />
                           {t("settings")}
-                        </button>
+                        </Link>
                         {/* PERBAIKAN: Mobile menu juga menggunakan handleManageCourses */}
                         {isAdminOrMentor(user.role) && (
                           <button
@@ -748,18 +752,18 @@ export const Header = () => {
                       </div>
                     ) : (
                       <div className="space-y-3 pt-4 border-t border-gray-200 dark:border-white/10">
-                        <button
-                          onClick={() => handleLinkClick("/login")}
+                        <Link href="/login"
+                          onClick={closeMenus}
                           className="block w-full text-left text-lg text-gray-800 dark:text-gray-200"
                         >
                           {t("login")}
-                        </button>
-                        <button
-                          onClick={() => handleLinkClick("/signup")}
+                        </Link>
+                        <Link href="/signup"
+                          onClick={closeMenus}
                           className="w-full px-5 py-3 border border-primary text-primary rounded-lg text-lg font-semibold hover:bg-primary hover:text-white transition"
                         >
                           {t("signup")}
-                        </button>
+                        </Link>
                       </div>
                     )}
                   </>

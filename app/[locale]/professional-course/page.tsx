@@ -1,17 +1,12 @@
-import { Header } from "@/components/Header";
-
 import CourseSection from "@/components/CourseSection";
-// import { PricingSection } from "@/components/PricingSection";
+import { getCourseSummaries } from "@/server/courses";
 
-import Footer from "@/components/Footer";
+export default async function Page() {
+  // Kirim daftar kursus dari server: langsung tampil tanpa spinner & terbaca mesin pencari
+  const courses = await getCourseSummaries().catch((error) => {
+    console.error("Professional course: gagal mengambil kursus", error);
+    return undefined;
+  });
 
-export default function Page() {
-  return (
-    <>
-      {/* <Header /> */}
-      <CourseSection />
-      {/* <PricingSection /> */}
-      {/* <Footer /> */}
-    </>
-  );
+  return <CourseSection initialCourses={courses as any} />;
 }

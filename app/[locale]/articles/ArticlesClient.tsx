@@ -1,0 +1,422 @@
+// // app/articles/page.tsx
+// "use client";
+
+// import { useEffect, useState } from "react";
+// import { motion } from "framer-motion";
+// import { ArrowUpRight, Calendar, User, Eye, Loader } from "lucide-react";
+// import { useRouter } from "next/navigation";
+// import Link from "next/link";
+// import { Header } from "@/components/Header";
+// import Footer from "@/components/Footer";
+
+// interface Article {
+//   id: string;
+//   title: string;
+//   content: string;
+//   thumbnail?: string;
+//   published: boolean;
+//   viewCount: number;
+//   createdAt: string;
+//   author: {
+//     name: string | null;
+//     email: string;
+//   };
+// }
+
+// export default function ArticlesPage() {
+//   const router = useRouter();
+//   const [articles, setArticles] = useState<Article[]>([]);
+//   const [loading, setLoading] = useState(true);
+
+//   useEffect(() => {
+//     fetchArticles();
+//   }, []);
+
+//   const fetchArticles = async () => {
+//     try {
+//       const res = await fetch("/api/articles");
+//       const data = await res.json();
+//       setArticles(data.articles || []);
+//     } catch (error) {
+//       console.error("Error fetching articles:", error);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   const formatDate = (dateString: string) => {
+//     return new Date(dateString).toLocaleDateString("id-ID", {
+//       day: "numeric",
+//       month: "long",
+//       year: "numeric",
+//     });
+//   };
+
+//   const stripHtml = (html: string) => {
+//     return html.replace(/<[^>]*>/g, "").substring(0, 150) + "...";
+//   };
+
+//   if (loading) {
+//     return (
+//       <div className="min-h-screen flex items-center justify-center bg-white">
+//         <Loader className="animate-spin h-8 w-8 text-[#156d95]" />
+//       </div>
+//     );
+//   }
+
+//   return (
+//     <>
+//       {/* <Header /> */}
+//       <div className="min-h-screen bg-white pt-32 md:pt-36">
+//         {" "}
+//         {/* ✅ PADDING TOP DITAMBAH */}
+//         {/* ARTICLES GRID */}
+//         <section className="w-full py-8 md:py-12 bg-white">
+//           {" "}
+//           {/* ✅ TAMBAH PADDING Y */}
+//           <div className="max-w-7xl mx-auto px-8 md:px-12">
+//             {articles.length === 0 ? (
+//               <div className="text-center py-20">
+//                 <p className="text-[#6e6e6e] text-lg">
+//                   Belum ada artikel yang tersedia.
+//                 </p>
+//               </div>
+//             ) : (
+//               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+//                 {articles.map((article, index) => (
+//                   <motion.article
+//                     key={article.id}
+//                     initial={{ opacity: 0, y: 20 }}
+//                     animate={{ opacity: 1, y: 0 }}
+//                     transition={{ duration: 0.5, delay: index * 0.1 }}
+//                     className="group cursor-pointer"
+//                     onClick={() => router.push(`/articles/${article.id}`)}
+//                   >
+//                     {/* Thumbnail */}
+//                     <div className="relative aspect-[16/10] rounded-lg overflow-hidden mb-4 bg-gray-100">
+//                       {article.thumbnail ? (
+//                         <img
+//                           src={article.thumbnail}
+//                           alt={article.title}
+//                           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+//                         />
+//                       ) : (
+//                         <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#156d95]/10 to-[#111A4A]/10">
+//                           <span className="text-[#156d95] text-4xl font-bold">
+//                             FBL
+//                           </span>
+//                         </div>
+//                       )}
+//                       {/* Overlay on hover */}
+//                       <div className="absolute inset-0 bg-[#111A4A]/0 group-hover:bg-[#111A4A]/10 transition-colors duration-300" />
+//                     </div>
+
+//                     {/* Meta Info */}
+//                     <div className="flex items-center gap-4 text-xs text-[#6e6e6e] mb-3 font-mono uppercase tracking-tight">
+//                       <span className="flex items-center gap-1">
+//                         <Calendar size={12} />
+//                         {formatDate(article.createdAt)}
+//                       </span>
+//                       <span className="flex items-center gap-1">
+//                         <Eye size={12} />
+//                         {article.viewCount} views
+//                       </span>
+//                     </div>
+
+//                     {/* Title */}
+//                     <h2
+//                       className="text-xl font-medium text-[#111A4A] mb-2 leading-tight group-hover:text-[#156d95] transition-colors"
+//
+//                     >
+//                       {article.title}
+//                     </h2>
+
+//                     {/* Excerpt */}
+//                     <p
+//                       className="text-sm text-[#6e6e6e] leading-relaxed mb-3"
+//
+//                     >
+//                       {stripHtml(article.content)}
+//                     </p>
+
+//                     {/* Author */}
+//                     <div className="flex items-center gap-2">
+//                       <div className="w-6 h-6 rounded-full bg-[#156d95] text-white flex items-center justify-center text-xs font-bold">
+//                         {(article.author.name || article.author.email)
+//                           .charAt(0)
+//                           .toUpperCase()}
+//                       </div>
+//                       <span className="text-xs text-[#6e6e6e]">
+//                         {article.author.name || article.author.email}
+//                       </span>
+//                     </div>
+
+//                     {/* Read More Link */}
+//                     <div className="mt-4 flex items-center gap-1 text-[#156d95] text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+//                       Baca Selengkapnya
+//                       <ArrowUpRight size={14} />
+//                     </div>
+//                   </motion.article>
+//                 ))}
+//               </div>
+//             )}
+//           </div>
+//         </section>
+//       </div>
+//       {/* <Footer /> */}
+//     </>
+//   );
+// }
+
+// app/articles/page.tsx
+"use client";
+
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import {
+  ArrowUpRight,
+  Calendar,
+  User,
+  Eye,
+  Loader,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useLocale } from "next-intl";
+import Link from "next/link";
+import { Header } from "@/components/Header";
+import Footer from "@/components/Footer";
+
+interface Article {
+  id: string;
+  title: string;
+  title_en?: string | null;
+  content: string;
+  content_en?: string | null;
+  thumbnail?: string;
+  published: boolean;
+  viewCount: number;
+  createdAt: string;
+  author: {
+    name: string | null;
+    email: string;
+  };
+}
+
+export default function ArticlesClient({
+  initialArticles,
+}: {
+  initialArticles?: Article[];
+}) {
+  const router = useRouter();
+  const locale = useLocale();
+  // Daftar artikel dirender di server; fetch di client hanya sebagai cadangan
+  const [articles, setArticles] = useState<Article[]>(initialArticles ?? []);
+  const [loading, setLoading] = useState(!initialArticles);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 9;
+
+  useEffect(() => {
+    if (!initialArticles) fetchArticles();
+  }, []);
+
+  const fetchArticles = async () => {
+    try {
+      const res = await fetch("/api/articles");
+      const data = await res.json();
+      setArticles(data.articles || []);
+    } catch (error) {
+      console.error("Error fetching articles:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString("id-ID", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+  };
+
+  const stripHtml = (html: string) => {
+    return html.replace(/<[^>]*>/g, "").substring(0, 150) + "...";
+  };
+
+  // Pagination logic
+  const totalPages = Math.ceil(articles.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentArticles = articles.slice(startIndex, endIndex);
+
+  const handlePageChange = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-[#050508] transition-colors">
+        <Loader className="animate-spin h-8 w-8 text-[#156d95]" />
+      </div>
+    );
+  }
+
+  return (
+    <>
+      {/* <Header /> */}
+      <div className="min-h-screen bg-white dark:bg-[#050508] transition-colors duration-500 pt-24 md:pt-28">
+        {" "}
+        {/* ✅ PADDING TOP DITAMBAH */}
+        {/* ARTICLES GRID */}
+        <section className="w-full py-8 md:py-12 bg-white dark:bg-[#050508]">
+          {" "}
+          {/* ✅ TAMBAH PADDING Y */}
+          <div className="max-w-7xl mx-auto px-5 sm:px-8 md:px-12">
+            <header className="mb-8 md:mb-12">
+              <h1 className="text-3xl md:text-[40px] font-medium leading-tight tracking-tight text-[#111A4A] dark:text-white mb-3">
+                {locale === "en" ? "Forex & Trading Education Articles" : "Artikel Edukasi Forex & Trading"}
+              </h1>
+              <p className="text-base md:text-lg text-[#6e6e6e] dark:text-gray-400 max-w-2xl">
+                {locale === "en"
+                  ? "Learn forex from scratch: market analysis, trading strategies, money management and EA trading tips."
+                  : "Belajar forex dari nol: analisa market, strategi trading, money management, dan tips EA trading."}
+              </p>
+            </header>
+            {articles.length === 0 ? (
+              <div className="text-center py-20">
+                <p className="text-[#6e6e6e] dark:text-gray-400 text-lg">
+                  Belum ada artikel yang tersedia.
+                </p>
+              </div>
+            ) : (
+              <>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {currentArticles.map((article, index) => (
+                    <motion.article
+                      key={article.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      className="group"
+                    >
+                      <Link href={`/articles/${article.id}`} className="block">
+                      {/* Thumbnail */}
+                      <div className="relative aspect-[16/10] rounded-lg overflow-hidden mb-4 bg-gray-100 dark:bg-gray-800">
+                        {article.thumbnail ? (
+                          <img
+                            src={article.thumbnail}
+                            alt={article.title}
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#156d95]/10 to-[#111A4A]/10">
+                            <span className="text-[#156d95] text-4xl font-bold">
+                              FBL
+                            </span>
+                          </div>
+                        )}
+                        {/* Overlay on hover */}
+                        <div className="absolute inset-0 bg-[#111A4A]/0 group-hover:bg-[#111A4A]/10 transition-colors duration-300" />
+                      </div>
+
+                      {/* Meta Info */}
+                      <div className="flex items-center gap-4 text-xs text-[#6e6e6e] dark:text-gray-400 mb-3 font-mono uppercase tracking-tight">
+                        <span className="flex items-center gap-1">
+                          <Calendar size={12} />
+                          {formatDate(article.createdAt)}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <Eye size={12} />
+                          {article.viewCount} views
+                        </span>
+                      </div>
+
+                      {/* Title */}
+                      <h2
+                        className="text-xl font-medium text-[#111A4A] dark:text-white mb-2 leading-tight group-hover:text-[#156d95] dark:group-hover:text-[#22d3a8] transition-colors"
+                      >
+                        {locale === 'en' && article.title_en ? article.title_en : article.title}
+                      </h2>
+
+                      {/* Excerpt */}
+                      <p
+                        className="text-sm text-[#6e6e6e] dark:text-gray-400 leading-relaxed mb-3"
+                      >
+                        {stripHtml(locale === 'en' && article.content_en ? article.content_en : article.content)}
+                      </p>
+
+                      {/* Author */}
+                      <div className="flex items-center gap-2">
+                        <div className="w-6 h-6 rounded-full bg-[#156d95] text-white flex items-center justify-center text-xs font-bold">
+                          {(article.author.name || article.author.email || "FBL")
+                            .charAt(0)
+                            .toUpperCase()}
+                        </div>
+                        <span className="text-xs text-[#6e6e6e] dark:text-gray-400">
+                          {article.author.name || article.author.email || "FBL"}
+                        </span>
+                      </div>
+
+                      {/* Read More Link */}
+                      <div className="mt-4 flex items-center gap-1 text-[#156d95] text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                        Baca Selengkapnya
+                        <ArrowUpRight size={14} />
+                      </div>
+                    </Link>
+                    </motion.article>
+                  ))}
+                </div>
+
+                {/* Pagination */}
+                {totalPages > 1 && (
+                  <div className="flex items-center justify-center mt-12 gap-2">
+                    <button
+                      onClick={() => handlePageChange(currentPage - 1)}
+                      disabled={currentPage === 1}
+                      className="p-2 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-[#156d95] hover:text-white hover:border-[#156d95] transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-gray-600 disabled:hover:border-gray-200"
+                    >
+                      <ChevronLeft size={20} />
+                    </button>
+
+                    <div className="flex items-center gap-1">
+                      {[...Array(totalPages)].map((_, i) => {
+                        const page = i + 1;
+                        return (
+                          <button
+                            key={page}
+                            onClick={() => handlePageChange(page)}
+                            className={`w-10 h-10 rounded-lg font-medium text-sm transition-all ${
+                              currentPage === page
+                                ? "bg-[#156d95] text-white"
+                                : "border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-[#156d95] hover:text-white hover:border-[#156d95]"
+                            }`}
+                          >
+                            {page}
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    <button
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      disabled={currentPage === totalPages}
+                      className="p-2 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-[#156d95] hover:text-white hover:border-[#156d95] transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-gray-600 disabled:hover:border-gray-200"
+                    >
+                      <ChevronRight size={20} />
+                    </button>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        </section>
+      </div>
+      {/* <Footer /> */}
+    </>
+  );
+}

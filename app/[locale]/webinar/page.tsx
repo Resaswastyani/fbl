@@ -37,7 +37,7 @@ export default function WebinarRegistrationPage() {
     return () => clearInterval(interval);
   }, [isMounted]);
 
-  if (!isMounted) return null;
+  // Halaman dirender di server; countdown mulai berjalan setelah mount
 
   return (
     <div className="min-h-screen bg-[#0A0E1A] text-white relative overflow-hidden font-sans">

@@ -132,7 +132,7 @@ export default async function RootLayout({
       >
         <JsonLd data={organizationJsonLd} />
         <NextIntlClientProvider messages={messages} locale={locale}>
-          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+          <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
             <CartProvider>
               <LayoutClient>{children}</LayoutClient>
               <CartDrawer />

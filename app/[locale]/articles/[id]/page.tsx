@@ -1,12 +1,22 @@
+import { getLocale } from "next-intl/server";
 import ArticleDetailClient from "./ArticleDetailClient";
 import { getPublishedArticle, getRelatedArticles } from "./data";
 
 type ArticleRow = NonNullable<Awaited<ReturnType<typeof getPublishedArticle>>>;
+type RelatedRow = Awaited<ReturnType<typeof getRelatedArticles>>[number];
 
-// Ubah Date -> string agar bisa dikirim ke client component
-function serialize(a: ArticleRow) {
+// Judul halaman sudah menjadi satu-satunya <h1>; heading H1 di dalam isi diturunkan ke H2
+const demoteH1 = (html: string | null) =>
+  html ? html.replace(/<h1(\s|>)/gi, "<h2$1").replace(/<\/h1>/gi, "</h2>") : html;
+
+// Ubah Date -> string agar bisa dikirim ke client component.
+// Hanya isi bahasa yang sedang dipakai yang dikirim (isi bisa berisi banyak gambar).
+function serialize<T extends ArticleRow | RelatedRow>(a: T, locale: string) {
+  const useEn = locale === "en" && !!a.content_en;
   return {
     ...a,
+    content: useEn ? "" : demoteH1(a.content) ?? "",
+    content_en: useEn ? demoteH1(a.content_en ?? null) : null,
     thumbnail: a.thumbnail ?? undefined,
     createdAt: a.createdAt.toISOString(),
     updatedAt: a.updatedAt.toISOString(),
@@ -24,11 +34,11 @@ export default async function ArticleDetailPage({
   // Draft (belum publish) tetap ditangani client seperti sebelumnya
   if (!article) return <ArticleDetailClient />;
 
-  const related = await getRelatedArticles(id);
+  const [related, locale] = await Promise.all([getRelatedArticles(id), getLocale()]);
   return (
     <ArticleDetailClient
-      initialArticle={serialize(article)}
-      initialRelated={related.map(serialize)}
+      initialArticle={serialize(article, locale)}
+      initialRelated={related.map((r) => serialize(r, locale))}
     />
   );
 }

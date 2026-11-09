@@ -463,6 +463,7 @@ import {
   useState,
   useCallback,
   useImperativeHandle,
+  useRef,
 } from "react";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -512,6 +513,8 @@ export const RichTextEditor = forwardRef<
   const [uploading, setUploading] = useState(false);
   const [uploadType, setUploadType] = useState<string | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  // Diisi setelah handleUpload dibuat; dipakai handler paste/drop di editorProps
+  const uploadRef = useRef<((file: File, type: "image") => void) | null>(null);
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -527,7 +530,8 @@ export const RichTextEditor = forwardRef<
       }),
       Image.configure({
         inline: false,
-        allowBase64: true, // Enable base64 images
+        // Gambar disisipkan sebagai base64 yang sudah dikompres server (lihat /api/upload)
+        allowBase64: true,
         HTMLAttributes: {
           class: "rounded-lg max-w-full h-auto my-4",
         },
@@ -547,6 +551,25 @@ export const RichTextEditor = forwardRef<
       attributes: {
         class:
           "prose prose-sm sm:prose lg:prose-lg max-w-none p-4 focus:outline-none min-h-[250px]",
+      },
+      // Gambar yang di-paste / di-drop dikompres dulu lewat /api/upload, bukan ditanam mentah
+      handlePaste: (_view, event) => {
+        const files = Array.from(event.clipboardData?.files || []).filter((f) =>
+          f.type.startsWith("image/")
+        );
+        if (files.length === 0) return false;
+        event.preventDefault();
+        files.forEach((file) => uploadRef.current?.(file, "image"));
+        return true;
+      },
+      handleDrop: (_view, event) => {
+        const files = Array.from(event.dataTransfer?.files || []).filter((f) =>
+          f.type.startsWith("image/")
+        );
+        if (files.length === 0) return false;
+        event.preventDefault();
+        files.forEach((file) => uploadRef.current?.(file, "image"));
+        return true;
       },
     },
   });
@@ -662,6 +685,7 @@ export const RichTextEditor = forwardRef<
     },
     [editor]
   );
+  uploadRef.current = handleUpload;
 
   // Trigger file input
   const triggerUpload = (type: "image" | "video" | "document") => {

@@ -350,18 +350,33 @@ export async function POST(req: NextRequest) {
     // ==================== MODE: CONTENT (Base64 dengan kompresi) ====================
     if (uploadType === "content") {
       try {
-        // Kompres untuk konten artikel (max 1200px, quality 85%)
-        const processedBuffer = await compressImage(buffer, 1200, 85, fileType);
-
-        // Jika masih besar (>500KB), kompres lebih agresif
-        let finalBuffer = processedBuffer;
-        if (processedBuffer.length > 500 * 1024) {
-          finalBuffer = await compressImage(buffer, 800, 70, fileType);
+        // Gambar konten disimpan inline (base64) di artikel, jadi harus sekecil mungkin:
+        // WebP, lebar maks 1000px, quality 70 (biasanya 5-10x lebih kecil dari JPEG 1200px/85)
+        let finalBuffer: Buffer = buffer;
+        let mime = "image/jpeg";
+        try {
+          const sharp = (await import("sharp")).default;
+          finalBuffer = await sharp(buffer)
+            .rotate()
+            .resize(1000, null, { withoutEnlargement: true, fit: "inside" })
+            .webp({ quality: 70 })
+            .toBuffer();
+          mime = "image/webp";
+          if (finalBuffer.length > 200 * 1024) {
+            finalBuffer = await sharp(buffer)
+              .rotate()
+              .resize(800, null, { withoutEnlargement: true, fit: "inside" })
+              .webp({ quality: 60 })
+              .toBuffer();
+          }
+        } catch {
+          finalBuffer = await compressImage(buffer, 1000, 70, fileType);
+          mime = "image/jpeg";
         }
 
         // Convert ke base64
         const base64Data = finalBuffer.toString("base64");
-        const dataUrl = `data:image/jpeg;base64,${base64Data}`;
+        const dataUrl = `data:${mime};base64,${base64Data}`;
 
         // Warning jika masih panjang
         if (dataUrl.length > 50000) {

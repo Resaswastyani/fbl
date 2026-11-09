@@ -78,3 +78,6 @@ Thumbs.db
 *.local
 .vercel
 .prisma
+
+# backup migrasi gambar base64
+scripts/backup-base64-*.json

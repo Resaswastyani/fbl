@@ -1,98 +1,257 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, BookOpen, Brain, ShieldCheck, Target } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 
-const ForexChart3D = dynamic(() => import("./ForexChart3D"), { ssr: false });
+// ─── Data ilustrasi chart (deterministik agar render server = client) ─────────
+const SL = 2333.5;
+const ENTRY = 2345.5;
+const TP = 2369.5;
+const PRICE_MIN = 2328;
+const PRICE_MAX = 2374;
+
+// [open, high, low, close]
+const CANDLES: [number, number, number, number][] = [
+  [2338, 2341, 2335, 2340],
+  [2340, 2342, 2336, 2337],
+  [2337, 2340, 2334, 2339],
+  [2339, 2344, 2338, 2343],
+  [2343, 2345, 2339, 2340],
+  [2340, 2343, 2337, 2342],
+  [2342, 2347, 2341, 2346],
+  [2346, 2349, 2343, 2344],
+  [2344, 2348, 2342, 2347],
+  [2347, 2353, 2346, 2352],
+  [2352, 2355, 2349, 2350],
+  [2350, 2357, 2349, 2356],
+  [2356, 2360, 2353, 2359],
+  [2359, 2362, 2355, 2357],
+  [2357, 2364, 2356, 2363],
+  [2363, 2367, 2360, 2366],
+];
+const ENTRY_INDEX = 6; // candle saat posisi dibuka
+
+const W = 360;
+const H = 210;
+const PAD_R = 58; // ruang label harga di kanan
+const y = (p: number) => ((PRICE_MAX - p) / (PRICE_MAX - PRICE_MIN)) * H;
+const fmt = (p: number) => p.toLocaleString("en-US", { minimumFractionDigits: 2 });
+
+function TradePlanChart({ labels }: { labels: { entry: string; sl: string; tp: string } }) {
+  const plotW = W - PAD_R;
+  const step = plotW / CANDLES.length;
+  const bodyW = step * 0.58;
+  const zoneX = ENTRY_INDEX * step + step / 2;
+
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-auto" role="img" aria-label="Contoh trading plan XAU/USD dengan entry, stop loss dan take profit">
+      {/* grid */}
+      {[0.2, 0.4, 0.6, 0.8].map((r) => (
+        <line key={r} x1={0} x2={plotW} y1={H * r} y2={H * r} className="stroke-slate-200 dark:stroke-white/5" strokeWidth={1} />
+      ))}
+
+      {/* zona reward (hijau) & risiko (merah) seperti tool posisi di platform trading */}
+      <rect x={zoneX} y={y(TP)} width={plotW - zoneX} height={y(ENTRY) - y(TP)} fill="#22d3a8" opacity={0.12} />
+      <rect x={zoneX} y={y(ENTRY)} width={plotW - zoneX} height={y(SL) - y(ENTRY)} fill="#ef4444" opacity={0.1} />
+
+      {/* candles */}
+      {CANDLES.map(([o, h, l, c], i) => {
+        const up = c >= o;
+        const cx = i * step + step / 2;
+        const color = up ? "#16a34a" : "#ef4444";
+        return (
+          <g key={i}>
+            <line x1={cx} x2={cx} y1={y(h)} y2={y(l)} stroke={color} strokeWidth={1.2} />
+            <rect
+              x={cx - bodyW / 2}
+              y={y(Math.max(o, c))}
+              width={bodyW}
+              height={Math.max(1.5, Math.abs(y(o) - y(c)))}
+              rx={1}
+              fill={color}
+            />
+          </g>
+        );
+      })}
+
+      {/* level TP / Entry / SL */}
+      {[
+        { p: TP, color: "#16a34a", label: labels.tp },
+        { p: ENTRY, color: "#2563eb", label: labels.entry },
+        { p: SL, color: "#ef4444", label: labels.sl },
+      ].map(({ p, color, label }) => (
+        <g key={label}>
+          <line x1={zoneX} x2={plotW} y1={y(p)} y2={y(p)} stroke={color} strokeWidth={1.2} strokeDasharray="4 3" />
+          <rect x={plotW + 2} y={y(p) - 9} width={PAD_R - 2} height={18} rx={4} fill={color} />
+          <text x={plotW + PAD_R / 2 + 1} y={y(p) + 3.5} textAnchor="middle" fontSize={9.5} fontWeight={600} fill="#fff">
+            {fmt(p)}
+          </text>
+          <text x={zoneX + 4} y={y(p) - 4} fontSize={9} fontWeight={600} fill={color}>
+            {label}
+          </text>
+        </g>
+      ))}
+
+      {/* titik entry */}
+      <circle cx={zoneX} cy={y(ENTRY)} r={3.5} fill="#2563eb" stroke="#fff" strokeWidth={1.5} />
+    </svg>
+  );
+}
 
 export const ForexPhilosophyHero = () => {
   const t = useTranslations("ForexPhilosophyHero");
-  const sectionRef = useRef<HTMLElement>(null);
-  const [enable3D, setEnable3D] = useState(false);
-  const [inView, setInView] = useState(false);
 
-  // Visual 3D (CSS) dimuat setelah mount; animasi berhenti saat di luar layar
-  useEffect(() => {
-    setEnable3D(true);
-  }, []);
+  const principles = [
+    { icon: ShieldCheck, title: t("principle1Title"), desc: t("principle1Desc") },
+    { icon: Target, title: t("principle2Title"), desc: t("principle2Desc") },
+    { icon: Brain, title: t("principle3Title"), desc: t("principle3Desc") },
+  ];
 
-  // Render loop 3D hanya berjalan saat section terlihat
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el) return;
-    const io = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting), {
-      rootMargin: "200px",
-    });
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
+  // Konsisten dengan chart: SL $12 dari entry, 0.01 lot XAU/USD (1 oz) = risiko $12 = 1% dari $1,200;
+  // TP $24 dari entry -> Risk:Reward 1:2
+  const stats = [
+    { label: t("balance"), value: "$1,200" },
+    { label: t("riskPerTrade"), value: "1% · $12" },
+    { label: t("lotSize"), value: "0.01" },
+    { label: t("riskReward"), value: "1 : 2" },
+  ];
 
   return (
-    <section ref={sectionRef} className="relative w-full min-h-[70vh] md:min-h-[95vh] py-20 md:py-0 flex items-center justify-center overflow-hidden bg-white dark:bg-[#050508] transition-colors duration-500">
-      {/* Lusion-style 3D Background */}
-      {enable3D && (
-        <div className="absolute inset-0 z-0 pointer-events-none opacity-25 md:opacity-60">
-          <ForexChart3D active={inView} />
-        </div>
-      )}
-
-      {/* Ambient glowing blobs — radial gradient statis + animasi CSS (tanpa blur besar) */}
+    <section className="relative w-full overflow-hidden bg-gradient-to-b from-white via-[#f6fbfa] to-white dark:from-[#050508] dark:via-[#07100e] dark:to-[#050508] py-20 md:py-28 transition-colors duration-500">
+      {/* Latar halus: grid tipis + glow statis */}
       <div
-        className="absolute top-1/4 -left-[15%] w-[700px] h-[700px] rounded-full pointer-events-none fx-drift"
-        style={{ background: "radial-gradient(circle, rgba(34,211,168,0.22) 0%, transparent 65%)", "--fx-dur": "14s" } as React.CSSProperties}
+        className="absolute inset-0 pointer-events-none opacity-[0.35] dark:opacity-[0.12]"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(17,26,74,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(17,26,74,0.06) 1px, transparent 1px)",
+          backgroundSize: "56px 56px",
+          maskImage: "radial-gradient(ellipse at center, black 30%, transparent 75%)",
+          WebkitMaskImage: "radial-gradient(ellipse at center, black 30%, transparent 75%)",
+        }}
       />
       <div
-        className="absolute bottom-1/4 -right-[15%] w-[700px] h-[700px] rounded-full pointer-events-none fx-drift"
-        style={{ background: "radial-gradient(circle, rgba(22,126,108,0.22) 0%, transparent 65%)", "--fx-dur": "18s", "--fx-delay": "2s" } as React.CSSProperties}
+        className="absolute -top-40 -right-40 w-[560px] h-[560px] rounded-full pointer-events-none"
+        style={{ background: "radial-gradient(circle, rgba(34,211,168,0.16) 0%, transparent 65%)" }}
       />
 
-      {/* Content overlay */}
-      <div className="relative z-10 container mx-auto px-6 md:px-12 flex flex-col items-center text-center">
+      <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 md:px-12 grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        {/* ── KIRI: pesan utama ── */}
         <motion.div
-          initial={{ opacity: 0, y: 60 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-          className="max-w-4xl"
+          viewport={{ once: true, amount: 0.15 }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
         >
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.2, duration: 0.8, ease: "easeOut" }}
-            className="inline-flex items-center gap-2 mb-6 md:mb-8 px-4 md:px-5 py-2 rounded-full border border-[#167E6C]/20 dark:border-white/10 bg-white/70 dark:bg-white/5 backdrop-blur-md shadow-sm"
-          >
-            <span className="w-2 h-2 rounded-full bg-[#22d3a8] animate-pulse"></span>
-            <span className="text-[#167E6C] text-xs md:text-sm font-semibold tracking-widest uppercase">{t("tagline")}</span>
-          </motion.div>
-          
-          <h2 className="text-4xl sm:text-5xl md:text-7xl font-bold text-[#111A4A] dark:text-white mb-6 md:mb-8 leading-[1.1] tracking-tight">
-            {t("titlePart1")} <br className="hidden md:block" />
+          <div className="inline-flex items-center gap-2 mb-6 px-3.5 py-1.5 rounded-full border border-[#167E6C]/20 dark:border-white/10 bg-white dark:bg-white/5 shadow-sm">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#22d3a8]" />
+            <span className="text-[#167E6C] dark:text-[#22d3a8] text-xs font-semibold tracking-[0.14em] uppercase">
+              {t("tagline")}
+            </span>
+          </div>
+
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#111A4A] dark:text-white leading-[1.08] tracking-tight mb-5">
+            {t("titlePart1")}
+            <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#167E6C] to-[#22d3a8]">
               {t("titlePart2")}
             </span>
           </h2>
-          
-          <p className="text-lg md:text-2xl text-[#111A4A]/70 dark:text-gray-400 mb-12 max-w-3xl mx-auto leading-relaxed font-medium italic font-[family-name:var(--font-figtree)]">
-            "{t("description")}"
+
+          <p className="text-base md:text-lg text-[#111A4A]/70 dark:text-gray-400 leading-relaxed max-w-xl mb-8">
+            {t("description")}
           </p>
 
-          <Link href="/philosophy">
-            <motion.button
-              whileHover={{ scale: 1.05, y: -5 }}
-              whileTap={{ scale: 0.95 }}
-              className="group relative inline-flex items-center justify-center gap-3 px-7 py-4 md:px-10 md:py-5 rounded-full bg-[#111A4A] dark:bg-[#167E6C] text-white font-semibold text-base md:text-lg overflow-hidden transition-all shadow-xl hover:shadow-[#22d3a8]/30 hover:shadow-2xl"
+          {/* Prinsip trading */}
+          <ul className="grid sm:grid-cols-3 gap-3 mb-9">
+            {principles.map(({ icon: Icon, title, desc }) => (
+              <li
+                key={title}
+                className="flex sm:block items-start gap-3 rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white/80 dark:bg-white/[0.03] p-3.5 sm:p-4 shadow-[0_1px_2px_rgba(16,24,40,0.04)]"
+              >
+                <span className="inline-flex shrink-0 items-center justify-center w-9 h-9 rounded-xl bg-[#167E6C]/10 dark:bg-[#22d3a8]/10 text-[#167E6C] dark:text-[#22d3a8] sm:mb-3">
+                  <Icon className="w-[18px] h-[18px]" strokeWidth={2} />
+                </span>
+                <div>
+                  <p className="text-sm font-semibold text-[#111A4A] dark:text-white leading-snug">{title}</p>
+                  <p className="text-xs text-[#111A4A]/60 dark:text-gray-400 mt-1 leading-relaxed">{desc}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Link
+              href="/philosophy"
+              className="group inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-[#111A4A] dark:bg-[#167E6C] text-white font-semibold text-base shadow-lg shadow-[#111A4A]/15 hover:bg-[#167E6C] transition-colors"
             >
-              <span className="relative z-10 flex items-center gap-2">
-                {t("button")}
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1.5 transition-transform duration-300" />
-              </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-[#167E6C] to-[#22d3a8] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            </motion.button>
-          </Link>
+              {t("button")}
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
+            <Link
+              href="/professional-course"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl border border-slate-300 dark:border-white/15 text-[#111A4A] dark:text-white font-semibold text-base hover:border-[#167E6C] hover:text-[#167E6C] dark:hover:text-[#22d3a8] transition-colors"
+            >
+              <BookOpen className="w-4 h-4" />
+              {t("secondaryButton")}
+            </Link>
+          </div>
+        </motion.div>
+
+        {/* ── KANAN: kartu trading plan ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.15 }}
+          transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+          className="relative"
+        >
+          <div className="rounded-3xl border border-slate-200 dark:border-white/10 bg-white dark:bg-[#0b1220] shadow-[0_24px_60px_-20px_rgba(17,26,74,0.25)] dark:shadow-black/40 overflow-hidden">
+            {/* header */}
+            <div className="flex items-center justify-between gap-3 px-5 py-4 border-b border-slate-100 dark:border-white/5">
+              <div className="flex items-center gap-3">
+                <span className="flex items-center justify-center w-9 h-9 rounded-full bg-amber-400/15 text-amber-500 font-bold text-sm">Au</span>
+                <div>
+                  <p className="text-sm font-semibold text-[#111A4A] dark:text-white leading-tight">XAU/USD · H1</p>
+                  <p className="text-xs text-slate-500 dark:text-gray-400">{t("planTitle")}</p>
+                </div>
+              </div>
+              <div className="text-right">
+                <p className="text-base font-semibold text-[#111A4A] dark:text-white tabular-nums">2,366.00</p>
+                <p className="text-xs font-medium text-emerald-600 tabular-nums">+20.50 (+0.88%)</p>
+              </div>
+            </div>
+
+            {/* chart */}
+            <div className="px-3 pt-4 pb-2">
+              <TradePlanChart labels={{ entry: t("entry"), sl: t("stopLoss"), tp: t("takeProfit") }} />
+            </div>
+
+            {/* info modal terlindungi */}
+            <div className="mx-4 mb-4 flex items-center gap-3 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-100 dark:border-emerald-500/20 px-3.5 py-2.5">
+              <ShieldCheck className="w-5 h-5 shrink-0 text-emerald-600 dark:text-emerald-400" />
+              <p className="text-xs sm:text-sm text-emerald-900 dark:text-emerald-200">
+                <span className="font-semibold">{t("capitalProtected")}</span>
+                <span className="text-emerald-800/70 dark:text-emerald-200/70"> — {t("capitalProtectedDesc")}</span>
+              </p>
+            </div>
+
+            {/* ringkasan position sizing */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 border-t border-slate-100 dark:border-white/5">
+              {stats.map((s, i) => (
+                <div
+                  key={s.label}
+                  className={`px-4 py-3.5 ${i > 0 ? "sm:border-l" : ""} ${i % 2 === 1 ? "border-l sm:border-l" : ""} ${i > 1 ? "border-t sm:border-t-0" : ""} border-slate-100 dark:border-white/5`}
+                >
+                  <p className="text-[10px] sm:text-[11px] uppercase tracking-wide whitespace-nowrap text-slate-500 dark:text-gray-500">{s.label}</p>
+                  <p className="text-sm font-semibold text-[#111A4A] dark:text-white tabular-nums mt-0.5">{s.value}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <p className="mt-3 text-center text-xs text-slate-400 dark:text-gray-500">{t("disclaimer")}</p>
         </motion.div>
       </div>
     </section>

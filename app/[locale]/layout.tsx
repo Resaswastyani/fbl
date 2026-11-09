@@ -2,6 +2,7 @@ import type React from "react";
 import type { Metadata } from "next";
 import { Figtree } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import "@/app/globals.css";
@@ -140,6 +141,7 @@ export default async function RootLayout({
         </NextIntlClientProvider>
 
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

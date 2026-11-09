@@ -819,12 +819,6 @@
     "description": "Trading should be a tool to improve your quality of life, not an activity that damages your finances, mental health, relationships and productivity.",
     "button": "Learn Our Philosophy",
     "secondaryButton": "View Trading Classes",
-    "principle1Title": "Measured risk",
-    "principle1Desc": "Max 1–2% of capital per trade",
-    "principle2Title": "Risk : Reward ≥ 1 : 2",
-    "principle2Desc": "Potential profit always exceeds the risk",
-    "principle3Title": "Discipline & healthy mindset",
-    "principle3Desc": "Follow the trading plan, not emotions",
     "planTitle": "Trading Plan",
     "planLive": "Example",
     "entry": "Entry",
@@ -836,7 +830,10 @@
     "riskReward": "Risk : Reward",
     "capitalProtected": "Capital protected",
     "capitalProtectedDesc": "99% of capital safe if SL is hit",
-    "disclaimer": "Educational illustration, not a trading signal."
+    "disclaimer": "Educational illustration, not a trading signal.",
+    "rule1Label": "Maximum risk per trade",
+    "rule2Label": "Minimum risk : reward",
+    "rule3Label": "Executed according to plan"
   },
   "Philosophy": {
     "heroTagline": "Forex for Better Living",

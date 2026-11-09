@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, BookOpen, Brain, ShieldCheck, Target } from "lucide-react";
+import { ArrowRight, BookOpen, ShieldCheck } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 
@@ -103,10 +103,11 @@ function TradePlanChart({ labels }: { labels: { entry: string; sl: string; tp: s
 export const ForexPhilosophyHero = () => {
   const t = useTranslations("ForexPhilosophyHero");
 
-  const principles = [
-    { icon: ShieldCheck, title: t("principle1Title"), desc: t("principle1Desc") },
-    { icon: Target, title: t("principle2Title"), desc: t("principle2Desc") },
-    { icon: Brain, title: t("principle3Title"), desc: t("principle3Desc") },
+  // Aturan manajemen risiko yang diajarkan, ditampilkan sebagai angka kunci
+  const rules = [
+    { value: "1–2%", label: t("rule1Label") },
+    { value: "1 : 2", label: t("rule2Label") },
+    { value: "100%", label: t("rule3Label") },
   ];
 
   // Konsisten dengan chart: SL $12 dari entry, 0.01 lot XAU/USD (1 oz) = risiko $12 = 1% dari $1,200;
@@ -144,13 +145,6 @@ export const ForexPhilosophyHero = () => {
           viewport={{ once: true, amount: 0.15 }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
         >
-          <div className="inline-flex items-center gap-2 mb-6 px-3.5 py-1.5 rounded-full border border-[#167E6C]/20 dark:border-white/10 bg-white dark:bg-white/5 shadow-sm">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#22d3a8]" />
-            <span className="text-[#167E6C] dark:text-[#22d3a8] text-xs font-semibold tracking-[0.14em] uppercase">
-              {t("tagline")}
-            </span>
-          </div>
-
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#111A4A] dark:text-white leading-[1.08] tracking-tight mb-5">
             {t("titlePart1")}
             <br />
@@ -163,23 +157,20 @@ export const ForexPhilosophyHero = () => {
             {t("description")}
           </p>
 
-          {/* Prinsip trading */}
-          <ul className="grid sm:grid-cols-3 gap-3 mb-9">
-            {principles.map(({ icon: Icon, title, desc }) => (
-              <li
-                key={title}
-                className="flex sm:block items-start gap-3 rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white/80 dark:bg-white/[0.03] p-3.5 sm:p-4 shadow-[0_1px_2px_rgba(16,24,40,0.04)]"
-              >
-                <span className="inline-flex shrink-0 items-center justify-center w-9 h-9 rounded-xl bg-[#167E6C]/10 dark:bg-[#22d3a8]/10 text-[#167E6C] dark:text-[#22d3a8] sm:mb-3">
-                  <Icon className="w-[18px] h-[18px]" strokeWidth={2} />
-                </span>
-                <div>
-                  <p className="text-sm font-semibold text-[#111A4A] dark:text-white leading-snug">{title}</p>
-                  <p className="text-xs text-[#111A4A]/60 dark:text-gray-400 mt-1 leading-relaxed">{desc}</p>
-                </div>
-              </li>
+          {/* Aturan risiko: strip angka kunci */}
+          <dl className="grid grid-cols-3 max-w-xl mb-9 border-y border-slate-200 dark:border-white/10 divide-x divide-slate-200 dark:divide-white/10">
+            {rules.map((r) => (
+              <div key={r.label} className="py-4 sm:py-5 px-3 sm:px-5 first:pl-0">
+                <dt className="sr-only">{r.label}</dt>
+                <dd className="text-2xl sm:text-3xl font-semibold tracking-tight text-[#111A4A] dark:text-white tabular-nums">
+                  {r.value}
+                </dd>
+                <dd className="mt-1 text-xs sm:text-sm leading-snug text-[#111A4A]/60 dark:text-gray-400">
+                  {r.label}
+                </dd>
+              </div>
             ))}
-          </ul>
+          </dl>
 
           <div className="flex flex-col sm:flex-row gap-3">
             <Link

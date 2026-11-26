@@ -940,5 +940,8 @@
     "dont2": "Combine EA with manual trading on the same account.",
     "dont3": "Evaluate results only from profit without looking at drawdown.",
     "dont4": "Share License Code or EA files with other parties."
+  },
+  "AuthPanel": {
+    "back": "Back to home"
   }
 }

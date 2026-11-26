@@ -940,5 +940,8 @@
     "dont2": "Menggabungkan EA dengan manual trade di akun yang sama.",
     "dont3": "Menilai hasil hanya dari profit tanpa melihat drawdown.",
     "dont4": "Membagikan License Code atau file EA kepada pihak lain."
+  },
+  "AuthPanel": {
+    "back": "Kembali ke beranda"
   }
 }

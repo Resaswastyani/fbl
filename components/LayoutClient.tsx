@@ -56,7 +56,11 @@ export default function LayoutClient({
     pathname === "/reset-password";
 
   const hideFooter =
-    pathname.startsWith("/dashboard") || pathname.startsWith("/student/") || pathname === "/webinar";
+    pathname.startsWith("/dashboard") ||
+    pathname.startsWith("/student/") ||
+    pathname === "/webinar" ||
+    pathname === "/login" ||
+    pathname === "/signup";
 
   const hideWebinarPopup =
     pathname === "/login" ||
